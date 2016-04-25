@@ -1,28 +1,23 @@
 Magit 入门简介
 
 * 什么是 Magit
-
 Magit 是 Emacs 用 Git 的接口，做出来一个的 Mode。它能实现 Git 绝大部分的功能。
 
 * Magit 比在终端上使用 Git 优势在哪？
-
 些许你会问，我已经在终端上会用 Git 的操作了，没有必要在 Emacs 上使用 Git 了。
 那么你已经不知不觉忍受了 Git 那些反人类的的操作了，即使已经在 zsh 简化了 Git 的
 命令，但是用了 Magit 后，你会有种幸福感，是多么幸运地遇到了 Magit 这样的神器。
 
 * Magit 的基本操作
-
 1. 假设你会了 git status, git add, git commit, git push, git pull 这些操作。
 2. 我使用的不是 Emacs 的键位，而是 Spacemacs 的键位设置。
-3.下面提到的 SPC = 空格
+3. 下面提到的 SPC = 空格
 
 * git init
-
 c-x c-f 打开你的本地 Git 仓库
 输入 SPC g i 这键位相当于 git init 的命令
 
 * Git status 和 Git commit
-
 1. 先打开本地的一个文件，README.md，在第一行输入 Add a line
 2. 输入 Spc g s 你会发发现了 README.md 这文件是 Unstaged 的状态
 
