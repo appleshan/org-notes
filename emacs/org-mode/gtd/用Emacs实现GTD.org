@@ -1,0 +1,141 @@
+用 Emacs 实现 GTD
+
+* Table of Contents
+1. 整体流程图
+2. Emacs 相关模式介绍
+3. gtd
+4. 所需文件
+5. 配置项
+6. 流程叙述
+7. 心得
+
+* 整体流程图
+整体内容的文字叙述比较难懂，给一张思维导图放在前面，请将后续表述与图中内容做
+对应以了解流程，针对各处操作未做太详尽描述，相信各位查阅资料能够解决问题，有
+问题的朋友可以联系我。
+#+CAPTION: 設定圖片寬度為 1300
+#+ATTR_HTML: :width 1300
+[[file:./gtd_guide.png]]
+
+* Emacs 相关模式介绍
+** org-mode
+关于该模式，网络上相关介绍非常之多，大概说来就是一个 Mark-Down 语法来编辑内
+容，并且通过 Emacs 内置功能可以极其方便的对内容格式进行组织操作，在阅读网上
+相关例程后参考上文中快捷键介绍，相信你可以很快熟悉该模式。
+** capture-mode
+在 Emacs 的以前版本，还有一个叫 remember-mode 的东西，两者功能非常相近，若
+是使用最新版本的 Emacs，可以不管 remember-mode，直接使用 capture-mode 进行
+内容的抓取。该模式支持模版化操作，使用快捷键呼出 capture-mode 之后，将通过
+快捷键选择你预先设定好的模板，并随后输入内容保存到指定位置。
+** agenda-mode
+agenda 作为 Emacs 的一种模式，并不是用于编辑，而是用于审阅。在配置文件中可
+以对 agenda 所包含的文件进行关联。在设置完成后，agenda 将会对所包含的文件内
+容进行整理，以日历、列表、标签等形式将所有的 TODO 内容整体呈现到你面前，并
+可对其直接进行操作而不用手动打开某个文件进行修改。
+
+* gtd
+** 什么是 GTD
+GTD 的核心很简单，就是要清空大脑，按照事先设定好的路线一步步将工作做完。
+关于这方面的书籍有很多，最出名的莫过于《Getting things done》
+（《尽管去做——无压工作的艺术》）。
+作为我的个人管理方式，主要就是 [收集－>整理->组织－>行动－>回顾] 这五步进行
+循环，首先把需要做的事情都记录在案，然后将整体内容进行分化不同类别，再针对
+每一个任务进行细化，接下来一步步去执行，最后将结果进行回顾。个人管理也是
+一门学问，想要深入了解恐怕需要认真阅读以下相关书籍，这里不再详述。
+** GTD 与 Emacs
+我想关于 GTD，每个人都有自己不同的理解，更是有适合自己的一套工作流，而诸多
+关于利用 Emacs 进行 GTD 的博客文章介绍的并非十分详实，这里我想把我个人的流
+程分享出来。我作为初学者仅仅是刚掌握了一些理论，在很多细节问题上仍然需要不
+断的完善和改进，在这过程中我会不断维护此文章。GTD 本身是不需要工具的，一个
+本子一支笔就可以清空大脑开始工作了，而 Emacs 提供的是更快捷的操作方式和高
+效率的组织回顾手段，市面上的 GTD 类软件也非常之多，很多人直接败在了 Emacs
+相对较高的入门门槛上，我在这里将把我学习使用的过程以自顶向下的方式表述，我
+想，在文章最后你就应该可以放手去做了。
+
+* 所需文件
+** inbox.org
+作为第一步的落脚点，周围所有杂事将在这里驻足
+1. 使用 capture-mode 将目前所能想到的事情进行收集，保存到 inbox.org 中
+2. 在每天早上对 inbox 进行填充，分解，清理，把插入的内容分配到 project.org
+   以及 task.org 两个文件中去
+3. 工作中遇到突发事件，两分钟以内能解决的就马上办，否则 capture 到 inbox 中
+** task.org
+一次性或短期任务将从 inbox 中细化至此
+1. 早上对当天任务预先规划，包括打上相关标签、设定子任务（使用 checkbox）等
+2. 在工作过程中逐步将子任务打勾完成，将 TODO 状态转移至其他状态
+3. 晚上将 task 内容迁移到 finish.org 中
+** project.org
+长远计划或项目计划
+1. 从 inbox 中抽象出 project 的内容，并做大致规划，不一定成为 TODO 项，但
+   经常检阅
+2. 随着项目推进，可以对项目完成度进行审核，计时
+** finished.org
+task 内容归宿，按照 tag 进行划分
+1. capture-mode 添加 datetree 模板，每日添加记录，进行总结
+2. task 内容移入每日记录下并打标签
+
+* 配置项
+** emacs.d
+#+BEGIN_SRC emacs-lisp
+;; 项目状态切换
+(setq org-todo-keywords
+      '((sequence "TODO(t!)"
+                  "NEXT(n)"
+                  "WAITTING(w)"
+                  "SOMEDAY(s)"
+                  "|"
+                  "DONE(d@/!)"
+                  "ABORT(a@/!)")
+      ))
+;;关联 agenda-mode 的文件
+(setq org-agenda-files(list
+      "~/Documents/gtd/inbox.org"
+      "~/Documents/gtd/project.org"
+      "~/Documents/gtd/task.org"
+      "~/Documents/gtd/finished.org"
+      ))
+;;绑定快捷键
+(define-key global-map "\C-cc" 'org-capture)
+(define-key global-map "\C-ca" 'org-agenda)
+;;capture 的 template
+(setq org-capture-templates
+      `(("t" "Todo" entry
+         (file+headline "~/Documents/gtd/inbox.org" "Tasks")
+         "* TODO %?\n%U  %i" :prepend t)
+        ("j" "Journal" entry
+         (file+datetree "~/Documents/gtd/finished.org" "Journals")
+         "* %?\n %T  %i")
+        ("n" "Note" entry
+         (file+headline "~/Documents/gtd/notes.org" "Notes")
+         "* %U %?\n\n  %i" :prepend t :empty-lines 1)
+         ))
+;;org-mode 下跨文件移动标题设置
+(setq org-refile-targets
+      (quote (("~/Document/gtd/inbox.org" :maxlevel . 1)
+              ("~/Document/gtd/task.org" : level .2))))
+;;定义快速打开 task.org 文件的方法并绑定以快捷键
+(defun gtd()
+  (interactive)
+  (find-file "~/Documents/gtd/task.org"))
+(global-set-key "\C-cz" 'gtd)
+#+END_SRC
+
+* 流程叙述
+** 可规划任务：
+1. 早晨开始工作前进行内容整理，清空 inbox，将任务分配至 task, project 中，
+   并视情况标记 deadline 和优先级
+2. 工作中以 agenda 作为里程碑，逐步干掉所有任务（包括 task 以及 project）
+3. 晚上通过 capture 建立 finished 中对应日期树，写总结并将完成的任务打标记
+   移入 finished 中
+** 临时事件：
+1. 预估事件处理时间，2 分钟内立即着手解决
+2. 超过两分钟的事件 capture 到 inbox 中，待下一番茄钟进行规划
+3. 未能及时处理或特殊情况的事件待第二天早上整理清空 inbox
+
+* 心得
+整套流程并不复杂，可能看起来略显繁琐，很多人一定觉得这样折腾并没有价值。我作
+为刚开始采用 GTD 方式的学生，其实觉得一旦着手这样做之后，不断修改状态或
+ checkout 子任务带来的成就感会促使你效率的提升。事先的安排更会清空大脑，做事
+效率有所提高。并且，此流程仅仅是我的习惯，针对不同的工作性质，应该更为私人定
+制一些。希望读到本文的人能花些时间去尝试一下这种个人管理的方法，面对这一个个
+的 TODO 变为 DONE，感觉是充实的，会更有干劲去面对接下来的工作。

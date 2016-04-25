@@ -1,0 +1,47 @@
+Emacs 的帮助系统
+
+Emacs 的帮助系统的按键前缀是 C-h 和 F1 。
+
+* 首先是关于帮助系统的帮助
+[C-h ？]，实际是 C-h S-/，它会列出 C-h 前缀下可用的命令，如 b ，列出当前可用的
+键绑定，完整的按键是C-h b 。
+
+* 查看变量的值和文档
+[C-h v] (describe-variable)
+
+* 查看函数的文档
+[C-h f] (describe-function)
+
+* 查看 face 的文档
+[M-x describe-face]
+
+* 查看某个 mode 的文档
+[C-h m] (describe-mode)
+刚开始学习某个 mode 的时候，可以用 [C-h m] 看看当前 buffer 对应的主 mode 和
+副 mode 的文档，这个文档一般都会包括 mode 的命令和快捷键列表。
+
+* 查看某个快捷键对应的命令
+[C-h k] (describe-key)
+
+* 查看某个命令对应的快捷键
+[C-h w] (where-is)
+
+* 查看当前 buffer 所有的快捷键列表
+[C-h b] (describe-bindings)
+
+* 查看当前 buffer 中以某个快捷键序列开头的快捷键列表
+[<待查看的快捷键序列> C-h]
+比如你想查看当前 buffer 中所有以 C-c 开头的快捷键列表，按 C-c C-h 就可以了。
+
+* 查看函数的代码
+find-function
+
+* 查看变量的代码
+find-variable
+
+* 查看 face 的代码
+find-face-definition
+
+* 查看包含某个关键词的函数、变量、face
+[M-x apropos]
+

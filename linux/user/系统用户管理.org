@@ -1,0 +1,10 @@
+客人会话禁用
+
+只要在shell下运行这​​个（一次）：
+
+sudo sh -c 'printf "[SeatDefaults]\nallow-guest=false\n" >/usr/share/lightdm/lightdm.conf.d/50-no-guest.conf'
+
+比以前的版本要简单很多。
+如果要复原（恢复客户选择）， 删除创建的文件 即可：
+sudo rm /usr/share/lightdm/lightdm.conf.d/50-no-guest.conf
+

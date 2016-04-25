@@ -1,0 +1,99 @@
+.1.提升到 root 用户
+在终端窗口里面输入: sudo -s.然后输入普通用户登陆的密码，回车即可进入 root用户权限模式.
+
+.2.查看文件系统格式和容量
+df -h
+
+.3.创建文件夹
+mkdir [文件夹]
+
+.4.创建文件
+touch [文件夹]
+
+.5.查看文件夹的树形结构
+tree [文件夹]
+
+.6.删除文件夹
+rm -dr
+
+.7.使环境变量配置立即生效
+source ~/.bashrc
+
+.8.获取 Ubuntu 的版本信息：
+cat /etc/issue－获悉 Ubuntu 的版本号
+uname -r－获知所用的 Linux 内核版本
+
+.9.检查性能状态：
+cat /proc/meminfo－提供内存占用的信息
+
+.10.使用 root 模式：
+sudo -s -H－作为 root 用户切换到 root 模式
+sudo -s－切换到 root 模式，但仍为当前用户
+
+.11.[ Ctrl+L ] 呼出地址栏
+
+.12.查看目录的磁盘占用情况
+$ du -h --max-depth=1 | sort -n -r
+
+.13.创建存档文件
+$ tar -czpf folder_name.tar.gz folder_name
+该命令将 folder_name 创建为 folder_name.tar.gz 存档文件。
+
+.14.递归查找文件内的字符串
+$ find ./ -name ‘*.html’ -exec grep “breadcrumbs.inc.php” ‘{}’ \; -print 
+这条命令将查找所有包含 breadcrumbs.inc.php 的 HTML 文件。
+
+.15.搜索并替换文件里的内容
+$ sed -i ’s/b/strong/g’ index.html
+此命令搜索 index.html 文件中的 b 并将其替换为 strong。
+
+.16.
+#显示文件
+$ ls -l | grep '^-'
+
+#显示目录
+$ ls -l | grep '^d'
+
+.17.
+#显示当前目录下，每个文件或子目录的尺寸
+$ du -sh * | sort -h
+
+.18.
+# 彻底的清空屏幕
+$ printf "\033c"
+or
+$ reset
+
+.19.
+如何获取吃掉你磁盘空间的最大的6个文件？
+一个使用du命令的简单单行脚本即可实现，du命令主要用于获取文件的空间使用情况。
+$ du -hsx * | sort -rh | head -6
+
+命令和选项的解释：
+du – 估计文件的空间使用情况
+-hsx – （-h）更易读的格式，（-s）汇总输出，（-x）跳过其他文件系统的文件
+sort – 对文本文件按行排序
+-rf – （-r）将比较的结果逆序输出，（-f）忽略大小写
+head – 输出文件的头几行
+
+.20.
+获取一个文件的详细状态信息
+可以使用stat命令
+# stat filename_ext  （例如：stat abc.pdf）
+
+.21.
+显示帮助
+下面的命令会随机显示一个man手册页。
+$ man $(ls /bin | shuf | head -1)
+
+命令和选项的解释：
+man – Linux man手册
+ls – 列出文件
+/bin – 系统可执行文件的路径
+shuf – 把输入内容按行随机打乱并输出
+head – 输出文件的头几行
+
+.22.
+查看glibc的版本
+ldd --version
+

@@ -1,0 +1,372 @@
+Spacemacs 使用大全
+
+* <Leader>键
+    Spacemacs 使用 SPC 作为它的 <Leader> 键。本文档也使用 SPC 作为 <Leader>
+键。所有的键位绑定都采用助记方式，并由 <Leader> 键组织。
+    Spacemacs 在一个延迟之后使用 which-key 来显示可用的键位绑定：
+[[file:./spacemacs_which-key.png]]
+
+* 帮助系统
+Emacs 具有一个可扩展的帮助系统。所有的快捷键都有 SPC h d 前缀，以允许便捷地
+访问帮助系统。最重要的快捷键是 SPC h d f, SPC h d k, 和 SPC h d v。同样还有
+SPC <f1> 允许用户搜索文档。
+| 快捷键    | 功能                                         |
+|-----------+----------------------------------------------|
+| SPC h d f | 对一个功能提示并显示其文档。                 |
+| SPC h d k | 对一个快捷键提示并显示其绑定的内容。         |
+| SPC h d v | 对一个变量提示并显示其文档和当前值。         |
+| SPC <f1>  | 搜索一个命令，功能，变量或接口，并显示其文档 |
+
+* 探索
+有几种方式可以探索 Spacemacs 的功能。一个是阅读 Github 上的源代码。你可以开始
+了解 Emacs Lisp，并能知道 Spacemacs 是怎样工作的。
+你还能通过如下快捷键来探索：
+| 快捷键    | 功能                               |
+|-----------+------------------------------------|
+| SPC f e h | 列出所有层并允许你浏览层上的文件。 |
+| SPC ?     | 列出所有快捷键。                   |
+
+* dotfiles 文件
+| 快捷键    | 功能                                          |
+|-----------+-----------------------------------------------|
+| SPC f e i | 打开你的 init.el                              |
+| SPC f e d | 打开你的 .spacemacs 或 .spacemacs.d/init.el   |
+| SPC f e D | 使用 diff 通过默认模版手动更新你的 .spacemacs |
+| SPC f e R | 同步配置文件                                  |
+
+* 移动
+| 快捷键    | 功能                                              |
+|-----------+---------------------------------------------------|
+| h         | 前                                                |
+| j         | 下                                                |
+| k         | 上                                                |
+| l         | 后                                                |
+| 0         | beginning of line                                 |
+| $         | end of line                                       |
+| 9j        | move down 9 lines                                 |
+| w         | move forward by word                              |
+| b         | move backward by word                             |
+| gg        | first line                                        |
+| G         | last line                                         |
+| C-u       | up half page                                      |
+| C-d       | down half page                                    |
+| f/        | move forward to first "/" character               |
+| t/        | move forward right before the first "/" character |
+| ;         | repeat that command again                         |
+| H         | head of the screen                                |
+| M         | middle of the screen                              |
+| L         | last of the screen                                |
+| {         | move backwards by paragraph or block              |
+| }         | move forward by paragraph or block                |
+| :[number] | 跳转到制定行                                      |
+
+* 编辑
+| 快捷键            | 功能                                            |
+|-------------------+-------------------------------------------------|
+| x                 | delete char under cursor                        |
+| X                 | delete char before cursor                       |
+| A                 | add to end of line                              |
+| I                 | insert at the beginning of the line             |
+| D                 | delete from cursor to end of line               |
+| [number] d object |                                                 |
+| dd                | 删除光标所在的整行                              |
+| dw                | 从光标处删除整个单词，包括单词后的空格。        |
+| de                | 从光标处删除整个单词，不包括空格。              |
+| d$                | 从光标处删除整行。                              |
+| di'               | delete text inside single quotes                |
+| di...             | ...etc                                          |
+| y                 | 复制选择的字符                                  |
+| yy                | copy line                                       |
+| Y                 | copy from cursor to end of line                 |
+| c                 | 剪切选择的字符。                                |
+| cc                | change line                                     |
+| C                 | change from cursor to end of line               |
+| cit               | change text inside html tag                     |
+| ci'               | change text inside single quotes                |
+| ci{               | change text inside curly brackets.              |
+| ci...             | ...etc                                          |
+| p                 | paste after cursor                              |
+| P                 | paste before cursor                             |
+| o                 | add line below                                  |
+| O                 | add line above                                  |
+| .                 | repeat last comment                             |
+| r                 | replace character                               |
+| R                 | replace. (overwrite) (good for columns of text) |
+| J                 | join line (cursor can be anywhere on line)      |
+
+* 撤销
+| 快捷键 | 功能   |
+|--------+--------|
+| u      | 撤销   |
+| C-R    | 反撤销 |
+
+* 运行命令
+| 快捷键 | 功能                                  |
+|--------+---------------------------------------|
+| M-x    | 运行 Emacs 命令                       |
+| SPC :  | 运行 Emacs 命令                       |
+|        | 这将会弹出一个使用 Helm 的缓冲区      |
+|        | 这个缓冲区中可以运行任意的 Emacs 命令 |
+| :      | 运行许多外部命令，就跟 vim 中一样     |
+
+* 缓冲区
+缓冲区的快捷键都具有 SPC b 前缀。
+| 快捷键  | 功能                             |
+|---------+----------------------------------|
+| SPC TAB | switch to previous buffer        |
+| SPC b b | 用 helm 选择一个 buffer          |
+| SPC b B | ibuffer                          |
+| SPC b n | 切换到下一个缓冲区               |
+| SPC b p | 切换到前一个缓冲区               |
+| SPC b d | kill current buffer              |
+| SPC b k | 查找并结束一个缓冲区             |
+| SPC b K | 结束除当前缓冲区的所有其他缓冲区 |
+| SPC b M | move buffer to another window    |
+| SPC b . | 缓冲区微状态                     |
+
+特殊缓冲区
+Emacs 默认会创建大量缓冲区，这些缓冲区很多人从来都不会使用到，就像
+*Messages*。Spacemacs 会在使用这些快捷键时自动忽略这些缓冲区。
+
+* 窗口管理
+窗口就像 vim 中的分割。它们在一次编辑多个文件时相当有用。
+所有的快捷键都有 SPC w 前缀。
+| 快捷键             | 功能            |
+|--------------------+-----------------|
+| SPC w - 或 SPC w s | 水平分割窗口    |
+| SPC w / 或 SPC w v | 垂直分割窗口    |
+| SPC w c            | 关闭当前窗口    |
+| SPC w h/j/k/l      | 在窗口间导航。  |
+| SPC w H/J/K/L      | 移动当前窗口。  |
+| SPC n(数字)        | 选择第 n 个窗口 |
+| SPC w .            | 窗口微状态      |
+
+* 插入和替换
+| 快捷键              | 功能                                       |
+|---------------------+--------------------------------------------|
+| i                   | 在光标前的位置，进入 insert mode，进行编辑 |
+| ESC                 | 退出 mode                                  |
+| C-[                 | 同上                                       |
+| r                   | 替换光标所在位置的单个字符                 |
+| [number] c object : |                                            |
+| cw                  | 从光标处删除整个单词，并进入 insert mode   |
+| ce                  | 同上                                       |
+| c$                  | 从光标处删除整行，并进入 insert mode       |
+
+* 文件操作
+Spacemacs 中所有文件命令都有 SPC f 前缀。
+| 快捷键        | 功能                                   |
+|---------------+----------------------------------------|
+| SPC p f       | 在当前项目目录中搜索文件               |
+| SPC f f       | 打开一个缓冲区搜索当前目录中的文件。   |
+| SPC f r       | 打开一个缓冲区在最近打开的文件中搜索。 |
+| SPC f o       | 用外部程序打开当前文件                 |
+| SPC f L       | 快速搜索磁盘文件                       |
+| SPC f R       | 重命名当前文件                         |
+| SPC f D       | 删除当前文件                           |
+| SPC f s 或 :w | 保存当前文件。                         |
+| :x            | 保存当前文件并退出。                   |
+| :e <file>     | 打开 <file>                            |
+
+* 快速跳转
+| 快捷键  | 功能                                                             |
+|---------+------------------------------------------------------------------|
+| ma      | find matching brace, paren, etc                                  |
+| `a      | after moving around, go back to the exact position of marker "a" |
+| 'a      | after moving around, go back to line of marker "a"               |
+| :marks  | view all the marks                                               |
+| [(      | jump back to the "(" at the beginning of the current code block  |
+| [[      | 跳转到当前章节开始处                                             |
+| []      | 跳转到当前章节结尾处                                             |
+| [{      | jump back to the "{" at the beginning of the current code block  |
+| SPC s j | 在 minibuffer 中列出文档大纲或函数列表，选中后跳到定义处         |
+| SPC y   | 快速行跳转(比行号要快)                                           |
+| SPC SPC | 快速位置跳转                                                     |
+
+* 搜索
+** 搜索内容:
+| 快捷键    | 功能                                   |
+|-----------+----------------------------------------|
+| *         | search for word under the cursor       |
+| ├ n       | search again forward                   |
+| └ N       | search again backwards                 |
+| #         | search backwards for word under cursor |
+| /         | search forward                         |
+| ?         | search backward                        |
+| %         | find matching brace, paren, etc        |
+| SPC /     | 在项目(或者文件夹)里智能搜索           |
+| SPC s s   | helm-swoop                             |
+| SPC s b   | 在所有打开的 buffer 里搜索             |
+| SPC s a p | 使用 ag 搜索当前 project               |
+| SPC s t p | 使用 pt 搜索当前 project               |
+
+** 搜索和替换:
+| 快捷键          | 功能                                     |
+|-----------------+------------------------------------------|
+| :s/old/new      | 替换第一个匹配；                         |
+| :s/old/new/g    | 替换当前行匹配；                         |
+| :#,#s/old/new/g | 替换行（#为行号）之间匹配；              |
+| :%s/old/new/g   | 替换全文匹配。                           |
+| :%s/old/new/gc  | 替换全文匹配，每一个匹配会提示是否匹配， |
+|                 | 输入 y 表示执行替换，n 表示跳过匹配      |
+
+** 搜索文件名:
+| 快捷键  | 功能                                            |
+|---------+-------------------------------------------------|
+| SPC s f | 在当前目录里搜索文件名 , 其实等价于 [<SPC> f f] |
+
+* 项目管理
+Projectile 是管理專案的程式，簡要來說，每當在 emacs 中開啓一份檔案時，
+projectile 會利用目錄名稱或是資料夾狀態，判斷該檔案是否處在某一個 專案 之中。
+如果平時需要在一個以上的專案中遊走，這個功能就相當有用，projectile 會自動將
+開啓的檔案歸入所屬的專案中。
+| 快捷键    | 功能                                               |
+|-----------+----------------------------------------------------|
+| SPC p p   | 切换 project                                       |
+| SPC p b   | 切换到已经打开的同 project 中的 buffer             |
+| SPC p f   | 打开当前 project 的文件                            |
+| SPC p t   | 打开当前 project 的文件树                          |
+| SPC p r   | 近打开的项目                                       |
+| SPC p o   | 在該專案中已開啓的 buffer 中，用 occur 搜尋關鍵字  |
+| SPC s a p | 在該專案目錄中，用 ag (sliver searcher) 搜尋關鍵字 |
+| C-c p s s | 同上                                               |
+
+* visual mode
+| 快捷键 | 功能              |
+|--------+-------------------|
+| v      | visual char mode  |
+| V      | visual line mode  |
+| C-v    | block visual mode |
+
+* outline
+* dired
+| 快捷键            | 功能             |
+|-------------------+------------------|
+| C-x C-j / SPC f j | 打开当前文件目录 |
+| D                 | 删除文件         |
+| RET 或者 a        | 打开文件         |
+| R                 | 重命名文件       |
+| +                 | 创建子目录       |
+| g                 | 刷新             |
+
+* neotree
+NeoTree 就是左边的文件树, 真心比 vim 的强不少, 打开的快捷键是 [<spc> f t]。
+| 快捷键  | 功能                                          |
+|---------+-----------------------------------------------|
+| SPC f t | 打开/关闭侧边栏，显示当前文件的目录           |
+| SPC p t | 打开/关闭侧边栏，显示当前文件所在项目的根目录 |
+| SPC 0   | 光标跳转到侧边栏（NeoTree）中                 |
+| j / k   | 上下导航                                      |
+| C-n/C-p | 上下导航                                      |
+| s       | 打开/关闭隐藏文件                             |
+| d       | 删除节点                                      |
+| r       | 重命名节点                                    |
+| RET     | 打开节点                                      |
+| h       | 回到上级目录节点或者关闭目录节点              |
+| l       | 定位下级目录节点或者打开目录节点              |
+
+* git
+| 快捷键    | 功能                                             |
+|-----------+--------------------------------------------------|
+| SPC g i   | git init                                         |
+| SPC g s   | git status                                       |
+| SPC g S   | git add currentFile                              |
+| SPC g c c | git commit                                       |
+|           | 按 C-c C-c 完成 commit，按 C-c C-k 取消 commit。 |
+| SPC g C   | git checkout xxx (切换分支)                      |
+| SPC g P p | git push                                         |
+| SPC g l   | 看 commit                                        |
+| SPC g t   | 时光机, 可以返回以前的 commit                    |
+| SPC g b   | blame 模式                                       |
+| SPC g d   | 查看 diff                                        |
+
+* bookmarks
+bookmarks 是 spacemacs 自带的, 可以迅速定位标记的文件, 它可以永久保存
+
+启用的快捷键是 [<spc> h b]
+
+删除书签 [C-d]
+编辑书签 [C-e]
+在另一个窗口打开书签 [C-o]
+
+* flycheck
+
+[[file:./spacemacs_flycheck.png]]
+
+语法检测, 如上图需要添加 syntax-checking 插件
+
+快捷键 [<spc> e], 需要查看 error lists 使用 [<spc> e l]
+
+* 多光标编辑
+需要进入 iedit 模式, 此时光标变成红色, 步骤如下:
+
+用 vim 的 visul 模式选取要 replace 的值
+按 [<spc> s e] 选取全部的匹配值(暂时不知怎么自定义选取)
+按 S 对值删除并进行修改
+按 ESC ESC 退出
+
+* 注释
+| 快捷键  | 功能                         |
+|---------+------------------------------|
+| SPC c l | 注释行                       |
+| SPC c y | 注释的同时并且复制相同的一份 |
+| SPC ;   | 注释块                       |
+
+其实对于 vimer 来说使用 visul 模式选取并用 [<spc> c l] 注释或许是更好的方法.
+
+* 对齐
+| 快捷键  | 功能                      |
+|---------+---------------------------|
+| SPC j = | 自动对齐，相当于 beautify |
+
+* 退出 Emacs
+| 快捷键  | 功能                                                          |
+|---------+---------------------------------------------------------------|
+| SPC q q | 退出 Emacs 并杀掉服务器，会对已修改的 Buffer 给出保存的提示。 |
+| SPC q Q | 同上，但会丢失所有未保存的修改。                              |
+
+* 微状态 Micro-state
+Spacemacs 定义了各种各样有意义 micro-state。这避免重复无聊的按 SPC 键。
+当一个 micro-state 被激活时, 在 minibuffer 会显示一个文档. 额外的信息有时候也
+会显示在 minibuffer.
+Text scale micro-state:
+[[file:./spacemacs-scale-micro-state.png]]
+
+* 图形 UI 指示器
+| 快捷键    | 功能                                          |
+|-----------+-----------------------------------------------|
+| SPC t f   | 显示填充列(默认填充列设置为 80)               |
+| SPC t h h | 开关当前行高亮                                |
+| SPC t h i | 开关缩进等级高亮                              |
+| SPC t h c | 开关当前列缩进高亮                            |
+| SPC t i   | 开关光标点的缩进引导                          |
+| SPC t l   | 开关截断行(truncate lines)                    |
+| SPC t L   | 开关可视行(visual lines)                      |
+| SPC t n   | 开关绝对行数                                  |
+| SPC T F   | 开关窗口全屏                                  |
+| SPC T f   | 开关边缘显示                                  |
+| SPC T m   | 开关菜单栏                                    |
+| SPC T M   | 开关窗口最大化                                |
+| SPC T t   | 开关工具栏                                    |
+| SPC T T   | 开关窗口透明度, 进入透明度微状态(micro-state) |
+
+* Mode-line
+模式行(mode line)是一个高度定制的 powerline, 具有以下功能:
+1. 显示窗口编号
+2. 当前状态的颜色代码
+3. 显示通过 anzu 搜索的结果的数量
+4. 开关 flycheck 信息
+5. 开关电池信息
+6. 开关 minor mode lighters
+
+提示下状态的颜色代码:
+| Evil State	         | Color     |
+|----------------------+-----------|
+| Normal	             | Orange    |
+| Insert	             | Green     |
+| Visual	             | Grey      |
+| Emacs 	             | Blue      |
+| Motion	             | Purple    |
+| Replace              | Chocolate |
+| Lisp	               | Pink      |
+| Iedit/Iedit-Insert	 | Red       |

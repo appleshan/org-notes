@@ -1,0 +1,5 @@
+Spacemacs 技巧大全
+
+* 怎么快速的知道哪个 package 在哪个 layer 里有？
+SPC h SPC
+然后你输入 package name 就可以看到 layer了

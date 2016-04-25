@@ -1,0 +1,101 @@
+How to detect if your server is vulnerable to the Heartbleed OpenSSL bug and fix it
+
+This is a serious bug affecting a lot of servers including Debian Wheezy. Act fast because
+everything is being scanned and information is being leaked right now!
+
+The Heartbleed Bug is a serious vulnerability in the popular OpenSSL cryptographic software library.
+This weakness allows stealing the information protected, under normal conditions, by the SSL/TLS
+encryption used to secure the Internet. The Heartbleed bug allows anyone on the Internet to read
+the memory of the systems protected by the vulnerable versions of the OpenSSL software. This
+compromises the secret keys used to identify the service providers and to encrypt the traffic, the
+names and passwords of the users and the actual content. This allows attackers to eavesdrop on
+communications, steal data directly from the services and users and to impersonate services and users.
+
+It’s really easy to use to bug to steal information from affected systems without having any access
+to it or the network. To check if your server is infected and see what information it is exposing
+you can use this python script: [[https://gist.github.com/harlo/10199638][hb-test.py]]
+
+To use the script, make sure you have python installed and run the following command:
+
+#+BEGIN_SRC python
+python hb-test.py www.example.org
+#+END_SRC
+
+Replace www.example.org with the domain you want to test
+
+On an infected server you’ll get results similar to these:
+
+#+BEGIN_EXAMPLE
+Connecting...
+Sending Client Hello...
+Waiting for Server Hello...
+... received message: type = 22, ver = 0302, length = 58
+... received message: type = 22, ver = 0302, length = 2338
+... received message: type = 22, ver = 0302, length = 525
+... received message: type = 22, ver = 0302, length = 4
+Sending heartbeat request...
+... received message: type = 24, ver = 0302, length = 16384
+Received heartbeat response:
+0000: 02 40 00 D8 03 02 53 43 5B 90 9D 9B 72 0B BC 0C .@....SC[...r...
+0010: BC 2B 92 A8 48 97 CF BD 39 04 CC 16 0A 85 03 90 .+..H...9.......
+0020: 9F 77 04 33 D4 DE 00 00 66 C0 14 C0 0A C0 22 C0 .w.3....f.....".
+0030: 21 00 39 00 38 00 88 00 87 C0 0F C0 05 00 35 00 !.9.8.........5.
+0040: 84 C0 12 C0 08 C0 1C C0 1B 00 16 00 13 C0 0D C0 ................
+...
+3fd0: 61 74 65 64 50 6C 75 67 69 6E 73 00 A8 02 00 00 atedPlugins.....
+3fe0: 29 00 00 00 1C F0 AD B8 1C F0 AD B8 00 FD A8 B8 )...............
+3ff0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+
+WARNING: server returned more data than it should - server is vulnerable!
+#+END_EXAMPLE
+
+You can also see if you are affected by checking the OpenSSL versions using this command:
+
+#+BEGIN_SRC
+apt-cache policy openssl
+#+END_SRC
+
+The results looks similar to this:
+
+#+BEGIN_EXAMPLE
+openssl:
+Installed: 1.0.1e-2+deb7u4
+Candidate: 1.0.1e-2+deb7u4
+Version table:
+*** 1.0.1e-2+deb7u4 0
+500 http://ftp.uk.debian.org/debian/ wheezy/main amd64 Packages
+100 /var/lib/dpkg/status
+1.0.1e-2+deb7u3 0
+500 http://security.debian.org/ wheezy/updates/main amd64 Packages
+#+END_EXAMPLE
+
+Version 1.0.1e-2+deb7u4 in wheezy is affected, so you need to update if you’re using that version
+
+To fix the bug, simply upgrade your system using apt:
+
+#+BEGIN_SRC
+apt-get update
+apt-get upgrade
+#+END_SRC
+
+Now check if the OpenSSL package has been updated by running this command:
+
+#+BEGIN_SRC
+apt-cache policy openssl
+#+END_SRC
+
+The results should be like this:
+
+#+BEGIN_EXAMPLE
+openssl:
+Installed: 1.0.1e-2+deb7u6
+Candidate: 1.0.1e-2+deb7u6
+Version table:
+*** 1.0.1e-2+deb7u6 0
+500 http://security.debian.org/ wheezy/updates/main amd64 Packages
+100 /var/lib/dpkg/status
+1.0.1e-2+deb7u4 0
+500 http://ftp.uk.debian.org/debian/ wheezy/main amd64 Packages
+#+END_EXAMPLE
+
+Version 1.0.1e-2+deb7u6 is patched and not vulnerable to Heartbleed

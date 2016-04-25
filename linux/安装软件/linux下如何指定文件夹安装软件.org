@@ -1,0 +1,30 @@
+linux下如何指定文件夹安装软件
+
+
+大多以 tar.gz 和 tar.bz2 打包软件，大多是通过
+
+# ./configure ;make ;make install 来安装的；
+
+有的软件是直接 make;make install；
+
+我们可以通过 ./configure --help 来查看配置软件的功能；大多软件是提供./configure 
+配置软件的功能的；少数的也没有，
+如果没有的就不用 ./configure ;直接 make; make install 就行了；
+
+./configure 比较重要的一个参数是 --prefix ，用--prefix 参数，我们可以指定软件安装
+目录；当我们不需要这个软件时，直接删除软件的目录就行了；
+
+比如我们可以指定fcitx 安装到 /opt/fcitx 目录中；
+
+[root@localhost fcitx]# ./configure --prefix=/opt/fcitx
+
+如果我们不需要fcitx 时，可以直接删除 /opt/fcitx 目录；
+
+所以我们举这个例子中，fcitx如果定制安装到 /opt/fcitx目录中，完整的安装方法应该是：
+
+[root@localhost fcitx]# tar jxvf fcitx-3.2-050827.tar.bz2
+[root@localhost fcitx]# cd fcitx
+[root@localhost fcitx]# ./configure --prefix=/opt/fcitx
+[root@localhost fcitx]# make
+[root@localhost fcitx]# make install
+

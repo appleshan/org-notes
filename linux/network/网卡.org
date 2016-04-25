@@ -1,0 +1,51 @@
+网卡
+
+* 基础知识
+Ubuntu 中，通常有线网卡为 eth0，无线网卡则为 wlan0，后续增加的以此类推（可能某些无线网卡型号命名为 eth1，而非 wlan0）。
+
+* ifconfig 简介
+ifconfig 是一个用来查看、配置、启用或禁用网络接口的工具，这个工具极为常用的（说的是喜欢动命令的人……）。
+
+* 查看系统网卡信息
+ifconfig
+
+* 查看网卡详细的硬件信息
+lshw -class network
+
+* 激活/禁用网卡
+
+** 激活网卡
+sudo ifconfig 网卡设备名 up
+
+sudo ifconfig 网卡设备名 down
+
+* 启用/禁用网络
+sudo /etc/init.d/networking start
+
+* iwconfig
+用于查看无线连接情况
+
+* 查看网卡设备信息
+查看网卡生产商，型号。
+
+qii@ubuntu:~$ lspci | grep -i net
+03:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8111/8168B PCI Express Gigabit Ethernet controller (rev 01)
+04:00.0 Network controller: Atheros Communications Inc. AR9285 Wireless Network Adapter (PCI-Express) (rev 01)
+
+举例来说，最底部，这样的格式，这里第一行是 Realtek 的 RTL8111/8168B 有线网卡，第二行是 Atheros 的 AR9285 无线网卡。
+
+如果你是 USB 网卡
+lsusb
+
+* 修改网卡接口名
+qii@ubuntu:~$ sudo nano /etc/udev/rules.d/70-persistent-net.rules
+修改下列字段便成。
+
+NAME="eth0"
+
+和
+
+NAME="wlan0"
+
+随后重启Ubuntu。
+

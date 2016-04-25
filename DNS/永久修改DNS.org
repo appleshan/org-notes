@@ -1,0 +1,15 @@
+永久修改 DNS
+
+* 1.设置 DNS
+$ sudo gedit /etc/dhcp/dhclient.conf
+
+里面有一行注释掉的：
+#prepend domain-name-servers x.x.x.x;
+
+将改行的注释去掉或者直接在文件中加上一行（后面加上想用的 DNS）：
+prepend domain-name-servers 8.8.8.8,8.8.4.4;
+prepend domain-name-servers 208.67.222.222,208.67.220.220;
+
+* 2.重启网络配置的命令
+$ sudo /etc/init.d/networking restart
+

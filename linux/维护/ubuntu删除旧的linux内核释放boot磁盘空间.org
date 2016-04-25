@@ -1,0 +1,19 @@
+ubuntu 删除旧的 linux 内核释放 boot 磁盘空间
+
+今天要升级 ubuntu 到 11.10 版本,提示 boot 空间不足，于是用命令删除 boot 里的
+旧 linux 内核,命令如下
+
+1、查看当前使用内核
+
+$ uname -r
+
+4.2.0-17-generic
+
+2、查看已经 intall 的旧系统内核
+
+$ dpkg --get-selections|grep linux
+
+3、选择删除那些 linux-image 开头的非当前使用的 linux 内核
+
+sudo apt-get remove linux-image-2.6.38-8-generic
+

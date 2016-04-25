@@ -1,0 +1,67 @@
+CentOS下安装beanstalkd服务
+
+beanstalkd在CentOS下没有默认的安装包，需要手动编译安装，最新版本1.6，不过1.5版本后，取消了对libevent的依赖，但不能直接启动作为daemon进程，1.4.6还是可以使用参数 -d  启动为 daemon，所以选择编译1.4.6。安装后默认不带启动脚本，但fedora下可以使用yum安装，安装后生成 /etc/init.d/beanstalkd启动脚本，所以特地在虚拟机里livecd启动fedora17，安装后，挖出beanstalkd启动脚本。
+
+切换到 root用户下：
+
+yum install libevent libevent-devel 
+
+所有版本地址： https://github.com/kr/beanstalkd/downloads  
+
+下载地址：
+
+wget   http://cloud.github.com/downloads/kr/beanstalkd/beanstalkd-1.4.6.tar.gz 
+
+解压：
+
+tar xzf beanstalkd-1.4.6.tar.gz 
+
+cd beanstalkd-1.4.6 
+
+./configure 
+
+make 
+
+make install 
+
+默认安装路径 ：/usr/local/bin/ 
+
+查看版本：
+
+/usr/local/bin/beanstalkd -v 
+
+1.4.6 
+
+添加用户组：
+
+groupadd beanstalkd 
+
+添加用户：
+
+adduser -M -g beanstalkd -s /sbin/nologin beanstalkd 
+
+添加启动脚本，放入 /etc/init.d/ 目录下
+
+chmod 755 /etc/init.d/beanstalkd 
+
+加入开机启动：
+
+chkconfig beanstalkd  on
+
+启动：
+
+service beanstalkd start 
+
+安装完毕
+
+--- 备注：
+
+1.8以后版本，只需要 执行 （没有 configure这一步）
+
+make 
+
+make install 
+
+自动安装 启动脚本。
+
+附：从Fedora下挖来的 startup 脚本：

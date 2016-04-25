@@ -1,0 +1,14 @@
+1.创建放源代码的目录
+mkdir -p $GOPATH/src/golang.org/x/tools
+
+2.下载源代码
+git clone https://go.googlesource.com/tools $GOPATH/src/golang.org/x/tools
+
+3.编译和安装
+编译：
+go build golang.org/x/tools/cmd/goimports
+
+或者
+安装：
+go install golang.org/x/tools/cmd/goimports
+

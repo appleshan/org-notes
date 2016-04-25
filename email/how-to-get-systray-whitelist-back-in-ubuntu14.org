@@ -1,0 +1,59 @@
+HOW TO WHITELIST SYSTRAY APPS IN UBUNTU 14.04 OR 14.10 (W/ UNITY)
+
+摘自：http://www.webupd8.org/2013/05/how-to-get-systray-whitelist-back-in.html
+
+As you probably know, the Unity notification area (systray) whitelist is
+no longer available in Ubuntu 13.04+ (so that includes Ubuntu 14.04 and 14.10)
+so you can't whitelist applications to be able to use the systray. If you
+can't live without an application that still uses the old notification area,
+here's how to get the Unity systray whitelist back in Ubuntu (Unity).
+
+* systray whitelist ubuntu 13.04
+Java and Wine applications have been hard-coded and continue to show up
+in the notification area but there are still some applications
+that don't have an AppIndicator and thus, can't use the systray. Some of
+the popular apps that can't use the systray anymore in Ubuntu 13.04+ include:
+Truecrypt, Cryptkeeper, Blueproximity, Pidgin (if you don't want to use
+the Messaging Menu) and KeePassX (although KeePassX from the Ubuntu repositories
+has the systray disabled in its settings and it can be enabled so for it you'll
+have to either use a PPA or build it from source).
+
+* How to whitelist all systray apps in Ubuntu 14.04 or 14.10 (with Unity)
+If you want all the applications that use a tray icon to be able to
+make use of it in Ubuntu 14.04 or 14.10, you can use a PPA that comes with Unity
+patched to re-enable the systray whitelist. To do this, open a terminal and run
+the following commands:
+
+** - for Ubuntu 14.04:
+
+sudo add-apt-repository ppa:gurqn/systray-trusty
+sudo apt-get update
+sudo apt-get upgrade
+
+** - for Ubuntu 14.10:
+
+sudo add-apt-repository ppa:gurqn/systray-utopic
+sudo apt-get update
+sudo apt-get upgrade
+
+
+Then, restart Unity by pressing ALT + F2 and entering "unity" or by logging out.
+The PPA now automatically whitelists all applications so there's no need to
+manually whitelist individual apps to be able to use the systray.
+
+* How to revert the changes
+If you want to revert the changes and go back to the default Unity packages from
+the Ubuntu repositories, use the commands below to purge the Unity systray
+whitelist PPA:
+
+** - for Ubuntu 14.04
+
+sudo apt-get install ppa-purge
+sudo ppa-purge ppa:gurqn/systray-trusty
+
+** -for Ubuntu 14.10:
+
+sudo apt-get install ppa-purge
+sudo ppa-purge ppa:gurqn/systray-utopic
+
+Then, restart Unity or log out and log back in.

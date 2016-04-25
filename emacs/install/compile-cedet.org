@@ -1,0 +1,6 @@
+﻿windows 下编译 cedet
+
+在 emacs 中打开 cedet-build.el 文件，然后
+M-x eval-buffer
+M-x cedet-build-in-default-emacs
+编译过程中如果发生超过 emacs 堆栈大小的错误，退出 emacs 再重新编译即可。

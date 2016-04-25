@@ -1,0 +1,5 @@
+Ubuntu中的Load/Unload Cycle Count
+
+$ sudo smartctl -a /dev/sda | grep 193
+可以看到Load/Unload Cycle Count数目
+

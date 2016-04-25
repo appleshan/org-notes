@@ -1,0 +1,11 @@
+执行 elisp 代码
+
+* 执行一条语句
+在某条语句后面按 [C-x C-e] (eval-last-sexp) 可以执行那条语句
+
+* 执行选中 region 的 elisp 代码
+选中一个 region 后，[M-x eval-region]可以执行这个 region 内的代码
+
+* 执行当前 buffer 内的 elisp 代码
+[M-x eval-buffer]
+

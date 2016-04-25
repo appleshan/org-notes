@@ -1,0 +1,12 @@
+1.解压缩[*.tar]文件
+tar xvf  *.tar
+
+2.解压缩[*.tar.gz]文件
+tar xzvf  *.tar.gz
+
+3.解压缩[*.tar.bz2]文件
+tar xjvf  *.tar.bz2
+
+4.解压缩[*.tar.xz]文件
+tar xJvf  *.tar.xz
+

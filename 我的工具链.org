@@ -1,0 +1,246 @@
+我的工具链（程序员效率指南）
+
+工欲善其事，必先利其器。
+这个器可以可以自己锻造，也可以用现成的。就是不断优化自己的工作环境。
+
+* Linux
+** Arch Linux
+是我尝试过的第三种 Linux 发行版，也最终让我留了下来。主要原因就是 pacman + AUR
+很好用，社区活跃，文档丰富，软件更新快，我觉得有人说的所谓折腾其实也是选择自己
+需要的一个过程，是有回报的。
+** Ubuntu
+我的主力开发平台。
+** Emacs
+从来没有那个编辑器能像 Emacs 一样吸引到我。
+Coding, Version-Control, Document, GTD, Email 都在 Emacs 里完成。
+如果 Linux 上只能留一个程序，我肯定是选 Emacs。
+*** [[https://github.com/syl20bnr/spacemacs][Spacemacs]]
+一份 emacs 的配置工程。vim 有 vimrc. Emacs 有.emacs.d. 这就是 Emacs 的.emacs.d
+配置工程。利用了 Emacs 的 evil 插件还有别的一些插件, 实现了 Emacs 中使用 VIM 的
+快捷键。已经将原生的 Emacs 改造成了另一个模样。
+1. 它是我见过最好看的 Emacs 配置.
+2. 工程结构完美，容易扩展.
+3. 它是我见过文档最全,最丰富,最易懂的 Emacs 配置.比`oh-my-emacs`好好几个量级.
+4. 开发人员更多.在开源世界里, 这个工程拥有上千的 fork 量,开发非常活跃.
+5. 对 evil 的支持更加好,它的主打就是 evil.
+6. 它非常精致.简直给粗糙的 Emacs 上了一层美丽的妆.
+7. 操作更人性化,细节考虑太周到了
+*** [[https://github.com/appleshan/my-spacemacs-config][my-spacemacs-config]]
+Apple Shan 的 Spacemacs 配置工程
+*** magit
+git 客户端
+*** org-mode
+用 org 格式写所有文字类的东西。也是强大的 GTD 工具。
+*** 另外，java 的话，还是别用 emacs 了，java，groovy，Scala 都不太适合 emacs。
+** zsh
+shell 里面的战斗机
+*** [[http://ohmyz.sh/][oh-my-zsh]]
+zsh 工具，你的终端你做主
+** Terminator
+** dotfiles
+一个程序员一天可能 80% 的时间都在跟 shell 打交道，有个好的 shell(bash or zsh)，加上
+合理的 shell 配置绝对让效率提升一大截。dotfiles 这样的东西不必自己从头来，在 github
+上找个 star 最高的 clone 或者 fork 之即可，这便是所谓的站在巨人的肩膀上。
+** percol
+python 开发的命令行工具,天才的作品
+** proxychains-ng(proxychains4)
+命令行代理工具，配合科学上网，让没有代理设置的软件也可以正常联网。
+** tree
+以树结构的方式展示一个目录
+** htop
+进程管理的好助手
+** shell 的所有命令行工具
+linux 命令行里面的所有工具都是精华，真的，用的熟悉的话可以很大程度上加快你的工作
+进度，linux 就像是一个数也数不清的优秀工具的大集合。
+** ag / pt
+搜索代码超级快
+** GnuPG
+保护你的备份数据
+** rclone
+同步文件到云端硬盘的客户端，支持：
+Google Drive
+Amazon S3
+Dropbox
+Google Cloud Storage
+Amazon Cloud Drive
+Microsoft One Drive
+The local filesystem
+** [[http://www.videolan.org/vlc/][VLC]]
+影音播放
+** [[https://forwardhq.com/help/ssh-tunneling-how-to/][forward]]
+ssh tunneling 讓其他人直接連到本機開發中網站
+** [[https://ngrok.com/][ngrok]]
+ssh tunneling 讓其他人直接連到本機開發中網站
+** VirtualBox
+免费的虚拟机，主要用于隔离国产软件
+** F.lux
+一款根据当前时间调节屏幕颜色的软件。程序员晚睡强迫症的福音。
+** cowsay lolcat
+好玩的，不解释
+* Windows
+尽量不要用 windows 进行开发，除非你只用 dotnet 开发软件，不然 osx/ubuntu 会是更好的
+开发平台。太多太多优秀的工具在 osx/ubuntu 下可以一键安装，在 windows 下却不得不花费
+超过一个甚至几个数量级的时间去安装，更别提有的工具 windows 压根没有替代品。
+
+** Babun
+windows 下面的 linux 命令行工具，就是在 CygWin 的基础上预先安装了一些命令行和美化
+了一下，一般用个 find,vim,sed 都不在话下，快点逃离那个神马 cmd 和 powershell 了
+** Xshell / Xftp / Xmanager 三件套
+** WinSCP / Putty 组合
+Telnet、SSH、rlogin 最方便
+** Intellij IDEA
+最最最最最好用的 Java IDE
+** AutoHotKey
+自定制喜欢的按键，比如我喜欢将 CapsLock 自定义为 Control
+** TeamViewer
+一款用着挺便捷的远程桌面软件；觉得好，没有同类个工具对比过，也就不好说她究竟有多好。
+** Picasa3
+图片查看器中的佼佼者，偏爱 ing。Google 出品，必属精品！
+** Clover
+在 Win 下必备，谁让 Win 资源管理器太...QT，TotalCommand 太重
+** Beyond Compare
+文件/夹比较利器; 此款为所接触同类中最佳。
+** [[https://github.com/cmderdev/cmder/releases][Cmder]]
+windows 下 cmd 的替换工具,支持 PowerShell;同比还有 PowerShell，ConEmu 等。对于
+Cmder 有在：Win 下必备神器之 Cmder 一文中予以总结。
+** [[https://git-for-windows.github.io/][Git for Windows]]
+打包好了，直接使用；Git 一族必备。
+** [[http://www.goodsync.com/][GoodSync]]
+文件同步好帮手。可以同步 本地文件 P2P 云(Dropbox,Google,OnDrive,FTP/SFTP 等等)，
+还可以同步应用程序 以及各设备；强大且不失简洁。比如：SFTP 同步，用过 SublimeText
+的 SFTP(最方便，却老弹框)，WinSCP(F5 即可同步，设计却不人性化)，Gulp 的 SFTP
+(只是需要率先 Watch)，Xftp4(老牌了，都是手动点来点去，额)。
+** [[http://www.ghisler.com/][Total Commander]]
+资源管理器集大成者，只是快捷键太繁琐，用她需要花费些时间了解她先。
+** [[https://getsharex.com/][ShareX]]
+截图、注释、上传，复制 URL 一条龙服务；免费，强大而简洁；自动存储；支持双屏；支
+持录制；还有给力有用的工具集...大有相见恨晚之感(唯一没中不足是：安装时需率先安装
+Steam 桌面应用，不过无妨)。
+* 开发
+** Source Code Pro
+没有一个合适的等宽字体，都不想看电脑。
+** [[https://kapeli.com/dash/][Dash]]
+Mac 专有开发者字典
+** [[https://zealdocs.org/][Zeal]]
+Linux & Windows，开发者字典，節省一直開瀏覽器 tab 的機會，查詢速度極快
+** [[http://devdocs.io/][Devdocs]]
+API 文件會整
+** [[https://www.sourcetreeapp.com/][SourceTree]]
+git GUI
+** [[https://www.docker.com/products/docker-toolbox][Docker]]
+现代开发流程中的航空母舰，一次运行，到处运行。Docker 的各种镜像，大幅度减少了
+我们安装、配置软件的 CD 等待时间。
+** DevOps
+用 Docker 做高可用，弹性伸缩，分布式，而我看中的则是环境隔离、快速安装。剩下的
+事情都交给运维了，我只关心计算。
+** Kitematic
+Docker GUI
+** Spark
+是新一代的科学计算软件，提供了 Python 的接口，轻松实现基于内存的分布式计算，结合
+ Docker 使得 Spark 更加易用，威力巨大。现代开发流程中的宇宙飞船，实现分布式开发
+傻瓜化。
+** Plsql Developer
+** Toad
+Toad for MySQL
+Toad for Oracle
+Toad for SQL Server
+** [[https://github.com/jkbrzt/httpie][httpie]]
+人类用的 http 测试工具
+** [[http://codepen.io/][codepen]]
+線上 HTML, CSS, JS
+** [[http://jsbin.com/][jsbin]]
+線上 HTML, CSS, JS
+** [[https://developers.google.com/speed/pagespeed/insights/][PageSpeed]]
+網頁測試分析工具
+* 编程语言
+** Python
+独特的代码缩进要求和 Everything in Python，各种 DevOps 和快速开发框架。
+Web 开发四件套：Django、Flask、Tornado、Gevent
+科学计算四件套：Numpy、Pandas、Matlibplot、SciPy
+自动测试四件套：Nose、Pyunit、Selenium、Seige
+国内金融三件套：tushare、vn.py、zipline
+网络爬虫：Scrapy、Urllib、Requests
+高端组件：OpenCV、NLTK、Tensorflow
+调试：ipython
+* 科学上网
+翻越长城，放眼世界
+众所周知的原因，我们被关在了墙内。
+作为一名互联网工作者，失去了与外部世界的联系基本就算失去了学习国外先进技术的途径。
+** Shadowsocks
+科学上网目前首选的工具是 shadowsocks，它可以创建一个本地的 socks5 的代理。
+*** shadowsocks-go
+** [[https://getlantern.org/][Lantern]]
+作为一个 P2P 的匿名科学上网工具，蓝灯免费带你飞跃长城！支持 Mac、Linux、Windows、
+Android 等多种操作系统，帮助我们照亮前进的道路，蓝灯绝对是科学上网必备的第一件神装！
+** Tor
+*** ARM
+tor 的外壳
+** DNS
+*** DnsMasq
+DNS 缓存
+*** DnsCrypt
+DNS 加密查询 Open DNS
+*** [[https://github.com/shadowsocks/ChinaDNS][ChinaDNS]]
+此项目解决的是 DNS 污染问题
+* VPS
+** [[http://aws.amazon.com/][AWS]]
+直连海外 CDN 加速，非常适合用来做各种前沿试验，速度和体验一流。
+** [[https://www.qingcloud.com/][青云]]
+国内，可以用青云做替代品使用。青云的 Web Design 和工单服务当数一流，真正在为开发者
+解决各种实际问题。
+* Hack
+** [[http://www.norse-corp.com/][norse]]
+DDOS 地圖
+* 网络服务
+** 源代码仓库
+*** [[https://github.com/][GitHub]]
+号称全球最大的程序员同性交友网站。其实是现代化的文档管理中心。适合存储非私密资料。
+只要是自己产生的文档，一律使用 git 管理。
+程序世界里的大师们都在 github 上，只是需要你的发掘。
+[[https://github.com/appleshan][personal repo]]
+*** [[https://bitbucket.org/][Bitbucket]]
+适合存储私密资料。
+** Google 帐号
+** Email
+*** Gmail
+邮件必备
+** Inoreader
+RSS 服务提供商
+** 雲端硬碟
+*** Dropbox
+** 分享
+*** [[http://imgur.com/][imgur]]
+圖片分享
+*** [[https://droplr.com/][droplr]]
+快速上傳圖片分享
+** [[https://www.google.com/chrome/][Chrome]]
+*** SwitchyOmega : 搭配 Shadowsocks 足够走遍天下
+*** Momentum - Dashboard
+** 看片
+[[http://www.acfun.com/][A 站]] / [[http://www.bilibili.com/][B 站]] / 被窝 / 海盗湾 : 总有能看到的片
+** 其他
+[[http://www.mailgun.com/][mailgun]] : 寄信服務
+[[http://www.urbandictionary.com/][urban]] : 新世代英文單字查詢
+[[http://www.keybr.com/#!practice][keybr]] : 英打練習
+[[https://quizlet.com/][quizlet]] : 語言學習, 背單字
+[[http://defonic.com/sunset.html][defonic]] : 白噪音
+* 社群
+** [[https://slack.com/][Slack]]
+各国小组讨论代替 Gmail Group
+** [[https://gitter.im/][gitter]]
+Github 交流
+** [[http://v2ex.com/][V2EX]]
+码农社区
+* 日常外设
+** gunnar
+眼镜
+** 指甲钳
+指甲长了敲代码速度明显变慢
+** 87 键机械键盘
+如果编码垒字较多的话，最好备着
+** 显示器
+使用大屏幕。大屏幕可以让一个屏幕同时显示好几个窗口而无需来回切换。屏幕多大才好？
+在机器带的起来的情况下越大越好，用上了就回不去了，一天呆在公司 12 小时都不嫌多。
+** ThinkPad
+主力办公电脑 ThinkPad X220i。推荐配置：
+Intel CPU + Intel 核心显卡 + Intel 有线/无线网卡 + 8GB 以上内存 + SSD

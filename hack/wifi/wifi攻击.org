@@ -1,0 +1,13 @@
+1.
+可以使用 sudo iwlist [wlan0] scan[ning] 去搜索无线网络，应该和从 Network-manager 上看到的
+那些无线网络是一样的。
+
+# 列出 wifi 热点
+sudo iwlist wlan0 scanning
+
+
+# 开启 wifi 网卡的监听模式
+sudo airmon-ng start wlan0
+
+# 扫描 wifi 网络热点和客户端
+sudo airodump-ng wlan0

@@ -1,0 +1,34 @@
+Emacs 快速切换光标位置
+
+Emacs 的光标移动能力估计是最被人所诟病的地方之一了，不过通过强大的 Ace-Jump-Mode 扩展，
+Emacs 也能做到像 Vim 那样的快速移动光标的能力，甚至做的更好。
+
+Ace-Jump-Mode 的官方演示地址 => http://dl.dropboxusercontent.com/u/3254819/AceJumpModeDemo/AceJumpDemo.htm
+
+Ace-Jump-Mode 的 Github => https://github.com/winterTTr/ace-jump-mode
+
+使用 el-get 就可以安装 Ace-Jump-Mode，然后添加以下配置文件：
+
+(autoload
+  'ace-jump-mode
+  "ace-jump-mode" t)
+(eval-after-load "ace-jump-mode"
+  '(ace-jump-mode-enable-mark-sync))
+
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+
+Ace-Jump-Mode 提供三种跳跃方式：
+
+"C-c SPC” ==> ace-jump-word-mode
+enter first character of a word, select the highlighted key to move to it.
+"C-u C-c SPC” ==> ace-jump-char-mode
+enter a character for query, select the highlighted key to move to it.
+"C-u C-u C-c SPC” ==> ace-jump-line-mode
+each non-empty line will be marked, select the highlighted key to move to it.
+
+具体使用就是，输入以上三种中任意之一的快捷键，MiniBuffer 就会提示你输入一个字母，
+比如你想跳到 World 这个单词，就输入 W。之后 Ace-Jump-Mode 会将文件中所有 W 打头的
+单词显示为一个单个字母，然后你在按这个字母就会跳到那个单词的开头了。语言比较难解释，
+所以最好还是看作者制作的说明动画，一看就能明白了。
+
