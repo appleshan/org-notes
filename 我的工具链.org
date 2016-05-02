@@ -153,6 +153,8 @@ Toad for SQL Server
 ** [[https://developers.google.com/speed/pagespeed/insights/][PageSpeed]]
 網頁測試分析工具
 * 编程语言
+** Common Lisp
+** Emacs Lisp
 ** Python
 独特的代码缩进要求和 Everything in Python，各种 DevOps 和快速开发框架。
 Web 开发四件套：Django、Flask、Tornado、Gevent
@@ -162,6 +164,9 @@ Web 开发四件套：Django、Flask、Tornado、Gevent
 网络爬虫：Scrapy、Urllib、Requests
 高端组件：OpenCV、NLTK、Tensorflow
 调试：ipython
+** Golang
+** Java
+** Javascript
 * 科学上网
 翻越长城，放眼世界
 众所周知的原因，我们被关在了墙内。
