@@ -2,6 +2,7 @@
 
 工欲善其事，必先利其器。
 这个器可以可以自己锻造，也可以用现成的。就是不断优化自己的工作环境。
+这些东西不必自己从头来，在 github 上找个 star 最高的 clone 或者 fork 之即可，这便是所谓的站在巨人的肩膀上。
 
 * Linux
 ** Arch Linux
@@ -9,7 +10,7 @@
 很好用，社区活跃，文档丰富，软件更新快，我觉得有人说的所谓折腾其实也是选择自己
 需要的一个过程，是有回报的。
 ** Ubuntu
-我的主力开发平台。
+可以让人少折腾的开发平台。
 ** Emacs
 从来没有那个编辑器能像 Emacs 一样吸引到我。
 Coding, Version-Control, Document, GTD, Email 都在 Emacs 里完成。
@@ -37,10 +38,11 @@ shell 里面的战斗机
 *** [[http://ohmyz.sh/][oh-my-zsh]]
 zsh 工具，你的终端你做主
 ** Terminator
+** Tmux
+终端多路复用
 ** dotfiles
 一个程序员一天可能 80% 的时间都在跟 shell 打交道，有个好的 shell(bash or zsh)，加上
-合理的 shell 配置绝对让效率提升一大截。dotfiles 这样的东西不必自己从头来，在 github
-上找个 star 最高的 clone 或者 fork 之即可，这便是所谓的站在巨人的肩膀上。
+合理的 shell 配置绝对让效率提升一大截。
 ** percol
 python 开发的命令行工具,天才的作品
 ** proxychains-ng(proxychains4)
@@ -88,8 +90,6 @@ windows 下面的 linux 命令行工具，就是在 CygWin 的基础上预先安
 ** Xshell / Xftp / Xmanager 三件套
 ** WinSCP / Putty 组合
 Telnet、SSH、rlogin 最方便
-** Intellij IDEA
-最最最最最好用的 Java IDE
 ** AutoHotKey
 自定制喜欢的按键，比如我喜欢将 CapsLock 自定义为 Control
 ** TeamViewer
@@ -144,6 +144,10 @@ Docker GUI
 Toad for MySQL
 Toad for Oracle
 Toad for SQL Server
+** Intellij IDEA
+最最最最最好用的 Java IDE
+** eclipse
+[[https://github.com/ajermakovics/eclipse-instasearch][InstaSearch]] 任何有对话框的搜索都是耍流氓
 ** [[https://github.com/jkbrzt/httpie][httpie]]
 人类用的 http 测试工具
 ** [[http://codepen.io/][codepen]]
@@ -187,12 +191,6 @@ DNS 缓存
 DNS 加密查询 Open DNS
 *** [[https://github.com/shadowsocks/ChinaDNS][ChinaDNS]]
 此项目解决的是 DNS 污染问题
-* VPS
-** [[http://aws.amazon.com/][AWS]]
-直连海外 CDN 加速，非常适合用来做各种前沿试验，速度和体验一流。
-** [[https://www.qingcloud.com/][青云]]
-国内，可以用青云做替代品使用。青云的 Web Design 和工单服务当数一流，真正在为开发者
-解决各种实际问题。
 * Hack
 ** [[http://www.norse-corp.com/][norse]]
 DDOS 地圖
@@ -229,6 +227,12 @@ RSS 服务提供商
 [[http://www.keybr.com/#!practice][keybr]] : 英打練習
 [[https://quizlet.com/][quizlet]] : 語言學習, 背單字
 [[http://defonic.com/sunset.html][defonic]] : 白噪音
+** VPS
+*** [[http://aws.amazon.com/][AWS]]
+直连海外 CDN 加速，非常适合用来做各种前沿试验，速度和体验一流。
+*** [[https://www.qingcloud.com/][青云]]
+国内，可以用青云做替代品使用。青云的 Web Design 和工单服务当数一流，真正在为开发者
+解决各种实际问题。
 * 社群
 ** [[https://slack.com/][Slack]]
 各国小组讨论代替 Gmail Group
@@ -248,4 +252,4 @@ Github 交流
 在机器带的起来的情况下越大越好，用上了就回不去了，一天呆在公司 12 小时都不嫌多。
 ** ThinkPad
 主力办公电脑 ThinkPad X220i。推荐配置：
-Intel CPU + Intel 核心显卡 + Intel 有线/无线网卡 + 8GB 以上内存 + SSD
+Intel 四核CPU + Intel 核心显卡 + Intel 有线/无线网卡 + 16GB 以上内存 + SSD
