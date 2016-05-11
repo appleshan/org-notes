@@ -1,2 +1,2 @@
 #+TITLE: org-notes
-My notes for variable purpose in Emacs Org-mode
+My notes for variable purpose in Emacs Org-mode.
