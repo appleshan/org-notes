@@ -30,7 +30,7 @@ Coding, Version-Control, Document, GTD, Email 都在 Emacs 里完成。
 *** [[https://github.com/appleshan/my-spacemacs-config][my-spacemacs-config]]
 Apple Shan 的 Spacemacs 配置工程
 *** magit
-git 客户端
+git 客户端，基本可以在 emacs 中完成所有常用 git 命令的操作
 *** org-mode
 用 org 格式写所有文字类的东西。也是强大的 GTD 工具。
 *** 另外，java 的话，还是别用 emacs 了，java，groovy，Scala 都不太适合 emacs。
