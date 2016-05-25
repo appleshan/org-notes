@@ -196,10 +196,12 @@ Spacemacs 中所有文件命令都有 SPC f 前缀。
 | `a      | after moving around, go back to the exact position of marker "a" |
 | 'a      | after moving around, go back to line of marker "a"               |
 | :marks  | view all the marks                                               |
-| [(      | jump back to the "(" at the beginning of the current code block  |
+| [(      | 前(                                                              |
+| ])      | 后)                                                              |
 | [[      | 跳转到当前章节开始处                                             |
 | []      | 跳转到当前章节结尾处                                             |
-| [{      | jump back to the "{" at the beginning of the current code block  |
+| [{      | 前{                                                              |
+| ]}      | 后}                                                              |
 | SPC s j | 在 minibuffer 中列出文档大纲或函数列表，选中后跳到定义处         |
 | SPC y   | 快速行跳转(比行号要快)                                           |
 | SPC SPC | first char search                                                |
