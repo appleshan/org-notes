@@ -1,4 +1,4 @@
-Spacemacs 使用大全
+#+TITLE: Spacemacs 使用大全
 
 * <Leader>键
     Spacemacs 使用 SPC 作为它的 <Leader> 键。本文档也使用 SPC 作为 <Leader>
@@ -26,7 +26,7 @@ SPC <f1> 允许用户搜索文档。
 | SPC f e h | 列出所有层并允许你浏览层上的文件。 |
 | SPC ?     | 列出所有快捷键。                   |
 
-* dotfiles 文件
+* Emacs init 文件
 | 快捷键    | 功能                                          |
 |-----------+-----------------------------------------------|
 | SPC f e i | 打开你的 init.el                              |
@@ -35,32 +35,53 @@ SPC <f1> 允许用户搜索文档。
 | SPC f e R | 同步配置文件                                  |
 
 * 移动
-| 快捷键    | 功能                                              |
-|-----------+---------------------------------------------------|
-| h         | left                                              |
-| j         | down                                              |
-| k         | up                                                |
-| l         | right                                             |
-| 0         | beginning of line                                 |
-| $         | end of line                                       |
-| ^         | first char of line                                |
-| 9j        | move down 9 lines                                 |
-| w         | 移动到下一个单词的首字符                          |
-| b         | 移动到上一个单词的首字符                          |
-| e         | 移动到下一个单词的尾字符                          |
-| gg        | first line                                        |
-| G         | last line                                         |
-| C-u       | up half page                                      |
-| C-d       | down half page                                    |
-| f/        | move forward to first "/" character               |
-| t/        | move forward right before the first "/" character |
-| ;         | repeat that command again                         |
-| H         | head of the screen                                |
-| M         | middle of the screen                              |
-| L         | last of the screen                                |
-| {         | move backwards by paragraph or block              |
-| }         | move forward by paragraph or block                |
-| :[number] | 跳转到制定行                                      |
+| 快捷键       | 功能                                              |
+|--------------+---------------------------------------------------|
+| h            | left                                              |
+| j            | down                                              |
+| k            | up                                                |
+| l            | right                                             |
+| 0            | 行首                                              |
+| 中竖线       | 行首                                              |
+| $            | 行尾                                              |
+| ^            | 字首                                              |
+| _            | 字首                                              |
+| 9j           | move down 9 lines                                 |
+| w            | 下一词首                                          |
+| W            | 下一串首                                          |
+| b            | 上一词首                                          |
+| B            | 上一串首                                          |
+| e            | 下一词尾                                          |
+| E            | 下一串尾                                          |
+| ge           | 上一词尾                                          |
+| gE           | 上一串尾                                          |
+| gg           | 首行                                              |
+| G            | 末行                                              |
+| C-f          | 上一页                                            |
+| C-b          | 下一页                                            |
+| C-u          | 上半页                                            |
+| C-d          | 下半页                                            |
+| C-y          | 上滚                                              |
+| C-e          | 下滚                                              |
+| f/           | move forward to first "/" character               |
+| t/           | move forward right before the first "/" character |
+| ;            | repeat that command again                         |
+| H            | 移动光标到屏首的行                                |
+| M            | 移动光标到屏中的行                                |
+| L            | 移动光标到屏尾的行                                |
+| zt / z RET   | 移动光标行到屏首                                  |
+| zz / z .     | 移动光标行到屏中                                  |
+| zb / z -     | 移动光标行到屏尾                                  |
+| zh           | 左滚                                              |
+| zl           | 右滚                                              |
+| zH           | 左屏                                              |
+| zL           | 右屏                                              |
+| (            | 句首（判'.'）                                        |
+| )            | 句尾（判'.'）                                        |
+| {            | 段首（判空行）                                         |
+| }            | 段尾（判空行）                                         |
+| :[N]         | 第 n 行                                           |
+| [N] + 中竖线 | 第 n 列                                           |
 
 * 编辑
 | 快捷键              | 功能                                            |
@@ -189,8 +210,10 @@ Spacemacs 中所有文件命令都有 SPC f 前缀。
 |-----------+------------------------------|
 | /         | search forward               |
 | ?         | search backward              |
-| *         | next occurrence of word      |
-| #         | prev occurrence of word      |
+| #         | 前一个词                     |
+| *         | 后一个词                     |
+| gd        | 局部变量定义                 |
+| gD        | 全局变量定义                 |
 | n         | next match                   |
 | N         | previous match               |
 | %         | goto corresponding (, {, [   |

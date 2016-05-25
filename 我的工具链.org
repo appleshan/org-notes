@@ -17,7 +17,8 @@
 Coding, Version-Control, Document, GTD, Email 都在 Emacs 里完成。
 如果 Linux 上只能留一个程序，我肯定是选 Emacs。
 *** [[https://github.com/syl20bnr/spacemacs][Spacemacs]]
-一份 emacs 的配置工程。vim 有 vimrc. Emacs 有.emacs.d. 这就是 Emacs 的.emacs.d
+最好的编辑器既不是 Emacs，也不是 Vim，而是两者的合体！
+这是一份 emacs 的配置工程。vim 有 vimrc. Emacs 有.emacs.d. 这就是 Emacs 的.emacs.d
 配置工程。利用了 Emacs 的 evil 插件还有别的一些插件, 实现了 Emacs 中使用 VIM 的
 快捷键。已经将原生的 Emacs 改造成了另一个模样。
 1. 它是我见过最好看的 Emacs 配置.
