@@ -207,7 +207,7 @@ Spacemacs 中所有文件命令都有 SPC f 前缀。
 | SPC SPC | first char search                                                |
 
 * 搜索
-** 搜索内容:
+** 当前文件内容的搜索:
 | 快捷键    | 功能                         |
 |-----------+------------------------------|
 | /         | search forward               |
@@ -245,16 +245,17 @@ Projectile 是管理專案的程式，簡要來說，每當在 emacs 中開啓�
 projectile 會利用目錄名稱或是資料夾狀態，判斷該檔案是否處在某一個 專案 之中。
 如果平時需要在一個以上的專案中遊走，這個功能就相當有用，projectile 會自動將
 開啓的檔案歸入所屬的專案中。
-| 快捷键    | 功能                                               |
-|-----------+----------------------------------------------------|
-| SPC p p   | 切换 project                                       |
-| SPC p b   | 切换到已经打开的同 project 中的 buffer             |
-| SPC p f   | 打开当前 project 的文件                            |
-| SPC p t   | 打开当前 project 的文件树                          |
-| SPC p r   | 近打开的项目                                       |
-| SPC p o   | 在該專案中已開啓的 buffer 中，用 occur 搜尋關鍵字  |
-| SPC s a p | 在該專案目錄中，用 ag (sliver searcher) 搜尋關鍵字 |
-| C-c p s s | 同上                                               |
+| 快捷键    | 功能                                                              |
+|-----------+-------------------------------------------------------------------|
+| SPC p p   | 切换 project                                                      |
+| SPC p b   | 切换到已经打开的同 project 中的 buffer                            |
+| SPC p f   | 打开当前 project 的文件                                           |
+| SPC p t   | 打开当前 project 的文件树                                         |
+| SPC p r   | 近打开的项目                                                      |
+| SPC p o   | 在该项目已开启的 buffer 中，用 occur 搜寻关鍵字                   |
+| SPC s a p | 在该项目目录中，用 ag ([[https://github.com/ggreer/the_silver_searcher][the_sliver_searcher]]) 搜寻关鍵字            |
+| SPC s t p | 在该项目目录中，用 pt 搜寻关键字 ([[https://github.com/monochromegane/the_platinum_searcher][the_platinum_searcher]]) 搜寻关键字 |
+| C-c p s s | 同上                                                              |
 
 * visual mode
 | 快捷键 | 功能              |
