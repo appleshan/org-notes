@@ -59,7 +59,7 @@ linux 命令行里面的所有工具都是精华，真的，用的熟悉的话�
 ** ag / pt
 搜索代码超级快
 ** GnuPG
-保护你的备份数据
+加密，保护你的备份数据
 ** rclone
 同步文件到云端硬盘的客户端，支持：
 Google Drive
@@ -69,6 +69,8 @@ Google Cloud Storage
 Amazon Cloud Drive
 Microsoft One Drive
 The local filesystem
+** fcitx 拼音输入法
+** sdcv 词典
 ** [[http://www.videolan.org/vlc/][VLC]]
 影音播放
 ** [[https://forwardhq.com/help/ssh-tunneling-how-to/][forward]]

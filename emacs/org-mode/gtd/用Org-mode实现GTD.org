@@ -1,4 +1,4 @@
-用 Org-mode 实现 GTD
+#+TITLE:用 Org-mode 实现 GTD
 
 有了 Org-mode 强大的任务管理功能，再配合其他一些 Emacs 插件，可以很容易实现个人
 时间管理（GTD）。 如果不了解 GTD，[[http://www.cnblogs.com/holbrook/archive/2012/02/09/GTD.html][这里]] 可以让你在两分钟之内对 GTD 有一个初步的

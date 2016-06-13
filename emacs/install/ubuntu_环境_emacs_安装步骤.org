@@ -13,7 +13,7 @@ sudo apt-get build-dep emacs24
 
 cd ‹source dir name›
 sudo ./configure --prefix=/opt/emacs-24.5
-sudo make
+sudo make -j4
 sudo make install # optional. This basically copy the binary to /usr/local/bin
 
 * 2.安装 sbcl
