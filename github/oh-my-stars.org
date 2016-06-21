@@ -1,0 +1,187 @@
+#+TITLE:我的 github star 资料整理
+
+* Linux
+** docs
+*** Linux-Tutorial
+https://github.com/judasn/Linux-Tutorial
+《Java 程序员眼中的 Linux》
+*** the_new_world_linux
+https://github.com/yangyangwithgnu/the_new_world_linux
+美丽新世界：linux 下的惬意生活
+*** linuxtools_rst
+https://github.com/me115/linuxtools_rst
+Linux 工具快速教程 http://linuxtools-rst.readthedocs.org/zh_CN/latest/
+*** using-cli
+https://github.com/xuxiaodong/using-cli
+Using the command line like a hacker http://talk.linuxtoy.org/using-cli/
+*** Linux related notes
+https://github.com/chenzhiwei/linux
+*** docs
+https://github.com/JasonWiki/docs
+文档整理
+*** Learning-SICP
+https://github.com/DeathKing/Learning-SICP
+《计算机程序的构造和解释》公开课中文化项目
+*** Intellij-IDEA-F2E
+https://github.com/Damao/Intellij-IDEA-F2E
+IntelliJ IDEA, PHPStorm, WebStorm 前端开发指南.
+*** nginx-book
+https://github.com/taobao/nginx-book
+Nginx 开发从入门到精通
+*** awesome-microservices
+https://github.com/mfornos/awesome-microservices
+微服务架构相关的原则和技术的资料整理。
+*** config-server
+https://github.com/sdcuike/config-server
+统一配置中心
+** script
+*** tracyone/oh-my-ubuntu
+https://github.com/tracyone/oh-my-ubuntu
+ubuntu OS 上，可以自定义和容易使用的软件安装 shell script.
+*** CodeFalling/arch-install
+https://github.com/CodeFalling/arch-install
+A quick archlinux install script
+** app
+* Emacs
+** Emacs-Elisp-Programming
+https://github.com/caiorss/Emacs-Elisp-Programming
+Tutorial about programming Elisp and Emacs text editor customization.
+http://caiorss.github.io/Emacs-Elisp-Programming
+** emacs-lisp-cn
+https://github.com/fortitudezhang/emacs-lisp-cn
+emacs lisp 文档中文翻译
+** emacs4developers
+https://github.com/pierre-lecocq/emacs4developers
+A document to help developers to use Emacs as a developer
+** orgmode-cn
+https://github.com/marboo/orgmode-cn
+orgmode 中文主页(非官方) http://orgmode-cn.marboo.io
+** emacs-notes
+https://github.com/sachac/emacs-notes
+Emacs / Org Mode tutorials and other organized notes
+** Spacemacs-rocks
+https://github.com/emacs-china/Spacemacs-rocks
+Happy Hacking Emacs & Spacemacs (Simplified Chinese)
+http://book.emacs-china.org
+* Shadowsocks
+** GameXG/shadowsocks_admin
+https://github.com/GameXG/shadowsocks_admin
+一个 shadowsocks 服务器多账号管理系统，后端使用 shadowsocks-go。
+支持多节点、流量限制等功能。
+** CrawlerIShadowsocks
+https://github.com/iyannik0215/CrawlerIShadowsocks
+抓取 http://www.ishadowsocks.com 的免费 SS 信息。
+* Python
+** magicmethods
+https://github.com/RafeKettler/magicmethods
+** magicmethods-zh_CN
+https://github.com/justjavac/magicmethods-zh_CN
+Python 的神奇方法指南
+** django-extension-docs-zh
+https://github.com/delongw/django-extension-docs-zh
+django-extensions 的中文文档.
+https://django-extensions-zh.readthedocs.io/zh_CN/latest/
+Django Extensions 是 Django 框架的扩展功能集合.
+推荐使用 Django 项目的人在开发环境下安装这个插件,功能十分强大.
+** python-guide
+https://github.com/kennethreitz/python-guide
+Python best practices guidebook, written for Humans. http://docs.python-guide.org
+** pythondocument
+https://github.com/ictar/pythondocument
+translate python documents to Chinese for convenient reference
+** Python4DataScience.CH
+https://github.com/catalystfrank/Python4DataScience.CH
+从 0 开始接触 Python 处理数据科学问题。
+包含 Python0 基础入门、科学计算工具入门、数学与计算机基础入门、统计学习入门。
+* Docker
+** docker_practice
+https://github.com/yeasy/docker_practice
+Docker —— 从入门到实践
+* Java
+** awesome-java
+https://github.com/akullpp/awesome-java
+** awesome-java-cn
+Java 资源大全中文版
+*** jobbole/awesome-java-cn
+https://github.com/jobbole/awesome-java-cn
+*** sdcuike/awesome-java-cn
+https://github.com/sdcuike/awesome-java-cn
+** useful-java-links
+https://github.com/Vedenin/useful-java-links
+A list of useful Java frameworks, libraries, software and hello worlds examples
+** spring-framework-reference
+https://github.com/abel533/spring-framework-reference
+Spring4 框架参考文档 - 中文版
+** cws_evaluation
+https://github.com/ysc/cws_evaluation
+Java 开源项目 cws_evaluation：中文分词器分词效果评估对比
+* Javascript
+** awesome-javascript-cn
+https://github.com/jobbole/awesome-javascript-cn
+JavaScript 资源大全中文版
+** json-api
+https://github.com/json-api/json-api
+A specification for building JSON APIs http://jsonapi.org
+** json-api-zh_CN
+https://github.com/justjavac/json-api-zh_CN
+用 JSON 构建 API 的标准指南 http://jsonapi.org.cn
+** essential-javascript-links
+https://github.com/ericelliott/essential-javascript-links
+Essential JavaScript website.
+* Programming
+** The-Art-Of-Programming-By-July
+https://github.com/julycoding/The-Art-Of-Programming-By-July
+** free-programming-books-zh_CN
+https://github.com/justjavac/free-programming-books-zh_CN
+免费的计算机编程类中文书籍
+** http-api-design-ZH_CN
+https://github.com/ZhangBohan/http-api-design-ZH_CN
+HTTP API 设计指南(http-api-design-ZH_CN)，
+翻译自 https://github.com/interagent/http-api-design
+** awesome-resources
+https://github.com/lyfeyaj/awesome-resources
+Awesome resources for coding and learning: open source projects, websites,
+books e.g.
+** IntelliJ-IDEA-Tutorial
+https://github.com/judasn/IntelliJ-IDEA-Tutorial
+IntelliJ IDEA 简体中文专题教程
+http://wiki.jikexueyuan.com/project/intellij-idea-tutorial/
+* Git
+** progit2-zh
+https://github.com/progit/progit2-zh
+Pro Git，第二版，简体中文
+** progit2-zh-tw
+https://github.com/progit/progit2-zh-tw
+Pro Git, 繁體中文第二版
+** github-roam
+https://github.com/phodal/github-roam
+GitHub 漫游指南
+* Golang
+** awesome-go
+https://github.com/avelino/awesome-go
+A curated list of awesome Go frameworks, libraries and software.
+** gopl-zh
+https://github.com/foreversmart/gopl-zh
+Go 圣经中文读书笔记(你懂的) http://www.gopl.io/
+** The-Golang-Standard-Library-by-Example
+https://github.com/polaris1119/The-Golang-Standard-Library-by-Example
+Golang 标准库。以示例驱动的方式讲解 Golang 的标准库。
+** the-way-to-go_ZH_CN
+https://github.com/Unknwon/the-way-to-go_ZH_CN
+《The Way to Go》中文译本，中文正式名《Go 入门指南》
+http://wiki.jikexueyuan.com/project/the-way-to-go/
+** go-rock-libraries-showcases
+https://github.com/Unknwon/go-rock-libraries-showcases
+《Go 名库讲解》是一套针对 Google 出品的 Go 语言的第三方库进行评测讲解的集博客、
+示例与语音视频为一体的综合教程，适合完成学习完成《Go 编程基础》教程的学习者。
+** go-fundamental-programming
+https://github.com/Unknwon/go-fundamental-programming
+《Go 编程基础》是一套针对 Google 出品的 Go 语言的视频语音教程，主要面向新手级别
+的学习者。
+** build-web-application-with-golang
+https://github.com/astaxie/build-web-application-with-golang
+A golang ebook intro how to build a web with golang
+* Computer
+** CSOneYearChallange
+https://github.com/FrontSeat/CSOneYearChallange
+计算机科学一年挑战
