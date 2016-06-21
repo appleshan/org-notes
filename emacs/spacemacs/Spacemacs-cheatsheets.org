@@ -1,4 +1,4 @@
-#+TITLE: Spacemacs 使用大全
+#+TITLE: Spacemacs cheatsheets
 
 * <Leader>键
     Spacemacs 使用 SPC 作为它的 <Leader> 键。本文档也使用 SPC 作为 <Leader>
