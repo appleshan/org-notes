@@ -1,4 +1,4 @@
-使用 tmux
+#+TITLE:使用 tmux
 
 本篇文章记录的是单机情况下的操作，远程连接没有用过，就不好置评
 但即便是单机情况下，tmux 也绝对是让人惊艳的一款终端软件。
@@ -8,7 +8,7 @@
 
 安装，直接从仓库里安装，但是一般而言，Linux 会自带
 #+BEGIN_SRC bash
-$ sudo apt-get install tmux
+$ sudo apt install tmux
 #+END_SRC
 
 完成之后，不用管其他的，直接在 Shell 里输入：

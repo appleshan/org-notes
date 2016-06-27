@@ -72,6 +72,19 @@ https://github.com/GameXG/shadowsocks_admin
 https://github.com/iyannik0215/CrawlerIShadowsocks
 抓取 http://www.ishadowsocks.com 的免费 SS 信息。
 * Python
+** pyeco
+https://github.com/dccrazyboy/pyeco
+Python 开发生态环境简介
+** python-guide
+https://github.com/kennethreitz/python-guide
+Python best practices guidebook, written for Humans. http://docs.python-guide.org
+** Python-Guide-CN
+https://github.com/Prodesire/Python-Guide-CN
+Python 最佳实践指南中文版
+http://pythonguidecn.readthedocs.io/zh/latest/
+** python-style-guide
+https://github.com/ee0703/python-style-guide
+Python 代码、单元测试和项目规范
 ** magicmethods
 https://github.com/RafeKettler/magicmethods
 ** magicmethods-zh_CN
@@ -83,9 +96,6 @@ django-extensions 的中文文档.
 https://django-extensions-zh.readthedocs.io/zh_CN/latest/
 Django Extensions 是 Django 框架的扩展功能集合.
 推荐使用 Django 项目的人在开发环境下安装这个插件,功能十分强大.
-** python-guide
-https://github.com/kennethreitz/python-guide
-Python best practices guidebook, written for Humans. http://docs.python-guide.org
 ** pythondocument
 https://github.com/ictar/pythondocument
 translate python documents to Chinese for convenient reference
