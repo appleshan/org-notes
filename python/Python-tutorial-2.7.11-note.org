@@ -1,0 +1,482 @@
+#+TITLE:Python tutorial 2.7.11
+
+@See http://www.pythondoc.com/pythontutorial27/index.html
+
+* 1.开胃菜
+Python 是一门解释型语言，因为无需编译和链接。
+* 2. 使用 Python 解释器
+** 2.1. 调用 Python 解释器
+#+BEGIN_SRC bash
+python
+#+END_SRC
+输入 quit() 命令退出解释器。
+*** 2.1.1. 参数传递
+调用解释器时，脚本名和附加参数传入一个名为 sys.argv 的字符串列表。你能够通过执行
+import sys 来获取这个列表
+*** 2.1.2. 交互模式
+主提示符通常标识为三个大于号 (>>>)；从属提示符，由三个点标识 (...)。
+** 2.2. 解释器及其环境
+*** 2.2.1. 源程序编码
+在 Python 源文件中可以使用非 ASCII 编码。最好的方法是在 #! 行的后面再增加一行特
+殊的注释来定义源文件的编码:
+#+BEGIN_SRC python
+# -*- coding: encoding -*-
+#+END_SRC
+通过此声明，源文件中所有的东西都会被当做用 encoding 指代的 UTF-8 编码对待。
+在 Python 库参考手册 [[https://docs.python.org/2.7/library/codecs.html#module-codecs][codecs]] 一节中你可以找到一张可用的编码列表。
+* 3. Python 简介
+Python 中的注释以 # 字符起始，直至实际的行尾
+** 3.1. 将 Python 当做计算器
+*** 3.1.1. 数字
+解释器表现得就像一个简单的计算器：可以向其录入一些表达式，它会给出返回值。
+表达式语法很直白：运算符 +，-，* 和 / ；括号 ( () ) 用于分组。
+整数的类型是 int，带有小数部分的数字的类型是 float。
+
+除法 ( / ) 返回的类型取决于它的操作数。
+如果两个操作数都是 int，将采用 floor division 除法并返回一个 int。
+如果两个操作数中有一个是 float，将采用传统的除法并返回一个 float。
+还提供 // 运算符用于 floor division 而无论操作数是什么类型。
+余数可以用 % 操作符计算。
+使用 ** 运算符计算幂乘方。
+
+等号( '=' )用于给变量赋值。
+变量在使用前必须 “定义”(赋值)，否则会出错。
+
+浮点数有完整的支持；与整型混合计算时会自动转为浮点数。
+
+交互模式中，最近一个表达式的值赋给变量 _。
+此变量对于用户是只读的。不要尝试给它赋值
+
+除了 int 和 float，Python 还支持其它数字类型，例如 Decimal 和 Fraction。
+Python 还内建支持 复数 ，使用后缀 j 或 J 表示虚数部分（例如，3+5j）。
+
+*** 3.1.2. 字符串
+可以通过几种不同方式表示的字符串。
+它们可以用单引号 ('...') 或双引号 ("...") 标识。
+
+\ 可以用来转义引号。
+
+在交互式解释器中，输出的字符串会用引号引起来，特殊字符会用反斜杠 (\) 转义。
+如果你前面带有 \ 的字符被当作特殊字符，你可以使用“原始字符串”，方法是在第一个
+引号前面加上一个 r。
+
+字符串文本能够分成多行。一种方法是使用三引号："""...""" 或者 '''...'''。
+行尾换行符会被自动包含到字符串中，但是可以在行尾加上 \ 来避免这个行为。
+也就是说：以反斜杠为行结尾的字符串，它表示下一行在逻辑上是本行的后续内容。
+
+字符串可以由 + 操作符连接(粘到一起)，可以由 * 表示重复。
+
+Python 没有单独的字符类型；一个字符就是一个简单的长度为 1 的字符串。
+
+字符串也可以被检索。类似于 C，字符串的第一个字符索引为 0。
+索引也可以是负数，这将导致从右边开始计算。
+切片的索引有非常有用的默认：
+值省略的第一个索引默认为零，省略的第二个索引默认为切片的字符串的大小。
+试图使用太大的索引会导致错误。
+
+除了索引，还支持 切片。索引用于获得单个字符，切片 让你获得一个子字符串。
+包含起始的字符，不包含末尾的字符。
+Python 能够优雅地处理那些没有意义的切片索引：
+一个过大的索引值(即下标值大于字符串实际长度)将被字符串实际长度所代替，
+当上边界比下边界大时(即切片左值大于右值)就返回空字符串。
+
+Python 字符串不可以被更改 — 它们是 不可变 的。
+
+内置函数 len() 返回字符串长度。
+
+*** 3.1.3. 关于 Unicode
+从 Python2.0 起，程序员们有了一个新的用来存储文本数据的类型：Unicode 对象。
+Unicode 的先进之处在于为每一种现代或古代使用的文字系统中出现的每一个字符都提供了
+统一的序列号。
+在 Python 中创建 Unicode 字符串和创建普通的字符串一样简单:
+#+BEGIN_SRC python
+>>> u'Hello World !'
+u'Hello World !'
+#+END_SRC
+引号前的 'u' 表示这会创建一个 Unicode 字符串。
+
+Python 提供了基于已知编码来创建 Unicode 字符串的整套方法。
+内置函数 unicode() 可以使用所有注册的 Unicode 编码(COders 和 DECoders)。
+如果有一个其它编码的数据，希望可以从中生成一个 Unicode 字符串，你可以使用
+unicode 函数，它接受编码名作为第二参数。
+*** 3.1.4. 列表
+Python 有几个 =复合= 数据类型，用于表示其它的值。最通用的是 =list (列表)= ，
+它可以写作中括号之间的一列逗号分隔的值。列表的元素不必是同一类型。
+
+列表可以被索引和切片。
+所有的切片操作都会返回一个包含请求的元素的新列表。
++ 操作可以连接多个列表。
+列表允许修改元素。
+可以使用 append() 方法在列表的末尾添加新的元素。
+也可以对切片赋值，此操作可以改变列表的尺寸，或清空它。
+
+内置函数 len() 同样适用于列表。
+
+允许嵌套列表(创建一个包含其它列表的列表)。
+** 3.2. 编程的第一步
+在 Python 中，任何非零整数都是 true；0 是 false。
+判断条件也可以是字符串或列表，实际上可以是任何序列；
+所有长度不为零的是 true，空序列是 false。
+
+标准比较操作符与 C 相同：<、>、==、<=、>= 和 !=。
+
+缩进是 Python 组织語句的方法。
+同一个语句块中的每一行必须缩进同样数量的空白。
+* 4. 深入 Python 流程控制
+** 4.1. if 语句
+例如:
+#+BEGIN_SRC python
+>>> x = int(raw_input("Please enter an integer: "))
+Please enter an integer: 42
+>>> if x < 0:
+...      x = 0
+...      print 'Negative changed to zero'
+... elif x == 0:
+...      print 'Zero'
+... elif x == 1:
+...      print 'Single'
+... else:
+...      print 'More'
+...
+More
+#+END_SRC
+可能会有零到多个 elif 部分，else 是可选的。
+** 4.2. for 语句
+Python 的 for 语句依据任意序列(链表或字符串)中的子项，按它们在序列中的顺序来进行
+迭代。
+
+例如:
+#+BEGIN_SRC python
+>>> # Measure some strings:
+... words = ['cat', 'window', 'defenestrate']
+>>> for w in words:
+...     print w, len(w)
+...
+cat 3
+window 6
+defenestrate 12
+#+END_SRC
+
+在迭代过程中修改迭代序列不安全。如果你想要修改你迭代的序列(例如：复制选择项)，
+你可以迭代它的复本。使用切割标识就可以很方便地做到这一点:
+#+BEGIN_SRC python
+>>> for w in words[:]:  # Loop over a slice copy of the entire list.
+...     if len(w) > 6:
+...         words.insert(0, w)
+...
+>>> words
+['defenestrate', 'cat', 'window', 'defenestrate']
+#+END_SRC
+** 4.3. range() 函数
+如果你需要一个数值序列，内置函数 range() 会很方便，它生成一个等差级数链表:
+#+BEGIN_SRC python
+>>> range(10)
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+#+END_SRC
+
+也可以让 range 操作从另一个数值开始，或者可以指定一个不同的步进值(甚至是负数，
+有时这也被称为 “步长”):
+#+BEGIN_SRC python
+>>> range(5, 10)
+[5, 6, 7, 8, 9]
+>>> range(0, 10, 3)
+[0, 3, 6, 9]
+>>> range(-10, -100, -30)
+[-10, -40, -70]
+#+END_SRC
+
+需要迭代链表索引的话，如下所示结合使用 range() 和 len():
+#+BEGIN_SRC python
+>>> a = ['Mary', 'had', 'a', 'little', 'lamb']
+>>> for i in range(len(a)):
+...     print i, a[i]
+...
+0 Mary
+1 had
+2 a
+3 little
+4 lamb
+#+END_SRC
+** 4.4. break 和 continue 语句, 以及循环中的 else 子句
+=break= 语句和 C 中的类似，用于跳出最近的一级 for 或 while 循环。
+
+循环可以有一个 else 子句；它在循环迭代完整个列表 (对于 for) 后或执行条件为
+false (对于 while) 时执行，但循环被 break 中止的情况下不会执行。
+
+=continue= 语句是从 C 中借鉴来的，它表示循环继续执行下一次迭代。
+** 4.5. pass 语句
+=pass= 语句什么也不做。它用于那些语法上必须要有什么语句，但程序什么也不做的场合。
+另一方面，pass 可以在创建新代码时用来做函数或控制体的占位符。可以让你在更抽象的
+级别上思考。
+** 4.6. 定义函数
+我们可以定义一个函数用来生成任意上界的菲波那契数列:
+#+BEGIN_SRC python
+>>> def fib(n):    # write Fibonacci series up to n
+...     """Print a Fibonacci series up to n."""
+...     a, b = 0, 1
+...     while a < n:
+...         print a,
+...         a, b = b, a+b
+...
+>>> # Now call the function we just defined:
+... fib(2000)
+0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597
+#+END_SRC
+
+关键字 =def= 引入了一个函数 定义 。在其后必须跟有函数名和包括形式参数的圆括号。
+函数体语句从下一行开始，必须是缩进的。
+
+函数体的第一行语句可以是可选的字符串文本，这个字符串是函数的文档字符串，或者称
+为 docstring。在你的代码中包含 docstrings 是一个好的实践。
+
+函数 =调用= 会为函数局部变量生成一个新的符号表。确切地说，所有函数中的变量赋值
+都是将值存储在局部符号表。变量引用首先在局部符号表中查找，然后是包含函数的局部
+符号表，然后是全局符号表，最后是内置名字表。
+
+一个函数定义会在当前符号表内引入函数名。函数名指代的值(即函数体)存在一个被
+Python 解释器认定为 用户自定义函数 的类型。这个值可以赋予其他的名字(即变量名)，
+然后它也可以被当做函数使用。这可以作为通用的重命名机制:
+#+BEGIN_SRC python
+>>> fib
+<function fib at 10042ed0>
+>>> f = fib
+>>> f(100)
+0 1 1 2 3 5 8 13 21 34 55 89
+#+END_SRC
+
+以下示例演示了如何从函数中返回一个包含菲波那契数列的数值链表，而不是打印它:
+#+BEGIN_SRC python
+>>> def fib2(n): # return Fibonacci series up to n
+...     """Return a list containing the Fibonacci series up to n."""
+...     result = []
+...     a, b = 0, 1
+...     while a < n:
+...         result.append(a)    # see below
+...         a, b = b, a+b
+...     return result
+...
+>>> f100 = fib2(100)    # call it
+>>> f100                # write the result
+[0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+#+END_SRC
+
+这个例子演示了一些新的 Python 功能：
+- return 语句从函数中返回一个值。
+  不带表达式的 return 返回 None。过程结束后也会返回 None。
+- 语句 result.append(b) 称为链表对象 result 的一个 方法 (method)。
+
+方法是一个“属于”某个对象的函数，它被命名为 obj.methodename，这里的 obj 是某个
+对象(可能是一个表达式)，methodename 是某个在该对象类型定义中的方法的命名。
+** 4.7. 深入 Python 函数定义
+在 Python 中，你也可以定义包含若干参数的函数。
+这里有三种可用的形式，也可以混合使用。
+*** 4.7.1. 默认参数值
+最常用的一种形式是为一个或多个参数指定默认值。这会创建一个可以使用比定义时允许
+的参数更少的参数调用的函数，例如:
+#+BEGIN_SRC python
+def ask_ok(prompt, retries=4, complaint='Yes or no, please!'):
+    while True:
+        ok = raw_input(prompt)
+        if ok in ('y', 'ye', 'yes'):
+            return True
+        if ok in ('n', 'no', 'nop', 'nope'):
+            return False
+        retries = retries - 1
+        if retries < 0:
+            raise IOError('refusenik user')
+        print complaint
+#+END_SRC
+
+这个函数可以通过几种不同的方式调用：
+
+- 只给出必要的参数:
+#+BEGIN_SRC python
+ask_ok('Do you really want to quit?')
+#+END_SRC
+
+- 给出一个可选的参数:
+#+BEGIN_SRC python
+ask_ok('OK to overwrite the file?', 2)
+#+END_SRC
+
+- 或者给出所有的参数:
+#+BEGIN_SRC python
+ask_ok('OK to overwrite the file?', 2, 'Come on, only yes or no!')
+#+END_SRC
+
+这个例子还介绍了 in 关键字。它测定序列中是否包含某个确定的值。
+
+*重要警告*: 默认值只被赋值一次。这使得当默认值是可变对象时会有所不同，比如列表、
+字典或者大多数类的实例。例如，下面的函数在后续调用过程中会累积(前面)传给它的参数:
+#+BEGIN_SRC python
+def f(a, L=[]):
+    L.append(a)
+    return L
+
+print f(1)
+print f(2)
+print f(3)
+#+END_SRC
+
+这将会打印:
+#+BEGIN_SRC python
+[1]
+[1, 2]
+[1, 2, 3]
+#+END_SRC
+
+如果你不想在随后的调用中共享默认值，可以像这样写函数:
+#+BEGIN_SRC python
+def f(a, L=None):
+    if L is None:
+        L = []
+    L.append(a)
+    return L
+#+END_SRC
+*** 4.7.2. 关键字参数
+函数可以通过 =关键字参数= 的形式来调用，形如 keyword = value。
+例如，以下的函数:
+#+BEGIN_SRC python
+def parrot(voltage, state='a stiff', action='voom', type='Norwegian Blue'):
+    print "-- This parrot wouldn't", action,
+    print "if you put", voltage, "volts through it."
+    print "-- Lovely plumage, the", type
+    print "-- It's", state, "!"
+#+END_SRC
+
+接受一个必选参数( voltage )以及三个可选参数( state, action, 和 type )。
+可以用以下的任一方法调用:
+#+BEGIN_SRC python
+parrot(1000)                                          # 1 positional argument
+parrot(voltage=1000)                                  # 1 keyword argument
+parrot(voltage=1000000, action='VOOOOOM')             # 2 keyword arguments
+parrot(action='VOOOOOM', voltage=1000000)             # 2 keyword arguments
+parrot('a million', 'bereft of life', 'jump')         # 3 positional arguments
+parrot('a thousand', state='pushing up the daisies')  # 1 positional, 1 keyword
+#+END_SRC
+
+不过以下几种调用是无效的:
+#+BEGIN_SRC python
+parrot()                     # required argument missing
+parrot(voltage=5.0, 'dead')  # non-keyword argument after a keyword argument
+parrot(110, voltage=220)     # duplicate value for the same argument
+parrot(actor='John Cleese')  # unknown keyword argument
+#+END_SRC
+
+在函数调用中，关键字的参数必须跟随在位置参数的后面。传递的所有关键字参数必须与
+函数接受的某个参数相匹配，它们的顺序并不重要。任何参数都不可以多次赋值。
+
+引入一个形如 **name 的参数时，它接收一个字典，该字典包含了所有未出现在形式参数
+列表中的关键字参数。
+这里可能还会组合使用一个形如 *name 的形式参数，它接收一个元组，包含了所有没有
+出现在形式参数列表中的参数值。( *name 必须在 **name 之前出现)。
+例如，我们这样定义一个函数:
+#+BEGIN_SRC python
+def cheeseshop(kind, *arguments, **keywords):
+    print "-- Do you have any", kind, "?"
+    print "-- I'm sorry, we're all out of", kind
+    for arg in arguments:
+        print arg
+    print "-" * 40
+    keys = sorted(keywords.keys())
+    for kw in keys:
+        print kw, ":", keywords[kw]
+#+END_SRC
+它可以像这样调用:
+#+BEGIN_SRC python
+cheeseshop("Limburger", "It's very runny, sir.",
+           "It's really very, VERY runny, sir.",
+           shopkeeper='Michael Palin',
+           client="John Cleese",
+           sketch="Cheese Shop Sketch")
+#+END_SRC
+当然它会按如下内容打印:
+#+BEGIN_EXAMPLE
+-- Do you have any Limburger ?
+-- I'm sorry, we're all out of Limburger
+It's very runny, sir.
+It's really very, VERY runny, sir.
+----------------------------------------
+client : John Cleese
+shopkeeper : Michael Palin
+sketch : Cheese Shop Sketch
+#+END_EXAMPLE
+*** 4.7.3. 可变参数列表
+最后，一个最不常用的选择是可以让函数调用可变个数的参数。
+这些参数被包装进一个元组。在这些可变个数的参数之前，可以有零到多个普通的参数:
+#+BEGIN_SRC python
+def write_multiple_items(file, separator, *args):
+    file.write(separator.join(args))
+#+END_SRC
+*** 4.7.4. 参数列表的分拆
+另有一种相反的情况: 当你要传递的参数已经是一个列表，但要调用的函数却接受分开
+一个个的参数值。这时候你要把已有的列表拆开来。
+例如内建函数 range() 需要独立的 start，stop 参数。
+你可以在调用函数时加一个 * 操作符来自动把参数列表拆开:
+#+BEGIN_SRC python
+>>> list(range(3, 6))            # normal call with separate arguments
+[3, 4, 5]
+>>> args = [3, 6]
+>>> list(range(*args))            # call with arguments unpacked from a list
+[3, 4, 5]
+#+END_SRC
+
+以同样的方式，可以使用 ** 操作符分拆字典为关键字参数:
+#+BEGIN_SRC python
+>>> def parrot(voltage, state='a stiff', action='voom'):
+...     print "-- This parrot wouldn't", action,
+...     print "if you put", voltage, "volts through it.",
+...     print "E's", state, "!"
+...
+>>> d = {"voltage": "four million", "state": "bleedin' demised", "action": "VOOM"}
+>>> parrot(**d)
+-- This parrot wouldn't VOOM if you put four million volts through it. E's bleedin' demised !
+#+END_SRC
+*** 4.7.5. Lambda 形式
+通过 lambda 关键字，可以创建短小的匿名函数。
+这里有一个函数返回它的两个参数的和：lambda a, b: a+b。
+出于语法限制，它们只能有一个单独的表达式。
+类似于嵌套函数定义，lambda 形式可以从外部作用域引用变量:
+#+BEGIN_SRC python
+>>> def make_incrementor(n):
+...     return lambda x: x + n
+...
+>>> f = make_incrementor(42)
+>>> f(0)
+42
+>>> f(1)
+43
+#+END_SRC
+
+另一个用途是将一个小函数作为参数传递:
+#+BEGIN_SRC python
+>>> pairs = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
+>>> pairs.sort(key=lambda pair: pair[1])
+>>> pairs
+[(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
+#+END_SRC
+*** 4.7.6. 文档字符串
+文档字符串的概念和格式：
+第一行应该是关于对象用途的简介。简短起见，以大写字母开头，以句号结尾。
+如果文档字符串有多行，第二行应该空出来，与接下来的详细描述明确分隔。
+第一行之后的第一个非空行决定了整个文档的缩进格式。
+*** 4.8. 插曲：编码风格
+对于 Python， [[https://www.python.org/dev/peps/pep-0008][PEP 8]] 引入了大多数项目遵循的风格指导。它给出了一个高度可读，视觉
+友好的编码风格。每个 Python 开发者都应该读一下，大多数要点都会对你有帮助：
+
++ 使用 4 空格缩进，而非 TAB。
+  在小缩进(可以嵌套更深)和大缩进(更易读)之间，4 空格是一个很好的折中。
+  TAB 引发了一些混乱，最好弃用。
++ 折行以确保其不会超过 79 个字符。
+  这有助于小显示器用户阅读，也可以让大显示器能并排显示几个代码文件。
++ 使用空行分隔函数和类，以及函数中的大块代码。
++ 可能的话，注释独占一行
++ 使用文档字符串
++ 把空格放到操作符两边，以及逗号后面，但是括号里侧不加空格：a = f(1, 2) + g(3, 4)。
++ 统一函数和类命名。
+  推荐类名用 =驼峰命名= ，函数和方法名用 =小写_和_下划线= 。
+  总是用 self 作为方法的第一个参数。
++ 不要使用花哨的编码，如果你的代码的目的是要在国际化环境。Python 的默认情况下，
+  UTF-8，甚至普通的 ASCII 总是工作的最好。
++ 同样，也不要使用非 ASCII 字符的标识符，除非是不同语种的会阅读或者维护代码。
+* 5. 数据结构
