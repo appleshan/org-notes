@@ -1,4 +1,4 @@
-#+TITLE: 我的工具链（程序员效率指南）
+#+TITLE: 我的工具链（Geek 的常用软件清单）
 
 工欲善其事，必先利其器。
 这个器可以可以自己锻造，也可以用现成的。就是不断优化自己的工作环境。
@@ -35,17 +35,18 @@ git 客户端，基本可以在 emacs 中完成所有常用 git 命令的操作
 *** org-mode
 用 org 格式写所有文字类的东西。也是强大的 GTD 工具。
 *** 另外，java 的话，还是别用 emacs 了，java，groovy，Scala 都不太适合 emacs。
+** Terminator
 ** zsh
 shell 里面的战斗机
 *** [[http://ohmyz.sh/][oh-my-zsh]]
 zsh 工具，你的终端你做主
-** Terminator
 ** Tmux
 终端多路复用
 ** dotfiles
 一个程序员一天可能 80% 的时间都在跟 shell 打交道，有个好的 shell(bash or zsh)，加上
 合理的 shell 配置绝对让效率提升一大截。
 ** percol
+交互过滤文本
 python 开发的命令行工具,天才的作品
 ** proxychains-ng(proxychains4)
 命令行代理工具，配合科学上网，让没有代理设置的软件也可以正常联网。
@@ -70,7 +71,8 @@ Google Cloud Storage
 Amazon Cloud Drive
 Microsoft One Drive
 The local filesystem
-** fcitx 拼音输入法
+** fcitx
+拼音输入法
 ** sdcv 词典
 ** [[http://www.videolan.org/vlc/][VLC]]
 影音播放
@@ -80,6 +82,25 @@ ssh tunneling 讓其他人直接連到本機開發中網站
 ssh tunneling 讓其他人直接連到本機開發中網站
 ** VirtualBox
 免费的虚拟机，主要用于隔离国产软件
+** bleachbit
+清理常用软件产生的临时文件
+** ncdu
+Best disk usage analyzer under Linux
+** Email Client
+*** ThunderBird
+电子邮件
+**** EmailPicky
+收集邮件地址
+右击, Pick email IDs from this folder
+**** Lightning
+Calendar
+右击, new calendar
+*** exchange server
+davmail
+download: http://davmail.sourceforge.net/
+doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without-outlook.html
+*** Popfile
+邮件分类
 ** F.lux
 一款根据当前时间调节屏幕颜色的软件。程序员晚睡强迫症的福音。
 ** cowsay lolcat
@@ -89,6 +110,7 @@ ssh tunneling 讓其他人直接連到本機開發中網站
 开发平台。太多太多优秀的工具在 osx/ubuntu 下可以一键安装，在 windows 下却不得不花费
 超过一个甚至几个数量级的时间去安装，更别提有的工具 windows 压根没有替代品。
 
+** 小狼毫输入法
 ** Babun
 windows 下面的 linux 命令行工具，就是在 CygWin 的基础上预先安装了一些命令行和美化
 了一下，一般用个 find,vim,sed 都不在话下，快点逃离那个神马 cmd 和 powershell 了
@@ -215,6 +237,7 @@ DDOS 地圖
 ** Inoreader
 RSS 服务提供商
 ** 雲端硬碟
+顺便说一下，国内的服务不要用，安全原因，不言自明。
 *** Dropbox
 ** 分享
 *** [[http://imgur.com/][imgur]]
