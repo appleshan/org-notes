@@ -1,0 +1,43 @@
+@startuml
+node WebLIS_Server [
+云康webLIS服务器
+----
+互联网:http://nf.ykhealth.cn/
+====
+ncl-services
+....
+本地监听了18890与18893两个端口
+]
+
+node Hospital_Server [
+医院服务器
+----
+内网（HIS or 体检）
+====
+his-services
+....
+连接云康WebLIS服务器的18890、18893端口
+]
+
+node Front_Server [
+前置服务器
+====
+端口转发
+....
+可以访问云康WebLIS服务器的18892端口
+]
+
+node Other_Hospital_Server [
+内网医院服务器
+----
+内网（HIS or 体检）
+====
+his application
+....
+连接前置服务器的某端口
+]
+
+Hospital_Server -up-> WebLIS_Server
+Front_Server -up-> WebLIS_Server
+Other_Hospital_Server -up-> Front_Server
+@enduml
