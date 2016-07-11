@@ -1,0 +1,4 @@
+基础知识：
+unicode.encode(encoding) -> bytes
+bytes.decode(encoding) -> unicode
+unicode.decode(encoding) -> unicode.encode(defaultencoding).decode(encoding) -> unicode
