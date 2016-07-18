@@ -57,8 +57,11 @@ python 开发的命令行工具,天才的作品
 ** shell 的所有命令行工具
 linux 命令行里面的所有工具都是精华，真的，用的熟悉的话可以很大程度上加快你的工作
 进度，linux 就像是一个数也数不清的优秀工具的大集合。
-** ag / pt
+** sift / ag / pt
 搜索代码超级快
+- sift : https://github.com/svent/sift
+- ag : https://github.com/ggreer/the_silver_searcher
+- pt : https://github.com/monochromegane/the_platinum_searcher
 ** GnuPG
 加密，保护你的备份数据
 ** rclone
