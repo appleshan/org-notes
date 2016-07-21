@@ -43,10 +43,11 @@ SPC <f1> 允许用户搜索文档。
 | l            | right                                             |
 | 0            | 行首                                              |
 | 中竖线       | 行首                                              |
-| $            | 行尾                                              |
-| ^            | 字首                                              |
+| $            | Go to end of line                                 |
+| ^            | Go to beginning of non-whitespace part of line    |
 | _            | 字首                                              |
-| 9j           | move down 9 lines                                 |
+| 9j           | go 9 lines down                                   |
+| 5w           | go right 5 words                                  |
 | w            | 下一词首                                          |
 | W            | 下一串首                                          |
 | b            | 上一词首                                          |
@@ -55,8 +56,9 @@ SPC <f1> 允许用户搜索文档。
 | E            | 下一串尾                                          |
 | ge           | 上一词尾                                          |
 | gE           | 上一串尾                                          |
-| gg           | 首行                                              |
-| G            | 末行                                              |
+| gg           | Go to beginning of file                           |
+| G            | Go to end of file                                 |
+| g ;          | Go to the last place you edited                   |
 | C-f          | 上一页                                            |
 | C-b          | 下一页                                            |
 | C-u          | 上半页                                            |
@@ -76,10 +78,10 @@ SPC <f1> 允许用户搜索文档。
 | zl           | 右滚                                              |
 | zH           | 左屏                                              |
 | zL           | 右屏                                              |
-| (            | 句首（判'.'）                                        |
-| )            | 句尾（判'.'）                                        |
-| {            | 段首（判空行）                                         |
-| }            | 段尾（判空行）                                         |
+| (            | 句首（判'.'）                                     |
+| )            | 句尾（判'.'）                                     |
+| {            | Go up to next paragraph (whitepace line)          |
+| }            | Go down to next paragraph (whitepace line)        |
 | :[N]         | 第 n 行                                           |
 | [N] + 中竖线 | 第 n 列                                           |
 
@@ -95,12 +97,14 @@ SPC <f1> 允许用户搜索文档。
 | X                   | delete char before cursor                       |
 | o                   | open new line below                             |
 | O                   | open new line above                             |
+| d                   | delete highlighted text                         |
 | D                   | delete from cursor to end of line               |
 | [number] d object   |                                                 |
 | d$                  | delete to end of line                           |
 | dd                  | delete current line                             |
 | de                  | delete to end of word                           |
 | dw                  | delete to start of next word                    |
+| df)                 | delete until right paren                        |
 | di'                 | delete text inside single quotes                |
 | di...               | ...etc                                          |
 | c                   | 剪切选择的字符。                                |
@@ -113,24 +117,35 @@ SPC <f1> 允许用户搜索文档。
 | ciw                 | replace current word                            |
 | cit                 | change text inside html tag                     |
 | ci'                 | change text inside single quotes                |
+| ci"                 |                                                 |
 | ci{                 | change text inside curly brackets.              |
 | ci...               | ...etc                                          |
 | y                   | copy current selection                          |
-| yy                  | copy line                                       |
+| yy                  | copy a line                                     |
+| yw                  | copy a word                                     |
+| y$                  | copy from cursor to end of line                 |
 | Y                   | copy from cursor to end of line                 |
 | p                   | paste after cursor                              |
 | P                   | paste before cursor                             |
+| Shift-p             | open up a line above and paste                  |
 | .                   | repeat last comment                             |
 | R                   | replace. (overwrite) (good for columns of text) |
 | J                   | join line (cursor can be anywhere on line)      |
 | ESC                 | 退出 mode                                       |
 | C-[                 | 退出 mode                                       |
+| SPC r y             | show previous things you’ve copied (yanked)     |
+| SPC z x             | Increase/decrease font size                     |
+| >                   | 向右边缩进                                      |
+| <                   | 向左边缩进                                      |
+| 2>                  | 缩进 2 行                                       |
+| 3>                  | 缩进 3 行                                       |
+| J                   | join lines separated by whitespace              |
 
 * 撤销
-| 快捷键 | 功能   |
-|--------+--------|
-| u      | 撤销   |
-| C-r    | 反撤销 |
+| 快捷键 | 功能 |
+|--------+------|
+| u      | Undo |
+| C-r    | Redo |
 
 * 运行命令
 | 快捷键 | 功能                                  |
@@ -176,54 +191,61 @@ Emacs 默认会创建大量缓冲区，这些缓冲区很多人从来都不会�
 
 * 文件操作
 Spacemacs 中所有文件命令都有 SPC f 前缀。
-| 快捷键        | 功能                                 |
-|---------------+--------------------------------------|
-| SPC p f       | 在当前项目目录中搜索文件             |
-| SPC f f       | 打开一个缓冲区搜索当前目录中的文件   |
-| SPC f r       | 打开一个缓冲区在最近打开的文件中搜索 |
-| SPC f o       | 用外部程序打开当前文件               |
-| SPC f L       | 快速搜索磁盘文件                     |
-| SPC f R       | 重命名当前文件                       |
-| SPC f D       | 删除当前文件                         |
-| SPC f s 或 :w | 保存当前文件                         |
-| :x            | 保存当前文件并退出                   |
-| :e <file>     | 打开 <file>                          |
+| 快捷键        | 功能                                  |
+|---------------+---------------------------------------|
+| SPC p f       | 在当前项目目录中搜索文件              |
+| SPC f f       | 打开一个缓冲区搜索当前目录中的文件    |
+| SPC f r       | 打开一个缓冲区在最近打开的文件中搜索  |
+| SPC f o       | 用外部程序打开当前文件                |
+| SPC f L       | 快速搜索磁盘文件                      |
+| SPC f R       | 重命名当前文件                        |
+| SPC f D       | 删除当前文件                          |
+| SPC f s 或 :w | 保存当前文件                          |
+| :x            | 保存当前文件并退出                    |
+| :e <file>     | 打开 <file>                           |
+| g f           | Go to the file path under your cursor |
 
 * 快速跳转
-| 快捷键  | 功能                                                             |
-|---------+------------------------------------------------------------------|
-| ma      | find matching brace, paren, etc                                  |
-| `a      | after moving around, go back to the exact position of marker "a" |
-| 'a      | after moving around, go back to line of marker "a"               |
-| :marks  | view all the marks                                               |
-| [(      | 前(                                                              |
-| ])      | 后)                                                              |
-| [[      | 跳转到当前章节开始处                                             |
-| []      | 跳转到当前章节结尾处                                             |
-| [{      | 前{                                                              |
-| ]}      | 后}                                                              |
-| SPC s j | 在 minibuffer 中列出文档大纲或函数列表，选中后跳到定义处         |
-| SPC y   | 快速行跳转(比行号要快)                                           |
-| SPC SPC | first char search                                                |
+| 快捷键             | 功能                                                             |
+|--------------------+------------------------------------------------------------------|
+| ma                 | find matching brace, paren, etc                                  |
+| `a                 | after moving around, go back to the exact position of marker "a" |
+| 'a                 | after moving around, go back to line of marker "a"               |
+| :marks             | view all the marks                                               |
+| [(                 | 前(                                                              |
+| ])                 | 后)                                                              |
+| ]]                 | go to next function                                              |
+| [[                 | go to previous function                                          |
+| []                 | 跳转到当前章节结尾处                                             |
+| ][                 | 跳到上一章节结尾处                                               |
+| [{                 | go up to outer brace                                             |
+| ]}                 | go down to outer brace                                           |
+| SPC s j            | 在 minibuffer 中列出文档大纲或函数列表，选中后跳到定义处         |
+| SPC y              | 快速行跳转(比行号要快)                                           |
+| SPC SPC <单词的首> | jump to any word                                                 |
+| C-o                | jump back                                                        |
 
 * 搜索
 ** 当前文件内容的搜索:
-| 快捷键    | 功能                         |
-|-----------+------------------------------|
-| /         | search forward               |
-| ?         | search backward              |
-| #         | 前一个词                     |
-| *         | 后一个词                     |
-| gd        | 局部变量定义                 |
-| gD        | 全局变量定义                 |
-| n         | next match                   |
-| N         | previous match               |
-| %         | goto corresponding (, {, [   |
-| SPC /     | 在项目(或者文件夹)里智能搜索 |
-| SPC s s   | helm-swoop                   |
-| SPC s b   | 在所有打开的 buffer 里搜索   |
-| SPC s a p | 使用 ag 搜索当前 project     |
-| SPC s t p | 使用 pt 搜索当前 project     |
+| 快捷键    | 功能                                                      |
+|-----------+-----------------------------------------------------------|
+| /         | Find text in buffer                                       |
+| ?         | search backward                                           |
+| #         | Find previous instance of a word that your cursor is over |
+| *         | Find next instance of a word that your cursor is over     |
+| gd        | 局部变量定义                                              |
+| gD        | 全局变量定义                                              |
+| n         | next match                                                |
+| N         | previous match                                            |
+| %         | goto corresponding (, {, [                                |
+| SPC /     | Find text in project                                      |
+| SPC *     | Find text under cursor in project                         |
+| SPC s l   | Resume last search                                        |
+| SPC s s   | helm-swoop                                                |
+| SPC s b   | 在所有打开的 buffer 里搜索                                |
+| SPC s a p | 使用 ag 搜索当前 project                                  |
+| SPC s t p | 使用 pt 搜索当前 project                                  |
+| :nohl     | Turn off previous search highlighting                     |
 
 ** 搜索和替换:
 | 快捷键          | 功能                                     |
@@ -340,6 +362,8 @@ bookmarks 是 spacemacs 自带的, 可以迅速定位标记的文件, 它可以�
 | SPC c l | 注释行                       |
 | SPC c y | 注释的同时并且复制相同的一份 |
 | SPC ;   | 注释块                       |
+| g c c   | Comment out a line           |
+| g c     | Comment out highlighted text |
 
 其实对于 vimer 来说使用 visul 模式选取并用 [<spc> c l] 注释或许是更好的方法.
 
@@ -372,6 +396,7 @@ Text scale micro-state:
 | SPC t l   | 开关截断行(truncate lines)                    |
 | SPC t L   | 开关可视行(visual lines)                      |
 | SPC t n   | 开关绝对行数                                  |
+| SPC t w   | Show whitespace                               |
 | SPC T F   | 开关窗口全屏                                  |
 | SPC T f   | 开关边缘显示                                  |
 | SPC T m   | 开关菜单栏                                    |
@@ -399,3 +424,24 @@ Text scale micro-state:
 | Replace              | Chocolate |
 | Lisp	               | Pink      |
 | Iedit/Iedit-Insert	 | Red       |
+* 折叠与展开
+| 快捷键 | 功能               |
+|--------+--------------------|
+| z a    | 切换当前级别的展开 |
+| z r    | 展开所有           |
+| z m    | 关闭所有           |
+* Chinese-pyim
+| 快捷键               | 功能                       |
+|----------------------+----------------------------|
+| C-n 或 M-n 或 +      | 向下翻页                   |
+| C-p 或 M-p 或 -      | 向上翻页                   |
+| C-f                  | 选择下一个备选词           |
+| C-b                  | 选择上一个备选词           |
+| SPC                  | 确定输入                   |
+| RET 或 C-m           | 字母上屏                   |
+| C-c                  | 取消输入                   |
+| C-g                  | 取消输入并保留已输入的中文 |
+| TAB                  | 模糊音调整                 |
+| DEL 或 BACKSPACE     | 删除最后一个字符           |
+| C-DEL 或 C-BACKSPACE | 删除最后一个拼音           |
+| M-DEL 或 M-BACKSPACE | 删除最后一个拼音           |
