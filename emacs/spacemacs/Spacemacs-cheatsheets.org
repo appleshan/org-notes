@@ -267,17 +267,17 @@ Projectile 是管理專案的程式，簡要來說，每當在 emacs 中開啓�
 projectile 會利用目錄名稱或是資料夾狀態，判斷該檔案是否處在某一個 專案 之中。
 如果平時需要在一個以上的專案中遊走，這個功能就相當有用，projectile 會自動將
 開啓的檔案歸入所屬的專案中。
-| 快捷键    | 功能                                                              |
-|-----------+-------------------------------------------------------------------|
-| SPC p p   | 切换 project                                                      |
-| SPC p b   | 切换到已经打开的同 project 中的 buffer                            |
-| SPC p f   | 打开当前 project 的文件                                           |
-| SPC p t   | 打开当前 project 的文件树                                         |
-| SPC p r   | 近打开的项目                                                      |
-| SPC p o   | 在该项目已开启的 buffer 中，用 occur 搜寻关鍵字                   |
-| SPC s a p | 在该项目目录中，用 ag ([[https://github.com/ggreer/the_silver_searcher][the_sliver_searcher]]) 搜寻关鍵字            |
-| SPC s t p | 在该项目目录中，用 pt 搜寻关键字 ([[https://github.com/monochromegane/the_platinum_searcher][the_platinum_searcher]]) 搜寻关键字 |
-| C-c p s s | 同上                                                              |
+| 快捷键    | 功能                                                     |
+|-----------+----------------------------------------------------------|
+| SPC p p   | 切换 project                                             |
+| SPC p b   | 切换到已经打开的同 project 中的 buffer                   |
+| SPC p f   | 打开当前 project 的文件                                  |
+| SPC p t   | 打开当前 project 的文件树                                |
+| SPC p r   | 近打开的项目                                             |
+| SPC p o   | 在该项目已开启的 buffer 中，用 occur 搜寻关鍵字          |
+| SPC s a p | 在该项目目录中，用 ag ([[https://github.com/ggreer/the_silver_searcher][the_sliver_searcher]]) 搜寻关鍵字   |
+| SPC s t p | 在该项目目录中，用 pt ([[https://github.com/monochromegane/the_platinum_searcher][the_platinum_searcher]]) 搜寻关键字 |
+| C-c p s s | 同上                                                     |
 
 * visual mode
 | 快捷键 | 功能              |
@@ -341,7 +341,8 @@ bookmarks 是 spacemacs 自带的, 可以迅速定位标记的文件, 它可以�
 在另一个窗口打开书签 [C-o]
 
 * flycheck
-
+#+CAPTION: 设定图片宽度为 300
+#+ATTR_HTML: :width 300
 [[file:./spacemacs_flycheck.png]]
 
 语法检测, 如上图需要添加 syntax-checking 插件
@@ -383,6 +384,8 @@ Spacemacs 定义了各种各样有意义 micro-state。这避免重复无聊的�
 当一个 micro-state 被激活时, 在 minibuffer 会显示一个文档. 额外的信息有时候也
 会显示在 minibuffer.
 Text scale micro-state:
+#+CAPTION: 设定图片宽度为 300
+#+ATTR_HTML: :width 300
 [[file:./spacemacs-scale-micro-state.png]]
 
 * 图形 UI 指示器
@@ -414,16 +417,16 @@ Text scale micro-state:
 6. 开关 minor mode lighters
 
 提示下状态的颜色代码:
-| Evil State	         | Color     |
-|----------------------+-----------|
-| Normal	             | Orange    |
-| Insert	             | Green     |
-| Visual	             | Grey      |
-| Emacs 	             | Blue      |
-| Motion	             | Purple    |
-| Replace              | Chocolate |
-| Lisp	               | Pink      |
-| Iedit/Iedit-Insert	 | Red       |
+| Evil State         | Color     |
+|--------------------+-----------|
+| Normal             | Orange    |
+| Insert             | Green     |
+| Visual             | Grey      |
+| Emacs              | Blue      |
+| Motion             | Purple    |
+| Replace            | Chocolate |
+| Lisp               | Pink      |
+| Iedit/Iedit-Insert | Red       |
 * 折叠与展开
 | 快捷键 | 功能               |
 |--------+--------------------|
