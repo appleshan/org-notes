@@ -3,15 +3,16 @@ ubuntu_环境_emacs_安装步骤
 * 1.安装 emacs
 @See to 《How to Build Emacs on Linux》:
 
-sudo apt-get update
+sudo apt update
 
 # install essential build tools
-sudo apt-get install build-essential
+sudo apt install build-essential
 
 # get all dependencies of a previous emacs version
-sudo apt-get build-dep emacs24
+sudo apt build-dep emacs24
 
 cd ‹source dir name›
+./autogen.sh
 sudo ./configure --prefix=/opt/emacs-24.5
 sudo make -j4
 sudo make install # optional. This basically copy the binary to /usr/local/bin

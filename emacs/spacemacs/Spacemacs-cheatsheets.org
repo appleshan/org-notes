@@ -291,14 +291,15 @@ projectile 會利用目錄名稱或是資料夾狀態，判斷該檔案是否處
 
 * outline
 * dired
-| 快捷键            | 功能             |
-|-------------------+------------------|
-| C-x C-j / SPC f j | 打开当前文件目录 |
-| D                 | 删除文件         |
-| RET 或者 a        | 打开文件         |
-| R                 | 重命名文件       |
-| +                 | 创建子目录       |
-| g                 | 刷新             |
+| 快捷键     | 功能             |
+|------------+------------------|
+| C-x C-j    | 打开当前文件目录 |
+| SPC f j    | 同上             |
+| D          | 删除文件         |
+| RET 或者 a | 打开文件         |
+| R          | 重命名文件       |
+| +          | 创建子目录       |
+| g          | 刷新             |
 
 * neotree
 NeoTree 就是左边的文件树, 真心比 vim 的强不少, 打开的快捷键是 [<spc> f t]。
@@ -384,8 +385,8 @@ Spacemacs 定义了各种各样有意义 micro-state。这避免重复无聊的�
 当一个 micro-state 被激活时, 在 minibuffer 会显示一个文档. 额外的信息有时候也
 会显示在 minibuffer.
 Text scale micro-state:
-#+CAPTION: 设定图片宽度为 300
-#+ATTR_HTML: :width 300
+#+CAPTION: 设定图片宽度为 30
+#+ATTR_HTML: :width 30
 [[file:./spacemacs-scale-micro-state.png]]
 
 * 图形 UI 指示器
