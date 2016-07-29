@@ -1,0 +1,14 @@
+#+TILLE:Install
+
+* install nodejs & tern
+#+BEGIN_SRC bash
+# install nodejs
+sudo proxychains4 apt install npm
+
+# update
+npm update minimatch@3.0.2
+npm update -d
+
+# install tern
+sudo proxychains4 npm i -g tern
+#+END_SRC
