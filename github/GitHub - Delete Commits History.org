@@ -1,0 +1,80 @@
+#+TITLE:GitHub - Delete Commits History
+
+Here are the git commands to clean up the messy, ugly commits history in a GitHub
+repository. This is like a repository reset.
+
+* First Method
+
+Deleting the =.git= folder may cause problems in our git repository. If we want to
+delete all of our commits history, but keep the code in its current state,
+try this:
+
+Check out to a temporary branch:
+#+BEGIN_EXAMPLE
+git checkout --orphan TEMP_BRANCH
+#+END_EXAMPLE
+
+Add all the files:
+#+BEGIN_EXAMPLE
+git add -A
+#+END_EXAMPLE
+
+Commit the changes:
+#+BEGIN_EXAMPLE
+git commit -am "Initial commit"
+#+END_EXAMPLE
+
+Delete the old branch:
+#+BEGIN_EXAMPLE
+git branch -D master
+#+END_EXAMPLE
+
+Rename the temporary branch to master:
+#+BEGIN_EXAMPLE
+git branch -m master
+#+END_EXAMPLE
+
+Finally, force update to our repository:
+#+BEGIN_EXAMPLE
+git push -f origin master
+#+END_EXAMPLE
+
+This will not keep our old commits history around. But if this doesn’t work,
+try the next method below.
+
+* Second Method
+
+Clone the project, e.g. =myproject= is my project repository:
+#+BEGIN_EXAMPLE
+git clone https://github/heiswayi/myproject.git
+#+END_EXAMPLE
+
+Since all of the commits history are in the =.git= folder, we have to remove it:
+#+BEGIN_EXAMPLE
+cd myproject
+#+END_EXAMPLE
+
+And delete the .git folder:
+#+BEGIN_EXAMPLE
+git rm -rf .git
+#+END_EXAMPLE
+
+Now, re-initialize the repository:
+#+BEGIN_EXAMPLE
+git init
+git remote add origin https://github.com/heiswayi/myproject.git
+git remote -v
+#+END_EXAMPLE
+
+Add all the files and commit the changes:
+#+BEGIN_EXAMPLE
+git add --all
+git commit -am "Initial commit"
+#+END_EXAMPLE
+
+Force push update to the master branch of our project repository:
+#+BEGIN_EXAMPLE
+git push -f origin master
+#+END_EXAMPLE
+
+NOTE: You might need to provide the credentials for your account.
