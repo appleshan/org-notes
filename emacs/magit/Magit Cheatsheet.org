@@ -34,9 +34,9 @@ the [[http://magit.vc/manual/magit/Installation.html][update instructions]].
 |                  |                      | in this cheatsheet are meant to be       |
 |                  |                      | executed. Probably a good idea to bind   |
 |                  |                      | magit-status to a key.                   |
-| $	              | magit-process buffer | Behind-the-scenes. Displays the git      |
+| $	            | magit-process buffer | Behind-the-scenes. Displays the git      |
 |                  |                      | command and its output.                  |
-| g	              | reload status buffer | Necessary to update an existing Magit    |
+| g	            | reload status buffer | Necessary to update an existing Magit    |
 |                  |                      | status buffer after saving a file in     |
 |                  |                      | emacs, or after making changes           |
 |                  |                      | to repo outside of emacs.                |
