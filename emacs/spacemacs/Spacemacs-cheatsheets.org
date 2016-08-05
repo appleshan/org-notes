@@ -385,8 +385,8 @@ Spacemacs 定义了各种各样有意义 micro-state。这避免重复无聊的�
 当一个 micro-state 被激活时, 在 minibuffer 会显示一个文档. 额外的信息有时候也
 会显示在 minibuffer.
 Text scale micro-state:
-#+CAPTION: 设定图片宽度为 30
-#+ATTR_HTML: :width 30
+#+CAPTION: 设定图片宽度为 900
+#+ATTR_HTML: :width 900
 [[file:./spacemacs-scale-micro-state.png]]
 
 * 图形 UI 指示器
@@ -428,12 +428,14 @@ Text scale micro-state:
 | Replace            | Chocolate |
 | Lisp               | Pink      |
 | Iedit/Iedit-Insert | Red       |
+
 * 折叠与展开
 | 快捷键 | 功能               |
 |--------+--------------------|
 | z a    | 切换当前级别的展开 |
 | z r    | 展开所有           |
 | z m    | 关闭所有           |
+
 * Chinese-pyim
 | 快捷键               | 功能                       |
 |----------------------+----------------------------|
@@ -449,3 +451,9 @@ Text scale micro-state:
 | DEL 或 BACKSPACE     | 删除最后一个字符           |
 | C-DEL 或 C-BACKSPACE | 删除最后一个拼音           |
 | M-DEL 或 M-BACKSPACE | 删除最后一个拼音           |
+
+* 批量更改文件名称
+1. dired 到某个目录；
+2. C-x C-q 进入 wdired 模式；
+3. C-M-% 使用查找替换功能，并输入要查找的字符串，按 Enter，然后输入替换后的字符串，按 Enter；
+4. C-c C-c 使更改过的 dired 生效。
