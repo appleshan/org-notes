@@ -454,6 +454,6 @@ Text scale micro-state:
 
 * 批量更改文件名称
 1. dired 到某个目录；
-2. C-x C-q 进入 wdired 模式；
+2. SPC b w / C-x C-q 进入 wdired 模式；
 3. C-M-% 使用查找替换功能，并输入要查找的字符串，按 Enter，然后输入替换后的字符串，按 Enter；
 4. C-c C-c 使更改过的 dired 生效。
