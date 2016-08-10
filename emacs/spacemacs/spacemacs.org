@@ -1,0 +1,206 @@
+* 关于.spacemacs
+** 在~/.spacemacs 中配置调用哪些 layer
+通过设置变量`dotspacemacs-configuration-layers'变量来配置.
+
+有些 layer 甚至能够配置在启用时启用哪些 layer-specific 特性. 例如 git-layer 就是一个例子
+#+BEGIN_SRC emacs-lisp
+  (setq dotspacemacs-configuration-layers
+        '(auto-completion
+          (git :variables
+               git-magit-status-fullscreen t)
+          smex))
+#+END_SRC
+** 不重启 emacs 对修改后的.spacemacs 生效
+输入 SPC f e R
+** 更改编辑方式
+通过在.spacemacs 中设置变量`dotspacemacs-editing-style'为`vim'或`emacs'来改变编辑方式.
+** 更多信息
+更多信息可以参见 DOCUMENTATION.org 中的 template 章节的注释
+* 关于 leader key
+默认情况下,vim style 时使用 SPC 作为 leader key,emacs style 时使用 M-m 作为 leader key.
+
+但可以在.spacemacs 中修改`dotspacemacs-leader-key'变量值来修改 leader key.
+
+同时,还有一个次级 leader key 用于作为与 major mode 相关的 leader-key,默认为`,'
+* 关于 layer
+** layer 的组成
+每个 layer 都是一个文件夹,该文件夹中至少包含如下文件:
++ packages.el
+
+  定义了要通过 package 安装哪些插件
+
++ extensions.el
+
+  配置那些不能通过 package 安装的插件,比如 Emacs 内建的功能或 git submodules
+** 在 private 目录下创建 layer
+运行命令 configuration-layer/create-layer
+
+任何自定义的 layer,都必须在~/.spacemacs 中明确加载
+** 通过 helm-spacemacs 命令可以快速搜索 package 并得到使用该 package 的 layer 名称.
+* 关于 key binding
++ SPC b 开头的为 buffer 相关命令
++ SPC h d 开头的为 describe 帮助相关命令
+* 规范性说明
+** 代码规范
+*** spacemacs 本身的命名规范为:
++ 命令名称格式为 =spacemacs/xxx=
++ 私有函数的命名格式为 =spacemacs//xxx=
++ 宏的命名格式为 =spacemacs|xxx=
++ 变量的命名格式为 =spacemacs-xxx=
++ 私有变量的命名格式为 =spacemacs--xxx=
+*** 自定义 layer 的命名规范为:
++ 每个包的初始化函数名称格式为: =layer 名称/init-package 名称=
+** 键绑定规范
+*** 预留前缀
++ ~SPC o~ 不能被任何 layer 占用. 它是提供給用户自定义的
++ ~SPC m~ 只能作为当前 major mode 的 leader key
++ 在尽可能的情况下,通过 ~M-SPC~ 和 ~S-M-SPC~ 应能启用 micro-state
++ 最好能使用 ~q~ 退出 micro-state
+*** Evilify status
+所谓 Evilify state,是指在 emacs state 中作如下修改:
++ 增加使用 ~hjkl~ 移动
++ 增加添加 ~/,n,N~ 递进搜索
++ 增加 =visual state= 以及 =visual line state=
++ 增加使用 ~y~ 拷贝
++ 可以使用 evil-leader key
+
+设置某个 mode 默认进入 =evilified state= 的方法是通过调用宏`evilify'来实现的.
+该宏还提供了方法修改以上被覆盖的按键,例如,若原 emacs state 占用了 h 键,则 evilify 后,h 变为移动命令,而原 h 的命令按键可以变为 H 或 C-h
+*** 导航命令
++ 一般使用 n 和 N 来跳转到下一个/上一个位置
++ 一般使用 ~SPC m g~ 作为跳转到某个地方的命令前缀
+  | Key   | Description                              |
+  |-------+------------------------------------------|
+  | ~m g a~ | go to alternate file (i.e. =.h <--> .cpp=) |
+  | ~m g g~ | go to things under point                 |
+  | ~m g G~ | go to things under point in other window |
+  | ~m g t~ | go to corresponding test file if any     |
++ 当 buffer 处于 insert state 时,一般使用 ~C-j~ 和 ~C-k~ 上下移动
+  | Key | Description |
+  |-----+-------------|
+  | ~C-j~ | go down     |
+  | ~C-k~ | go up       |
+*** 执行代码的命令
+执行代码的命令,一般以 ~SPC m e~ 开头
+| Key   | Description                                       |
+|-------+---------------------------------------------------|
+| ~m e $~ | put the point at the end of the line and evaluate |
+| ~m e b~ | evaluate buffer                                   |
+| ~m e e~ | evaluate last expression                          |
+| ~m e f~ | evaluate function                                 |
+| ~m e l~ | evaluate line                                     |
+| ~m e r~ | evaluate region                                   |
+*** REPL
+**** Send Code
++ 发送代码命令的前缀为 ~SPC m s~
++ 小字母表示光标保留在当前 buffer
++ 大字母表示光标跳转到 REPL buffer
+
+| Key   | Description                                                  |
+|-------+--------------------------------------------------------------|
+| ~m s b~ | send buffer                                                  |
+| ~m s B~ | send buffer and switch to REPL                               |
+| ~m s d~ | first key to send buffer and switch to REPL to debug (step)  |
+| ~m s D~ | second key to send buffer and switch to REPL to debug (step) |
+| ~m s f~ | send function                                                |
+| ~m s F~ | send function and switch to REPL                             |
+| ~m s i~ | start/switch to REPL inferior process                        |
+| ~m s l~ | send line                                                    |
+| ~m s L~ | send line and switch to REPL                                 |
+| ~m s r~ | send region                                                  |
+| ~m s R~ | send region and switch to REPL                               |
+**** In terminal
+在 shell 或 REPL buffer 中,一般使用 ~C-j~ 和 ~C-k~ 遍历历史命令.
+| Key | Description                |
+|-----+----------------------------|
+| ~C-j~ | next item in history       |
+| ~C-k~ | previous item in  history  |
+| ~C-l~ | clear screen               |
+| ~C-r~ | search backward in history |
+*** 编译命令
+编译命令一般以 ~SPC m c~ 作为前缀
+| Key Binding | Description       |
+|-------------+-------------------|
+| ~m c b~       | compile buffer    |
+| ~m c c~       | compile           |
+| ~m c r~       | clean and compile |
+*** 调试命令
+调试命令一般以 ~SPC m d~开头
+
+| Key Binding | Description             |
+|-------------+-------------------------|
+| ~m d a~       | abandon current process |
+| ~m d b~       | toggle a breakpoint     |
+| ~m d B~       | clear all breakpoints   |
+| ~m d c~       | continue                |
+| ~m d d~       | start debug session     |
+| ~m d i~       | inspect value at point  |
+| ~m d l~       | local variables         |
+| ~m d n~       | next                    |
+| ~m d r~       | run                     |
+| ~m d s~       | step                    |
+*** 标记语言
+**** Headers
+所有 header 相关的命令一般以 ~SPC m h~ 开头
+| Key Binding | Description                                      |
+|-------------+--------------------------------------------------|
+| ~m h i~       | Insert a header                                  |
+| ~m h I~       | Insert a header alternative method (if existing) |
+| ~m h 1..10~   | Insert a header of level 1..10 (if possible)     |
+**** 插入其他元素
+插入连接,注脚之类的元素,一般用 ~SPC m i~开头
+| Key Binding | Description      |
+|-------------+------------------|
+| ~m i f~       | Insert footnote  |
+| ~m i i~       | Insert image     |
+| ~m i l~       | Insert link      |
+| ~m i u~       | Insert url       |
+| ~m i w~       | Insert wiki-link |
+**** 修改文本 region 内的内容
+修改文本 region 内的内容的命令一般以 ~SPC m x~ 开头
+| Key Binding | Description                   |
+|-------------+-------------------------------|
+| ~m x b~       | Make region bold              |
+| ~m x c~       | Make region code              |
+| ~m x i~       | Make region italic            |
+| ~m x q~       | Quote a region                |
+| ~m x r~       | Remove formatting from region |
+| ~m x s~       | Make region strike-through    |
+| ~m x u~       | Make region underlined        |
+| ~m x v~       | Make region verbose           |
+**** normal mode 下移动光标位置
+| Key Binding | Description                            |
+|-------------+----------------------------------------|
+| ~g h~         | Move up one level in headings          |
+| ~g j~         | Move to next heading on same level     |
+| ~g k~         | Move to previous heading on same level |
+| ~g l~         | Move down one level in headings        |
+**** Promotion, Demotion and element movement
+| Key Binding | Description                  |
+|-------------+------------------------------|
+| ~M-h~         | Promote heading by one level |
+| ~M-j~         | Move element down            |
+| ~M-k~         | Move element up              |
+| ~M-l~         | Demote heading by one level  |
+**** 编辑表格
+编辑表格的命令,一般以 ~SPC m t~ 开头
+*** 测试相关命令
+很多语言都有各自的测试框架. 这些测试框架可以共用同一个按键.
+
+一般来说,测试命令以 ~SPC m t~ 开头, 若要在 debug 模式下运行测试,则以 ~SPC m T~ 开头
+| Key   | Description                                         |
+|-------+-----------------------------------------------------|
+| ~m t a~ | execute all the tests of the current project        |
+| ~m t b~ | execute all the tests of the current buffer         |
+| ~m t t~ | execute the current test (thing at point, function) |
+| ~m t m~ | execute the tests of the current module             |
+| ~m t s~ | execute the tests of the current suite              |
+*** 重构相关命令
+重构相关命令一般以 ~SPC m r~ 开头
+*** 帮助相关命令
+查看帮助的命令一般以 ~SPC m h~ 开头
+
+| Key   | Description                        |
+|-------+------------------------------------|
+| ~m h h~ | documentation of thing under point |
+| ~m h r~ | documentation of selected region   |
