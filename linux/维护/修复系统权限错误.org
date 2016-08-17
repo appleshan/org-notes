@@ -1,0 +1,26 @@
+#+TITLE:修复系统权限错误
+
+sudo chmod 777 /
+sudo chmod 777 -R /
+Linux 下以上命令的危害性，试过的人都会觉得可怕，有些人遇到这种情况，第一反应是没救了，其实，你要愿意花功夫去折腾，还是有办法滴！
+下面理了下怎么折腾：
+
+* 道具：
+A、B 两台电脑，假设都装着 Ubuntu 12.04 版本的系统，都能 ssh、root（平时装 Linux 的时候这两个最好都弄好了，以备不时之需）。
+
+* 情景：
+现假设「A」是那台悲剧的执行过「sudo chmod 777 /」的电脑，什么效果，就不说了，反正不是什么好事，如果好奇，一试便知！
+「B」电脑是正常的那台！
+
+* 修复思路：
+通过终端，从「B」电脑复制一份权限，上传至 「A」电脑，然后「A」恢复之！
+
+「B」：
+getfacl -R / > test.bak  获取/root 下的所有文件和目录的权限列表并写入 test.bak 文件
+scp test.bak root@server:/home/  上传 test.bak 至「A」（ps：这个时候 root 就很方便了，一般来说通过 root 还是有机会把文件成功上传的）
+「A」:
+cd /home/  找到 test.bak
+setfacl --restore=test.bak  恢复/root 下的所有文件和目录的权限，最好「A」重启一下吧！
+ok！
+
+from: http://lihuipeng007.blog.163.com/blog/static/12108438820113232563758/
