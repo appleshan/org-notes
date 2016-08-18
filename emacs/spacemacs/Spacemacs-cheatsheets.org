@@ -130,6 +130,7 @@ SPC <f1> 允许用户搜索文档。
 | Shift-p             | open up a line above and paste                  |
 | .                   | repeat last comment                             |
 | R                   | replace. (overwrite) (good for columns of text) |
+| S                   | clear a line                                    |
 | J                   | join line (cursor can be anywhere on line)      |
 | ESC                 | 退出 mode                                       |
 | C-[                 | 退出 mode                                       |
