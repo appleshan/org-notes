@@ -1,0 +1,4 @@
+引用变量除特殊情况外时总使用大括号，总使用双引号: "${var}" 
+常量变量使用 readonly 或者 declare -a ，并使用大写 : readonly CONST="value" 
+function 内尽量使用 local 声明变量: local var 
+参数变量引用时除特殊情况外总使用 @，并使用双引号: "$@" 
