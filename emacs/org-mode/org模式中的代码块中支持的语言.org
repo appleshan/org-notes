@@ -1,0 +1,23 @@
+#+NAME: org 模式中的代码块中支持的语言
+| Language       | Identifier | Language   | Identifier |
+|----------------+------------+------------+------------|
+| Asymptote      | asymptote  | Awk        | awk        |
+| C              | C          | C++        | C++        |
+| Clojure        | clojure    | CSS        | css        |
+| D              | d          | ditaa      | ditaa      |
+| Graphviz       | dot        | Emacs Calc | calc       |
+| Emacs Lisp     | emacs-lisp | Fortran    | fortran    |
+| gnuplot        | gnuplot    | Haskell    | haskell    |
+| Java           | java       | Javascript | js         |
+| LaTeX          | latex      | Ledger     | ledger     |
+| Lisp           | lisp       | Lilypond   | lilypond   |
+| MATLAB         | matlab     | Mscgen     | mscgen     |
+| Objective Caml | ocaml      | Octave     | octave     |
+| Org mode       | org        | Oz         | oz         |
+| Perl           | perl       | Plantuml   | plantuml   |
+| Processing.js  | processing | Python     | python     |
+| R              | R          | Ruby       | ruby       |
+| Sass           | sass       | Scheme     | scheme     |
+| GNU Screen     | screen     | Sed        | sed        |
+| shell          | sh         | SQL        | sql        |
+| SQLite         | sqlite     |            |            |
