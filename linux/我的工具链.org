@@ -73,8 +73,10 @@ Google Cloud Storage
 Amazon Cloud Drive
 Microsoft One Drive
 The local filesystem
-** fcitx
-拼音输入法
+** unity-tweak-tool
+Unity 配置工具
+** fcitx - 拼音输入法
+*** fcitx-rime
 ** sdcv 词典
 ** [[http://www.videolan.org/vlc/][VLC]]
 影音播放
@@ -103,8 +105,15 @@ download: http://davmail.sourceforge.net/
 doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without-outlook.html
 *** Popfile
 邮件分类
+** uget - 网络下载工具
+** hget - 网络下载工具
+** PAC Manager - 远程管理工具
 ** F.lux
 一款根据当前时间调节屏幕颜色的软件。程序员晚睡强迫症的福音。
+** psensor
+ 温度监控小工具
+** shutter
+ 截图工具
 ** cowsay lolcat
 好玩的，不解释
 * Windows
@@ -185,6 +194,9 @@ Toad for SQL Server
 線上 HTML, CSS, JS
 ** [[https://developers.google.com/speed/pagespeed/insights/][PageSpeed]]
 網頁測試分析工具
+** pip - Python 程序安装程序
+python-pip
+python3-pip
 * 编程语言
 ** Common Lisp
 ** Emacs Lisp
