@@ -105,15 +105,21 @@ download: http://davmail.sourceforge.net/
 doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without-outlook.html
 *** Popfile
 邮件分类
-** uget - 网络下载工具
-** hget - 网络下载工具
+** 网络下载工具
+*** uget
+*** aria2
+*** youtube-dl
+*** axel
 ** PAC Manager - 远程管理工具
 ** F.lux
 一款根据当前时间调节屏幕颜色的软件。程序员晚睡强迫症的福音。
+** indicator-netspeed-unity
+网速显示小插件
 ** psensor
  温度监控小工具
 ** shutter
  截图工具
+** tlp 笔记本电源管理工具
 ** cowsay lolcat
 好玩的，不解释
 * Windows
