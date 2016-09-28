@@ -10,8 +10,7 @@
 是我尝试过的第三种 Linux 发行版，也最终让我留了下来。主要原因就是 pacman + AUR
 很好用，社区活跃，文档丰富，软件更新快，我觉得有人说的所谓折腾其实也是选择自己
 需要的一个过程，是有回报的。
-** Ubuntu
-可以让人少折腾的开发平台。
+** Ubuntu - 可以让人少折腾的开发平台。
 ** Emacs
 从来没有那个编辑器能像 Emacs 一样吸引到我。
 Coding, Version-Control, Document, GTD, Email 都在 Emacs 里完成。
@@ -21,78 +20,26 @@ Coding, Version-Control, Document, GTD, Email 都在 Emacs 里完成。
 这是一份 emacs 的配置工程。vim 有 vimrc. Emacs 有.emacs.d. 这就是 Emacs 的.emacs.d
 配置工程。利用了 Emacs 的 evil 插件还有别的一些插件, 实现了 Emacs 中使用 VIM 的
 快捷键。已经将原生的 Emacs 改造成了另一个模样。
-1. 它是我见过最好看的 Emacs 配置.
-2. 工程结构完美，容易扩展.
-3. 它是我见过文档最全,最丰富,最易懂的 Emacs 配置.比`oh-my-emacs`好好几个量级.
-4. 开发人员更多.在开源世界里, 这个工程拥有上千的 fork 量,开发非常活跃.
-5. 对 evil 的支持更加好,它的主打就是 evil.
-6. 它非常精致.简直给粗糙的 Emacs 上了一层美丽的妆.
-7. 操作更人性化,细节考虑太周到了
-*** [[https://github.com/appleshan/my-spacemacs-config][my-spacemacs-config]]
-Apple Shan 的 Spacemacs 配置工程
-*** magit
-git 客户端，基本可以在 emacs 中完成所有常用 git 命令的操作
-*** org-mode
-用 org 格式写所有文字类的东西。也是强大的 GTD 工具。
+- 1. 它是我见过最好看的 Emacs 配置.
+- 2. 工程结构完美，容易扩展.
+- 3. 它是我见过文档最全,最丰富,最易懂的 Emacs 配置.比`oh-my-emacs`好好几个量级.
+- 4. 开发人员更多.在开源世界里, 这个工程拥有上千的 fork 量,开发非常活跃.
+- 5. 对 evil 的支持更加好,它的主打就是 evil.
+- 6. 它非常精致.简直给粗糙的 Emacs 上了一层美丽的妆.
+- 7. 操作更人性化,细节考虑太周到了
+*** [[https://github.com/appleshan/my-spacemacs-config][my-spacemacs-config]] - Apple Shan 的 Spacemacs 配置工程
+*** magit - git 客户端
+基本可以在 emacs 中完成所有常用 git 命令的操作
+*** org-mode - 用 org 格式写所有文字类的东西。也是强大的 GTD 工具。
 *** 另外，java 的话，还是别用 emacs 了，java，groovy，Scala 都不太适合 emacs。
 ** Terminator
-** zsh
-shell 里面的战斗机
-*** [[http://ohmyz.sh/][oh-my-zsh]]
-zsh 工具，你的终端你做主
-** Tmux
-终端多路复用
-** dotfiles
-一个程序员一天可能 80% 的时间都在跟 shell 打交道，有个好的 shell(bash or zsh)，加上
-合理的 shell 配置绝对让效率提升一大截。
-** percol
-交互过滤文本
-python 开发的命令行工具,天才的作品
-** proxychains-ng(proxychains4)
-命令行代理工具，配合科学上网，让没有代理设置的软件也可以正常联网。
-透明代理首选工具。
 ** git
-** htop
-进程管理的好助手
-** shell 的所有命令行工具
-linux 命令行里面的所有工具都是精华，真的，用的熟悉的话可以很大程度上加快你的工作
-进度，linux 就像是一个数也数不清的优秀工具的大集合。
-** sift / ag / pt
-搜索代码超级快
-- sift : https://github.com/svent/sift
-- ag : https://github.com/ggreer/the_silver_searcher
-- pt : https://github.com/monochromegane/the_platinum_searcher
-** GnuPG
-加密，保护你的备份数据
-** rclone
-同步文件到云端硬盘的客户端，支持：
-Google Drive
-Amazon S3
-Dropbox
-Google Cloud Storage
-Amazon Cloud Drive
-Microsoft One Drive
-The local filesystem
-** unity-tweak-tool
-Unity 配置工具
+** unity-tweak-tool - Unity 配置工具
 ** fcitx - 拼音输入法
 *** fcitx-rime
-** sdcv 词典
-** [[http://www.videolan.org/vlc/][VLC]]
-影音播放
-** [[https://forwardhq.com/help/ssh-tunneling-how-to/][forward]]
-ssh tunneling 讓其他人直接連到本機開發中網站
-** [[https://ngrok.com/][ngrok]]
-ssh tunneling 讓其他人直接連到本機開發中網站
-** VirtualBox
-免费的虚拟机，主要用于隔离国产软件
-** bleachbit
-清理常用软件产生的临时文件
-** ncdu
-Best disk usage analyzer under Linux
+** VirtualBox - 免费的虚拟机，主要用于隔离国产软件
 ** Email Client
-*** ThunderBird
-电子邮件
+*** ThunderBird - 电子邮件
 **** EmailPicky
 收集邮件地址
 右击, Pick email IDs from this folder
@@ -100,11 +47,10 @@ Best disk usage analyzer under Linux
 Calendar
 右击, new calendar
 *** exchange server
-davmail
+**** davmail
 download: http://davmail.sourceforge.net/
 doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without-outlook.html
-*** Popfile
-邮件分类
+*** popfile - 邮件分类
 ** 网络下载工具
 *** uget
 *** aria2
@@ -115,13 +61,57 @@ doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without
 一款根据当前时间调节屏幕颜色的软件。程序员晚睡强迫症的福音。
 ** indicator-netspeed-unity
 网速显示小插件
-** psensor
- 温度监控小工具
+** psensor - 温度监控小工具
 ** shutter
  截图工具
-** tlp 笔记本电源管理工具
-** cowsay lolcat
-好玩的，不解释
+** CLI
+*** zsh
+ shell 里面的战斗机
+**** [[http://ohmyz.sh/][oh-my-zsh]]
+ zsh 工具，你的终端你做主
+*** Tmux -  终端多路复用
+*** [[https://github.com/peco/peco][peco]] - Simplistic interactive filtering tool
+*** percol -  交互过滤文本
+ python 开发的命令行工具,天才的作品
+*** [[https://ngrok.com/][ngrok]]
+ ssh tunneling 讓其他人直接連到本機開發中網站
+*** rclone
+ 同步文件到云端硬盘的客户端，支持：
+ Google Drive
+ Amazon S3
+ Dropbox
+ Google Cloud Storage
+ Amazon Cloud Drive
+ Microsoft One Drive
+ The local filesystem
+*** tlp 笔记本电源管理工具
+*** dotfiles
+ 一个程序员一天可能 80% 的时间都在跟 shell 打交道，有个好的 shell(bash or zsh)，加上
+ 合理的 shell 配置绝对让效率提升一大截。
+*** htop - 进程管理的好助手
+*** proxychains-ng(proxychains4)
+ 命令行代理工具，配合科学上网，让没有代理设置的软件也可以正常联网。
+ 透明代理首选工具。
+*** shell 的所有命令行工具
+ linux 命令行里面的所有工具都是精华，真的，用的熟悉的话可以很大程度上加快你的工作
+ 进度，linux 就像是一个数也数不清的优秀工具的大集合。
+*** full text search - 搜索代码超级快
+**** sift : https://github.com/svent/sift
+**** ag : https://github.com/ggreer/the_silver_searcher
+**** pt : https://github.com/monochromegane/the_platinum_searcher
+*** GnuPG -  加密，保护你的备份数据
+*** [[https://forwardhq.com/help/ssh-tunneling-how-to/][forward]]
+ ssh tunneling 讓其他人直接連到本機開發中網站
+*** [[http://www.videolan.org/vlc/][VLC]]
+ 影音播放
+*** cowsay lolcat
+ 好玩的，不解释
+*** bleachbit
+ 清理常用软件产生的临时文件
+*** sdcv 词典
+*** ncdu - Best disk usage analyzer under Linux
+*** [[https://github.com/dvorka/hstr][hh]] - search and manage your command history
+*** [[https://github.com/tstack/lnav][lnav]] - The Logfile Navigator
 * Windows
 尽量不要用 windows 进行开发，除非你只用 dotnet 开发软件，不然 osx/ubuntu 会是更好的
 开发平台。太多太多优秀的工具在 osx/ubuntu 下可以一键安装，在 windows 下却不得不花费
@@ -222,9 +212,12 @@ Web 开发四件套：Django、Flask、Tornado、Gevent
 翻越长城，放眼世界
 众所周知的原因，我们被关在了墙内。
 作为一名互联网工作者，失去了与外部世界的联系基本就算失去了学习国外先进技术的途径。
+** [[https://github.com/cyfdecyf/cow][COW]] - 一个简化穿墙的 HTTP 代理服务器
+它能自动检测被墙网站，仅对这些网站使用二级代理。
 ** Shadowsocks
 科学上网目前首选的工具是 shadowsocks，它可以创建一个本地的 socks5 的代理。
 *** shadowsocks-go
+** [[https://github.com/v2ray/v2ray-core][v2ray]] - 网络代理平台
 ** [[https://getlantern.org/][Lantern]]
 作为一个 P2P 的匿名科学上网工具，蓝灯免费带你飞跃长城！支持 Mac、Linux、Windows、
 Android 等多种操作系统，帮助我们照亮前进的道路，蓝灯绝对是科学上网必备的第一件神装！
@@ -265,8 +258,9 @@ RSS 服务提供商
 *** [[https://droplr.com/][droplr]]
 快速上傳圖片分享
 ** [[https://www.google.com/chrome/][Chrome]]
-*** SwitchyOmega : 搭配 Shadowsocks 足够走遍天下
+*** [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]] - 搭配 Shadowsocks 足够走遍天下
 *** Momentum - Dashboard
+*** [[https://github.com/philc/vimium][vimium]] - The hacker's browser.
 ** 看片
 [[http://www.acfun.com/][A 站]] / [[http://www.bilibili.com/][B 站]] / 被窝 / 海盗湾 : 总有能看到的片
 ** 其他
