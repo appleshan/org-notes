@@ -59,11 +59,13 @@ doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without
 ** PAC Manager - 远程管理工具
 ** F.lux
 一款根据当前时间调节屏幕颜色的软件。程序员晚睡强迫症的福音。
-** indicator-netspeed-unity
-网速显示小插件
+** [[https://github.com/GGleb/indicator-netspeed-unity][indicator-netspeed-unity]] - 网速显示小插件
 ** psensor - 温度监控小工具
-** shutter
- 截图工具
+** shutter - 截图工具
+** 英文词典
+*** goldendict
+项目主页：http://goldendict.org/
+源代码仓库：https://github.com/goldendict/goldendict
 ** CLI
 *** zsh
  shell 里面的战斗机
@@ -75,8 +77,8 @@ doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without
  python 开发的命令行工具,天才的作品
 *** [[https://ngrok.com/][ngrok]]
  ssh tunneling 讓其他人直接連到本機開發中網站
-*** rclone
- 同步文件到云端硬盘的客户端，支持：
+*** rclone - 同步文件到云端硬盘的客户端
+ 支持：
  Google Drive
  Amazon S3
  Dropbox
