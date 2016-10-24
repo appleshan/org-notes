@@ -35,6 +35,7 @@ datadir         = /var/lib/mysql
 如果你创建了一个名为 test 的数据库，那么这个数据库的数据会存放到 /var/lib/mysql/test 目录下。
 
 * 进入 MySQL
+** 方法一：
 mysql -u root -p
 (输入 mysql 的 root 密码)
 
@@ -51,17 +52,85 @@ mysql>
 
 sudo mysqladmin -u root password newpassword；
 
+** 方法二：
+#+BEGIN_SRC bash
+mysql --host=192.168.14.60 --user=nftest --password=daantest nftest
+# or
+mysql -h 192.168.14.60 -u nftest -pdaantest nftest
+#+END_SRC
 * 简单的操作
-显示数据库：
+** Test
+#+BEGIN_SRC sql
+select version(), current_date;
+#+END_SRC
+and result is show as above
+#+BEGIN_EXAMPLE
+mysql> select version(), current_date;
++------------+--------------+
+| version()  | current_date |
++------------+--------------+
+| 5.6.16-log | 2016-10-21   |
++------------+--------------+
+1 row in set (0.00 sec)
+#+END_EXAMPLE
 
+** List all databases in MySQL：
+#+BEGIN_SRC sql
+show databases;
+#+END_SRC
+...
+#+BEGIN_EXAMPLE
 mysql> show databases;
 +--------------------+
 | Database           |
 +--------------------+
 | information_schema |
 | mysql              |
+| tutorial_database  |
 +--------------------+
 2 rows in set (0.00 sec)
+#+END_EXAMPLE
+
+** View Selected Database in MySQL
+#+BEGIN_SRC sql
+SELECT database();
+#+END_SRC
+
+Your result may be similar to this:
+#+BEGIN_EXAMPLE
+mysql> SELECT database();
++------------+
+| database() |
++------------+
+| NULL       |
++------------+
+1 row in set (0.00 sec)
+#+END_EXAMPLE
+
+** Select a Database in MySQL
+#+BEGIN_SRC sql
+USE tutorial_database;
+#+END_SRC
+
+That command should yield a result of Database changed similar to:
+#+BEGIN_EXAMPLE
+mysql> USE tutorial_database;
+Database changed
+#+END_EXAMPLE
+
+** List all tables in selected database
+#+BEGIN_SRC sql
+show tables;
+#+END_SRC
+...
+#+BEGIN_EXAMPLE
+mysql> show tables;
++-----------------------------+
+| Tables_in_tutorial_database |
++-----------------------------+
+| employee                    |
++-----------------------------+
+#+END_EXAMPLE
 
 * 设置远程访问
 1.取消本地监听
