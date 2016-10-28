@@ -1,0 +1,113 @@
+#+TITLE: 开发 Go 项目最简单的方式-一个基于 Docker 的 go 工具
+
+@see https://toutiao.io/k/wkqjsw
+
+当我尝试开发一个在 IronWorkerr 上运行的非常简单的程序的时候，我发现目前为止没有
+一个工具可以让人在几分钟之内运行一段 Go 的示例代码。但在其他语言里面这是可以很容
+易做到的，因为他们不像 Go 一样需要设置 GOPATH 环境变量，遵守一个特定的代码目录结
+构，而且他们通常还有更简单的依赖管理工具。
+
+* 有什么更好的方式吗？
+我最近想了很多，也写了很过关于 Docker 的文章，并尝试在所有能使用 Docker 的情境下都
+坚持使用 Docker（是的，我是 Docker 的超级粉丝）。大部分原因是因为在 Iron.io，我们
+从事 Docker 的相关工作。我们运行了很多 Docker 容器，真的很多。在这期间，我已经意识
+到 Docker 的强大与疯狂之处。相信我，这不只是炒作。
+
+我们向用户展示如何使用 Docker 容器构建和测试他们的 Go 语言程序已经有一段时间了，但
+始终有一个痛点，让我们如鲠在喉。那便是用户需要将代码放到特定的目录，配置 GOPATH
+环境变量，使用一个第三方工具如 godep 来加载和代理依赖（注意通常这些依赖和你的代码
+一样，也需要被版本控制管理），有序的加载相关目录等等。这些当然可以完成，但是总是让
+人觉得不够爽。
+
+现在，这个流程变得更好些了。
+
+* 基于 Docker 的 Go 工具
+我创建了一个基于 Docker 的 go 工具——“treeder/go”，他让 Go 语言开发变得超级简单。你
+唯一需要安装的只有 Docker。下面是一些它的一些功能和好处：
+
+- 你不需要安装 Go
+- 你不需要安装这些相关的工具
+- 你不需要配置 GOPATH	环境变量
+- 你不需要将你的代码放到特定的目录（如：/src/github.com/user/hello）或者 Go	的安装
+  目录，你可以任意放置你的代码。
+- 不需要重写代码里面依赖导入目录就可以加载相应依赖
+- 代码交叉编译
+- 代码静态编译
+- 将代码打包成 Docker	镜像（一个命令即可搞定，然后你将得到一个包含你的代码的镜像）
+- 构建远端 git 仓库的代码
+
+* 演示
+** 基础部分
+让我们先来写个简单的例子，首先复制粘贴下面的代码到一个叫 app.go 的文件，放到任意
+目录。
+#+BEGIN_SRC go
+package main
+import (
+           "fmt"
+           "log"
+           "net/http"
+           "github.com/gorilla/mux"
+ )
+func main() {
+          r := mux.NewRouter()
+          r.HandleFunc("/", Hello)
+          http.Handle("/", r)
+          fmt.Println("Starting up on 8080")
+          log.Fatal(http.ListenAndServe(":8080", nil))
+}
+func Hello(w http.ResponseWriter, req *http.Request) {
+         fmt.Fprintln(w, "Hello world!")
+}
+#+END_SRC
+
+注意到这段代码有第三方依赖了吗？让我们来代理（vendor）依赖：
+#+BEGIN_SRC bash
+docker run --rm -v $PWD:/app -w /app treeder/go vendor
+#+END_SRC
+
+上述命令会把抵赖都放 /vendor 目录下
+然后我们对代码进行构建：
+#+BEGIN_SRC bash
+docker run --rm -v $PWD:/app -w /app treeder/go build
+#+END_SRC
+
+接着，我们来运行代码：
+#+BEGIN_SRC bash
+docker run --rm -v $PWD:/app -w /app -p 8080:8080 iron/base ./app
+#+END_SRC
+
+打开浏览器，输入 http://localhost:8080。哈哈，我们成功的通过 iron/base 这个基础
+镜像运行了我们的代码。它是一个包含了运行 GO 程序所需的所有东西的很小的镜像。
+
+** 更酷炫的东西
+构建一个包含你的代码的可以运行的 Docker 镜像怎么样？
+#+BEGIN_SRC bash
+docker run --rm -v $PWD:/app -w /app -v /var/run/docker.sock:/var/run/docker.sock treeder/go image username/myapp:latest
+#+END_SRC
+
+现在通过你的新镜像来运行代码吧：
+#+BEGIN_SRC bash
+docker run --rm -v $PWD:/app -w /app -p 8080:8080 iron/base ./app
+#+END_SRC
+
+再次打开 http://localhost:8080，哈哈，现在流程是不是更好了。这个镜像非常小。你
+可以通过输入 docker images 来查看这个镜像到底有好大，大概在 12M 左右吧。
+
+或者你也可以下载和构建一个远程的代码仓库：
+#+BEGIN_SRC bash
+docker run --rm -v $PWD:/app -w /app treeder/go remote https://github.com/treeder/hello-app.go.git
+#+END_SRC
+
+最后你将得到一个包含这个远程代码仓库的代码的镜像。
+
+* 结论
+将 Docker 运用于开发再次胜利了，如果你之前开发过 Go 项目，你应该会感谢这个工具带来
+的简单和简洁。它仅仅是个实验阶段的工具，没有包含太多的其他工具链。不过，就我知道的
+而言，这应该是最简单的 Go 上手方式了。通过这个工具，仅仅告诉其他人一个代码仓库链接，
+他们就可以克隆，构建，运行代码而不需要任何初始化流程仅仅只需要 Docker。
+
+完整的文档和项目源代码请浏览
+https://github.com/treeder/go
+
+更新:我做了一个更大更好的工具
+https://github.com/treeder/devo
