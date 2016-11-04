@@ -6,7 +6,7 @@
 实验环境：ubuntu 16.04, 64 位
 
 * 1.获取 mysql 镜像
-从 docker hub 的仓库中拉取 mysql 镜像
+从 docker hub 的仓库中拉取 mysql 镜像：
 #+BEGIN_SRC bash
 docker pull mysql
 #+END_SRC

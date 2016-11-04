@@ -1,0 +1,179 @@
+#+TITLE: Connecting to Microsoft SQL Server from UNIX (Linux/Mac OSX)
+
+* unixODBC
+http://www.unixodbc.org/
+
+参考在资讯：
+http://www.ibm.com/developerworks/cn/linux/database/odbc/
+
+** 什么是 unixODBC
+ODBC(Open Database Connect)是由 Microsoft 公司于 1991 年提出的一个开放的，用于
+访问数据库的统一接口规范。
+
+unixODBC 的是为非 Window 平台的系统实现 ODBC 规范接口的中间件。
+
+** unixODBC 的安装
+有 GUI 的用户可以使用 ODBCConfig tool 安装。教程在官网文档有详细介绍，不再赘述。
+地址：http://www.unixodbc.org/doc/UserManual/
+
+以下介绍没有 GUI 界面的安装说明，同样也是来自官方文档，
+地址：http://www.unixodbc.org/odbcinst.html
+
+#+BEGIN_SRC bash
+sudo apt install unixodbc
+#+END_SRC
+
+** unixODBC 的配置
+ODBC 会区分两种类型的 ini 文件。
+ODBC 的系统文件是 odbcinst.ini 和 odbc.ini。
+用户文件是~/.odbc.ini(注意开头.号)，并包含在各自用户的 home 目录下。
+
+odbcinst.ini 包含对所有用户可访问的 ODBC 驱动信息;
+odbc.ini 文件包含所有用户可访问的 DSN 信息。
+
+*** [/etc/odbcinst.ini]
+向 unixODBC 登记 FreeTDS 驱动：
+#+NAME: odbcinst.ini
+#+BEGIN_SRC conf :tangle /data/Dropbox/dotfiles/etc/odbcinst.ini
+[FreeTDS]
+Description = FreeTDS Driver
+Driver      = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
+Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
+FileUsage   = 1
+CPTimeout   = 5
+CPReuse     = 5
+
+[MySQL]
+Description = MySQL driver for Linux
+Driver      = /usr/lib/x86_64-linux-gnu/odbc/libmyodbc.so
+Setup       = /usr/lib/x86_64-linux-gnu/odbc/libodbcmyS.so
+FileUsage   = 1
+#+END_SRC
+
+[FreeTDS]是 driver 的名字，这里表明这是一个 FreeTDS driver。
+Driver 和 Setup 路径指出 ODBC driver 和 setup libs 的位置。
+当我们使用 ODBCConfig 工具添加新的 DSN 时，会调用这个 setup lib。但是由于现在
+我们是非 GUI 安装，所以其实可以不用管他。
+Driver 路径最为关键。当 DSN 调用 SQLConnect 或 SQLDriverConnect 时，
+driver manager 会动态载入这些库。若这里指定到了错误的 Driver，则 DSN 无法工作。
+FileUsage 由 odbcinst 命令自己添加，所以如果你使用的是文本编辑器，则需要自己添加。
+
+*** [/etc/odbc.ini] or [~/.odbc.ini]
+odbc.ini 的内容要复杂一些，主要是因为不同的 driver 需要不同的配置项。
+这些配置项可以通过 odbcinst 命令，或文本编辑器来添加。
+
+添加 DSN：
+#+NAME: odbc.ini
+#+BEGIN_SRC conf :tangle /data/Dropbox/dotfiles/etc/odbc.ini
+[ODBC Data Sources]
+mssql.test1.local = 160 上的 Ms Sql Server 测试数据库 1
+mssql.test2.local = 160 上的 Ms Sql Server 测试数据库 2
+
+[mssql.test1.local]
+Description = "local test db : [local-test]"
+Driver      = FreeTDS
+Servername  = dbdev160
+Database    = local-test
+
+[mssql.test2.local]
+Description = "local test db : [local-test]"
+Driver      = FreeTDS
+Server      = 192.168.2.160
+Port        = 1433
+Database    = local-test
+UID         = sa
+#+END_SRC
+
+Driver 项用于匹配 odbcinst.ini 的[section]部分。不过也可以直接指向 driver 路径，
+只是可能需要注意路径访问权限的问题。
+
+** 使用 isql 程序查看数据库
+unixODBC 还提供了命令台下查看数据库的程序，这就是 isql，用法如下：
+#+BEGIN_EXAMPLE
+isql DSN [UID [PWD]] [options]
+DSN		数据源名称
+UID		用户 ID
+PWD		用户密码
+Options：
+-b		批处理，没有提示符的模式
+-dx		设置列之间的分隔符为 x
+-w		将查询结果输出为 HTML 格式
+-c		第一行输出列名
+--version	           输出 isql 的版本号
+#+END_EXAMPLE
+
+#+BEGIN_SRC bash
+isql -v mssqlserver.test.local sa yklis
+#+END_SRC
+
+* FreeTDS
+unixODBC 提供了 Linux 对 ODBC 的支持, 但它只是一个 ODBC 的管理器, 要连接实际的
+数据库还得提供这种数据库的 ODBC 驱动.
+
+FreeTDS 就是 Linux 下 用于连接 MS SQL Server 和 Sybase 的免费 ODBC 驱动。
+注意, 必须先装 unixODBC, 再装 freetds
+
+** FreeTDS 的安装
+#+BEGIN_SRC bash
+sudo apt install tdsodbc freetds-common freetds-bin
+#+END_SRC
+
+** FreeTDS 的配置
+*** [/etc/freetds/freetds.conf]
+在 FreeTDS 的配置文件中添加指向具体数据库的访问信息：
+#+BEGIN_SRC conf :tangle /data/Dropbox/dotfiles/etc/freetds/freetds.conf
+[global]
+tds version = 7.1
+
+[dbdev160]
+host = 192.168.2.160
+port = 1433
+client charset = UTF-8
+#+END_SRC
+
+注意, client charset 必需大于或等于服务端数据库使用的字符集.
+例如,服务端数据库是 MS SQL Server 2000, 字符集是 GB2312.
+那么 client charset 可以设置为 GB2312(等于), GB18030(大于),UTF-8(大于)
+但不能设为 ISO-8859-1(小于), Shift_JIS(不等于).
+由于 UTF-8 是所由字符集的超集,因此设置为 UTF-8 总是可行的.
+此外, FreeTDS 的 client charset 不能设置为 UTF16. 这时目前该软件设计的局限,
+其官方网站称,在未来版本中可能会增加对 client charset UTF16 的支持.
+
+** 使用 tsql 程序查看数据库
+#+BEGIN_SRC bash
+tsql -S dbdev160 -U sa -P yklis
+locale is "zh_CN.UTF-8"
+locale charset is "UTF-8"
+using default charset "UTF-8"
+1>
+#+END_SRC
+
+Great! That 1> prompt smells of success!
+
+#+BEGIN_SRC bash
+1> select getdate()
+2> go
+
+10 月 28 2016 07:11 下午
+(1 row affected)
+1> bye
+#+END_SRC
+
+* 注意事项
+** 两种配置方式
+用 unixODBC 通过 freeTDS 访问 MS SQL Server 有两种配置方式.
+
+(1)一种是将服务器信息写在 freeTDS 的配置文件 $PREFIX/etc/freetds.conf 中,
+而 /etc/odbc.ini 中使用 Servername 来指向 freetds.conf 中设定的 DSN.
+如上例中的 [TEST1dsn]
+(2).另一种方式是将服务器信息也一并写在 /etc/odbc.ini 中. 如上例中的 [TEST2dsn].
+注意,关键字有所不同.  例如, freetds.conf 中的 tds version 在
+/etc/odbc.ini 中为 TDS_Version.
+
+方式(2)相对简单,但只有少数几个关键字可以控制 freetds,至于 freetds 的
+其它特征则使用 freetds 的缺省配置.
+
+方式(1)虽然复杂一些,但对 freetds 可进行更细致的控制,例如可指定客户端
+的字符集.
+
+推荐使用方式(1)进行配置.
