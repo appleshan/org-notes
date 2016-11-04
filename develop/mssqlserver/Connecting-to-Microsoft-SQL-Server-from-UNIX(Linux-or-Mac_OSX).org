@@ -3,9 +3,6 @@
 * unixODBC
 http://www.unixodbc.org/
 
-参考在资讯：
-http://www.ibm.com/developerworks/cn/linux/database/odbc/
-
 ** 什么是 unixODBC
 ODBC(Open Database Connect)是由 Microsoft 公司于 1991 年提出的一个开放的，用于
 访问数据库的统一接口规范。
@@ -78,7 +75,7 @@ Database    = local-test
 [mssql.test2.local]
 Description = "local test db : [local-test]"
 Driver      = FreeTDS
-Server      = 192.168.2.160
+Server      = dev160.server.local
 Port        = 1433
 Database    = local-test
 UID         = sa
@@ -118,6 +115,10 @@ FreeTDS 就是 Linux 下 用于连接 MS SQL Server 和 Sybase 的免费 ODBC �
 sudo apt install tdsodbc freetds-common freetds-bin
 #+END_SRC
 
+#+BEGIN_SRC bash
+sudo chmod +x /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
+#+END_SRC
+
 ** FreeTDS 的配置
 *** [/etc/freetds/freetds.conf]
 在 FreeTDS 的配置文件中添加指向具体数据库的访问信息：
@@ -126,7 +127,7 @@ sudo apt install tdsodbc freetds-common freetds-bin
 tds version = 7.1
 
 [dbdev160]
-host = 192.168.2.160
+host = dev160.server.local
 port = 1433
 client charset = UTF-8
 #+END_SRC
@@ -159,6 +160,20 @@ Great! That 1> prompt smells of success!
 1> bye
 #+END_SRC
 
+* hostname
+#+BEGIN_SRC bash
+vi /etc/hosts
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+192.168.2.160 dev160.server.local
+#+END_EXAMPLE
+
+* 使用 osql 程序查看数据库
+#+BEGIN_SRC bash
+osql -S mssql.test2.local -U sa -P yklis
+#+END_SRC
+
 * 注意事项
 ** 两种配置方式
 用 unixODBC 通过 freeTDS 访问 MS SQL Server 有两种配置方式.
@@ -177,3 +192,7 @@ Great! That 1> prompt smells of success!
 的字符集.
 
 推荐使用方式(1)进行配置.
+
+* 参考资讯
+https://www.acloudtree.com/how-to-install-freetds-and-unixodbc-on-osx-using-homebrew-for-use-with-ruby-php-and-perl/
+http://www.ibm.com/developerworks/cn/linux/database/odbc/
