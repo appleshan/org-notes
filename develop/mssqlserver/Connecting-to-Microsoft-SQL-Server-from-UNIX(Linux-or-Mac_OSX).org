@@ -31,7 +31,7 @@ odbc.ini 文件包含所有用户可访问的 DSN 信息。
 *** [/etc/odbcinst.ini]
 向 unixODBC 登记 FreeTDS 驱动：
 #+NAME: odbcinst.ini
-#+BEGIN_SRC conf :tangle /data/Dropbox/dotfiles/etc/odbcinst.ini
+#+BEGIN_SRC conf
 [FreeTDS]
 Description = FreeTDS Driver
 Driver      = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
@@ -61,7 +61,7 @@ odbc.ini 的内容要复杂一些，主要是因为不同的 driver 需要不同
 
 添加 DSN：
 #+NAME: odbc.ini
-#+BEGIN_SRC conf :tangle /data/Dropbox/dotfiles/etc/odbc.ini
+#+BEGIN_SRC conf
 [ODBC Data Sources]
 mssql.test1.local = 160 上的 Ms Sql Server 测试数据库 1
 mssql.test2.local = 160 上的 Ms Sql Server 测试数据库 2
@@ -122,7 +122,7 @@ sudo chmod +x /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
 ** FreeTDS 的配置
 *** [/etc/freetds/freetds.conf]
 在 FreeTDS 的配置文件中添加指向具体数据库的访问信息：
-#+BEGIN_SRC conf :tangle /data/Dropbox/dotfiles/etc/freetds/freetds.conf
+#+BEGIN_SRC conf
 [global]
 tds version = 7.1
 
@@ -160,6 +160,11 @@ Great! That 1> prompt smells of success!
 1> bye
 #+END_SRC
 
+** 使用 osql 程序查看数据库
+#+BEGIN_SRC bash
+osql -S mssql.test2.local -U sa -P yklis
+#+END_SRC
+
 * hostname
 #+BEGIN_SRC bash
 vi /etc/hosts
@@ -168,11 +173,6 @@ vi /etc/hosts
 #+BEGIN_EXAMPLE
 192.168.2.160 dev160.server.local
 #+END_EXAMPLE
-
-* 使用 osql 程序查看数据库
-#+BEGIN_SRC bash
-osql -S mssql.test2.local -U sa -P yklis
-#+END_SRC
 
 * 注意事项
 ** 两种配置方式
@@ -194,5 +194,5 @@ osql -S mssql.test2.local -U sa -P yklis
 推荐使用方式(1)进行配置.
 
 * 参考资讯
-https://www.acloudtree.com/how-to-install-freetds-and-unixodbc-on-osx-using-homebrew-for-use-with-ruby-php-and-perl/
-http://www.ibm.com/developerworks/cn/linux/database/odbc/
+- https://www.acloudtree.com/how-to-install-freetds-and-unixodbc-on-osx-using-homebrew-for-use-with-ruby-php-and-perl/
+- http://www.ibm.com/developerworks/cn/linux/database/odbc/
