@@ -17,7 +17,7 @@ unixODBC 的是为非 Window 平台的系统实现 ODBC 规范接口的中间件
 地址：http://www.unixodbc.org/odbcinst.html
 
 #+BEGIN_SRC bash
-sudo apt install unixodbc
+sudo apt install unixodbc unixodbc-dev
 #+END_SRC
 
 ** unixODBC 的配置

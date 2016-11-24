@@ -1,0 +1,13 @@
+#+TITLE: Docker 术语
+
+- Container
+  Linux	Container（容器），运行时可写
+- Image
+  容器的镜像，每个镜像可以运行多个容器实例
+- Hub
+  中央仓库，为分布式应用提供广泛服务，包括容器 镜像分布、更改、用户和团队协作、
+  生命周期自动化等
+- Dockerfile
+  创建镜像的自动化脚本
+- Push/Pull
+  从 Index 获得镜像或者推送镜像到 Index
