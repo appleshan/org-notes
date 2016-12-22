@@ -1,4 +1,4 @@
-linux 系统的 dns 设置
+#+TITLE: linux 系统的 dns 设置
 
 * 编辑 /etc/resolv.conf
 将原有的内容全部注释，然后在第一行写上
@@ -12,4 +12,3 @@ nameserver 127.0.0.1
 
 * 编辑 /etc/NetworkManager/NetworkManager.conf
 找到 dns=dnsmasq，在前面增加“#”，也就是把这句注释掉。
-

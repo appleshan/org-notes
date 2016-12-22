@@ -1,11 +1,11 @@
-搭建一台 Dnsmasq + DNSCrypt 的 DNS 服务器
+#+TITLE: 搭建一台 Dnsmasq + DNSCrypt 的 DNS 服务器
 
 這篇日誌紀錄是我在 Ubuntu Linux 下配置 DNSCrypt + DNSMasq 的過程。
 
 * 0.方案
 ** 两个工具：
-dnscrypt-proxy：通过加密线路请求 DNS 解析
-dnsmasq：DNS 缓存服务器
+dnscrypt-proxy： 通过加密线路请求 DNS 解析
+dnsmasq：        DNS 缓存服务器
 
 ** 监听端口：
 dnscrypt-proxy 监听 127.0.0.1:1053
@@ -35,24 +35,24 @@ dnsmasq        监听 127.0.0.1:53
 **** 2. 验证完整性
 计算 SHA256:
 #+BEGIN_SRC bash
-$ openssl dgst -sha256 libsodium-<version>.tar.gz
+openssl dgst -sha256 libsodium-<version>.tar.gz
 #+END_SRC
 
 使用 dig 验证 SHA256:
 #+BEGIN_SRC bash
-$ dig +dnssec +short txt libsodium-<version>.tar.gz.download.libsodium.org
+dig +dnssec +short txt libsodium-<version>.tar.gz.download.libsodium.org
 #+END_SRC
 
 如果匹配则继续下面的操作，否则去官方 GitHub 报告，不要继续进行
 
 **** 3. 编译安装
 #+BEGIN_SRC bash
-$ tar zxvf libsodium-<version>.tar.gz
-$ cd libsodium-<version>/
-$ ./configure
-$ make -j CORE_NUMBER && make check
-$ sudo make install
-$ sudo ldconfig       /*   root 下重新载入模块  */
+tar zxvf libsodium-<version>.tar.gz
+cd libsodium-<version>/
+./configure
+make -j CORE_NUMBER && make check
+sudo make install
+sudo ldconfig       /*   root 下重新载入模块  */
 #+END_SRC
 
 *** 编译安装 dnscrypt-proxy
@@ -62,12 +62,12 @@ $ sudo ldconfig       /*   root 下重新载入模块  */
 **** 2. 验证完整性
 计算 SHA256:
 #+BEGIN_SRC bash
-$ openssl dgst -sha256 dnscrypt-proxy-<version>.tar.bz2
+openssl dgst -sha256 dnscrypt-proxy-<version>.tar.bz2
 #+END_SRC
 
 使用 dig 验证 SHA256:
 #+BEGIN_SRC bash
-$ dig +dnssec TXT dnscrypt-proxy-<version>.tar.bz2.download.dnscrypt.org
+dig +dnssec TXT dnscrypt-proxy-<version>.tar.bz2.download.dnscrypt.org
 #+END_SRC
 
 如果匹配则继续下面的操作，否则去官方 GitHub 报告， *不要继续进行*
@@ -75,19 +75,20 @@ $ dig +dnssec TXT dnscrypt-proxy-<version>.tar.bz2.download.dnscrypt.org
 **** 3. 编译安装
 在 Fedora, RHEL and CentOS 上安装 必须在 `ldconfig` 之前
 #+BEGIN_SRC bash
-$ su root
-# echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
-# ldconfig
-# exit
+su root
+echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
+ldconfig
+exit
 #+END_SRC
 
 Ubuntu 标准安装
 #+BEGIN_SRC bash
-$ bunzip2 -cd dnscrypt-proxy-*.tar.bz2 | tar xvf -
-$ cd dnscrypt-proxy-*/
-$ ./configure && make -j CORE_NUMBER
-$ sudo make install
-$ sudo ldconfig
+bunzip2 -cd dnscrypt-proxy-*.tar.bz2 | tar xvf -
+cd dnscrypt-proxy-*/
+./configure --prefix=/opt/net/dnscrypt-proxy
+make -j CORE_NUMBER
+sudo make install
+sudo ldconfig
 #+END_SRC
 
 默认安装在 /usr/local/sbin/dnscrypt-proxy
@@ -100,14 +101,14 @@ man 8 dnscrypt-proxy
 *** 1. 创建专用系统账户
 理论上都可以使用  未完全测试，建议创建带有空 home 目录的专用无权限系统账户
 #+BEGIN_SRC bash
-# adduser --system --home /home/dnscrypt --disabled-password --disabled-login dnscrypt
-# useradd --home-dir /home/dnscrypt --create-home --system --user-group dnscrypt
+adduser --system --home /home/dnscrypt --disabled-password --disabled-login dnscrypt
+useradd --home-dir /home/dnscrypt --create-home --system --user-group dnscrypt
 #+END_SRC
 
 *** 2. 配置启动脚本
 创建脚本文件
 #+BEGIN_SRC bash
-# touch /etc/init/dnscrypt.conf
+touch /etc/init/dnscrypt.conf
 #+END_SRC
 
 脚本中不需要出现 daemon 的内容，比如这里的 --daemonize
@@ -133,35 +134,35 @@ end script
 
 之后软连接到 /etc/init.d 目录下
 #+BEGIN_SRC bash
-# ln -s /lib/init/upstart-job /etc/init.d/dnscrypt
+ln -s /lib/init/upstart-job /etc/init.d/dnscrypt
 #+END_SRC bash
 注： --resolver-name=cloudns-can 有 DNSSEC, No-log 和 Namecoin， 方便突破封鎖
 
 *** 3. 启动和停止
 #+BEGIN_SRC bash
-# killall -KILL dnscrypt-proxy  // 或者使用 pid
-# start dnscrypt                // 在 /etc/init.d 中的名称
+killall -KILL dnscrypt-proxy  // 或者使用 pid
+start dnscrypt                // 在 /etc/init.d 中的名称
 #+END_SRC
 
 * 2.DNSmasq
 ** 禁用 Ubuntu 自带 DNSmasq
 #+BEGIN_SRC bash
-# vim /etc/NetworkManager/NetworkManager.conf
+vim /etc/NetworkManager/NetworkManager.conf
 /* 把 dns=dnsmasq 注释掉，之后重启服务 */
-# service network-manager restart
+service network-manager restart
 #+END_SRC
 
 ** 编译安装过程
 *** 1. 下载源代码
-从这里下载: DNSmasq，比如 dnsmasq-<version>.tar.gz
+从这里下载: [[http://www.thekelleys.org.uk/dnsmasq/][DNSmasq]] ，比如 dnsmasq-<version>.tar.gz
 
 *** 2. 编译安装
 Ubuntu 标准安装
 #+BEGIN_SRC bash
-$ tar zxvf dnsmasq-<version>.tar.gz
-$ cd dnsmasq-<version>/
-$ make -j CORE_NUMBER
-# make install
+tar zxvf dnsmasq-<version>.tar.gz
+cd dnsmasq-<version>/
+make -j CORE_NUMBER
+make install
 #+END_SRC
 
 默认安装在 /usr/local/sbin/dnsmasq
@@ -175,8 +176,8 @@ man 8 dnsmasq
 *** 1. 创建专用系统账户
 理论上都可以使用  未完全测试，建议创建 带有空家目录的专用无权限系统账户
 #+BEGIN_SRC bash
-# adduser --system --home /home/dnsmasq --disabled-password --disabled-login dnsmasq
-# useradd --home-dir /home/dnsmasq --create-home --system --user-group dnsmasq
+adduser --system --home /home/dnsmasq --disabled-password --disabled-login dnsmasq
+useradd --home-dir /home/dnsmasq --create-home --system --user-group dnsmasq
 #+END_SRC
 
 *** 2. 配置启动脚本
