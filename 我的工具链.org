@@ -260,9 +260,10 @@ RSS 服务提供商
 *** [[https://droplr.com/][droplr]]
 快速上傳圖片分享
 ** [[https://www.google.com/chrome/][Chrome]]
-*** [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]] - 搭配 Shadowsocks 足够走遍天下
-*** Momentum - Dashboard
+*** AdBloc - 过滤烦人的广告
+*** [[https://github.com/FelisCatus/SwitchyOmega][ProxySwitchyOmega]] - 搭配 Shadowsocks 足够走遍天下
 *** [[https://github.com/philc/vimium][vimium]] - The hacker's browser.
+*** Imagus - 不用点开图片就能放大
 ** 看片
 [[http://www.acfun.com/][A 站]] / [[http://www.bilibili.com/][B 站]] / 被窝 / 海盗湾 : 总有能看到的片
 ** 其他

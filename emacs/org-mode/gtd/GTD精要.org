@@ -1,4 +1,4 @@
-GTD 精要
+#+TITLE: GTD 精要
 
 * 基本流程
 GTD(Getting Things Done) 是一种将繁重超负荷的工作生活方式变成无压力高效的时间管
