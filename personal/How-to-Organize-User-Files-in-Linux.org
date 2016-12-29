@@ -1,0 +1,88 @@
+#+TITLE: How to Organize User Files in Linux
+
+Created On: 2016-07-22 Updated On: 2016-07-24
+
+* Intended User
+Every computer user should know where their data is stored and create proper
+backup for their data. User purchased or created data is the most valuable
+thing to backup in a computer. Today, computers are used in many areas and
+users usually download or create many files when using a computer. If you are
+happy with how computer handle your files now, you may ignore this post.
+On the other hand, if you have lots of file to organize, don't know where you
+should put things and often forget where you put things, this post could help
+out. I will talk file system and directory structure in Linux, since that's
+what I use. Some concepts can be used in other OS, but I won't go into the
+details of applying it to other OS.
+
+* Type of Files
+Before I talk about the real thing, you should know there are different type
+of files. Usually we use different dir to store them.
+
+Based on the creator of the file, there are
+
+- User created files, such as text files, spreadsheet, drawings, diagrams.
+- Transferred file or downloaded file, such as photos, movies, songs, documents
+  sent to you by other friends.
+- Program managed files, such as a database.
+- Programs. Usually we are not interested in these files.
+
+Based on the uniqueness of the file, there are
+
+- Easy to get files. Publicly distributed, products from high profile company.
+  Such as the JDK installer, drivers for your graphic card.
+- Files shared for a group of people. Such as travel photos,
+  company administration documents.
+- Files created and owned privately by yourself.
+
+* The directory layout
+Usually I just put these dirs in HOME dir.
+
+| directory                       | description                                                                                                                          |
+|---------------------------------+--------------------------------------------------------------------------------------------------------------------------------------|
+| ./texts/	                      | User created text or textual files, could be plain text files, config files etc.                                                     |
+| ./texts/howto/	                | Record how to do things, for example, ./texts/howto/zfs-on-linux contains how to use zfs on linux.                                   |
+| ./texts/install/	              | Record how to install software. Only for things that are difficult to install, of course.                                            |
+| ./texts/daylogs/<hostname>	    | Keep daylogs for each desktop and server here. Every config change should be recorded. Read more about Keep a Daylog.                |
+| ./texts/receipts/	             | Keep your receipts here. HTML, PDF, JPG could also stay here as long as they are receipts.                                           |
+| ./texts/cheatsheet/	           | Printable cheatsheets for varies languages and tools.                                                                                |
+| ./texts/choose-a/	             | Compare goods or service before buying. For example, ~/texts/choose-a/pad                                                            |
+| ./texts/config/	               | Common config files templates, such as nginx site file, samba config file, fabfile.                                                  |
+| ./texts/talk-notes/	           | Video or talk notes.                                                                                                                 |
+| ./<lang>/	                     | Programming language notes and projects, such as ./python/.                                                                          |
+| ./<lang>/testing-only/	        | Test scripts or projects.                                                                                                            |
+| ./projects/<project-name>	     | Everything that worth a dir or a git repo to track its content and progress. Usually programming related. Such as a side project.    |
+| ./projects/obsolete-projects/	 | Obsolete projects are moved to this sub-directory.                                                                                   |
+| ./case/<case-name>	            | Usually only contains downloaded documents or files for resolving a problem.                                                         |
+| ./office/<thing-name>	         | Everything that worth a dir or a git repo to track its content and progress. Usually not programming related. Such as a travel plan. |
+| ./sysadmin/<foo>/	             | Build files and configs for complicated sysadmin work. Config and log backup for some production system is also here.                |
+| ./videos/	                     | Short videos from the internet.                                                                                                      |
+| ./keys/	                       | GPG key, ssh key, SSL cert backup.                                                                                                   |
+| ./<xxx>-office/	               | If you work in a company, here goes the company office related files.                                                                |
+| ./btdownload/	                 | Torrent download. completed downloads should be moved/copied to ./persist/                                                           |
+| ./vbox/	                       | VirtualBox VMs and snapshots.                                                                                                        |
+| ./hdimages/	                   | General hard disk images.                                                                                                            |
+| ./cdimages/	                   | General disc images.                                                                                                                 |
+| ./system-images/	              | Specific system image or backup image.                                                                                               |
+| ./persist/	                    | File that needs to be stored permanently, but usually the content doesn't change anymore.                                            |
+| ./persist/movies/               |                                                                                                                                      |
+| ./persist/tv-series/            |                                                                                                                                      |
+| ./persist/music/                |                                                                                                                                      |
+| ./persist/ebook/                |                                                                                                                                      |
+| ./persist/user-guides/	        | User guide for electronics, cars, software, etc.                                                                                     |
+| ./persist/paper/                |                                                                                                                                      |
+| ./persist/slides/	             | Talk slides.                                                                                                                         |
+| ./persist/videos/               |                                                                                                                                      |
+| ./persist/pictures/             |                                                                                                                                      |
+| ./persist/pictures/Screenshots  |                                                                                                                                      |
+| ./persist/pictures/map          |                                                                                                                                      |
+| ./persist/pictures/info         |                                                                                                                                      |
+| ./persist/pictures/food         |                                                                                                                                      |
+| ./persist/photos/               |                                                                                                                                      |
+| ./persist/soft/	               | Software installer or source files                                                                                                   |
+| ./persist/android/	            | Android apks                                                                                                                         |
+| ./persist/winsoft/	            | Software for windows                                                                                                                 |
+| ./persist/wingame/	            | Windows games                                                                                                                        |
+| ./persist/wingame-saves/	      | Game save backup for windows games                                                                                                   |
+| ./persist/macsoft/	            | Mac OS X software                                                                                                                    |
+| ./persist/fonts/                |                                                                                                                                      |
+| ./persist/cache/	              | Software that can be downloaded but is large in size or too slow to download from original source, such as the GHC compiler.         |
