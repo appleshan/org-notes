@@ -1,0 +1,5 @@
+* directory
+~/Dropbox/org-notes/howto
+
+* description
+Record how to do things, for example, ./texts/howto/linux contains how to use linux.

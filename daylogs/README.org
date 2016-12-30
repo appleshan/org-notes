@@ -1,0 +1,5 @@
+* directory
+~/Dropbox/org-notes/daylogs/<hostname>
+
+* description
+Keep daylogs for each desktop and server here. Every config change should be recorded. Read more about [[https://blog.emacsos.com/keep-a-daylog.html][Keep a Daylog]].

@@ -1,0 +1,5 @@
+* directory
+~/Dropbox/org-notes/receipts
+
+* description
+Keep your receipts here. HTML, PDF, JPG could also stay here as long as they are receipts.

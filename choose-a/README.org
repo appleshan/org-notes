@@ -1,0 +1,5 @@
+* directory
+~/Dropbox/org-notes/choose-a
+
+* description
+Compare goods or service before buying. For example, ~/texts/choose-a/pad

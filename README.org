@@ -1,2 +1,8 @@
 #+TITLE: org-notes
 My notes for variable purpose in Emacs Org-mode.
+
+* directory
+~/Dropbox/org-notes
+
+* description
+User created text or textual files, could be plain text files, config files etc.
