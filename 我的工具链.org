@@ -39,13 +39,9 @@ Coding, Version-Control, Document, GTD, Email 都在 Emacs 里完成。
 *** fcitx-rime
 ** VirtualBox - 免费的虚拟机，主要用于隔离国产软件
 ** Email Client
-*** ThunderBird - 电子邮件
-**** EmailPicky
-收集邮件地址
-右击, Pick email IDs from this folder
-**** Lightning
-Calendar
-右击, new calendar
+*** mutt
+**** [[http://www.offlineimap.org/][OfflineIMAP]]
+**** msmtp
 *** exchange server
 **** davmail
 download: http://davmail.sourceforge.net/
