@@ -150,6 +150,25 @@ Cmder 有在：Win 下必备神器之 Cmder 一文中予以总结。
 Steam 桌面应用，不过无妨)。
 ** office
 虽然基本不用但还是得备一套。
+** QQ 轻聊版
+** ManicTime
+分秒不漏的记录你在用电脑的时候到底在干什么，可以自动分类各种操作，形成统计报表。
+** NetSetMan
+功能：多网关（或多 IP/多 DNS）切换
+** Query Express - MSSQL 數據庫終端
+http://www.albahari.com/queryexpress.aspx
+非常輕便，又非常實用的一款 MSSQL 終端程序，可以直接裝在 U 盤裡面運行。
+** Potplayer
+視頻播放器
+** Sandboxie
+軟件沙盤
+** Junction
+https://technet.microsoft.com/en-us/sysinternals/bb896768.aspx
+建立软链接，让一个目录的实际存储位置是在另一个地方，比如另一块硬盘上。
+** Picasa
+Google 公司的图片浏览、编辑工具。
+** 1Checker
+免费的英语写作辅助软件：1Checker（易改）。用来检查、修改文章中的单词和语法错误。
 * Android
 ** google 服务
 包括邮件,日历,联系人,play 应用市场等功能。
@@ -165,6 +184,10 @@ shadowsocks 翻墙服务。
 知乎日报每日必读。
 ** 微信
 足以替代短信，何况还有朋友圈和订阅号。
+** Hacker's Keyboard
+** Termux
+** 1Checker
+免费的英语写作辅助软件：1Checker（易改）。用来检查、修改文章中的单词和语法错误。
 * 开发
 ** Source Code Pro
 没有一个合适的等宽字体，都不想看电脑。
@@ -239,6 +262,9 @@ Android 等多种操作系统，帮助我们照亮前进的道路，蓝灯绝对
 ** Tor
 *** ARM
 tor 的外壳
+*** Tor Browser
+Tor Project 官方打包製作的傻瓜式匿名瀏覽器。
+上暗网的必备工具。你所看到的网络世界只是冰山一角。
 ** DNS
 *** DnsMasq
 DNS 缓存
@@ -273,10 +299,14 @@ RSS 服务提供商
 *** [[https://droplr.com/][droplr]]
 快速上傳圖片分享
 ** [[https://www.google.com/chrome/][Chrome]]
-*** AdBloc - 过滤烦人的广告
-*** [[https://github.com/FelisCatus/SwitchyOmega][ProxySwitchyOmega]] - 搭配 Shadowsocks 足够走遍天下
-*** [[https://github.com/philc/vimium][vimium]] - The hacker's browser.
-*** Imagus - 不用点开图片就能放大
+*** AdBloc
+过滤烦人的广告
+*** [[https://github.com/FelisCatus/SwitchyOmega][ProxySwitchyOmega]]
+搭配 Shadowsocks 足够走遍天下
+*** [[https://github.com/philc/vimium][vimium]]
+The hacker's browser.
+*** Imagus
+不用点开图片就能放大
 ** 看片
 [[http://www.acfun.com/][A 站]] / [[http://www.bilibili.com/][B 站]] / 被窝 / 海盗湾 : 总有能看到的片
 ** 其他
