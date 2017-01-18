@@ -283,6 +283,7 @@ DDOS 地圖
 程序世界里的大师们都在 github 上，只是需要你的发掘。
 [[https://github.com/appleshan][personal repo]]
 *** [[https://bitbucket.org/][Bitbucket]]
+用于团队的 Git 和 Mercurial 代码管理工具。
 适合存储私密资料。
 ** Google 帐号
 ** Email
