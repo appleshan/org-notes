@@ -1,6 +1,6 @@
 #+TITLE: 使用 docker 运行 mysql 实例
 
-原文链接：http://www.jianshu.com/p/c24e3e5f5b58
+@see http://www.jianshu.com/p/c24e3e5f5b58
 
 实验主题：使用 docker 部署 mysql 实例
 实验环境：ubuntu 16.04, 64 位
@@ -72,7 +72,7 @@ mysql> show databases;
 使用 docker 相对于虚拟机而言的原因是耗费很少的资源，可以"开辟"非常多的隔离的环
 境，所以我们继续运行第二个 mysql 实例，还用之前的镜像，名字为 second-mysql。
 #+BEGIN_SRC bash
-sudo docker run --name second-mysql -p 3306:3307 -e MYSQL_ROOT_PASSWORD=123456 -d mysql
+docker run --name second-mysql -p 3306:3307 -e MYSQL_ROOT_PASSWORD=123456 -d mysql
 
 2de4ddb5bfb9b9434af8e72368631e7f4c3f83ee354157328049d7d0
 f5523661docker: Error response from daemon: driver failed programming external connectivity
@@ -84,7 +84,7 @@ Bind for 0.0.0.0:3306 failed: port is already allocated.
 了错误，但是产生了一个容器 id，当我们修改端口后还会报错，因为名字冲突了，也即这
 次失败的创建会占用这个名字：
 #+BEGIN_SRC bash
-sudo docker run --name second-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=123456 -d
+docker run --name second-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=123456 -d
 
 mysqldocker: Error response from daemon: Conflict. The name "/second-mysql" is already
 in use by container 2de4ddb5bfb9b9434af8e72368631e7f4c3f83ee354157328049d7d0f5523661.
@@ -95,7 +95,7 @@ You have to remove (or rename) that container to be able to reuse that name..
 我们可以观察到 first-mysql 的状态为 Up 34 minutes，说明已经工作了 34 分钟，
 而 second-mysql 只是刚刚创建的。
 #+BEGIN_SRC bash
-sudo docker ps -a
+docker ps -a
 
 CONTAINER ID    IMAGE    COMMAND                   CREATED               STATUS           PORTS                     NAMES
 2de4ddb5bfb9    mysql    "docker-entrypoint.sh"    About a minute ago    Created                                    second-mysql
@@ -104,9 +104,9 @@ CONTAINER ID    IMAGE    COMMAND                   CREATED               STATUS 
 
 我们用 rm 命令删除这个容器,如下面命令所示：
 #+BEGIN_EXAMPLE
-maintain@maintain-dev1:~$ sudo docker rm second-mysql
+docker rm second-mysql
 
-maintain@maintain-dev1:~$ sudo docker ps -a
+docker ps -a
 
 CONTAINER ID    IMAGE    COMMAND                   CREATED           STATUS           PORTS                     NAMES
 5b6bf6f629bf    mysql    "docker-entrypoint.sh"    42 minutes ago    Up 42 minutes    0.0.0.0:3306->3306/tcp    first-mysql
@@ -114,11 +114,11 @@ CONTAINER ID    IMAGE    COMMAND                   CREATED           STATUS     
 
 重新建立 second-mysql 这个容器，占用物理机的 3307 端口：
 #+BEGIN_SRC bash
-sudo docker run --name second-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql
+docker run --name second-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql
 #+END_SRC
 
 #+BEGIN_SRC bash
-sudo docker ps
+docker ps
 
 CONTAINER ID    IMAGE    COMMAND                   CREATED           STATUS           PORTS                     NAMES
 5404fb11f29c    mysql    "docker-entrypoint.sh"    12 seconds ago    Up 11 seconds    0.0.0.0:3307->3306/tcp    second-mysql
