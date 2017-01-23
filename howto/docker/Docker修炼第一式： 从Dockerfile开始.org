@@ -1,5 +1,7 @@
 #+TITLE: Docker 修炼第一式： 从 Dockerfile 开始
 
+@see http://t.goodrain.com/t/docker-dockerfile/233
+
 * Docker、Dockerfile、Docker 镜像、容器这些都是什么鸟？
 老生常谈，再再再……普及一下：
 - Docker：

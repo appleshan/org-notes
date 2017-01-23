@@ -1,5 +1,7 @@
 #+TITLE: Docker 调试技巧
 
+@see http://mtunique.com/docker_debug/
+
 * 『重用』容器名
 但我们在编写/调试 Dockerfile 的时候我们经常会重复之前的 command，比如这种
 docker run --name jstorm-zookeeper zookeeper:3.4，然后就容器名就冲突了。
@@ -188,4 +190,4 @@ docker inspect CONTAINER 饭后镜像和容器的详细信息。比如：
 环境变量非常有用很多问题都是环境变量引起的。
 
 1. history 查看 image layers
-可以看到各层创建的指令，大小和哈希。可以用来检查这个image是否符合你的预期。
+可以看到各层创建的指令，大小和哈希。可以用来检查这个 image 是否符合你的预期。
