@@ -300,14 +300,43 @@ RSS 服务提供商
 *** [[https://droplr.com/][droplr]]
 快速上傳圖片分享
 ** [[https://www.google.com/chrome/][Chrome]]
-*** AdBloc
+*** [[https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo][tampermonkey]]
+最好用的脚本管理器
+装完就可以去 http://greasyfork.org 安装许多屌炸天的脚本了。
+greasyfork.org 的 dark side：https://sleazyfork.org/en，集合了各种黑暗面的脚本。
+*** [[https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm][uBlock Origin]]
+广告屏蔽选
+它可以使用数十个定制的屏蔽规则，包括反流氓软件网站规则、反反 adblock 插件规则，
+而 cpu 和内存占用小到忽略不计，完爆知名的 Adblocker。
+*** [[https://chrome.google.com/webstore/detail/adblock-plus/cfhdojbkjhnklbpkdaibdccddilifddb][Adblock Plus]]
 过滤烦人的广告
-*** [[https://github.com/FelisCatus/SwitchyOmega][ProxySwitchyOmega]]
+*** [[https://github.com/FelisCatus/SwitchyOmega][Proxy SwitchyOmega]]
 搭配 Shadowsocks 足够走遍天下
+*** [[https://chrome.google.com/webstore/detail/https-everywhere/gcbommkclmclpchllfjekcdonpmejbdp][HTTPS Everywhere]]
+加密整個網路！自動在網站上使用 HTTPS 安全連線。
 *** [[https://github.com/philc/vimium][vimium]]
 The hacker's browser.
+vim 键位控制浏览器，彻底解放鼠标。
 *** Imagus
 不用点开图片就能放大
+*** Stylish
+去 userstyles.org 就可以找到很多别人弄好的网页样式，点击就可安装到 Stylish
+*** [[https://github.com/buunguyen/octotree][Octotree]]
+程序员必备的插件
+当我们在浏览别人的开源代码时，还要 clone 下来一个文件查看，而有了这个插件，你可以
+直接在 Chrome 侧边栏向打开文件夹一样的查看别人的项目。
+*** [[https://chrome.google.com/webstore/detail/isometric-contributions/mjoedlfflcchnleknnceiplgaeoegien][Isometric Contributions]]
+可以让你在 GitHub 上的 commit 像盖楼一样的展示
+*** [[https://github.com/anasnakawa/chrome-github-avatars][Avatars for Github]]
+默认我们在 GitHub 主页动态只能看到 id 的，而安装了这个插件就可以看到 GitHub 头像了，让
+你一眼就能知道是谁。
+*** Session Manager
+chrome 启动时自动打开上次未关闭的标签页
+*** [[https://chrome.google.com/webstore/detail/save-to-pocket/niloccemoadcdkdjlinkgdfekeahmflj][Save to Pocket]]
+*** [[https://chrome.google.com/webstore/detail/%E6%89%87%E8%B4%9D/aanmfalgnenapmgaeaknhahbclkbealk][扇贝]]
+扇贝网功能改造 chrome 插件,直接加载所有柯林斯例句
+*** [[https://chrome.google.com/webstore/detail/extension-automation/ghopjgdkodchjclkkfdekhjfomdbakkb][Extension Automation]]
+
 ** 看片
 [[http://www.acfun.com/][A 站]] / [[http://www.bilibili.com/][B 站]] / 被窝 / 海盗湾 : 总有能看到的片
 ** 其他
