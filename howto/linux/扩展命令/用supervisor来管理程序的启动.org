@@ -1,0 +1,41 @@
+#+TITLE: 用 supervisor 来管理程序的启动
+
+@see https://aitanlu.com/ubuntu-shadowsocks-ke-hu-duan-pei-zhi.html
+
+我们现在可以在你的 ubuntu 上安装一个叫做 supervisor 的程序来管理你的 sslocal 启动。
+
+#+BEGIN_SRC bash
+sudo apt-get install supervisor
+#+END_SRC
+
+安装好后我们可以在/etc/supervisor/目录下找到 supervisor.conf 配置文件，我们可以用
+以下命令来编辑
+#+BEGIN_SRC bash
+sudo gedit /etc/supervisor/supervisor.conf
+#+END_SRC
+
+在这个文件的最后加上以下内容
+#+BEGIN_EXAMPLE
+[program:shadowsocks]
+command=sslocal -c /home/mudao/shadowsocks.json
+autostart=true
+autorestart=true
+user=root
+log_stderr=true
+logfile=/var/log/shadowsocks.log
+#+END_EXAMPLE
+
+当然在 16.04 里你可以直接在/etc/supervisor/conf.d/下新建个文件比如 ss.conf 然后加入上面内容。
+
+command = 这里 json 文件的路径根据你的文件路径来填写。确认无误后记得保存。
+
+现在关掉你之前运行 sslocal 命令的终端，再打开终端输入 sudo service supervisor restart 然后去打开浏览器看看可不可以继续代理上网。你也可以用 ps -ef|grep sslocal 命令查看 sslocal 是否在运行。
+
+这个时候我们需要在/etc 下编辑一个叫 rc.local 的文件 ，让 supervisor 开机启动。
+
+#+BEGIN_SRC bash
+sudo gedit /etc/rc.local
+#+END_SRC
+
+在这个配置文件的 exit 0 前面一行加上 service supervisor start 保存。看你是否配置成
+功你可以在现在关机重启之后直接打开浏览器看是否代理成功。

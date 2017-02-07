@@ -1,0 +1,94 @@
+#+TITLE: How to Install Go 1.7 on Ubuntu 16.10
+
+[[https://golang.org/][Go]] is an open source programming language developed by a team at Google. It
+provides easy to build simple, reliable, and efficient softwares. This language
+is designed for writing servers, that’s why it is using widely these days. Go
+has released latest version 1.7. This tutorial will help you to install Go 1.7.5
+on your Ubuntu 16.10 systems.
+
+* Step 1 — Install Go Language
+
+Login to your Ubuntu system using ssh and upgrade to apply latest security
+updates there.
+#+BEGIN_SRC bash
+$ sudo apt-get update
+$ sudo apt-get -y upgrade
+#+END_SRC
+
+Now download the Go language binary archive file using following link. To find
+and download latest version available or 32 bit version go to official download
+page.
+#+BEGIN_SRC bash
+$ wget https://storage.googleapis.com/golang/go1.7.5.linux-amd64.tar.gz
+#+END_SRC
+
+Now extract the downloaded archive and install it to the desired location on
+the system. For this tutorial, I am installing it under /usr/local directory.
+You can also put this under the home directory (for shared hosting) or other
+location.
+
+#+BEGIN_SRC bash
+$ sudo tar -xvf go1.7.5.linux-amd64.tar.gz
+$ sudo mv go /usr/local
+#+END_SRC
+
+or
+
+#+BEGIN_SRC bash
+$ sudo tar -xvf go1.7.5.linux-amd64.tar.gz
+$ mv ./go ./go-1.7.5
+$ sudo mv go-1.7.5 /opt/golang/go-1.7.5
+#+END_SRC
+
+* Step 2 — Setup Go Environment
+
+Now you need to setup Go language environment variables for your project.
+Commonly you need to set 3 environment variables as GOROOT, GOPATH and PATH.
+
+GOROOT is the location where Go package is installed on your system.
+#+BEGIN_SRC bash
+$ export GOROOT=/usr/local/go
+#+END_SRC
+
+GOPATH is the location of your work directory. For example my project directory
+is ~/Projects/Proj1 .
+#+BEGIN_SRC bash
+$ export GOPATH=$HOME/Projects/Proj1
+#+END_SRC
+
+Now set the PATH variable to access go binary system wide.
+#+BEGIN_SRC bash
+$ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+#+END_SRC
+
+All above environment will be set for your current session only. To make it
+permanent add above commands in ~/.profile file.
+
+* Step 3 — Verify Installation
+
+At this step, you have successfully installed and configured go language on your
+system. First use the following command to check Go version.
+#+BEGIN_SRC bash
+$ go version
+go version go1.7.5 linux/amd64
+#+END_SRC
+
+Now also verify all configured environment variables using following command.
+
+#+BEGIN_SRC bash
+$ go env
+GOARCH="amd64"
+GOBIN=""
+GOEXE=""
+GOHOSTARCH="amd64"
+GOHOSTOS="linux"
+GOOS="linux"
+GOPATH="/home/tecadmin/Projects/Proj1"
+GORACE=""
+GOROOT="/usr/local/go"
+GOTOOLDIR="/usr/local/go/pkg/tool/linux_amd64"
+CC="gcc"
+GOGCCFLAGS="-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build661994963=/tmp/go-build"
+CXX="g++"
+CGO_ENABLED="1"
+#+END_SRC
