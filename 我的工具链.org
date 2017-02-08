@@ -303,6 +303,9 @@ RSS 服务提供商
 *** [[https://droplr.com/][droplr]]
 快速上傳圖片分享
 ** [[https://www.google.com/chrome/][Chrome]]
+*** [[https://github.com/philc/vimium][vimium]]
+The hacker's browser.
+vim 键位控制浏览器，彻底解放鼠标。
 *** [[https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo][tampermonkey]]
 最好用的脚本管理器
 装完就可以去 http://greasyfork.org 安装许多屌炸天的脚本了。
@@ -314,18 +317,19 @@ greasyfork.org 的 dark side：https://sleazyfork.org/en，集合了各种黑暗
 *** [[https://chrome.google.com/webstore/detail/adblock-plus/cfhdojbkjhnklbpkdaibdccddilifddb][Adblock Plus]]
 过滤烦人的广告
 *** [[https://github.com/FelisCatus/SwitchyOmega][Proxy SwitchyOmega]]
-搭配 Shadowsocks 足够走遍天下
+轻松快捷地管理和切换多个代理设置，据悉常与 shadowsocks 互相配合，来完成科学上网
+的美好愿景。
 *** [[https://chrome.google.com/webstore/detail/https-everywhere/gcbommkclmclpchllfjekcdonpmejbdp][HTTPS Everywhere]]
 加密整個網路！自動在網站上使用 HTTPS 安全連線。
-*** [[https://github.com/philc/vimium][vimium]]
-The hacker's browser.
-vim 键位控制浏览器，彻底解放鼠标。
 *** Imagus
 不用点开图片就能放大
-*** Stylish
+*** [[https://chrome.google.com/webstore/detail/stylish-custom-themes-for/fjnbnpbmkenffdnngjfgmeleoegfcffe?hl=zh-CN][Stylish]]
+Restyle the web with Stylish（为任意网站自定义主题）!
+其官方描述为：利用用户样式管理器 Stylish 来重新编辑网站的样式。您可利用 Stylish
+为许多网站安装主题和皮肤，也可创建自己的主题和皮肤。
 去 userstyles.org 就可以找到很多别人弄好的网页样式，点击就可安装到 Stylish
 *** [[https://github.com/buunguyen/octotree][Octotree]]
-程序员必备的插件
+Code tree for GitHub and GitLab；
 当我们在浏览别人的开源代码时，还要 clone 下来一个文件查看，而有了这个插件，你可以
 直接在 Chrome 侧边栏向打开文件夹一样的查看别人的项目。
 *** [[https://chrome.google.com/webstore/detail/isometric-contributions/mjoedlfflcchnleknnceiplgaeoegien][Isometric Contributions]]
@@ -340,6 +344,27 @@ chrome 启动时自动打开上次未关闭的标签页
 扇贝网功能改造 chrome 插件,直接加载所有柯林斯例句
 *** [[https://chrome.google.com/webstore/detail/extension-automation/ghopjgdkodchjclkkfdekhjfomdbakkb][Extension Automation]]
 
+*** [[https://chrome.google.com/webstore/detail/print-friendly-pdf/ohlencieiipommannpdfcmfdpjjmeolj/related?hl=zh-CN][Print Friendly & PDF]]
+一款可以帮助用户自定义打印内容，以及打印格式的谷歌浏览器插件，同时支持 PDF 的格
+式打印。Chrome 自带打印功能(command p 或者右键)，但不能满足复杂点的需求；而这款
+插件的存在，就解决了很多人的刚需：
+1. 可以滤掉一些不想打印的内容(去除打印页面中的所有图片、删除网页中的广告、删除
+   多余的文字等方便的自定义打印的功能)；
+2. 对打印的格式重新进行调整(比如调节打印的字体大小)；
+还支持查看打印历史等等，如此贴心，值得拥有。
+*** [[https://chrome.google.com/webstore/detail/reader-view/iibolhpkjjmoepndefdmdlmbpfhlgjpl/related?utm_source=chrome-app-launcher-info-dialog][阅读模式]]
+她提供与 Safari 阅读模式功能一致的插件，浏览文章页时候可进入友好的阅读模式，并
+自定义阅读功能。
+*** [[https://chrome.google.com/webstore/detail/json-handle/iahnhfdhidomcpggpaimmmahffihkfnj?hl=zh-CN][Json-Handle]]
+她可以帮助你在浏览器中查看 JSON 数据，并以优美的树视图姿势，展示出对应数据；如果
+你愿意，还可以配置快捷键，所需之时，一键呼出。
+*** [[https://chrome.google.com/webstore/detail/wappalyzer/gppongmhjkpfnbhagpmjfkannfbllamg?hl=zh-CN][Wappalyzer]]
+Wappalyzer 是一个浏览器扩展，义译为 Web 应用指纹识别，它能够揭示某网站上使用的技
+术。它可以检测内容管理系统，电子商务平台，Web 服务器，JavaScript 框架，分析工具
+等等；浏览 Wappalyzer 能够检测到的应用的完整列表：
+https://wappalyzer.com/applications。
+据悉为渗透工程师必备，同比之下还有 HackBar、Tamper Data 等等；倘若，你想知道一个
+网站，使用什么技术，用此插件就对了。
 ** 看片
 [[http://www.acfun.com/][A 站]] / [[http://www.bilibili.com/][B 站]] / 被窝 / 海盗湾 : 总有能看到的片
 ** 其他
