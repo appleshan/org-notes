@@ -110,6 +110,9 @@ doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without
 *** ncdu - Best disk usage analyzer under Linux
 *** [[https://github.com/dvorka/hstr][hh]] - search and manage your command history
 *** [[https://github.com/tstack/lnav][lnav]] - The Logfile Navigator
+*** [[https://github.com/holys/redis-cli][redis-cli]]
+*** [[https://github.com/asciimoo/wuzz][wuzz]]
+Interactive cli tool for HTTP inspection
 * Windows
 尽量不要用 windows 进行开发，除非你只用 dotnet 开发软件，不然 osx/ubuntu 会是更好的
 开发平台。太多太多优秀的工具在 osx/ubuntu 下可以一键安装，在 windows 下却不得不花费
