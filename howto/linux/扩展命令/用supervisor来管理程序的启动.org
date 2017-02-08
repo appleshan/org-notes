@@ -25,11 +25,17 @@ log_stderr=true
 logfile=/var/log/shadowsocks.log
 #+END_EXAMPLE
 
-当然在 16.04 里你可以直接在/etc/supervisor/conf.d/下新建个文件比如 ss.conf 然后加入上面内容。
+当然在 16.04 里你可以直接在/etc/supervisor/conf.d/下新建个文件比如 ss.conf 然后
+加入上面内容。
 
 command = 这里 json 文件的路径根据你的文件路径来填写。确认无误后记得保存。
 
-现在关掉你之前运行 sslocal 命令的终端，再打开终端输入 sudo service supervisor restart 然后去打开浏览器看看可不可以继续代理上网。你也可以用 ps -ef|grep sslocal 命令查看 sslocal 是否在运行。
+现在关掉你之前运行 sslocal 命令的终端，再打开终端输入
+
+sudo service supervisor restart
+
+然后去打开浏览器看看可不可以继续代理上网。你也可以用 ps -ef|grep sslocal 命令查
+看 sslocal 是否在运行。
 
 这个时候我们需要在/etc 下编辑一个叫 rc.local 的文件 ，让 supervisor 开机启动。
 
