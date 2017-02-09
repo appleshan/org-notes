@@ -257,7 +257,9 @@ Web 开发四件套：Django、Flask、Tornado、Gevent
 它能自动检测被墙网站，仅对这些网站使用二级代理。
 ** Shadowsocks
 科学上网目前首选的工具是 shadowsocks，它可以创建一个本地的 socks5 的代理。
-*** shadowsocks-go
+*** [[https://github.com/shadowsocks/shadowsocks-go][shadowsocks-go]]
+shadowsocks-go is a lightweight tunnel proxy which can help you get through firewalls. It is a port of shadowsocks.
+The protocol is compatible with the origin shadowsocks (if both have been upgraded to the latest version).
 ** [[https://github.com/v2ray/v2ray-core][v2ray]] - 网络代理平台
 ** [[https://getlantern.org/][Lantern]]
 作为一个 P2P 的匿名科学上网工具，蓝灯免费带你飞跃长城！支持 Mac、Linux、Windows、
