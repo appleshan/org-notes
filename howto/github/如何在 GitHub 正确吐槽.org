@@ -22,7 +22,7 @@
 
 对于启用了版本控制的项目，PhpStorm 允许我们查看每一行代码的作者信息。在行号处点击右键，选中 Annotate，即可开启此功能。（图一）
 
-01 ide-annotate
+[[https://cloud.githubusercontent.com/assets/5830104/6820311/b75e82aa-d308-11e4-9e5d-475e13e4c887.png]]
 
 行号栏会扩展出一条作者信息栏，显示出每行代码所属的 commit 版本号、更新日期、作者等信息。当鼠标悬停在此栏时，还会显示每行的详细信息，包括完整的 commit 版本号、精确的更新时间、commit 的标题等。（图二）
 
