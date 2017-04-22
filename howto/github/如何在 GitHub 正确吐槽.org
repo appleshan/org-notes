@@ -1,20 +1,20 @@
-如何在 GitHub 正确吐槽
+#+TITLE: 如何在 GitHub 正确吐槽
 
 @see https://github.com/cssmagic/blog/issues/51
 
-背景
+* 背景
 
 在几年前，百姓网几乎所有项目的开发流程就已经迁到 GitHub 上了。将 GitHub flow 作为日常开发流程，有一个很大的好处，pull request 很自然地成为 code review 的平台——每个人的代码都必须经过 review 之后，才会合并到主干。
 
 因此，各个项目的 pull request 也逐渐成为一座座金矿，新人可以在历史 PR 中汲取经验，高手也常常通过 PR 追查疑难杂症的来龙去脉。而对我这个吐槽狂来说，PR 也是一个非常重要的阵地……
 
-一个吐槽狂的日常
+* 一个吐槽狂的日常
 
 我叫魔法哥，我是一个吐槽狂。每当我在公司项目中看到不靠谱的代码，总是忍不住一吐为快。我相信，吐槽使人进步，吐槽改变世界。
 
 吐槽很爽，但也有风险。即使某段代码看起来不太对劲，我也要再三确认，因为一旦搞错了，会很没面子。接下来，我会告诉你，我如何安全、优雅、正确地在 GitHub 吐槽别人的代码。
 
-“这行代码是谁写的？”
+** “这行代码是谁写的？”
 
 看到不靠谱的代码，我们的第一反应通常是这个疑问。怨有头债有主，先要弄清楚喷谁。
 
@@ -28,7 +28,7 @@
 
 [[https://cloud.githubusercontent.com/assets/5830104/6820831/6fff4908-d30d-11e4-9495-60dd9ac58cda.png]]
 
-“它是怎么变成现在这样的？”
+** “它是怎么变成现在这样的？”
 
 根据上面的方法，我们就通常可以找到吐槽的对象了。但这还不够。有些时候这里显示出的作者可能是只重排了一下代码格式，并非真凶；又或者我们需要了解清楚代码是怎么一步步改成现在这样的，涉案人员都不能放过。所以接下来，我们要捋一遍这个文件的历史。
 
@@ -40,7 +40,7 @@
 
 [[https://cloud.githubusercontent.com/assets/5830104/6820401/9ed9683e-d309-11e4-82d1-65d7ae6bf0b6.png]]
 
-手边没有 IDE 怎么查？
+** 手边没有 IDE 怎么查？
 
 如果自己的电脑不在手边，也可以用浏览器登录 GitHub 网站，通过网页界面来一步步追查。我们进入项目 repo 的主页，打开某个文件的详情页面，在顶部可以发现 “Blame” 和 “History” 两个按钮（图五）：
 
@@ -58,7 +58,7 @@
 
 [[https://cloud.githubusercontent.com/assets/5830104/6820539/4e3289c2-d30b-11e4-894e-049cf1288012.png]]
 
-吐槽 Commit
+** 吐槽 Commit
 
 追查到问题代码真正的 check-in 节点后，就可进入相关 commit 的详情页面开始吐槽了。慢着，如何找到某个 commit 在 GitHub 上的详情页？
 
@@ -80,7 +80,7 @@ https://github.com/{org}/{project}/commit/{revision}
 
 憋了这么半天，终于可以畅快地吐槽了！这个评论框具备完整的 GitHub 评论功能，我们可以使用 [[https://github.com/cssmagic/blog/issues/13][GitHub 风格的 Markdown 语法]] 书写富文本，可以引用其它 commit 或 PR、@ 别人、拖拽图片上传，很方便。
 
-更优雅一点，吐槽 PR  
+** 更优雅一点，吐槽 PR  
 
 在 GitHub 吐槽 commit 看起来很拉风，但这还不够，还可以更优雅一点。
 
@@ -104,7 +104,7 @@ https://github.com/{org}/{project}/commit/{revision}
 
 [[https://cloud.githubusercontent.com/assets/5830104/6820745/a2ede37a-d30c-11e4-940c-4efc0c41391a.png]]
 
-做一个有情怀的吐槽狂
+* 做一个有情怀的吐槽狂
 
 要知道，总会有一些害羞的同学不敢直面我的吐槽，他们总是假装没有收到我在 GitHub 的评论。为此，我写了这篇教程[[https://github.com/cssmagic/blog/issues/49][《如何正确接收 GitHub 的消息邮件》]]，并发给每个人，这样应该可以防止大家装睡了吧。
 
