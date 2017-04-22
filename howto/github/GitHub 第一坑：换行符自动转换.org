@@ -88,15 +88,15 @@ git config --global core.autocrlf false
 
 它是今天的第二被告。这货很容易上手，很适合小白，我主要用它来一键克隆项目到本地。可能正是为了维护简洁易用的亲切形象，这货并没有像 TortoiseGit 那样提供丰富的选项（对“换行符自动转换”这样的细节功能完全讳莫如深啊，我这样的小白死了都不知道怎么死的……）。因此，我们需要手动修改一下它的配置。
 
-GitHub 的 Windows 客户端实际上也是一个壳，它自带了一个便携版的 Git for Windows。这个便携版和你自己安装的 Git for Windows 是相互独立的，不过它们都会使用同一个配置文件（实际上就是当前用户主目录下的 .gitconfig 文件）。
+GitHub 的 Windows 客户端实际上也是一个壳，它自带了一个便携版的 Git for Windows。这个便携版和你自己安装的 Git for Windows 是相互独立的，不过它们都会使用同一个配置文件（实际上就是当前用户主目录下的 =.gitconfig= 文件）。
 
 所以如果你已经配置好了自己安装的 Git for Windows，那就不用操心什么了。但如果你的机器上只装过 GitHub 的 Windows 客户端，那么最简单的配置方法就是手工修改配置文件了。
 
 * 修改 Git 的全局配置文件
 
-进入当前用户的主目录（通常 XP 的用户目录是 C:\Documents and Settings\yourname，在 Vista 和 Win7 下是 C:\Users\yourname），用你最顺手的文本编辑器打开 .gitconfig 文件。
+进入当前用户的主目录（通常 XP 的用户目录是 =C:\Documents and Settings\yourname= ，在 Vista 和 Win7 下是 =C:\Users\yourname= ），用你最顺手的文本编辑器打开 =.gitconfig= 文件。
 
-在 [core] 区段找到 autocrlf，将它的值改为 false。如果没找到，就在 [core] 区段中新增一行：（最终效果见图）
+在 =[core]= 区段找到 =autocrlf= ，将它的值改为 =false= 。如果没找到，就在 =[core]= 区段中新增一行：（最终效果见图）
 #+BEGIN_EXAMPLE
     autocrlf = false
 #+END_EXAMPLE
@@ -109,15 +109,15 @@ GitHub 的 Windows 客户端实际上也是一个壳，它自带了一个便携�
 
 关掉了 Git 的“换行符自动转换”功能就万事大吉了吗？失去了它的“保护”，你心里会有点不踏实。你可能会问：如果我不小心在文件中混入了几个 Windows 回车该怎么办？这种意外可以防范吗？
 
-事实上 Git 还真能帮你阻止这种失误。它提供了一个换行符检查功能（core.safecrlf），可以在提交时检查文件是否混用了不同风格的换行符。这个功能的选项如下：
+事实上 Git 还真能帮你阻止这种失误。它提供了一个换行符检查功能（ =core.safecrlf= ），可以在提交时检查文件是否混用了不同风格的换行符。这个功能的选项如下：
 
-- false - 不做任何检查
-- warn - 在提交时检查并警告
-- true - 在提交时检查，如果发现混用则拒绝提交
+- =false= - 不做任何检查
+- =warn= - 在提交时检查并警告
+- =true= - 在提交时检查，如果发现混用则拒绝提交
 
 我建议使用最严格的 true 选项。
 
-和 core.autocrlf 一样，你可以通过命令行、图形界面、配置文件三种方法来修改这个选项。具体操作就不赘述了，大家自己举一反三吧。
+和 =core.autocrlf= 一样，你可以通过命令行、图形界面、配置文件三种方法来修改这个选项。具体操作就不赘述了，大家自己举一反三吧。
 
 * 最后
 
