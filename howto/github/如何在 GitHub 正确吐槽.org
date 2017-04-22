@@ -26,7 +26,7 @@
 
 行号栏会扩展出一条作者信息栏，显示出每行代码所属的 commit 版本号、更新日期、作者等信息。当鼠标悬停在此栏时，还会显示每行的详细信息，包括完整的 commit 版本号、精确的更新时间、commit 的标题等。（图二）
 
-02 ide-annotate-open
+[[https://cloud.githubusercontent.com/assets/5830104/6820831/6fff4908-d30d-11e4-9495-60dd9ac58cda.png]]
 
 “它是怎么变成现在这样的？”
 
@@ -34,29 +34,29 @@
 
 选择菜单 VCS → Git → Show History，PhpStorm 会在 Version Control 面板显示出当前文件的所有相关 commit 历史。（图三）
 
-03 ide-vcs
+[[https://cloud.githubusercontent.com/assets/5830104/6820329/d1105f20-d308-11e4-8955-d8807092bc52.png]]
 
 在这个历史记录中，双击任何一条 commit 即可查看它的 diff 视图。这样就可以深入分析某段代码的更改过程、定位到相应的 check-in 节点。（图四）
 
-04 ide-diff
+[[https://cloud.githubusercontent.com/assets/5830104/6820401/9ed9683e-d309-11e4-82d1-65d7ae6bf0b6.png]]
 
 手边没有 IDE 怎么查？
 
 如果自己的电脑不在手边，也可以用浏览器登录 GitHub 网站，通过网页界面来一步步追查。我们进入项目 repo 的主页，打开某个文件的详情页面，在顶部可以发现 “Blame” 和 “History” 两个按钮（图五）：
 
-05 github-file-detail-page
+[[https://cloud.githubusercontent.com/assets/5830104/6820426/e03da63c-d309-11e4-9afb-d2e92b10bfb5.png]]
 
 其中，进入 Blame 页面可以查看文件内每行代码的作者信息（图六），其功能相当于图一。
 
-06 github-blame
+[[https://cloud.githubusercontent.com/assets/5830104/6819987/279c7c38-d305-11e4-942b-e0606a51080b.png]]
 
 而进入 History 页面可以查看这个文件的所有修改记录（图七），类似于图三。
 
-07 github-history
+[[https://cloud.githubusercontent.com/assets/5830104/6820462/3d2c6d7e-d30a-11e4-9ca2-b3adbc10542e.png]]
 
 在 History 页面点击任何一条 commit 即可查看该 commit 各文件的 diff 视图（图八），相当于图四。
 
-08 github-diff
+[[https://cloud.githubusercontent.com/assets/5830104/6820539/4e3289c2-d30b-11e4-894e-049cf1288012.png]]
 
 吐槽 Commit
 
@@ -66,18 +66,19 @@
 
 如果你正在用 PhpStorm，且你的 PhpStorm 安装了 GitHub 插件，也比较好办。在类似图二的作者信息栏展开的状态下，右击任一 commit，在弹出菜单中选择 Open on GitHub，即可打开浏览器进入该 commit 的详情页。（图九）
 
-09 ide-github-plugin
+[[https://cloud.githubusercontent.com/assets/5830104/6820502/d7db3210-d30a-11e4-9004-4d679d1bc3ca.png]]
 
 （需要注意的是，由于我们的工作 repo 都是 fork，所以这个操作打开的页面是你的 fork 中的这个 commit。你需要手动修改一下页面 URL 来进入项目 upstream 的对应的 commit 页面。）
 
 如果你的 PhpStorm 没有安装 GitHub 插件，也可以试试另一种方法。在图九的右键菜单中选择 Copy revision number，即可得到该 commit 的版本号。然后使用以下模式手工构造一个 URL 打开即可：
-
+#+BEGIN_EXAMPLE
 https://github.com/{org}/{project}/commit/{revision}
+#+END_EXAMPLE
 好了，在 commit 详情页的底部，我们可以发现一个评论框。（图十）
 
-10 github-commit-comment
+[[https://cloud.githubusercontent.com/assets/5830104/6820778/02e7036a-d30d-11e4-9927-ca8da1172755.png]]
 
-憋了这么半天，终于可以畅快地吐槽了！这个评论框具备完整的 GitHub 评论功能，我们可以使用 GitHub 风格的 Markdown 语法 书写富文本，可以引用其它 commit 或 PR、@ 别人、拖拽图片上传，很方便。
+憋了这么半天，终于可以畅快地吐槽了！这个评论框具备完整的 GitHub 评论功能，我们可以使用 [[https://github.com/cssmagic/blog/issues/13][GitHub 风格的 Markdown 语法]] 书写富文本，可以引用其它 commit 或 PR、@ 别人、拖拽图片上传，很方便。
 
 更优雅一点，吐槽 PR  
 
@@ -91,20 +92,20 @@ https://github.com/{org}/{project}/commit/{revision}
 
 在上一节我们已经找到了 commit 的版本号，接下来，我们登录项目 upstream repo 的主页，在页面顶部有一个搜索框，填入 commit 的版本号，搜索。（图十一）
 
-11 github-search
+[[https://cloud.githubusercontent.com/assets/5830104/6820656/312f884c-d30c-11e4-8f0c-d18a02ea7a07.png]]
 
 （请留意此时搜索框的状态是 “This repository”，否则你可能进错了的页面。）
 
 搜索结果往往为空。别着急，在页面左侧的搜索类型栏可以发现 “Issues” 有 1 条搜索结果，点击之。（图十二）
 
-12 github-search-issue
+[[https://cloud.githubusercontent.com/assets/5830104/6820665/5034d120-d30c-11e4-839a-99d4ad8fc1b9.png]]
 
 此时就可以找到这个 commit 是在哪个 PR 被合并到主干的啦（图十三）。尽情开动吧！
 
-13 github-search-pr
+[[https://cloud.githubusercontent.com/assets/5830104/6820745/a2ede37a-d30c-11e4-940c-4efc0c41391a.png]]
 
 做一个有情怀的吐槽狂
 
-要知道，总会有一些害羞的同学不敢直面我的吐槽，他们总是假装没有收到我在 GitHub 的评论。为此，我写了这篇教程《如何正确接收 GitHub 的消息邮件》，并发给每个人，这样应该可以防止大家装睡了吧。
+要知道，总会有一些害羞的同学不敢直面我的吐槽，他们总是假装没有收到我在 GitHub 的评论。为此，我写了这篇教程[[https://github.com/cssmagic/blog/issues/49][《如何正确接收 GitHub 的消息邮件》]]，并发给每个人，这样应该可以防止大家装睡了吧。
 
 另外，在日常的吐槽工作中，我还会把一些典型的错误汇总起来，并招集大家听我当面吐槽一遍。虽然大家都很嫌弃我，但我丝毫不为所动，因为我是一个有情怀的吐槽狂，天生骄傲！
