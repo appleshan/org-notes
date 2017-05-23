@@ -1,5 +1,7 @@
 #+TITLE: 国内开源镜像站主流 Linux 发行版支持统计与简单速度测试
 
+@see https://www.v2ex.com/t/321222
+
 刚看到 USTC 的 mirror 的硬盘又出问题了，TUNA 那边压力也过大导致带宽近乎跑满。
 这是前几天做的一个小统计，方便大家可以在某个镜像站挂掉的时候换用其他速度较好的
 镜像站点，并缓解例如 TUNA 和 USTC@LUG 的镜像站的压力给小众源需求的人使用。
@@ -19,71 +21,94 @@
 * 企业类：
 ** 网易开源镜像站
 http://mirrors.163.com/
-包含发行版：archlinux(包括 archlinuxcn)、centos、debian、gentoo、ubuntu、tinycorelinux
+包含发行版：
+archlinux(包括 archlinuxcn)、centos、debian、gentoo、ubuntu、tinycorelinux
 平均速度：2.775MB/s
 
 ** 阿里开源镜像站
 http://mirrors.aliyun.com/
-包含发行版：archlinux、debian、debian、deepin、fedora、gentoo、kali、opensuse、raspbian、sabayonlinux
+包含发行版：
+archlinux、debian、debian、deepin、fedora、gentoo、kali、opensuse、raspbian、
+sabayonlinux
 平均速度：913.489KB/s
 
 ** 首都在线科技股份有限公司
 http://mirrors.yun-idc.com/
-包含发行版：archlinux、centos、debian、deepin、fedora、gentoo、mageia、opensuse、slackware、ubuntu
+包含发行版：
+archlinux、centos、debian、deepin、fedora、gentoo、mageia、opensuse、slackware、
+ubuntu
 平均速度：3.324M/s
 
 * 大学类
 ** 中国科技大学镜像
 https://mirrors.ustc.edu.cn/
-包含发行版：alpine、antergos、archlinux(包含 archlinuxcn)、archlinuxARM、blackarch、centos、debian、deepin、fedora、gentoo、kali、knoppix、linux mint、mageia、manjaro、openSUSE、raspbian、scientificlinux、steamOS、Trisquel、ubuntu、
+包含发行版：
+alpine、antergos、archlinux(包含 archlinuxcn)、archlinuxARM、blackarch、centos、
+debian、deepin、fedora、gentoo、kali、knoppix、linux mint、mageia、manjaro、
+openSUSE、raspbian、scientificlinux、steamOS、Trisquel、ubuntu、
 平均速度：1.394M/s
 
 ** 清华大学镜像站
 https://mirror.tuna.tsinghua.edu.cn/
-包含发行版：alpine、antergos、archlinux（包含 archlinuxcn）、archlinuxARM、blackarch、centos、chakra、debian、deepin、fedora、gentoo、kali、linux mint、mageia、manjaro、openSUSE、raspbian、slackware、steamOS、ubuntu
+包含发行版：
+alpine、antergos、archlinux（包含 archlinuxcn）、archlinuxARM、blackarch、centos、
+chakra、debian、deepin、fedora、gentoo、kali、linux mint、mageia、manjaro、
+openSUSE、raspbian、slackware、steamOS、ubuntu
 平均速度：3.051M/s
 
 ** 大连东软信息学院
 http://mirrors.neusoft.edu.cn/
-包含发行版：archlinux、centos、gentoo、kali、raspbian、ubuntu
+包含发行版：
+archlinux、centos、gentoo、kali、raspbian、ubuntu
 平均速度：1.115M/s
 
 ** 浙江大学开源镜像站
 http://mirrors.zju.edu.cn/
-包含发行版：archlinux、centos、debian、deepin、fedora、gentoo、kali、linux mint、openSUSE、raspbian、ubuntu
+包含发行版：
+archlinux、centos、debian、deepin、fedora、gentoo、kali、linux mint、openSUSE、
+raspbian、ubuntu
 平均速度：478.61K/s
 
 ** 兰州大学开源镜像站
 http://mirror.lzu.edu.cn/
-包含发行版：archlinux(包含 archlinuxcn)、centos、debian、deepin、ubuntu
+包含发行版：
+archlinux(包含 archlinuxcn)、centos、debian、deepin、ubuntu
 平均速度：1.226M/s
 
 ** 厦门大学开源镜像站
 http://mirrors.xmu.edu.cn/
-包含发行版：centos、debian、deepin、gentoo、openSUSE、ubuntu
+包含发行版：
+centos、debian、deepin、gentoo、openSUSE、ubuntu
 平均速度：1.586M/s
 
 ** 北京理工大学开源镜像站
 http://mirror.bit.edu.cn/
-包含发行版：archlinux、centos、debian、deepin、fedora、gentoo、knoppix、openSUSE、ubuntu
+包含发行版：
+archlinux、centos、debian、deepin、fedora、gentoo、knoppix、openSUSE、ubuntu
 平均速度：1.405M/s
 
 ** 北京交通大学开源镜像站
 http://mirror.bjtu.edu.cn/cn/
-包含发行版：archlinux、chakra、centos、debian、deepin、fedora、gentoo、linux mint、openSUSE、sabayon、slackware、ubuntu、
+包含发行版：
+archlinux、chakra、centos、debian、deepin、fedora、gentoo、linux mint、openSUSE、
+sabayon、slackware、ubuntu、
 平均速度：2.509M/s
 
 ** 华中科技大学开源镜像站
 http://mirrors.hust.edu.cn/
-包含发行版：archlinux、archlinuxARM、centos、debian、deepin、kali、linux mint、openSUSE、ubuntu
+包含发行版：
+archlinux、archlinuxARM、centos、debian、deepin、kali、linux mint、openSUSE、ubuntu
 平均速度：160.415k/s(多数节点没有得到测速结果)
 
 ** 重庆大学开源镜像站
 http://mirrors.cqu.edu.cn/
-包含发行版：archlinux（包含 archlinuxcn）、archlinuxARM、centos、debian、deepin、engo、kali、linux mint、openSUSE、raspbian、ubuntu
+包含发行版：
+archlinux（包含 archlinuxcn）、archlinuxARM、centos、debian、deepin、engo、kali、
+linux mint、openSUSE、raspbian、ubuntu
 平均速度：1.965M/s
 
 ** 郑州大学开源镜像站
 https://mirrors.zzu.edu.cn/
-包含发行版：archlinux、centos、debian、kali、openSUSE、raspbian、ubuntu
+包含发行版：
+archlinux、centos、debian、kali、openSUSE、raspbian、ubuntu
 平均速度：1.478M/s
