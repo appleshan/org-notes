@@ -1,0 +1,325 @@
+Dubbo 实现 RPC 调用使用入门
+
+使用 Dubbo 进行远程调用实现服务交互，它支持多种协议，如 Hessian、HTTP、RMI、
+Memcached、Redis、Thrift 等等。由于 Dubbo 将这些协议的实现进行了封装了，无论是
+服务端（开发服务）还是客户端（调用服务），都不需要关心协议的细节，只需要在配置中
+指定使用的协议即可，从而保证了服务提供方与服务消费方之间的透明。
+另外，如果我们使用 Dubbo 的服务注册中心组件，这样服务提供方将服务发布到注册的
+中心，只是将服务的名称暴露给外部，而服务消费方只需要知道注册中心和服务提供方提供
+的服务名称，就能够透明地调用服务，后面我们会看到具体提供服务和消费服务的配置
+内容，使得双方之间交互的透明化。
+
+* 示例场景
+
+我们给出一个示例的应用场景：
+服务方提供一个搜索服务，对服务方来说，它基于 SolrCloud 构建了搜索服务，包含两个
+集群，ZooKeeper 集群和 Solr 集群，然后在前端通过 Nginx 来进行反向代理，达到负载
+均衡的目的。
+
+服务消费方就是调用服务进行查询，给出查询条件（满足 Solr 的 REST-like 接口）。
+
+* 应用设计
+
+基于上面的示例场景，我们打算使用 ZooKeeper 集群作为服务注册中心。注册中心会暴露
+给服务提供方和服务消费方，所以注册服务的时候，服务先提供方只需要提供 Nginx 的
+地址给注册中心，但是注册中心并不会把这个地址暴露给服务消费方，如图所示：
+[[provider-registry-consumer.bmp]]
+
+我们先定义一下，通信双方需要使用的接口，如下所示：
+
+#+BEGIN_SRC java
+package org.shirdrn.platform.dubbo.service.rpc.api;
+
+public interface SolrSearchService {
+
+	String search(String collection, String q, ResponseType type, int start, int rows);
+
+	public enum ResponseType {
+		JSON,
+		XML
+	}
+}
+#+END_SRC
+
+基于上图中的设计，下面我们分别详细说明 Provider 和 Consumer 的设计及实现。
+
+** Provider 服务设计
+
+Provider 所发布的服务组件，包含了一个 SolrCloud 集群，在 SolrCloud 集群前端又加
+了一个反向代理层，使用 Nginx 来均衡负载。Provider 的搜索服务系统，
+设计如下图所示：
+[[solrcloud-cluster.png]]
+
+上图中，实际 Nginx 中将请求直接转发内部的 Web Servers 上，在这个过程中，使用
+ZooKeeper 来进行协调：从多个分片（Shard）服务器上并行搜索，最后合并结果。我们
+看一下 Nginx 配置的内容片段：
+
+#+BEGIN_EXAMPLE
+user  nginx;
+worker_processes  4;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+	upstream master {
+		server slave1:8888 weight=1;
+		server slave4:8888 weight=1;
+		server slave6:8888 weight=1;
+	}
+
+	server {
+		listen 80;
+		server_name master;
+		location / {
+			root /usr/share/nginx/html/solr-cloud;
+			index  index.html index.htm;
+			proxy_pass   http://master;
+			include /home/hadoop/servers/nginx/conf/proxy.conf;
+		}
+	}
+}
+#+END_EXAMPLE
+
+一共配置了 3 台 Solr 服务器，因为 SolrCloud 集群中每一个节点都可以接收搜索请求，
+然后由整个集群去并行搜索。最后，我们要通过 Dubbo 服务框架来基于已有的系统来开发
+搜索服务，并通过 Dubbo 的注册中心来发布服务。
+首先需要实现服务接口，实现代码如下所示：
+
+#+BEGIN_SRC java
+package org.shirdrn.platform.dubbo.service.rpc.server;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.shirdrn.platform.dubbo.service.rpc.api.SolrSearchService;
+import org.shirdrn.platform.dubbo.service.rpc.utils.QueryPostClient;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SolrSearchServer implements SolrSearchService {
+
+	private static final Log LOG = LogFactory.getLog(SolrSearchServer.class);
+	private String baseUrl;
+	private final QueryPostClient postClient;
+	private static final Map<ResponseType, FormatHandler> handlers = new HashMap<ResponseType, FormatHandler>(0);
+	static {
+		handlers.put(ResponseType.XML, new FormatHandler() {
+			public String format() {
+				return "&wt=xml";
+			}
+		});
+		handlers.put(ResponseType.JSON, new FormatHandler() {
+			public String format() {
+				return "&wt=json";
+			}
+		});
+	}
+
+	public SolrSearchServer() {
+		super();
+		postClient = QueryPostClient.newIndexingClient(null);
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	public String search(String collection, String q, ResponseType type,
+			int start, int rows) {
+		StringBuffer url = new StringBuffer();
+		url.append(baseUrl).append(collection).append("/select?").append(q);
+		url.append("&start=").append(start).append("&rows=").append(rows);
+		url.append(handlers.get(type).format());
+		LOG.info("[REQ] " + url.toString());
+		return postClient.request(url.toString());
+	}
+
+	interface FormatHandler {
+		String format();
+	}
+
+	public static void main(String[] args) throws IOException {
+		String config = SolrSearchServer.class.getPackage().getName().replace('.', '/') + "/search-provider.xml";
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(config);
+        context.start();
+        System.in.read();
+	}
+
+}
+#+END_SRC
+
+对应的 Dubbo 配置文件为 search-provider.xml，内容如下所示：
+
+#+BEGIN_EXAMPLE
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<dubbo:application name="search-provider" />
+	<dubbo:registry address="zookeeper://slave1:2188?backup=slave3:2188,slave4:2188" />
+	<dubbo:protocol name="dubbo" port="20880" />
+	<bean id="searchService" class="org.shirdrn.platform.dubbo.service.rpc.server.SolrSearchServer">
+		<property name="baseUrl" value="http://nginx-lbserver/solr-cloud/" />
+	</bean>
+	<dubbo:service interface="org.shirdrn.platform.dubbo.service.rpc.api.SolrSearchService" ref="searchService" />
+
+</beans>
+#+END_EXAMPLE
+
+上面，Dubbo 服务注册中心指定 ZooKeeper 的地址：
+zookeeper://slave1:2188?backup=slave3:2188,slave4:2188，
+使用 Dubbo 协议。配置服务接口的时候，可以按照 Spring 的 Bean 的配置方式来配置，
+注入需要的内容，我们这里指定了搜索集群的 Nginx 反向代理地址
+http://nginx-lbserver/solr-cloud/。
+
+** Consumer 调用服务设计
+
+这个就比较简单了，拷贝服务接口，同时要配置一下 Dubbo 的配置文件，写个简单的
+客户端调用就可以实现。客户端实现的 Java 代码如下所示：
+
+#+BEGIN_SRC java
+package org.shirdrn.platform.dubbo.service.rpc.client;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+
+import org.shirdrn.platform.dubbo.service.rpc.api.SolrSearchService;
+import org.shirdrn.platform.dubbo.service.rpc.api.SolrSearchService.ResponseType;
+import org.springframework.beans.BeansException;
+import org.springframework.context.support.AbstractXmlApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.alibaba.dubbo.rpc.RpcContext;
+
+public class SearchConsumer {
+
+	private final String collection;
+	private AbstractXmlApplicationContext context;
+	private SolrSearchService searchService;
+
+	public SearchConsumer(String collection, Callable<AbstractXmlApplicationContext> call) {
+		super();
+		this.collection = collection;
+		try {
+			context = call.call();
+			context.start();
+			searchService = (SolrSearchService) context.getBean("searchService");
+		} catch (BeansException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Future<String> asyncCall(final String q, final ResponseType type, final int start, final int rows) {
+		Future<String> future = RpcContext.getContext().asyncCall(new Callable<String>() {
+			public String call() throws Exception {
+				return search(q, type, start, rows);
+			}
+		});
+		return future;
+	}
+
+	public String syncCall(final String q, final ResponseType type, final int start, final int rows) {
+		return search(q, type, start, rows);
+	}
+
+	private String search(final String q, final ResponseType type, final int start, final int rows) {
+		return searchService.search(collection, q, type, start, rows);
+	}
+
+	public static void main(String[] args) throws Exception {
+		final String collection = "tinycollection";
+		final String beanXML = "search-consumer.xml";
+		final String config = SearchConsumer.class.getPackage().getName().replace('.', '/') + "/" + beanXML;
+		SearchConsumer consumer = new SearchConsumer(collection, new Callable<AbstractXmlApplicationContext>() {
+			public AbstractXmlApplicationContext call() throws Exception {
+				final AbstractXmlApplicationContext context = new ClassPathXmlApplicationContext(config);
+				return context;
+			}
+		});
+
+		String q = "q=上海&fl=*&fq=building_type:1";
+		int start = 0;
+		int rows = 10;
+		ResponseType type  = ResponseType.XML;
+		for (int k = 0; k < 10; k++) {
+			for (int i = 0; i < 10; i++) {
+				start = 1 * 10 * i;
+				if(i % 2 == 0) {
+					type = ResponseType.XML;
+				} else {
+					type = ResponseType.JSON;
+				}
+//				String result = consumer.syncCall(q, type, start, rows);
+//				System.out.println(result);
+				Future<String> future = consumer.asyncCall(q, type, start, rows);
+//				System.out.println(future.get());
+			}
+		}
+	}
+}
+#+END_SRC
+
+查询的时候，需要提供查询字符串，符合 Solr 语法，
+例如 “q=上海&fl=*&fq=building_type:1”。
+配置文件，我们使用 search-consumer.xml，内容如下所示：
+
+#+BEGIN_EXAMPLE
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<dubbo:application name="search-consumer" />
+	<dubbo:registry address="zookeeper://slave1:2188?backup=slave3:2188,slave4:2188" />
+	<dubbo:reference id="searchService" interface="org.shirdrn.platform.dubbo.service.rpc.api.SolrSearchService" />
+
+</beans>
+#+END_EXAMPLE
+
+* 运行说明
+
+首先保证服务注册中心的 ZooKeeper 集群正常运行，然后启动 SolrSearchServer，启动
+的时候直接将服务注册到 ZooKeeper 集群存储中，可以通过 ZooKeeper 的客户端脚本来
+查看注册的服务数据。一切正常以后，可以启动运行客户端 SearchConsumer，
+调用 SolrSearchServer 所实现的远程搜索服务。
+
+* 参考链接
+
+[[https://github.com/alibaba/dubbo][Github Dubbo]]
+[[http://alibaba.github.io/dubbo-doc-static/Home-zh.htm][Home-zh]]
+[[http://alibaba.github.io/dubbo-doc-static/User+Guide-zh.htm][User+Guide-zh]]
+[[http://alibaba.github.io/dubbo-doc-static/Developer+Guide-zh.htm][Developer+Guide-zh]]
+[[http://alibaba.github.io/dubbo-doc-static/Administrator+Guide-zh.htm][Administrator+Guide-zh]]
+[[http://alibaba.github.io/dubbo-doc-static/FAQ-zh.htm][FAQ-zh]]

@@ -1,5 +1,0 @@
-cairo-ubuntu
-fontconfig-ubuntu
-freetype2-ubuntu
-libxft-ubuntu
-在 aur 里把这些包装上吧，如果想要 ubuntu 的渲染效果

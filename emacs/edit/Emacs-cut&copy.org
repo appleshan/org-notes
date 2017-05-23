@@ -1,0 +1,36 @@
+Emacs 中的剪切复制
+
+* 概念
+
+** 对于拷贝粘贴，Emacs 有点不一样。
+在一般的编辑软件中，先选择一段区 域，然后 C-c 拷贝。
+Emacs 中的不是这样的，当前插入点叫做 point，还有一个点是 mark，
+可以用 C-@ 设置 mark 的位置，然后 point 和 mark 之间的内容就是 region，
+C-w 剪切, M-w 拷贝都是针对 region 的。
+C-@ 的作用就是设置一块 region 的起始位置，point 是光标当前的位置，
+region 是 mark 和 point 之间的区域。
+
+** Emacs 中的剪切不叫剪切 [cut]，叫 kill。
+
+** 复制 [copy] 不叫 copy ,叫 kill-ring-save ．
+这个可以理解为先 kill 掉放到 kill-ring 里，然后再把它 save 回来。
+
+** 另外还有一个操作叫 delete ．
+delete 与 kill 的区别是 kill 掉的内容会被放到 kill-ring (剪切环)，而 delete 掉的内容则直接删掉了，
+除了进行 undo 操作外没法找回删掉的内容。
+而 kill 掉的内容很容易从 kill-ring 中取回。有了 kill-ring 的 Emacs 可以说是具有了多个剪贴板。
+
+
+* 默认的键绑定：
+C-w kill-region
+C-k kill-line
+C-M-k kill-sexp 这个比较复杂 它表示删除一个结构单元。对不同类型的文档（c java
+文本 等）一个结构单元表示不同的含义。你可以尝试一下。(比如，你移动到一个
+括号的开头，按下，则删除整个括号内的内容)
+C-d delete-char
+M-d kill-word
+C-backspace backward-kill-word
+M-w kill-ring-save 复制。
+C-y yank 粘贴。
+
+另外在按下 C-y 后，按一次或多次 M-y 会循环取出 kill-ring 中的内容，然后贴到当前位置。

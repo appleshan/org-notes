@@ -1,0 +1,43 @@
+# -*- org-image-actual-width: nil; -*-
+#+TITLE: 安装 Chez Scheme
+
+* build
+#+BEGIN_SRC bash
+# 先下载源码
+git clone https://github.com/cisco/ChezScheme.git
+cd ChezScheme
+./configure
+sudo make install
+
+# 使用
+man scheme
+scheme
+#+END_SRC
+
+* 所遇错误
+你可能在 make 的时候会看到以下错误:
+#+BEGIN_EXAMPLE
+fatal error: curses.h: No such file or directory
+or
+fatal error: X11/Xlib.h: No such file or directory
+#+END_EXAMPLE
+
+文档里提到 > Prerequisites :
+- GNU Make
+- gcc
+- Header files and libraries for ncurses
+- Header files and libraries for X windows
+
+安装依赖解决
+#+BEGIN_EXAMPLE
+# CentOS7
+yum install -y git ncurses-devel libX11-devel
+# Ubuntu
+apt-get install libncurses5-dev libx11-dev
+#+END_EXAMPLE
+
+* Screenshots
+#+NAME: Chez Scheme
+#+CAPTION: Screenshot from Chez Scheme.
+#+ATTR_ORG: :width 340
+[[file:./ChezScheme.jpg]]

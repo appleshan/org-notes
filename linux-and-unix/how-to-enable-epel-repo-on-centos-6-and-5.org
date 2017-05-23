@@ -1,0 +1,92 @@
+how-to-enable-epel-repo-on-centos-6-and-5
+
+What, Why and How to Enable EPEL Repo on CentOS 6 and 5 – I categorized this simple tip as “basic” level tutorial as because the process is easy, yet it is also basic thing you should know. Starting from this article I will try to regularly post “2 cent tips” aka smart simple and short tutorial about basic simple things related to server management. So lets start..
+
+This article will guide you how to install and enable EPEL (Extra Packages for Enterprise Linux) repository (repo) on your CentOS server. And that’s including CentOS 6 and CentOS 5 but you can also apply the steps on RHEL.
+
+WHAT IS THE EPEL REPO ANYWAY?
+
+EPEL repo, you might already heard it frequently. It is an open source and free community based repository project from Fedora team which provides 100% high quality add-on software packages for Linux distribution including RHEL (Red Hat Enterprise Linux), CentOS, and Scientific Linux to provide lots of open source packages like networking, sys admin, programming, monitoring and so on. Shortly, there are many apps you can not install on your CentOS server without adding this popular repo.
+
+SO WHY SHOULD WE USE EPEL REPO ANYWAY?
+
+So you ask it again. Fine. By adding EPEL repo in your server’s repository source, you’ll be able to install additional standard open source packages by using YUM command. Yet, but because EPEL repo is 100% open source and free to use; providing lots of open source packages to install via Yum; maintained by Fedora repo officially; and it is also providing any core duplicate packages and no compatibility issues.
+
+
+HOW TO INSTALL EPEL REPO?
+
+Step 1 – Obviously you have to login to your server as root.
+
+Step 2 – Then download the file using wget command:
+
+# For RHEL/CentOS 6 32-Bit #
+wget http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+ 
+# For RHEL/CentOS 6 64-Bit #
+wget http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+ 
+# For RHEL/CentOS 5 32-Bit #
+wget http://download.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm
+ 
+# For RHEL/CentOS 5 64-Bit #
+wget http://download.fedoraproject.org/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm
+
+Step 3 – Finally, install it using RPM command:
+
+## For RHEL/CentOS 6 32-Bit ##
+rpm -ivh epel-release-6-8.noarch.rpm
+ 
+## For RHEL/CentOS 6 64-Bit ##
+rpm -ivh epel-release-6-8.noarch.rpm
+ 
+## For RHEL/CentOS 5 32-Bit ##
+rpm -ivh epel-release-5-4.noarch.rpm
+ 
+## For RHEL/CentOS 5 64-Bit ##
+rpm -ivh epel-release-5-4.noarch.rpm
+
+Step 4 – Now you have to also verify that the EPEL repository is already installed successfully and ready to use:
+
+yum repolist
+
+
+HOW TO ENABLE AND USE EPEL REPO WITH YUM
+
+Step 1 – The main command to use with yum is:
+
+yum --enablerepo=epel [command] [package name]
+
+Replace the [command] part with one of these:
+
+– install
+– update
+– check-update
+– upgrade
+– remove or erase
+– list
+– provides or whatprovides
+– search
+– info
+– clean
+– shell
+– resolvedep
+– localinstall
+– localupdate
+– deplist
+
+While [package name] can be replaced with the name of the package.
+
+Example, this command below will display information about a package called nginx, the world’s most popular fast Web server:
+
+yum --enablerepo=epel info nginx
+
+Step 2 – Now finally install the package you want to. And the command for that is:
+
+yum --enablerepo=epel install [package name]
+
+example:
+
+yum --enablerepo=epel install nginx
+
+That is it. Catch all other tutorials about CentOS here.
+

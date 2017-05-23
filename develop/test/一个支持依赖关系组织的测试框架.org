@@ -1,0 +1,133 @@
+#+TITLE:一个支持依赖关系组织的测试框架
+
+Deptest
+地址: [[https://github.com/reorx/deptest][reorx/deptest]] , [[https://pypi.python.org/pypi/deptest][pypi/deptest]]
+
+* 引
+Web API 测试的需求已经困扰我好几年了。想象一个发布文章 (post) 的服务，API 如下:
+#+BEGIN_EXAMPLE
+GET /posts 获取文章列表
+POST /posts 发布文章
+GET /posts/:id 获取文章条目
+PUT /posts/:id 更新文章
+DELETE /posts:id 删除文章
+#+END_EXAMPLE
+
+想把所有的接口都测试一遍，怎样组织你的测试代码呢？
+
+首先你可能会想到，出于单元测试的思想，要为每个接口写一个测试函数:
+#+BEGIN_SRC python
+def test_get_posts():
+    ...
+
+def test_post_posts():
+   ...
+
+def test_put_post():
+   ...
+#+END_SRC
+
+嗯，每个函数完成一个功能测试，很优雅，很整洁。
+
+然而这时你会发现，他们并不是完全独立的测试单元，test_get_posts 要拿到数据，首先
+要 test_post_posts 先执行过；test_put_post 需要一个 post 的 id 才可以执行。怎样
+让他们执行的时候都既能满足先决条件，又不会影响到其他函数的执行呢？
+
+如果用的是 nose 或者 py.test，大概有两种方法来解决这个问题:
+
+1.严格遵循单元测试思想：每个函数都应该独立执行，并且执行之后不影响全局环境。给
+  每个测试函数加上 setup 和 teardown，用来初始化数据和消除影响。比如
+  test_put_post.setup 会首先给数据库里插入一个 post 条目，test_put_post.teardown
+  把这个条目删除。
+
+  这看起来似乎很美好，但是有两个非常糟糕的问题。一个是测试的目的发生了改变。
+  原本这些测试是为了验证从 HTTP 请求到后端 model 层的数据接口整个流程是否工作正
+  常，但 setup 中放入数据库操作的代码却让 model 层工作正常成为了先决条件，最终
+  其实只是测试了 HTTP 服务是否工作正常，然而 HTTP 服务又不是你写的代码，测个毛
+  线啊测。
+
+  另一个是让代码变得非常臃肿，原本只是想单纯地测试一下 HTTP 请求，看看结果如何，
+  却写了一堆数据库操作的代码，而这些代码又可能引入新的问题。效率变得十分低下，
+  写出的代码也会非常难看，最后很烦躁于是 git rm 回到点击测试的原始状态…
+
+2.只写一个测试函数，把所有 HTTP 请求按照需要的先后顺序执行一遍…这可能也会带来想
+  要删除代码的强烈烦躁情绪。
+
+That's why deptest was created.
+
+* deptest
+我们来看看以上的例子如果用 deptest 来写会是什么样子:
+
+#+BEGIN_SRC python
+def test_post_posts():
+    """POST to create a post item"""
+    data = {
+        'name': 'hello'
+    }
+    resp = requests.post(_url('/posts'), data=json.dumps(data))
+    log_resp(resp)
+
+    assert resp.status_code == 200
+    assert 'id' in resp.json()
+
+    return resp.json()
+
+
+@depend_on('test_post_posts', with_return=True)
+def test_get_posts(p):
+    """GET post list, should be run after a post has been created"""
+    resp = requests.get(_url('/posts'))
+    log_resp(resp)
+
+    assert resp.status_code == 200
+    d = resp.json()
+    assert len(d) == len(app.db)
+    assert d[0]['id'] == p['id']
+
+
+@depend_on('test_get_post', with_return=True)
+def test_put_post(p):
+    """PUT a post item, should be run after a post has been created.
+    The reason why this function depends on not `test_post_posts`
+    but `test_get_post` is because if it run before `test_get_post`,
+    the name of the post will be changed, which will make
+    the name comparation failed in `test_get_post`.
+    """
+    new_p = dict(p)
+    new_p['name'] = 'world'
+    resp = requests.put(
+        _url('/posts/{}'.format(p['id'])),
+        data=json.dumps(new_p))
+    log_resp(resp)
+
+    assert resp.status_code == 200
+    d = resp.json()
+    assert d['name'] == new_p['name']
+#+END_SRC
+
+先简单解释下取返回值的问题，with_return 为 True，则 depend_on 的函数的返回值会
+再调用时传给被装饰的函数，所以需要定义一个参数来接收。
+如果依赖多个函数的返回值，会按 depend_on 的先后顺序传递，靠近被装饰函数的会先
+传递，所以有几个 with_return 就定义几个参数就对了。
+
+怎么样，是不是既让每个函数只测试一个接口，又解决了顺序和依赖的问题呢？
+
+Deptest 用一个叫 depend_on 的装饰器来定义测试函数的依赖关系：
+
+在上面的例子中， @depend_on('test_get_post', with_return=True) 表达了
+test_put_post 依赖于 test_get_post, 且接收其返回值作为参数的意思。因此
+test_put_post 一定会在 test_get_post 执行成功 后才会执行。如果
+test_get_post 失败了，test_put_post 不会被执行，其状态会变为 UNMET，表示未满足
+依赖而没有执行。
+
+你可以在 [[https://github.com/reorx/deptest/blob/master/examples/http_api_test.py][这里]] 看到上面这个例子的代码，它的运行结果如下:
+
+- 直接运行
+
+[[file:./normal.png]]
+
+看看 logging 有什么输出呢
+
+[[file:./withstdout.png]]
+
+Have fun testing :D

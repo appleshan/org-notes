@@ -1,0 +1,128 @@
+mongodb基本操作
+
+* 关闭/启动服务
+sudo service mongodb stop
+sudo service mongodb start
+
+* 客户端登录服务器
+** 连接本地mongodb
+    $ mongo
+
+** 连接远程mongodb server，默认端口为27017
+    $ mongo 192.168.30.25
+
+出现:
+MongoDB shell version: 2.6.7
+connecting to: test
+>
+
+# 执行db.foo.save({1 : “Hello world”})
+> db.foo.save({1: "Hello world"});
+WriteResult({ "nInserted" : 1 })
+
+# 然后查找db.foo.find();
+> db.foo.find();
+{ "_id" : ObjectId("54ee89f4dd5b56594eeabdd9"), "1" : "Hello world" }
+
+看到{ "_id" : ObjectId("54ee89f4dd5b56594eeabdd9"), "1" : "Hello world" }
+执行到这里恭喜你，成功安装好了mongodb.
+
+* 创建或者切换数据库
+如果没有mydb数据库的话，在客户端中使用命令：
+    > use mydb;
+    switched to db mydb
+将创建mydb数据库，而且当前数据库切换为mydb.
+
+* 检查当前数据库状态
+    > db.stats();
+
+* 显示已经有的数据库
+    > show dbs;
+
+* 显示已经有的数据库"表"
+    > show collections;
+
+* mongodb 删除数据库
+    > use mydb;
+    > db.dropDatabase();
+    { "dropped" : "mydb", "ok" : 1 }
+
+  mongodb删除表
+    > db.mytable.drop();
+
+* help
+
+** 1,db的帮助
+db.addUser(username,password) 添加用户 
+db.auth(usrename,password)   设置数据库连接验证 
+db.cloneDataBase(fromhost)   从目标服务器克隆一个数据库 
+db.commandHelp(name)      returns the help for the command 
+db.copyDatabase(fromdb,todb,fromhost) 复制数据库fromdb---源数据库名称，todb---目标数据库名称，fromhost---源数据库服务器地址 
+db.createCollection(name,{size:3333,capped:333,max:88888}) 创建一个数据集，相当于一个表 
+db.currentOp()         取消当前库的当前操作 
+db.dropDataBase()       删除当前数据库 
+db.eval(func,args)       run code server-side 
+db.getCollection(cname)    取得一个数据集合，同用法：db['cname'] or 
+db.getCollenctionNames()    取得所有数据集合的名称列表 
+db.getLastError()       返回最后一个错误的提示消息 
+db.getLastErrorObj()      返回最后一个错误的对象 
+db.getMongo()         取得当前服务器的连接对象get the server 
+db.getMondo().setSlaveOk()   allow this connection to read from then nonmaster membr of a replica pair 
+db.getName()          返回当操作数据库的名称 
+db.getPrevError()       返回上一个错误对象 
+db.getProfilingLevel()     获取profile level 
+db.getReplicationInfo()    获得重复的数据 
+db.getSisterDB(name)      get the db at the same server as this onew 
+db.killOp()          停止（杀死）在当前库的当前操作 
+db.printCollectionStats()   返回当前库的数据集状态 
+db.printReplicationInfo()    打印主数据库的复制状态信息 
+db.printSlaveReplicationInfo()    打印从数据库的复制状态信息 
+db.printShardingStatus()    返回当前数据库是否为共享数据库 
+db.removeUser(username)    删除用户 
+db.repairDatabase()      修复当前数据库 
+db.resetError() 
+db.runCommand(cmdObj)     run a database command. if cmdObj is a string, turns it into {cmdObj:1} 
+db.setProfilingLevel(level)  设置profile level 0=off,1=slow,2=all 
+db.shutdownServer()      关闭当前服务程序 
+db.version()          返回当前程序的版本信息 
+
+** 2,表的帮助
+格式: db.表名.help()
+db.test.find({id:10})     返回test数据集ID=10的数据集 
+db.test.find({id:10}).count() 返回test数据集ID=10的数据总数 
+db.test.find({id:10}).limit(2) 返回test数据集ID=10的数据集从第二条开始的数据集 
+db.test.find({id:10}).skip(8) 返回test数据集ID=10的数据集从0到第八条的数据集 
+db.test.find({id:10}).limit(2).skip(8) 返回test数据集ID=1=的数据集从第二条到第八条的数据 
+db.test.find({id:10}).sort()  返回test数据集ID=10的排序数据集 
+db.test.findOne([query])    返回符合条件的一条数据 
+db.test.getDB()        返回此数据集所属的数据库名称 
+db.test.getIndexes()      返回些数据集的索引信息 
+db.test.group({key:...,initial:...,reduce:...[,cond:...]})  返回分组信息 
+db.test.mapReduce(mayFunction,reduceFunction,<optional params>) 这个有点像存储过程 
+db.test.remove(query)           在数据集中删除一条数据 
+db.test.renameCollection(newName)     重命名些数据集名称 
+db.test.save(obj)             往数据集中插入一条数据 
+db.test.stats()              返回此数据集的状态 
+db.test.storageSize()           返回此数据集的存储大小 
+db.test.totalIndexSize()          返回此数据集的索引文件大小 
+db.test.totalSize()            返回些数据集的总大小 
+db.test.update(query,object[,upsert_bool]) 在此数据集中更新一条数据 
+db.test.validate()             验证此数据集 
+db.test.getShardVersion()         返回数据集共享版本号
+
+* 标准检查流程
+1.首先检查 ulimit -a 
+查看open files (-n) 是否为设置的值
+
+如果是在开机脚本里面设置，则应该通过下面4步骤检查。本步骤可以忽略。
+
+2.ps -def | grep mongod
+查看该服务是否启动
+3.cd /data/db/journal/
+cat mongdb.log 
+查看服务器是否正确
+4.进入http://192.168.1.199:27017
+看服务器是否启动正常
+5.进入/usr/mongodb/bin,执行./mongo
+看看是否能够登录
+

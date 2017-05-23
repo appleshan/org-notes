@@ -1,9 +1,0 @@
-#+TITLE: 分区方案
-
-/boot 512MB
-/ 50GB
-/swap 6GB
-/tmp 1GB
-/home ~GB
-
-加密了 swap tmp home

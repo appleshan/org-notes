@@ -1,9 +1,0 @@
-不重启 Emacs 让新修改的配置生效
-
-不重启 Emacs 让 init.el 新修改的内容生效，有四个函数可以做到：
-
-M-x eval-last-sexp / C-x C-e 使当前 elisp 配置中光标前的那一条语句立刻生效；
-M-x eval-region 使当前 elisp 配置中选中的 region 中的语句立刻生效；
-M-x eval-buffer 使当前的 buffer 中的设置语句立刻生效；
-M-x load-file ~/.emacs.d/init.el 载入 init.el 文件，从而使其中的设置生效，
-要生效其它 elisp 文件只需要把 init.el 文件名换成其它的即可。

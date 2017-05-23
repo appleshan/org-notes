@@ -1,5 +1,0 @@
-* directory
-~/Dropbox/org-notes/cheatsheet
-
-* description
-Printable cheatsheets for varies languages and tools.

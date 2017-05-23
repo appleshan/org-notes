@@ -1,0 +1,157 @@
+#+TITLE: arch-anywhere linux 安装后的系统环境设置
+
+* 配置区域
+@see http://www.jianshu.com/p/fe2165cc6af8
+
+打开/etc/locale.gen文件，取消掉 en_US.UTF-8 和 zh_CN.UTF-8 的注释：
+
+$ sudo vi /etc/locale.gen
+
+然后重新生成一下区域信息：
+
+$ sudo locale-gen
+
+这样就会在 /etc/locale.conf 文件设置全局有效的locale：LANG=en_US.UTF-8
+
+=警告=: 不推荐在此设置中文 locale，会导致tty乱码；在tty下亦可显示和输入中文，但需要安装 cce、zhcon 或 fbterm；
+
+* 配置时间
+开启网络对时功能：
+$ timedatectl set-ntp true
+
+* 安装字体
+首先使用pacman搜索一下所有字体，然后安装所需的字体：
+$ pacman -Ss font
+
+强烈建议现在这里安装一种文泉中文字体，比如文泉微米黑，否则可能出现重启之后所有字体全变成方块的问题。
+$ sudo pacman -S wqy-microhei wqy-zenhei adobe-source-code-pro-fonts
+
+* 设置中文区域
+
+/etc/locale.conf 文件中的区域设置是全局设置，会影响到所有的程序。如果在这里把区域设置为中文，虽然桌面环境下可以正常显示，但是进入tty的话就会出现乱码现象。
+
+对于特定用户，还可以在 ~/.bashrc、~/.xinitrc 或 ~/.xprofile 中设置自己的用户环境。不同之处在于：
+
+- .bashrc: 每次终端登录时读取并运用里面的设置。
+- .xinitrc: 每次 startx 启动 X 界面时读取并运用里面的设置
+- .xprofile: 每次使用 gdm 等图形登录时读取并运用里面的设置
+
+所以推荐的方法是在启动图形界面的时候加入中文区域设置，打开 ~/.xprofile 文件加入以下几行即可，注意文件名称全部是小写的。
+
+export LANG=zh_CN.UTF-8
+export LANGUAGE=zh_CN:en_US
+export LC_CTYPE=en_US.UTF-8
+
+注意: 该方法适用于slim或者无登陆管理器的用户，GDM和KDM用户可以在Gnome或KDE设置中选择语言。
+注意: 若欲将此三行放至 ~/.xinitrc 中，请注意将其放在exec _example_WM_or_DE_行之前；此为常见错误；
+
+* 安装fcitx输入法 TODO
+
+** 输入法模块
+Fcitx 提供对 Gtk+/Qt 提供了输入法模块，请根据需要安装 fcitx-gtk2, fcitx-gtk3, fcitx-qt4 和 fcitx-qt5. 多软件包 fcitx-im 打包了全部.(现在已经包括 fcitx-qt5).
+警告: 即使未安装输入法模块，一般还是可以在大部分程序中使用输入法，不过很可能出现从无法光标跟随、无法显示预编辑字符串、无法输入甚至程序卡死等情况。如无特殊情况请直接安装 fcitx-im.
+
+#$ sudo pacman -S fcitx fcitx-cloudpinyin fcitx-im fcitx-fbterm kcm-fcitx
+
+** fcitx 精簡安裝
+$ sudo apt-get install fcitx fcitx-ui-classic fcitx-config-gtk
+
+让fcitx控制面板可选输入法(非必要)
+$ sudo apt-get install fcitx-module-dbus (可选)
+
+安装完成之后还需要配置一下。打开~/.xprofile文件并加入以下几行：
+
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+
+* 安装fbterm
+
+安装fbterm并将当前用户添加到video用户组中：
+
+$ sudo pacman -S fbterm
+$ sudo gpasswd -a username video
+
+* 其他美化
+
+** 设置pacman彩色输出
+
+打开 /etc/pacman.conf 文件，找到被注释的 #Color ，改为 Color 。pacman 就会输出彩色信息，方便查看。
+
+** 终端美化
+
+首先安装zsh，z shell以最后一个字母z命名，意为终极shell。配合oh-my-zsh一起使用效果更佳。安装完成之后将其设置为默认shell，重新登录即可生效。另外还要安装git。
+
+# pacman -S zsh git
+# chsh -s $(which zsh)
+
+显示用户登录的shell：
+$ echo $SHELL
+
+然后安装oh-my-zsh，可以从curl或者wget安装。
+$ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+$ sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+
+安装完成之后打开.zshrc文件配置。我喜欢将主题设置为random，启用几个插件，并添加vim的简化命令。
+
+ZSH_THEME="random"
+
+plugins=(git archlinux history mvn python git-extras textmate lighthouse autojump)
+
+# Example aliases
+alias zshconfig="mate ~/.zshrc"
+alias ohmyzsh="mate ~/.oh-my-zsh"
+alias vi=vim
+
+有些主题需要破解过的字体，需要安装git来同步这些字体：
+
+git clone https://github.com/powerline/fonts.git
+cd fonts
+./install.sh
+
+还有更多奇妙的主题，这里是其中的两个，在 [[https://github.com/robbyrussell/oh-my-zsh/wiki/Themes][这里]] 还可以找到更多：
+
+[[https://github.com/bhilburn/powerlevel9k][powerlevel9k]]
+[[https://github.com/halfo/lambda-mod-zsh-theme/][lambda-mod]]
+
+** 字体美化
+
+由于原作者可能不在更新项目了，所以现在好像没办法安装infinality了。Linux下字体发虚的原因是系统分辨率太低，而中文字体字形复杂，所以笔画会显示比较模糊。现阶段这属于无解状况。（当然如果有钱换个2K或者4K的屏幕，字体应该就显示正常了。）
+
+** 图标美化
+
+numix-circle-icon-theme是一个非常好看的图标主题。但是需要我们手动安装。这个主题不是官方仓库的一部分，所以需要使用AUR(Arch User Repository)来安装。安装它最简单的办法就是使用Yaourt这个包管理器来做。它是一个建立在pacman上层的工具，既可以安装官方仓库的软件（和pacman一样），也可以安装AUR中的软件。
+
+首先来安装Yaourt。先打开pacman.conf，
+
+$ sudo nano /etc/pacman.conf
+然后把下面几行添加到pacman.conf中，
+
+[archlinuxfr]
+SigLevel = Never
+Server = http://repo.archlinux.fr/$arch
+添加完成之后就能刷新软件仓库并安装Yaourt了，
+
+$ sudo pacman -Sy yaourt
+安装完成之后就可以使用yaourt来安装numix了，
+
+# yaourt numix
+这样就会列出所有的numix相关的软件包，在其中找到numix-circle-icon-theme，然后输入前面的序号就可以安装了。然后接下来根据提示进行操作就可以了。
+
+yaourt是一个强大的工具，你可以在AUR中查找一下其他的好用的软件，使用yaourt来安装。这是在其他Linux发行版中无法得到的体验。
+
+* 安装Yaourt包管理器
+
+以root权限打开软件库配置文件。
+
+sudo nano /etc/pacman.conf
+将下面的三行文字添加到文件末尾。这将添加repo.archlinuxcn.org的Yaourt软件库。Yaourt的官方软件库地址是repo.archlinux.fr/$arch，但官方服务器在法国，中国用户访问速度很慢，所以我们可以用中国的Yaourt镜像软件库。
+
+[archlinuxcn]
+SigLevel = Optional TrustedOnly
+Server   =  http://repo.archlinuxcn.org/$arch
+保存文件。现在同步软件库信息并安装Yaourt包管理器以及fakeroot。fakeroot是一个很重要的工具，它可以模拟超级用户权限，是Yaourt构建Arch软件包时的必要工具。
+
+sudo pacman -Sy yaourt fakeroot
+

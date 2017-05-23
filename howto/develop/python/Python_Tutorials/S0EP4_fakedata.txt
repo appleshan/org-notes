@@ -1,3 +1,0 @@
-first_name,last_name,employee_number
-luke,vanderhart,1
-ryan,neufeld,2

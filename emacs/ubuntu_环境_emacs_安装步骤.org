@@ -1,0 +1,39 @@
+ubuntu_环境_emacs_安装步骤
+
+* 1.安装 emacs
+@See to 《How to Build Emacs on Linux》:
+
+sudo apt update
+
+# install essential build tools
+sudo apt install build-essential
+
+# get all dependencies of a previous emacs version
+sudo apt build-dep emacs24
+
+cd ‹source dir name›
+./autogen.sh
+sudo ./configure --prefix=/opt/emacs-24.5
+sudo make -j4
+sudo make install # optional. This basically copy the binary to /usr/local/bin
+
+* 2.安装 sbcl
+INSTALL_ROOT=/opt/develop/lisp/sbcl-1.2.0 sh install.sh
+
+bash:
+export SBCL_HOME=/opt/develop/lisp/sbcl-1.2.0/lib/sbcl
+
+运行：
+./sbcl
+
+或者
+
+$ sh run-sbcl.sh
+
+* 3.安装 ccl
+Linux x86:
+$ cd ccl/lisp-kernel/linux8632  # or linux8664
+$ make
+
+运行：
+./lx86cl64

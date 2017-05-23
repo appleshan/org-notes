@@ -1,9 +1,0 @@
-#+TITLE: DNS Check
-
-* 1. 可以用下面任意一个命令来检测 dns 是否工作正常
-$ dig @127.0.0.1 www.google.com
-$ host www.google.com 127.0.0.1
-$ nslookup www.google.com 127.0.0.1
-
-* 2.查询一下 53 端口是否在监听
-$ netstat -natu|grep 53

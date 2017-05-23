@@ -1,0 +1,40 @@
+linux 配置网络
+
+* 1.配置静态 IP 地址
+
+* 命令设置 IP（设置网卡 eth0 的 IP 地址和子网掩码）
+sudo ifconfig eth0 192.168.2.135 netmask 255.255.255.0
+
+或者
+
+* 编辑网络配置文件
+$ sudo vi /etc/network/interfaces
+
+内容如下：
+
+auto lo
+iface lo inet loopback
+iface eth0 inet static
+address 192.168.2.135
+netmask 255.255.25.0
+gateway 192.168.2.1
+auto eth0
+
+* 2.配置 DNS
+$ sudo vi /etc/resolv.conf
+
+增加以下内容：
+
+nameserver 211.95.193.97
+nameserver 211.92.8.161
+
+* 3.增加默认网关
+$ sudo route add default gw 192.168.2.1
+
+* 4.重新启动网络配置
+$ sudo /etc/init.d/networking restart
+
+若不行，请重启 ubuntu：sudo reboot
+
+* 5.查看当前 IP：
+ifconfig

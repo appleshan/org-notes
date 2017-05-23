@@ -1,5 +1,0 @@
-* directory
-~/Dropbox/org-notes/install
-
-* description
-Record how to install software. Only for things that are difficult to install, of course.

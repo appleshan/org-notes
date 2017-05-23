@@ -1,0 +1,51 @@
+Ubuntu14.10 上 Thunderbird + DavMail workstation 代替 Outlook 访问 Exchange
+
+* 0.基本原理
+    基本原理是用 DavMail workstation/server 版本搭建一个服务器，该服务器通过 exchange web client 接口
+访问 email 和日历。然后 Linux 程序员可以通过各种各样的邮件客户端（比如 Thunderbird 或者 Emacs 的 Gnus)
+来访问 DavMail server。
+
+* 1.下载 DavMail workstation 的安装包
+[[http://davmail.sourceforge.net/download.html][Download latest DavMail Gateway release]]
+
+因为我的 linux 系统是 ubuntu 14.10，尝试的软件版本是 [Workstation (personal) mode]，所以下载信息是：
+
+Debian Linux (Ubuntu): Download debian package davmail_4.6.0-2331-1_all.deb
+（大概是 2015 年 1 月 27 日打包的版本）
+
+* 2.双击即可通过 Ubuntu 软件中心安装；
+    安装后，在系统 Dash 中搜索：davmail，运行该程序，会出现如下对话框：
+[[DavMail-Gateway-Settings.png]]
+
+OWA(Exchange) URL:里面填写 web 版本访问你的 Exchange server 上邮件的登录地址。
+也就是登录界面出现的时候将网页地址复制下来，填入这里即可。其他默认设置吧。这里并不需要输入你的用户名和密码，那个在 Thunderbird 里面设置。
+
+注意：Ubuntu 14 的用户，可以遵循如下说明，自行处理系统托盘问题：
+[[http://www.webupd8.org/2013/05/how-to-get-systray-whitelist-back-in.html][How to whitelist all systray apps in Ubuntu 14.04 or 14.10 (with Unity)]]
+(在墙外，需翻墙)
+本地链接：
+[[how-to-get-systray-whitelist-back-in-ubuntu14.org][Ubuntu 14 系统通知栏图标显示问题解决方案]]
+
+处理后，Ubuntu 14 系统托盘显示通知：
+[[DavMail-Gateway-ubuntutray.png]]
+
+* 3.安装 Thunderbird
+    通过 Ubuntu 软件中心安装即可。
+
+* 4.配置 Thunderbird
+    启动 Thunderbird,然后创建一个已经存在的 email 账户。
+对应端口和设置都参考：[[http://davmail.sourceforge.net/thunderbirdmailsetup.html][官方文档]]
+
+注意几点：
+  (1).一个是两个 server 都填 localhost，
+  (2).端口：
+      Local IMAP Port: 1143
+      Local SMTP Port: 1025
+  (3).Username 填写你在 exchange server 上的帐号，
+根据 exchange server 版本，有时候需要用这种形式：域名\username。
+
+[[Thunderbird-Account.png]]
+
+然后点击创建帐号按钮。
+
+OK.已经上路了，剩下的功能自己摸索.

@@ -1,6 +1,0 @@
-WARNING: Tray icon may not be available:
-If on Unity, try installing 'libgtk2-appindicator-perl' package.
-If on Gnome3 gnome-shell, you may need to install some extension like 'Evil Status Icon Forever' in order to be able to see PAC's tray icon.
-This message will not appear anymore.
-See tooltip of 'Preferences' -> 'PAC Main Options' -> 'Behaviour' -> 'At PAC Exit' -> 'Hide to tray instead of closing'
-You may reenable Tray icon options under 'Preferences'.

@@ -1,0 +1,42 @@
+#+TITLE:Emacs Dired Tips
+
+I’m using Emacs 23.1, primarily on Windows 7, and want to make a note of some
+Dired tips for my own use.
+
+! will run a shell command on the marked files or the file at point.
+
+So, to look at the end of a log file on a remote server (and since I have
+Cygwin installed):
+#+BEGIN_EXAMPLE
+! tail RET
+#+END_EXAMPLE
+
+To copy the name of the file at point, in order to make use of it elsewhere,
+use dired-copy-filename-as-kill, which is bound to w. To make it copy the
+absolute path:
+#+BEGIN_EXAMPLE
+0 w
+#+END_EXAMPLE
+
+To copy the path to the folder you’re looking at in dired:
+#+BEGIN_EXAMPLE
+M-< w
+#+END_EXAMPLE
+
+To create an archive of the currently marked files using 7zip:
+#+BEGIN_EXAMPLE
+! 7z a zipfilename * RET
+#+END_EXAMPLE
+
+To extract the archive of the file at point:
+#+BEGIN_EXAMPLE
+! 7z e * RET
+#+END_EXAMPLE
+
+UPDATE: here’s another one I keep forgetting to use.
+
+From dired, to search for files containing a string, just do this, remembering
+that your regexp will be case-sensitive:
+#+BEGIN_EXAMPLE
+M-x find-grep-dired
+#+END_EXAMPLE

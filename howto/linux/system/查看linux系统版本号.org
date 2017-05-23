@@ -1,7 +1,0 @@
-uname -a
-或
-cat /proc/version
-或
-cat /etc/issue
-或
-lsb_release -a      //此命令可看到详细信息

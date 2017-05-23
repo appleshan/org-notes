@@ -1,4 +1,0 @@
-#+TITLE: Python Tutorials
-
-Python 语言的 0 基础入门，需要一些其他语言的功底或者单纯的悟性。
-@See https://github.com/catalystfrank/Python4DataScience.CH

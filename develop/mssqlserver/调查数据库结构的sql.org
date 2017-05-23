@@ -1,0 +1,95 @@
+#+TITLE: 调查数据库结构的 sql
+
+* Show Databases
+#+BEGIN_SRC sql
+EXEC sp_databases
+#+END_SRC
+
+* Show Tables
+#+BEGIN_SRC sql
+SELECT table_name, table_type FROM information_schema.tables;
+#+END_SRC
+
+or
+
+#+BEGIN_SRC sql
+--列出数据库里所有的表名
+select name from sysobjects where type='U'
+#+END_SRC
+
+U 指的是用户创建的表.
+S 指的是系统表.
+TR 指的是触发器.
+
+* Show Columns
+#+BEGIN_SRC sql
+--列出表里的所有的列
+select name from syscolumns where id=object_id('TableName')
+#+END_SRC
+
+#+BEGIN_SRC sql
+--查询 表 的结构
+sp_help TB_NAME
+#+END_SRC
+
+* 查询出各（某）表字段的属性
+#+BEGIN_SRC sql
+--sql server 2000
+SELECT
+    表名       = case when a.colorder=1 then d.name else '' end,
+    表说明     = case when a.colorder=1 then isnull(f.value,'') else '' end,
+    字段序号   = a.colorder,
+    字段名     = a.name,
+    标识       = case when COLUMNPROPERTY( a.id,a.name,'IsIdentity')=1 then '√'else '' end,
+    主键       = case when exists(SELECT 1 FROM sysobjects where xtype='PK' and parent_obj=a.id and name in (
+                     SELECT name FROM sysindexes WHERE indid in(
+                        SELECT indid FROM sysindexkeys WHERE id = a.id AND colid=a.colid))) then '√' else '' end,
+    类型       = b.name,
+    占用字节数 = a.length,
+    长度       = COLUMNPROPERTY(a.id,a.name,'PRECISION'),
+    小数位数   = isnull(COLUMNPROPERTY(a.id,a.name,'Scale'),0),
+    允许空     = case when a.isnullable=1 then '√'else '' end,
+    默认值     = isnull(e.text,''),
+    字段说明   = isnull(g.[value],'')
+FROM
+    syscolumns a
+left join
+    systypes b
+on
+    a.xusertype=b.xusertype
+inner join
+    sysobjects d
+on
+    a.id=d.id  and d.xtype='U' and  d.name<>'dtproperties'
+left join
+    syscomments e
+on
+    a.cdefault=e.id
+left join
+    sysproperties g
+on
+    a.id=g.id and a.colid=g.smallid
+left join
+    sysproperties f
+on
+    d.id=f.id and f.smallid=0
+where
+    d.name='要查询的表'    --如果只查询指定表,加上此条件
+order by
+    a.id,a.colorder
+
+/*
+表名    表说明 字段序号 字段名    标识 主键    类型    占用字节数 长度 小数位数 允许空  默认值      字段说明
+------- ----- -------  -------- ---- ------- ------ ------- --------------- ------ ---------- ----------
+authors       1        au_id          √     id      11     11      0
+              2        au_lname              varchar 40     40      0
+              3        au_fname              varchar 20     20      0
+              4        phone                 char    12     12      0              ('UNKNOWN')
+              5        address               varchar 40     40      0       √
+              6        city                  varchar 20     20      0       √
+              7        state                 char    2      2       0       √
+              8        zip                   char    5      5       0       √
+              9        contract              bit     1      1       0
+（所影响的行数为 9 行）
+*/
+#+END_SRC

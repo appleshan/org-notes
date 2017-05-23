@@ -1,0 +1,218 @@
+#+TITLE: Docker 修炼第一式： 从 Dockerfile 开始
+
+@see http://t.goodrain.com/t/docker-dockerfile/233
+
+* Docker、Dockerfile、Docker 镜像、容器这些都是什么鸟？
+老生常谈，再再再……普及一下：
+- Docker：
+  最早是 dotCloud 公司出品的一套容器管理工具，但后来 Docker 慢慢火起来了，连
+  公司名字都从 dotCloud 改成 Docker。
+- Dockerfile：
+  它是 Docker 镜像的描述文件，可以理解成火箭发射的 A、B、C、D……的步骤。
+- Docker 镜像：
+  通过 Dockerfile 做出来的，包含操作系统基础文件和软件运行环境，它使用分层的
+  存储方式。
+- 容器：
+  是运行起来的镜像，简单理解，Docker 镜像相当于程序，容器相当于进程。
+讲了这么多，大家可能已经意识到了，想玩转 Docker 必须先要搞定 Docker 镜像，镜像
+又来自于 Dockerfile，因此本文从 Dockerfile 编写开始，与您分享 Docker 镜像的制作
+过程，里面有 经验，有 技巧，还有 彩蛋~！
+
+* 如何通过 Dockerfile 快速构建镜像
+接下来，我们通过构建一个 Tomcat 镜像，来演示 Dockerfile 的使用方法，当然前提是
+你的电脑安装了 Docker 环境，如何安装 Docker 环境就不在此赘述了。
+
+** 1、创建一个 Dockerfile
+Dockerfile 命名必须为“Dockerfile”，Docker 镜像构建时，会查找指定目录中的
+Dockerfile。
+
+** 2、编写 Dockerfile
+*** （1）环境配置
+#+BEGIN_SRC dockerfile
+FROM ubuntu:14.04
+#+END_SRC
+
+通过 FROM 指令，Docker 编译程序能够知道通过哪个基础镜像执行来进行编译。所有的
+Dockerfile 都必须以 FROM 指令开始。通过该指令，我们相当于有了一个最基本的
+Ubuntu 系统。
+
+*** （2）其他环境配置
+#+BEGIN_SRC dockerfile
+MAINTAINER example <example@goodrain.com>
+#+END_SRC
+
+另外我们需要指定时区，否则我们做出的镜像可能会跟当前时间不符。
+#+BEGIN_SRC dockerfile
+RUN echo "Asia/Shanghai" > /etc/timezone;dpkg-reconfigure -f noninteractive tzdata
+#+END_SRC
+
+我们可以像在电脑上安装 Tomcat 一样，把 Tomcat 安装在 Docker 容器中。
+
+*** （3）Tomcat 必要软件安装。
+我们此时使用的 Ubuntu 系统其实是很简陋的系统，上面很多系统都没有。所以我先安装
+一些必要的软件。
+#+BEGIN_SRC dockerfile
+RUN apt-get update && apt-get install -y curl vim net-tools && \
+    rm -rf /var/lib/apt/lists/* && mkdir -p /app
+#+END_SRC
+
+RUN 指令用来在 Docker 的编译环境中运行指定命令。
+这里我安装了 curl、vim、net-tools，其中 curl 用来获取 java 和 tomcat 的安装包，
+vim 和 net-tools 用来调试，并创建了/app 目录。
+
+*** （4）指定工作目录
+使用	WORKDIR /app 可以将工作目录定位到/app 目录下
+
+*** （5）获取安装软件
+我们使用 第 （3）步 安装的 curl 工具来获取安装包。
+#+BEGIN_SRC dockerfile
+RUN  curl -L 'http://download.oracle.com/otn-pub/java/jdk/7u65-b17/jdk-7u65-linux-x64.tar.gz' \
+          -H 'Cookie: oraclelicense=accept-securebackup-cookie; gpw_e24=Dockerfile' | tar -xz \
+    && curl -L 'http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.8/bin/apache-tomcat-7.0.8.tar.gz' | tar -xz
+#+END_SRC
+
+以上命令将会从指定地址下载安装包，并解压到当前目录（上一步我们指定了工作空间为
+/app，所以会解压到此目录下）
+
+*** （6）指定运行脚本
+截止到上一步，我们已经将需要的准备工作都做好了，剩下的还有 Java 环境变量的设置，
+Tomcat 环境变量设置（非必须）和 Tomcat 的启动。
+#+BEGIN_SRC dockerfile
+COPY tomcat7.sh /app/tomcat7.sh
+RUN chmod +x /app/tomcat7.sh
+#+END_SRC
+
+上面的两行命令会将与 Dockerfile 同级目录的 tomcat7.sh 文件上传到 docker 容器中的
+/app 目录下，并且给该文件赋予可执行的权限。
+看一眼该脚本的内容便一目了然了。
+#+BEGIN_SRC bash
+# Java 环境变量配置
+export JAVA_HOME=/app/jdk1.7.0_65
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+
+# Tomcat 环境变量配置
+export TOMCAT_HOME=/app/apache-tomcat-7.0.8
+export PATH=$TOMCAT_HOME/bin:$PATH
+
+# 启动 Tomcat
+exec $TOMCAT_HOME/bin/catalina.sh run
+#+END_SRC
+
+*** （7）指定端口
+#+BEGIN_SRC dockerfile
+EXPOSE 8080
+#+END_SRC
+
+通常情况下，Tomcat 启动后会监听 8080 端口，在容器中也一样。
+EXPOSE 指令用于标明，这个镜像中的应用将会侦听某个端口，并且希望能将这个端口映射
+到主机的网络界面上
+
+*** （8）指定脚本的运行
+至此，我们要做的准备工作就做完了。使用下面这条命令，运行我们在 第 6 步 创建的脚
+本，一个简单的 Tomcat 的 Dockerfile 就编写完成了。
+#+BEGIN_SRC dockerfile
+ENTRYPOINT [“/app/tomcat7.sh"]
+#+END_SRC
+
+ENTRYPOINT 用于标明一个镜像作为容器运行时，最后要执行的程序或命令。
+
+** 3.构建镜像
+进入 Dockerfile 所在目录，运行命令:
+#+BEGIN_SRC bash
+docker build -t mytomcat .
+#+END_SRC
+
+(注意最后有个点用来表示当前目录，初次构建速度会比较慢，需要多等一会。)
+
+[[file:./images/docker-build-mytomcat.png]]
+
+出现如下信息就构建成功了
+[[file:./images/docker-build-mytomcat-success.png]]
+
+** 4.运行 Docker 容器
+#+BEGIN_SRC bash
+docker run -i -t -p 5000:8080 mytomcat
+#+END_SRC
+
+其中，docker run 用于运行一个容器
+
+- -t 在容器指定一个伪终端或者终端;
+- -i 进行命令交互;
+- -p 匹配镜像内的网络端口号,即我们可以通过宿主机中访问 5000 端口来达到访问容器
+  8080 端口的目的。
+
+** 5.查看构建好的镜像和运行的容器
+#+BEGIN_SRC bash
+docker images  #查看镜像
+#+END_SRC
+
+3.png1004x160 73.2 KB
+[[file:./images/docker-images.png]]
+
+#+BEGIN_SRC bash
+docker ps -a #查看所有的容器
+#+END_SRC
+
+4.png1004x67 38.4 KB
+[[file:./images/docker-ps--a.png]]
+
+** 6.查看服务是否运行
+在宿主机中我们输入 localhost:5000 访问，出现如下界面，表示 Tomcat 成功运行。
+
+5.png1004x434 146 KB
+[[file:./images/tomcat-page.png]]
+
+至此，我们就成功的创建了一个 Tomcat 镜像了，当然这里只是为了简单演示，所以镜像
+做的比较简单，官方的 Tomcat 镜像比这复杂的多，在熟悉了 Dockerfile 后可以去看看
+官方的做法。
+
+** 7.其他
+
+在做镜像的时候有那么多步骤，根本不可能一次将所有的步骤完成，所以，这里教给大家
+一个 小技巧。
+
+在编写完 Dockerfile 到第二步的时候，其实可以先使用一个脚本先运行着，然后进入容器
+内部进行操作。笔者在编写 Dockerfile 时先使用如下命令：
+#+BEGIN_SRC dockerfile
+COPY run.sh /app/run.sh
+RUN chmod +x /app/run.sh
+ENTRYPOINT [“/app/run.sh"]
+#+END_SRC
+
+run.sh 脚本的内容如下：
+#+BEGIN_SRC bash
+#!/bin/bash
+sleep 15
+while true
+do
+  echo "true"
+  sleep 180
+done
+#+END_SRC
+
+其实就是一段死循环代码代替原有的 tomcat7.sh，接着就可以 build 和 run 我们的容器
+了。容器运行起来后使用 docker exec -it container_id bash 进入 docker 容器。此时
+就和我们平时装软件的方式一样了，做完一个步骤，在 Dockerfile 中记录一条，这样
+Dockerfile 也就做出来了。(ps:exit 退出容器。)
+
+特别注意的一点，如果做好镜像以后，在镜像中有需要保存的数据（持久化目录）需要我们
+在 Dockerfile 中指定持久化目录。为了能够保存（持久化）数据以及共享容器间的数据，
+Docker 提出了 Volume 的概念。简单来说，Volume 就是目录或者文件，它可以绕过默认的
+联合文件系统，而以正常的文件或者目录的形式存在于宿主机上。并且我们运行容器的时候
+需要使用使用 -v 来声明 Volume，如：
+#+BEGIN_SRC bash
+docker run -it -v /home/dock/logs:/usr/logs tomcat /bin/bash
+#+END_SRC
+
+冒号前为宿主机目录，必须为绝对路径，冒号后为镜像内挂载的路径，这样容器内更改的
+数据就被写到宿主机上了。
+
+拥有了 Tomcat 服务器后，就可以跑写好的 java-web 程序了，如何运行 java-web 程序就
+不在此详述了，跟普通运行 java-web 程序一样。
+
+同样的，如果你有一个 web 应用，将其放入 Docker 容器中，写好 Dockerfile，构建好应
+用运行需要的环境后，就可以很快的使用应用了。
+
+Dockerfile 源码已放到好雨的 github 公共仓库了，上面有很多使用 Dockerfile 构建的
+项目。可以方便大家学习。地址：[[https://github.com/goodrain-apps/tomcat-demo][tomcat-demo4]]

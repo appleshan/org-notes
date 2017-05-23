@@ -1,0 +1,19 @@
+* 关闭 ssh 的 gssapi 认证
+vi /etc/ssh/ssh_config 注释掉如下两行
+
+GSSAPIAuthentication yes
+GSSAPIDelegateCredentials no
+
+* 关闭 ssh 的 UseDNS
+vi /etc/ssh/sshd_config
+
+注：Ubuntu 的 sshd_config 文件没有 UseDNS 参数，而据我了解，其它类*NIX、*BSD 操作系统的
+sshd_config 都有 UseDNS 参数，且它们缺省都是"UseDNS yes"，那估计 Ubuntu 的 sshd_config
+虽然没有 UseDNS，那它缺省也是"UseDNS yes"了。
+于是，在 sshd_config 末尾处插入如下行：
+
+UseDNS no
+
+然后执行指令"/etc/init.d/ssh restart"，重启 ssh 服务，配置生效。经测试，使用此方法后，
+ubuntu 的认证时间大大缩短，原来其登录认证一般耗时在 10 秒以上 15 秒左右，有些时候甚至
+达到 20 多秒到 30 秒左右，而经过此修改，Ubuntu的登录认证时间将会缩短在3秒以内。

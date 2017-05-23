@@ -1,8 +1,0 @@
-#+TITLE:Emacs Java flycheck
-
-* Emacs flycheck
-** https://github.com/flycheck/flycheck/issues/125
-** https://github.com/senny/emacs-eclim
-** https://github.com/akorobov/flycheck-java
-** https://github.com/calve/flycheck-infer
-*** https://github.com/facebook/infer

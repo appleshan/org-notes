@@ -34,6 +34,9 @@ Coding, Version-Control, Document, GTD, Email 都在 Emacs 里完成。
 *** 另外，java 的话，还是别用 emacs 了，java，groovy，Scala 都不太适合 emacs。
 ** Terminator
 ** git
+*** tig : https://github.com/jonas/tig
+字符模式下交互查看git项目，可以替代git命令。
+[[./images/tig.png]]
 ** unity-tweak-tool - Unity 配置工具
 ** fcitx - 拼音输入法
 *** fcitx-rime
@@ -51,7 +54,11 @@ doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without
 *** uget
 *** aria2
 *** youtube-dl
-*** axel
+*** axel : https://axel.alioth.debian.org/
+多线程下载工具，下载文件时可以替代curl、wget。
+运行以下命令：
+axel -n 20 http://centos.ustc.edu.cn/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso
+[[./images/axel.png]]
 ** PAC Manager - 远程管理工具
 ** F.lux
 一款根据当前时间调节屏幕颜色的软件。程序员晚睡强迫症的福音。
@@ -65,9 +72,11 @@ doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without
 ** CLI
 *** zsh
  shell 里面的战斗机
-**** [[http://ohmyz.sh/][oh-my-zsh]]
+**** oh-my-zsh : http://ohmyz.sh/ | https://github.com/robbyrussell/oh-my-zsh
  zsh 工具，你的终端你做主
-*** Tmux -  终端多路复用
+*** tmux : https://github.com/tmux/tmux
+终端多路复用，替代screen、nohup
+[[./images/tmux.png]]
 *** [[https://github.com/peco/peco][peco]] - Simplistic interactive filtering tool
 *** percol -  交互过滤文本
  python 开发的命令行工具,天才的作品
@@ -86,16 +95,22 @@ doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without
 *** dotfiles
  一个程序员一天可能 80% 的时间都在跟 shell 打交道，有个好的 shell(bash or zsh)，加上
  合理的 shell 配置绝对让效率提升一大截。
-*** htop - 进程管理的好助手
+*** htop : https://hisham.hm/htop/
+提供更美观、更方便的进程监控工具，替代top命令。
+[[./images/htop.png]]
 *** proxychains-ng(proxychains4)
- 命令行代理工具，配合科学上网，让没有代理设置的软件也可以正常联网。
+ 命令行 sock5 代理工具，配合科学上网，让没有代理设置的软件也可以正常联网。
  透明代理首选工具。
 *** shell 的所有命令行工具
  linux 命令行里面的所有工具都是精华，真的，用的熟悉的话可以很大程度上加快你的工作
  进度，linux 就像是一个数也数不清的优秀工具的大集合。
 *** full text search - 搜索代码超级快
-**** sift : https://github.com/svent/sift
-**** ag : https://github.com/ggreer/the_silver_searcher
+**** sift
+https://github.com/svent/sift
+**** ag
+比 grep、ack 跟快的递归搜索文件内容
+https://github.com/ggreer/the_silver_searcher
+[[./images/the_silver_searcher.png]]
 **** pt : https://github.com/monochromegane/the_platinum_searcher
 *** GnuPG -  加密，保护你的备份数据
 *** [[https://forwardhq.com/help/ssh-tunneling-how-to/][forward]]
@@ -113,11 +128,66 @@ doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without
 *** [[https://github.com/holys/redis-cli][redis-cli]]
 *** [[https://github.com/asciimoo/wuzz][wuzz]]
 Interactive cli tool for HTTP inspection
+** mysql
+*** mycli
+https://github.com/dbcli/mycli
+mysql客户端，支持语法高亮和命令补全，效果类似ipython，可以替代mysql命令。
+[[./images/mycli.png]]
+** jq : https://stedolan.github.io/jq/
+json文件处理以及格式化显示，支持高亮，可以替换python -m json.tool。
+[[./images/jq.png]]
+** mosh : https://mosh.org/#getting
+基于UDP的终端连接，可以替代ssh，连接更稳定，即使IP变了，也能自动重连。
+** fzf : https://github.com/junegunn/fzf
+命令行下模糊搜索工具，能够交互式智能搜索并选取文件或者内容，配合终端ctrl-r历史命令搜索简直完美。
+[[./images/fzf.png]]
+** PathPicker(fpp) : https://github.com/facebook/PathPicker
+在命令行输出中自动识别目录和文件，支持交互式，配合git非常有用。
+运行以下命令：
+git diff HEAD~8 --stat | fpp
+[[./images/fpp.png]]
+** sz/rz : https://github.com/mmastrac/iterm2-zmodem
+交互式文件传输，在多重跳板机下传输文件非常好用，不用一级一级传输。
+** cloc : http://cloc.sourceforge.net/
+代码行数统计工具，统计结果比较分类比较详细，支持大部分编程语言。
+[[./images/cloc-1.png]]
+[[./images/cloc-2.png]]
+** you-get : https://github.com/soimort/you-get
+非常强大的媒体下载工具，支持youtube、google+、优酷、芒果TV、腾讯视频、秒拍等视频下载。
+** PM2 : http://pm2.keymetrics.io/
+用以在后台运行和管理进程
+先放张刚截的图：
+[[./images/pm2-1.png]]
+可以看到我的 pm2 list 中有 aria2c，npm，gulp 和 hexo。
+后台运行担心看不到 log？pm2 也已经帮你考虑了：pm2 monit
+[[./images/pm2-monit.png]]
+这样就能看到全局的 log 啦。
+** enca
+detect and convert encoding of text files
+** tldr : https://github.com/tldr-pages/tldr
+如果你经常不想详读man文档，那么你应该试试这个小工具。
+** mackup : https://github.com/lra/mackup
+应用偏好设置备份和同步工具。支持多种云盘，支持大部分应用程序的配置文件（也可以自定义）。
+** moby : https://github.com/moby/moby
+** ansible : https://github.com/ansible/ansible
+** musicbox : https://github.com/darknessomi/musicbox
+** trash-cli
+一套命令集，用作shell下的回收站，包括以下几个命令
+- trash-put：删除文件
+- trash-empty：清空回收站
+- trash-restore：还原指定文件
+- trash-list：查看
+可以通过alias把rm指向trash-put，但建议直接禁止rm命令，使用trash-put的原生命令
+** screenfetch
+** pandoc
+文档转换工具
+** except
+可以实现自动化操作。
+
 * Windows
 尽量不要用 windows 进行开发，除非你只用 dotnet 开发软件，不然 osx/ubuntu 会是更好的
 开发平台。太多太多优秀的工具在 osx/ubuntu 下可以一键安装，在 windows 下却不得不花费
 超过一个甚至几个数量级的时间去安装，更别提有的工具 windows 压根没有替代品。
-
 ** 小狼毫输入法
 ** Babun
 windows 下面的 linux 命令行工具，就是在 CygWin 的基础上预先安装了一些命令行和美化
@@ -192,6 +262,7 @@ shadowsocks 翻墙服务。
 ** Termux
 ** 1Checker
 免费的英语写作辅助软件：1Checker（易改）。用来检查、修改文章中的单词和语法错误。
+
 * 开发
 ** Source Code Pro
 没有一个合适的等宽字体，都不想看电脑。
@@ -232,9 +303,21 @@ Toad for SQL Server
 線上 HTML, CSS, JS
 ** [[https://developers.google.com/speed/pagespeed/insights/][PageSpeed]]
 網頁測試分析工具
+** shellcheck : https://github.com/koalaman/shellcheck
+shell脚本静态检查工具，能够识别语法错误以及不规范的写法。
+[[./images/shellcheck.png]]
 ** pip - Python 程序安装程序
 python-pip
 python3-pip
+** yapf
+https://github.com/google/yapf
+Google开发的python代码格式规范化工具，支持pep8以及Google代码风格。
+** ccache : https://ccache.samba.org/
+高速C/C++编译缓存工具，反复编译内核非常有用。使用起来也非常方便：
+gcc foo.c
+改成:
+ccache gcc foo.c
+
 * 编程语言
 ** Common Lisp
 ** Emacs Lisp
@@ -250,6 +333,7 @@ Web 开发四件套：Django、Flask、Tornado、Gevent
 ** Golang
 ** Java
 ** Javascript
+
 * 科学上网
 翻越长城，放眼世界
 众所周知的原因，我们被关在了墙内。
@@ -258,9 +342,10 @@ Web 开发四件套：Django、Flask、Tornado、Gevent
 它能自动检测被墙网站，仅对这些网站使用二级代理。
 ** Shadowsocks
 科学上网目前首选的工具是 shadowsocks，它可以创建一个本地的 socks5 的代理。
-*** [[https://github.com/shadowsocks/shadowsocks-go][shadowsocks-go]]
+*** shadowsocks-go : https://github.com/shadowsocks/shadowsocks-go
 shadowsocks-go is a lightweight tunnel proxy which can help you get through firewalls. It is a port of shadowsocks.
 The protocol is compatible with the origin shadowsocks (if both have been upgraded to the latest version).
+*** shadowsocks-libev
 ** [[https://github.com/v2ray/v2ray-core][v2ray]] - 网络代理平台
 ** [[https://getlantern.org/][Lantern]]
 作为一个 P2P 的匿名科学上网工具，蓝灯免费带你飞跃长城！支持 Mac、Linux、Windows、
@@ -278,9 +363,11 @@ DNS 缓存
 DNS 加密查询 Open DNS
 *** [[https://github.com/shadowsocks/ChinaDNS][ChinaDNS]]
 此项目解决的是 DNS 污染问题
+
 * Hack
 ** [[http://www.norse-corp.com/][norse]]
 DDOS 地圖
+
 * 网络服务
 ** 源代码仓库
 *** [[https://github.com/][GitHub]]
@@ -382,6 +469,7 @@ https://wappalyzer.com/applications。
 *** [[https://www.qingcloud.com/][青云]]
 国内，可以用青云做替代品使用。青云的 Web Design 和工单服务当数一流，真正在为开发者
 解决各种实际问题。
+
 * 社群
 ** [[https://slack.com/][Slack]]
 各国小组讨论代替 Gmail Group
@@ -389,6 +477,7 @@ https://wappalyzer.com/applications。
 Github 交流
 ** [[http://v2ex.com/][V2EX]]
 码农社区
+
 * 日常外设
 ** gunnar
 眼镜

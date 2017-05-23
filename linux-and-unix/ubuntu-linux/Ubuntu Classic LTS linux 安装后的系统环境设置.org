@@ -1,0 +1,22 @@
+#+TITLE: Ubuntu Classic LTS linux 安装后的系统环境设置
+
+* 配置区域
+
+打开/etc/locale.gen文件，取消掉 en_US.UTF-8 和 zh_CN.UTF-8 的注释：
+
+$ sudo vi /etc/locale.gen
+
+然后重新生成一下区域信息：
+
+$ sudo locale-gen
+
+* 配置时间
+开启网络对时功能：
+$ timedatectl set-ntp true
+
+* 安装字体
+首先使用pacman搜索一下所有字体，然后安装所需的字体：
+$ apt search font
+
+强烈建议现在这里安装一种文泉中文字体，比如文泉微米黑，否则可能出现重启之后所有字体全变成方块的问题。
+$ sudo pacman -S wqy-microhei wqy-zenhei adobe-source-code-pro-fonts

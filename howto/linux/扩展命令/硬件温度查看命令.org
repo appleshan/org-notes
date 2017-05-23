@@ -1,7 +1,0 @@
-.1.查看硬盘温度
-$ sudo hddtemp /dev/sda
-
-.2.处理器核心平均温度
-$ sensors
-
-

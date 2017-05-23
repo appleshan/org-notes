@@ -1,0 +1,49 @@
+查看当前 IP 地址
+ifconfig eth0 |awk '/inet/ {split($2,x,":");print x[2]}'
+
+查看当前网卡的物理地址
+ifconfig eth0 | head -1 | awk '{print $5}'
+
+根据 IP 查电脑名
+nmblookup -A IP 地址
+
+查看当前监听 80 端口的程序
+lsof -i :80
+
+查看路由信息
+netstat -rn
+sudo route -n
+
+手工增加一条路由
+sudo route add -net 192.168.0.0 netmask 255.255.255.0 gw 172.16.0.1
+
+手工删除一条路由
+sudo route del -net 192.168.0.0 netmask 255.255.255.0 gw 172.16.0.1
+
+察看当前网络连接状况以及程序
+sudo netstat -atnp
+
+查看网络的当前流量
+#安装 ethstatus 软件
+sudo apt-get install ethstatus
+#查看 ADSL 的速度
+sudo ethstatus -i ppp0
+#查看 网卡 的速度
+sudo ethstatus -i eth0
+
+如何查看 HTTP 头
+w3m -dump_head http://www.example.com
+或 curl --head http://www.example.com
+
+从当前页面开始镜像整个网站到本地
+wget -r -p -np -k http://www.21cn.com
+· -r：在本机建立服务器端目录结构；
+· -p: 下载显示 HTML 文件的所有图片；
+· -np：只下载目标站点指定目录及其子目录的内容；
+· -k: 转换非相对链接为相对链接。
+
+查询网卡信息
+sudo nmcli dev list
+查询网关信息
+sudo nmcli dev list | grep gw
+

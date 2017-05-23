@@ -1,0 +1,37 @@
+手动安装 emacspeak [安装手册]
+
+1.下载 emacspeak-<version>.tar.gz, 解压缩到.emacs.d
+
+2.安装 build-depend
+  $ sudo apt-get build-dep emacspeak
+
+3.编译 emacspeak
+  $ cd ~/.emacs.d/emacspeak-<version>
+  $ make
+
+4.安装 voice server driver
+  4.1.apt-get
+      $ sudo apt-get install eflite
+
+  4.2.手动编译
+      $ sudo apt-get build-dep eflite libflite1 flite
+
+      $ cd ~/<build-path>
+
+      $ apt-get source eflite
+
+      $ cd eflite-<version>
+
+      $ ./configure --prefix=/opt/eflite-0.4.1/ flite_dir=/usr/src/flite-1.1-release flite_include_dir=/usr/include/flite/
+
+      # 可以通过调整 Makefile 文件中 FL_VOX 变量来设置默认 voice， 我使用 cmu_us_slt
+      $ make
+
+      $ make test
+
+      $ sudo make install
+
+5.编辑.emacs 文件
+(load-library "~/.emacs.d/emacspeak-<version>/lisp/emacspeak-setup.el")
+(setq dtk-program "~/<build-path>/eflite-<version>/eflite")
+(if (featurep 'emacspack) (dtk-set-rate 120))

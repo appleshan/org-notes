@@ -1,0 +1,28 @@
+node A_Server [
+A 服务器
+----
+内网
+====
+./rtcp.py c:localhost:22 c:222.2.2.2:10001
+....
+连接本地的22端口与B服务器的10001端口
+]
+node B_Server [
+B服务器
+----
+公网IP:222.2.2.2
+====
+./rtcp.py l:10001 l:10002
+....
+本地监听了10001与10002两个端口
+]
+node C_Server [
+C服务器
+====
+ssh 222.2.2.2 -p 10002
+....
+可以访问A服务器的22端口
+]
+
+A_Server -up-> B_Server
+C_Server -up-> B_Server

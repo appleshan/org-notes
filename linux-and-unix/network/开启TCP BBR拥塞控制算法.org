@@ -1,0 +1,114 @@
+#+TiTLE: 开启 TCP BBR 拥塞控制算法
+
+@see https://github.com/iMeiji/shadowsocks_install/wiki/%E5%BC%80%E5%90%AFTCP-BBR%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6%E7%AE%97%E6%B3%95
+
+BBR 目的是要尽量跑满带宽, 并且尽量不要有排队的情况, 效果并不比速锐差
+
+最新 4.9 内核已支持 tcp_bbr 下面简单讲述如何开启
+
+* Debian 8 / Ubuntu 14
+- 下载最新内核,最新内核查看 [[http://kernel.ubuntu.com/~kernel-ppa/mainline][这里]]
+#+BEGIN_SRC bash
+wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.9/linux-image-4.9.0-040900-generic_4.9.0-040900.201612111631_amd64.deb
+#+END_SRC
+
+- 安装内核
+#+BEGIN_SRC bash
+dpkg -i linux-image-4.9.0*.deb
+#+END_SRC
+
+- 删除旧内核(可选)
+#+BEGIN_SRC bash
+dpkg -l|grep linux-image
+apt-get purge 旧内核
+#+END_SRC
+
+- 更新 grub 系统引导文件并重启
+#+BEGIN_SRC bash
+update-grub
+reboot
+#+END_SRC
+
+* CentOS 6
+- 下载更换内核
+最新内核查看 [[http://elrepo.org/linux/kernel/el6/x86_64/RPMS/][这里]]
+#+BEGIN_SRC bash
+rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+rpm -Uvh http://www.elrepo.org/elrepo-release-6-6.el6.elrepo.noarch.rpm
+yum --enablerepo=elrepo-kernel install kernel-ml -y
+#+END_SRC
+
+- 查看内核是否安装成功
+#+BEGIN_SRC bash
+rpm -qa | grep kernel
+#+END_SRC
+
+- 删除旧内核(可选)
+#+BEGIN_SRC bash
+rpm -ev 旧内核
+#+END_SRC
+
+- 更新 grub 系统引导文件并重启
+#+BEGIN_SRC bash
+sed -i 's:default=.*:default=0:g' /etc/grub.conf
+reboot
+#+END_SRC
+
+开不了机的打开 vps 后台控制面板的 vnc, 开机卡在 grub 引导, 只需要手动选择内核就可以了
+
+* CentOS 7
+- 下载更换内核
+最新内核查看 [[http://elrepo.org/linux/kernel/el7/x86_64/RPMS/][这里]]
+#+BEGIN_SRC bash
+rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+yum --enablerepo=elrepo-kernel install kernel-ml -y
+#+END_SRC
+
+- 查看内核是否安装成功
+#+BEGIN_SRC bash
+rpm -qa | grep kernel
+#+END_SRC
+
+- 删除旧内核(可选)
+#+BEGIN_SRC bash
+rpm -ev 旧内核
+#+END_SRC
+
+- 更新 grub 系统引导文件并重启
+#+BEGIN_SRC bash
+egrep ^menuentry /etc/grub2.cfg | cut -f 2 -d \'
+grub2-set-default 0  #default 0 表示第一个内核设置为默认运行, 选择最新内核就对了
+reboot
+#+END_SRC
+
+- 注意，某些服务商（如 [[https://www.digitalocean.com/community/tutorials/how-to-update-a-digitalocean-server-s-kernel][Digital Ocean]]）可能需要首先将 VPS 配置为可自定义内核，然后 grub2 的配置才会生效。
+
+* 开启 bbr
+开机后 =uname -r= 看看是不是内核 4.9
+
+执行
+#+BEGIN_SRC bash
+echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+#+END_SRC
+
+保存生效
+#+BEGIN_SRC bash
+sysctl -p
+#+END_SRC
+
+执行
+#+BEGIN_SRC bash
+sysctl net.ipv4.tcp_available_congestion_control
+sysctl net.ipv4.tcp_congestion_control
+#+END_SRC
+
+如果结果都有 =bbr= , 则证明你的内核已开启 bbr
+
+执行
+#+BEGIN_SRC bash
+lsmod | grep bbr
+#+END_SRC
+
+看到有 tcp_bbr 模块即说明bbr已启动

@@ -1,6 +1,0 @@
-#+TITLE: 如何高效地批量替换
-
-第三方插件: visual-regexp
-
-直观的动画图：
-[[file:./query-replace-test.gif]]

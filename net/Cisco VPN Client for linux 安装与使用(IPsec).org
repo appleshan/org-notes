@@ -1,0 +1,50 @@
+Cisco VPN Client for linux 安装与使用(IPsec)
+
+* VPN Client For Window
+Cisco 一直有一个比较好的 Windows 客户端去拨 VPN，比如我现在用的
+Cisco Systems VPN Client Version 5.0.07.0290，
+但是他却一直没有出一个官方的比较合理的 linux 客户端。
+
+* VPN Client For Linux
+官网：http://projects.tuxx-home.at/?id=cisco_vpn_client
+
+** 1.下载 source code
+vpnclient-linux-x86_64-4.8.02.0030-k9.tar.gz
+[http://projects.tuxx-home.at/ciscovpn/clients/linux/4.8.02/vpnclient-linux-x86_64-4.8.02.0030-k9.tar.gz]
+
+** 2.下载 patch
+cisco-vpnclient-linux.tar.gz
+[http://download.csdn.net/detail/colinsun/4206065]
+
+** 3.解压 cisco-vpnclient
+cd /usr/local/src
+wget http://projects.tuxx-home.at/ciscovpn/clients/linux/4.8.02/vpnclient-linux-x86_64-4.8.02.0030-k9.tar.gz
+tar zxvf vpnclient-linux-x86_64-4.8.02.0030-k9.tar.gz
+
+** 4.打补丁
+cd /usr/local/src
+tar zxvf cisco-vpnclient-linux.tar.gz
+cd vpnclient
+patch < ../fixes-3.0.patch
+
+** 5.编译
+sudo ./vpn_install
+
+** 6.启动 vpnclient 服务
+sudo /etc/init.d/vpnclient_init start
+
+** 7.使用
+当一切安装结束之后：
+连接 VPN 的配置都在/etc/opt/cisco-vpnclient/Profiles 中，里面默认已经有一个叫做 simple.pcf 的模板文件，不过我们基本用不上。
+在其中加入一个新的配置 XXX.pcf（名字随意，主要是为了好识别这个 vpn 配置文件是连接哪的）。
+配置文件的内容参考使用 win 版 VPN client 连接之后，安装目录中 Profiles 内的 pcf 文件，直接复制即可
+
+拨通 vpn (XXX 为 Profile 目录下的自己定义的名字)
+vpnclient connect XXX
+
+例如：
+cp mycompany.pcf /etc/opt/cisco-vpnclient/Profiles/
+vpnclient connect mycomany
+
+#sudo nohup vpnclient connect bstrill > /tmp/vpnclient.out &
+
