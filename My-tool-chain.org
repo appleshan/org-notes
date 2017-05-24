@@ -35,7 +35,7 @@ Coding, Version-Control, Document, GTD, Email 都在 Emacs 里完成。
 ** Terminator
 ** git
 *** tig : https://github.com/jonas/tig
-字符模式下交互查看git项目，可以替代git命令。
+字符模式下交互查看 git 项目，可以替代 git 命令。
 [[./images/tig.png]]
 ** unity-tweak-tool - Unity 配置工具
 ** fcitx - 拼音输入法
@@ -55,7 +55,7 @@ doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without
 *** aria2
 *** youtube-dl
 *** axel : https://axel.alioth.debian.org/
-多线程下载工具，下载文件时可以替代curl、wget。
+多线程下载工具，下载文件时可以替代 curl、wget。
 运行以下命令：
 axel -n 20 http://centos.ustc.edu.cn/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso
 [[./images/axel.png]]
@@ -75,7 +75,7 @@ axel -n 20 http://centos.ustc.edu.cn/centos/7/isos/x86_64/CentOS-7-x86_64-Minima
 **** oh-my-zsh : http://ohmyz.sh/ | https://github.com/robbyrussell/oh-my-zsh
  zsh 工具，你的终端你做主
 *** tmux : https://github.com/tmux/tmux
-终端多路复用，替代screen、nohup
+终端多路复用，替代 screen、nohup
 [[./images/tmux.png]]
 *** [[https://github.com/peco/peco][peco]] - Simplistic interactive filtering tool
 *** percol -  交互过滤文本
@@ -96,7 +96,7 @@ axel -n 20 http://centos.ustc.edu.cn/centos/7/isos/x86_64/CentOS-7-x86_64-Minima
  一个程序员一天可能 80% 的时间都在跟 shell 打交道，有个好的 shell(bash or zsh)，加上
  合理的 shell 配置绝对让效率提升一大截。
 *** htop : https://hisham.hm/htop/
-提供更美观、更方便的进程监控工具，替代top命令。
+提供更美观、更方便的进程监控工具，替代 top 命令。
 [[./images/htop.png]]
 *** proxychains-ng(proxychains4)
  命令行 sock5 代理工具，配合科学上网，让没有代理设置的软件也可以正常联网。
@@ -131,18 +131,18 @@ Interactive cli tool for HTTP inspection
 ** mysql
 *** mycli
 https://github.com/dbcli/mycli
-mysql客户端，支持语法高亮和命令补全，效果类似ipython，可以替代mysql命令。
+mysql 客户端，支持语法高亮和命令补全，效果类似 ipython，可以替代 mysql 命令。
 [[./images/mycli.png]]
 ** jq : https://stedolan.github.io/jq/
-json文件处理以及格式化显示，支持高亮，可以替换python -m json.tool。
+json 文件处理以及格式化显示，支持高亮，可以替换 python -m json.tool。
 [[./images/jq.png]]
 ** mosh : https://mosh.org/#getting
-基于UDP的终端连接，可以替代ssh，连接更稳定，即使IP变了，也能自动重连。
+基于 UDP 的终端连接，可以替代 ssh，连接更稳定，即使 IP 变了，也能自动重连。
 ** fzf : https://github.com/junegunn/fzf
-命令行下模糊搜索工具，能够交互式智能搜索并选取文件或者内容，配合终端ctrl-r历史命令搜索简直完美。
+命令行下模糊搜索工具，能够交互式智能搜索并选取文件或者内容，配合终端 ctrl-r 历史命令搜索简直完美。
 [[./images/fzf.png]]
 ** PathPicker(fpp) : https://github.com/facebook/PathPicker
-在命令行输出中自动识别目录和文件，支持交互式，配合git非常有用。
+在命令行输出中自动识别目录和文件，支持交互式，配合 git 非常有用。
 运行以下命令：
 git diff HEAD~8 --stat | fpp
 [[./images/fpp.png]]
@@ -153,7 +153,7 @@ git diff HEAD~8 --stat | fpp
 [[./images/cloc-1.png]]
 [[./images/cloc-2.png]]
 ** you-get : https://github.com/soimort/you-get
-非常强大的媒体下载工具，支持youtube、google+、优酷、芒果TV、腾讯视频、秒拍等视频下载。
+非常强大的媒体下载工具，支持 youtube、google+、优酷、芒果 TV、腾讯视频、秒拍等视频下载。
 ** PM2 : http://pm2.keymetrics.io/
 用以在后台运行和管理进程
 先放张刚截的图：
@@ -165,19 +165,19 @@ git diff HEAD~8 --stat | fpp
 ** enca
 detect and convert encoding of text files
 ** tldr : https://github.com/tldr-pages/tldr
-如果你经常不想详读man文档，那么你应该试试这个小工具。
+如果你经常不想详读 man 文档，那么你应该试试这个小工具。
 ** mackup : https://github.com/lra/mackup
 应用偏好设置备份和同步工具。支持多种云盘，支持大部分应用程序的配置文件（也可以自定义）。
 ** moby : https://github.com/moby/moby
 ** ansible : https://github.com/ansible/ansible
 ** musicbox : https://github.com/darknessomi/musicbox
 ** trash-cli
-一套命令集，用作shell下的回收站，包括以下几个命令
+一套命令集，用作 shell 下的回收站，包括以下几个命令
 - trash-put：删除文件
 - trash-empty：清空回收站
 - trash-restore：还原指定文件
 - trash-list：查看
-可以通过alias把rm指向trash-put，但建议直接禁止rm命令，使用trash-put的原生命令
+可以通过 alias 把 rm 指向 trash-put，但建议直接禁止 rm 命令，使用 trash-put 的原生命令
 ** screenfetch
 ** pandoc
 文档转换工具
@@ -205,10 +205,13 @@ Telnet、SSH、rlogin 最方便
 在 Win 下必备，谁让 Win 资源管理器太...QT，TotalCommand 太重
 ** Beyond Compare
 文件/夹比较利器; 此款为所接触同类中最佳。
-** [[https://github.com/cmderdev/cmder/releases][Cmder]]
+** Cmder
+项目主页：http://cmder.net/
+源代码仓库：https://github.com/cmderdev/cmder/releases
 windows 下 cmd 的替换工具,支持 PowerShell;同比还有 PowerShell，ConEmu 等。对于
 Cmder 有在：Win 下必备神器之 Cmder 一文中予以总结。
-** [[https://git-for-windows.github.io/][Git for Windows]]
+** Git for Windows
+项目主页：https://git-for-windows.github.io/
 打包好了，直接使用；Git 一族必备。
 ** [[http://www.goodsync.com/][GoodSync]]
 文件同步好帮手。可以同步 本地文件 P2P 云(Dropbox,Google,OnDrive,FTP/SFTP 等等)，
@@ -304,16 +307,16 @@ Toad for SQL Server
 ** [[https://developers.google.com/speed/pagespeed/insights/][PageSpeed]]
 網頁測試分析工具
 ** shellcheck : https://github.com/koalaman/shellcheck
-shell脚本静态检查工具，能够识别语法错误以及不规范的写法。
+shell 脚本静态检查工具，能够识别语法错误以及不规范的写法。
 [[./images/shellcheck.png]]
 ** pip - Python 程序安装程序
 python-pip
 python3-pip
 ** yapf
 https://github.com/google/yapf
-Google开发的python代码格式规范化工具，支持pep8以及Google代码风格。
+Google 开发的 python 代码格式规范化工具，支持 pep8 以及 Google 代码风格。
 ** ccache : https://ccache.samba.org/
-高速C/C++编译缓存工具，反复编译内核非常有用。使用起来也非常方便：
+高速 C/C++编译缓存工具，反复编译内核非常有用。使用起来也非常方便：
 gcc foo.c
 改成:
 ccache gcc foo.c
