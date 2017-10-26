@@ -1,0 +1,359 @@
+#+TITLE: 搭建一台 Dnsmasq + DNSCrypt 的 DNS 服务器
+
+這篇日誌紀錄是我在 Ubuntu Linux 下配置 DNSCrypt + DNSMasq 的過程。
+
+* 0.方案
+** 两个工具：
+dnscrypt-proxy： 通过加密线路请求 DNS 解析
+dnsmasq：        DNS 缓存服务器
+
+** 监听端口：
+dnscrypt-proxy 监听 127.0.0.1:1053
+dnsmasq        监听 127.0.0.1:53
+
+** 大概流程：
+当我们发起一次 DNS 请求时，首先经过 127.0.0.1:53 向 dnsmasq 请求，如果 cache 里
+没有，dnsmasq 会通过 127.0.0.1:1053 向 dnscrypt-proxy 请求，dnscrypt-proxy 通过
+加密线路向世界各地提供此服务的 DNS 服务器请求解析.
+
+** 原理：
+    DNSCrypt 是 OpenDNS 推出的一個用來加密 DNS 請求的代理，用這個來繞開 GFW 的
+檢查。dnsmasq 是一款的 DNS 服務器，主要用其提供 DNS 緩存的功能。
+    我將用 dnsmasq 設置本地的 DNS 服務器，然後配置 dnsmasq 從 dnscrypt 獲得結果
+並返回給請求者。而 dnscrypt 會把來自 dnsmasq 的請求加密丟到 opendns 的服務器，
+然後把解析結果返回回來。
+    那麼 dnsmasq 將偵聽 53 端口，而 dnscrypt 的端口隨意，只要和 dnsmasq 裡的配置
+匹配就可以了。这里隨便用了 1053 作為 dnscrypt 的端口。
+    最後，把系統的 DNS 服務器設置為本機就可以了。
+
+* 1.DNSCrypt-proxy
+** 编译安装过程
+*** 编译安装依赖 libsodium
+**** 1. 下载源代码
+点击链接找最新的 [[https://download.libsodium.org/libsodium/releases/][tarball of libsodium]]，比如 libsodium-<version>.tar.gz
+
+**** 2. 验证完整性
+计算 SHA256:
+#+BEGIN_SRC bash
+openssl dgst -sha256 libsodium-<version>.tar.gz
+#+END_SRC
+
+使用 dig 验证 SHA256:
+#+BEGIN_SRC bash
+dig +dnssec +short txt libsodium-<version>.tar.gz.download.libsodium.org
+#+END_SRC
+
+如果匹配则继续下面的操作，否则去官方 GitHub 报告，不要继续进行
+
+**** 3. 编译安装
+#+BEGIN_SRC bash
+tar zxvf libsodium-<version>.tar.gz
+cd libsodium-<version>/
+./configure
+make -j CORE_NUMBER && make check
+sudo make install
+sudo ldconfig       /*   root 下重新载入模块  */
+#+END_SRC
+
+*** 编译安装 dnscrypt-proxy
+**** 1. 下载源代码
+从这里下载: [[https://github.com/jedisct1/dnscrypt-proxy/releases][dnscrypt download]]
+
+**** 2. 验证完整性
+计算 SHA256:
+#+BEGIN_SRC bash
+openssl dgst -sha256 dnscrypt-proxy-<version>.tar.bz2
+#+END_SRC
+
+使用 dig 验证 SHA256:
+#+BEGIN_SRC bash
+dig +dnssec TXT dnscrypt-proxy-<version>.tar.bz2.download.dnscrypt.org
+#+END_SRC
+
+如果匹配则继续下面的操作，否则去官方 GitHub 报告， *不要继续进行*
+
+**** 3. 编译安装
+在 Fedora, RHEL and CentOS 上安装 必须在 `ldconfig` 之前
+#+BEGIN_SRC bash
+su root
+echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
+ldconfig
+exit
+#+END_SRC
+
+Ubuntu 标准安装
+#+BEGIN_SRC bash
+bunzip2 -cd dnscrypt-proxy-*.tar.bz2 | tar xvf -
+cd dnscrypt-proxy-*/
+./configure --prefix=/opt/net/dnscrypt-proxy
+make -j CORE_NUMBER
+sudo make install
+sudo ldconfig
+#+END_SRC
+
+默认安装在 /usr/local/sbin/dnscrypt-proxy
+查看详细帮助信息
+#+BEGIN_SRC bash
+man 8 dnscrypt-proxy
+#+END_SRC
+
+** 启动脚本配置以及使用
+*** 1. 创建专用系统账户
+理论上都可以使用  未完全测试，建议创建带有空 home 目录的专用无权限系统账户
+#+BEGIN_SRC bash
+adduser --system --home /home/dnscrypt --disabled-password --disabled-login dnscrypt
+useradd --home-dir /home/dnscrypt --create-home --system --user-group dnscrypt
+#+END_SRC
+
+*** 2. 配置启动脚本
+创建脚本文件
+#+BEGIN_SRC bash
+touch /etc/init/dnscrypt.conf
+#+END_SRC
+
+脚本中不需要出现 daemon 的内容，比如这里的 --daemonize
+其中的 --resolver-name 可以在 [[https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv][public DNS resolvers supporting DNSCrypt]] 中的
+ Name 列找，目前使用的是 opendns 其中 --tcp-only 因为性能问题不建议使用，除非
+必须要用来突破 DNS 污染
+
+#+BEGIN_SRC conf
+description "dnscrypt startup script"
+
+start on (local-filesystems and started dbus and stopped udevtrigger)
+stop on runlevel [016]
+
+script
+    exec /usr/local/sbin/dnscrypt-proxy \
+         --resolver-name=cloudns-can \
+         --local-address=127.0.0.9:35535 \
+         --user=dnscrypt \
+         --logfile=/var/log/dnscrypt.log \
+         --pidfile=/var/run/dnscrypt.pid
+end script
+#+END_SRC conf
+
+之后软连接到 /etc/init.d 目录下
+#+BEGIN_SRC bash
+ln -s /lib/init/upstart-job /etc/init.d/dnscrypt
+#+END_SRC bash
+注： --resolver-name=cloudns-can 有 DNSSEC, No-log 和 Namecoin， 方便突破封鎖
+
+*** 3. 启动和停止
+#+BEGIN_SRC bash
+killall -KILL dnscrypt-proxy  // 或者使用 pid
+start dnscrypt                // 在 /etc/init.d 中的名称
+#+END_SRC
+
+* 2.DNSmasq
+** 禁用 Ubuntu 自带 DNSmasq
+#+BEGIN_SRC bash
+vim /etc/NetworkManager/NetworkManager.conf
+/* 把 dns=dnsmasq 注释掉，之后重启服务 */
+service network-manager restart
+#+END_SRC
+
+** 编译安装过程
+*** 1. 下载源代码
+从这里下载: [[http://www.thekelleys.org.uk/dnsmasq/][DNSmasq]] ，比如 dnsmasq-<version>.tar.gz
+
+*** 2. 编译安装
+Ubuntu 标准安装
+#+BEGIN_SRC bash
+tar zxvf dnsmasq-<version>.tar.gz
+cd dnsmasq-<version>/
+make -j CORE_NUMBER
+make install
+#+END_SRC
+
+默认安装在 /usr/local/sbin/dnsmasq
+
+查看详细帮助信息
+#+BEGIN_SRC bash
+man 8 dnsmasq
+#+END_SRC
+
+** 启动脚本配置以及使用
+*** 1. 创建专用系统账户
+理论上都可以使用  未完全测试，建议创建 带有空家目录的专用无权限系统账户
+#+BEGIN_SRC bash
+adduser --system --home /home/dnsmasq --disabled-password --disabled-login dnsmasq
+useradd --home-dir /home/dnsmasq --create-home --system --user-group dnsmasq
+#+END_SRC
+
+*** 2. 配置启动脚本
+创建脚本文件
+#+BEGIN_SRC bash
+# touch /etc/init/dnsmasq.conf
+#+END_SRC
+
+脚本中不需要出现 daemon 的内容
+#+BEGIN_SRC bash
+description "dnsmasq startup script"
+
+start on (local-filesystems and started dbus and stopped udevtrigger)
+stop on runlevel [016]
+
+script
+    exec /usr/local/sbin/dnsmasq --conf-file=/etc/dnsmasq.conf
+end script
+#+END_SRC
+
+之后软连接到 /etc/init.d 目录下
+#+BEGIN_SRC bash
+# ln -s /lib/init/upstart-job /etc/init.d/dnsmasq
+#+END_SRC
+
+*** 3. 启动和停止
+#+BEGIN_SRC bash
+# killall -KILL dnsmasq        // 或者使用 pid
+# start dnsmasq                // 在 /etc/init.d 中的名称
+#+END_SRC
+
+*** 4. 卸载
+#+BEGIN_SRC bash
+# make uninstall              // dnsmasq 一般没有 uninstall 字段
+# make clean
+$ chmod +x clean_compile_soft.py
+# ./clean_compile_soft.py
+#+END_SRC
+
+卸载脚本 clean_compile_soft.py 在 Scripts repository
+
+*** 5. 配置 dnsmasq
+NetworkManager 设置当前连接 DNS 为 127.0.0.1 即可使用本地 DNSmasq 进行解析和缓存
+
+创建默认位置配置文件
+#+BEGIN_SRC bash
+# touch /etc/dnsmasq.conf
+#+END_SRC
+
+我们可以把大量文本配置放在 /etc/dnsmasq.d 文件夹中，然后使用 conf-dir 选项指定配
+置文件目录，目录中不要放置其他文件，这样看起来也比较整洁。另外 dnsmasq 配置文件
+可参考我的 OpenWRT 配置
+#+BEGIN_SRC conf
+no-resolv
+no-poll
+all-servers
+
+conf-dir=/etc/dnsmasq.d
+user=dnsmasq
+group=dnsmasq
+
+listen-address=127.0.0.1
+
+# log for debug purpose
+# log-queries
+# log-facility=/var/log/dnsmasq.log
+
+# Find more rules there, including accelerate and ISP block rules
+#   (https://github.com/felixonmars/dnsmasq-china-list)
+
+# special forward rules
+server=/launchpad.net/8.8.8.8
+#+END_SRC
+
+* 2.配置
+这个部分是最麻烦的，因为需要根据地址不同，把国内地址和国外地址区分对待。幸亏有
+好心人做了一些工作，极大的减少我们的工作量。这个项目维护了一份中国地区大部分网站
+的地址。这个列表来可以帮助 DNSMasq 判断应该把 DNS 请求发向哪里。我们先要把里面
+的两个配置文件下载下来，创建 /usr/local/etc/dnsmasq.d 文件夹，把两个配置文件放到
+里面。
+
+** 2.1 配置 DNSMasq
+修改 /usr/local/etc/dnsmasq.conf :
+#+BEGIN_SRC conf
+# Configuration file for dnsmasq.
+#
+# Format is one option per line, legal options are the same
+# as the long options legal on the command line. See
+# "/usr/sbin/dnsmasq --help" or "man 8 dnsmasq" for details.
+
+# Custom development domains
+address=/.dev/127.0.0.1
+address=/.dom/127.0.0.1
+
+# Pass through DNSSEC validation results from dnscrypt-proxy.
+proxy-dnssec
+
+# 不读取有关解析的配置文件，默认使用/etc/revolve.conf 中的上游服务器地址进行解析
+# 这里我们把地址直接写在配置文件里，所以不需要这个了
+no-resolv
+# 不检查有关解析的配置文件更新（原因同上）
+no-poll
+# 配置文件路径，加载 dnsmasq-china-list 的那两个配置文件
+conf-dir=/usr/local/etc/dnsmasq.d
+# 附加 Hosts 文件，可有可无，我觉得以后可能还是需要用到 Hosts，就加入了这一行
+addn-hosts=/usr/local/etc/dnsmasq.hosts
+# 上游服务器设置成 DNSCrypt
+server=127.0.0.1#1053
+# 上游服务器设置成 Open DNS
+#server=8.8.4.4
+#server=8.8.8.8
+#server=178.79.131.110
+# 缓存大小，默认是 150，调大点应该没坏处
+cache-size=2000
+# 可以自行参照 man dnsmasq 里的内容继续添加别的参数
+#+END_SRC conf
+
+** 2.2 配置 DNSCrypt
+直接添加在启动脚本中 :
+# dnscrypt-proxy
+# 将端口从默认的 53 改为 40（或其他端口），为的是给 dnsmasq 让路。
+# 加上--daemonize 选项则将作为守护进程在后台运行。
+sudo dnscrypt-proxy \
+--local-address=127.0.0.1:1053 \
+--edns-payload-size=4096 \
+--user=dnscrypt \
+--resolver-address=208.67.220.220:443 \
+--provider-name=2.dnscrypt-cert.opendns.com \
+--provider-key=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79 \
+--daemonize
+
+** 2.3 增加国内网站 Dnsmasq 配置文件
+这是为了保证国内的网站域名不需要通过国外的 DNS 服务器进行解析.
+
+git clone https://github.com/felixonmars/dnsmasq-china-list.git
+cd dnsmasq-china-list
+ln -s ~/git/dnsmasq-china-list/accelerated-domains.china.conf /usr/local/etc/dnsmasq.d/
+ln -s ~/git/dnsmasq-china-list/bogus-nxdomain.china.conf /usr/local/etc/dnsmasq.d/
+
+小提醒，使用苹果硬件设备的同学，可以用 V2EX 提供的 DNS 对 Apple.com 进行加速，
+直接增加一个配置文件即可，比如新建一个 /etc/dnsmasq.d/apple.conf 增加
+
+server=/.apple.com/199.91.73.222
+
+* 3.启动
+** 启动 DNSCrypt
+sudo dnscrypt-proxy \
+--local-address=127.0.0.1:1053 \
+--edns-payload-size=4096 \
+--user=dnscrypt \
+--resolver-address=208.67.220.220:443 \
+--provider-name=2.dnscrypt-cert.opendns.com \
+--provider-key=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79 \
+--daemonize
+
+** 启动 dnsmasq
+sudo dnsmasq -C /usr/local/etc/dnsmasq.conf
+
+* 4.测试
+然後用 dig 測試之是否工作：
+
+** 测试 dnscrypt
+$ dig @127.0.0.1 -p 1053 twitter.com
+如果得到正確結果，則說明 dnscrypt 配置好了。
+
+** 测试 dnsmasq
+$ dig @127.0.0.1 -p 53 twitter.com
+沒問題的話就說明 dnsmasq 已經工作了。
+
+* 5.設置系統 DNS
+
+$ echo nameserver 127.0.0.1 | sudo gedit /etc/resolv.conf
+
+所以下一步，设定開機啟動！
+
+$ sudo rc-update add dnscrypt-proxy default
+$ sudo rc-update add dnsmasq default
+
+搞定，去玩吧。
