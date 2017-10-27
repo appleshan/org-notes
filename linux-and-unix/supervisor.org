@@ -1,0 +1,47 @@
+#+TITLE: Supervisor
+
+参考文献: http://supervisord.org/
+
+supervisor的文档比较丰富，建议使用时阅读官网手册。
+
+* 安装
+
+#+BEGIN_SRC bash
+easy_install supervisor
+#+END_SRC
+
+** 配置启动
+
+supervisor可以用不同的配置起多个服务，这里简单的起一份。
+
+首先生成默认配置文件
+
+#+BEGIN_SRC bash
+echo_supervisord_conf > supervisord.conf
+#+END_SRC
+
+修改一下
+
+#+BEGIN_SRC conf
+[supervisord]
+logfile=/tmp/supervisord.log ; 日志文件
+logfile_maxbytes=50MB        ; 超过50M就滚动日志
+logfile_backups=10           ; 滚动日志会删除，这里保留最新10份
+loglevel=info                ; 日志级别
+pidfile=/tmp/supervisord.pid ; supervisord的pid
+nodaemon=false               ; 是否前台运行
+minfds=1024                  ; 这个好啊，意思是当max open file小于1024时，会设置为1024，当设置不上去了，就直接报错
+minprocs=200                 ;类似同上
+[program:mytestcat]          ;mytestcat实际上是命令的组名了
+command=/bin/cat
+process_name=%(program_name)s_%(process_num)02d
+numprocs=2
+[program:mytestserver]
+command=/root/program1 2345
+#+END_SRC
+
+启动 supervisord
+
+#+BEGIN_SRC bash
+supervisord -c supervisord.conf
+#+END_SRC
