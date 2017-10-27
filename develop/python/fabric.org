@@ -1,0 +1,173 @@
+#+TITLE: fabric
+:description: "应用部署和系统管理工具"
+:category: "运维"
+:tags: [运维]
+
+* 简介
+
+官网: [[http://www.fabfile.org][fabric]]
+
+- 一个python库和命令行工具
+- 自动化应用部署和系统管理工具
+- 通过ssh方便的执行shell命令
+
+* 安装
+
+#+BEGIN_SRC bash
+pip install fabric
+or
+yum install fabric
+#+END_SRC
+
+详细安装参见： [[http://www.fabfile.org/installing.html][installing]]
+
+
+* hello，world
+
+#+BEGIN_SRC python
+def hello():
+    print("Hello world!")
+def hi(name="fengya"):
+    print("Hi %s!" % name)
+#+END_SRC
+
+结果：
+
+#+BEGIN_SRC bash
+$ fab hello
+Hello world!
+
+Done.
+
+$ fab hi
+Hi fengya!
+
+Done.
+
+$ fab hi:name=zhuzi
+Hi zhuzi!
+
+Done.
+
+$ fab hi:zhuzi
+Hi zhuzi!
+
+Done.
+#+END_SRC
+
+* 完整的例子
+
+涉及的api为
+
+#+BEGIN_SRC bash
+cd,run,sudo,put
+#+END_SRC
+
+完整的api参考官网。
+
+#+BEGIN_SRC python
+from fabric.api import *
+import os
+
+host_local = ['10.11.6.203']
+host_remote1 = ['10.11.6.204']
+host_remote2 = ['10.11.6.205']
+host_remote = []
+host_remote.extend(host_remote1)
+host_remote.extend(host_remote2)
+host_all = []
+host_all.extend(host_local)
+host_all.extend(host_remote)
+
+#env.hosts = host_remote
+env.port = xxx
+env.password = 'xxx'
+env.user = 'fengya'
+#env.warn_only = True
+env.roledefs = {
+    'local': host_local,
+    'remote1': host_remote1,
+    'remote2': host_remote2,
+    'remote': host_remote,
+    'all': host_all
+}
+
+@parallel
+def test():
+  with cd("/tmp"):
+    run("pwd")
+    put("/tmp/localfile1","remotefile1",mode=0777)
+  run("ls -l /tmp/remotefile1")
+  sudo("touch /tmp/remotefile2",user="zhuzi")
+  run("ls -l /tmp/remotefile2")
+#+END_SRC
+
+结果：
+
+#+BEGIN_SRC bash
+$ fab -R remote1  test
+[10.11.6.204] Executing task 'test'
+[10.11.6.204] run: pwd
+[10.11.6.204] out: /tmp
+[10.11.6.204] out:
+
+[10.11.6.204] put: /tmp/localfile1 -> /tmp/remotefile1
+[10.11.6.204] run: ls -l /tmp/remotefile1
+[10.11.6.204] out: -rwxrwxrwx 1 fengya hero 23 2016-02-02 15:08 /tmp/remotefile1
+[10.11.6.204] out:
+
+[10.11.6.204] sudo: touch /tmp/remotefile2
+[10.11.6.204] out: sudo password:
+[10.11.6.204] out:
+[10.11.6.204] run: ls -l /tmp/remotefile2
+[10.11.6.204] out: -rw-r--r-- 1 zhuzi hero 0 2016-02-02 15:08 /tmp/remotefile2
+[10.11.6.204] out:
+
+
+Done.
+
+$ fab -R remote  test
+[10.11.6.204] Executing task 'test'
+[10.11.6.205] Executing task 'test'
+[10.11.6.205] run: pwd
+[10.11.6.204] run: pwd
+[10.11.6.204] out: /tmp
+[10.11.6.204] out:
+
+[10.11.6.205] out: /tmp
+[10.11.6.205] out:
+
+[10.11.6.204] put: /tmp/localfile1 -> /tmp/remotefile1
+[10.11.6.204] run: ls -l /tmp/remotefile1
+[10.11.6.205] put: /tmp/localfile1 -> /tmp/remotefile1
+[10.11.6.205] run: ls -l /tmp/remotefile1
+[10.11.6.204] out: -rwxrwxrwx 1 fengya hero 23 2016-02-02 15:08 /tmp/remotefile1
+[10.11.6.204] out:
+
+[10.11.6.204] sudo: touch /tmp/remotefile2
+[10.11.6.205] out: -rwxrwxrwx 1 fengya hero 23 2016-02-02 15:08 /tmp/remotefile1
+[10.11.6.205] out:
+
+[10.11.6.205] sudo: touch /tmp/remotefile2
+[10.11.6.204] out: sudo password:
+[10.11.6.205] out: sudo password:
+[10.11.6.204] out:
+[10.11.6.204] run: ls -l /tmp/remotefile2
+[10.11.6.204] out: -rw-r--r-- 1 zhuzi hero 0 2016-02-02 15:08 /tmp/remotefile2
+[10.11.6.204] out:
+
+[10.11.6.205] out:
+[10.11.6.205] run: ls -l /tmp/remotefile2
+[10.11.6.205] out: -rw-r--r-- 1 zhuzi hero 0 2016-02-02 15:08 /tmp/remotefile2
+[10.11.6.205] out:
+
+
+Done.
+
+#+END_SRC
+
+* 一些其他零散的备忘
+
+#+BEGIN_SRC bash
+fab task1 task2 #一条fab命令可以跟多个任务
+#+END_SRC
