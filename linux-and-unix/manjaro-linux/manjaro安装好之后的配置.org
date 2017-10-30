@@ -79,13 +79,15 @@ ZSH_THEME="fino"
 
 * 安装一些工具
 
-# bash 的 Tab 自动补全
 sudo pacman -S vi
+sudo pacman -S w3m
 sudo pacman -S wget
 sudo pacman -S screenfetch
 sudo pacman -S shadowsocks-qt5
 sudo pacman -S ttf-hack
 sudo pacman -S adobe-source-code-pro-fonts
+
+sudo pip install percol
 
 * 安装 theme
 https://github.com/horst3180/Arc-theme
