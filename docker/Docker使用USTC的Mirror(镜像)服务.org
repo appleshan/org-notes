@@ -1,0 +1,55 @@
+#+TITLE: Docker使用USTC的Mirror(镜像)服务
+
+@see https://github.com/nkypy/blog/issues/14
+
+在国内pull docker hub 的 image 速度是很慢的,DaoCloud和阿里云都提供镜像服务,但是必须注册一个账号,对于我这种能少注册就少注册的,当然要找不需要注册的.
+随后我就发现了USTC提供的Docker Mirror(镜像)服务,Mirror 地址 https://docker.mirrors.ustc.edu.cn。速度还是很快的,我Arch Linux mirror也是使用的USTC Mirror,USTC真是广大用户福音.
+
+=新版 Docker=
+新版修改配置文件 /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\config\daemon.json（Windows）
+
+#+BEGIN_SRC json
+{
+  "registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"]
+}
+#+END_SRC
+
+=以下为过时的配置方法=
+最简单的使用镜像的方法就是修改docker.service.
+#+BEGIN_SRC conf
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network.target docker.socket
+Requires=docker.socket
+
+[Service]
+Type=notify
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+#ExecStart=/usr/bin/docker daemon -H fd://
+ExecStart=/usr/bin/docker daemon  -H fd:// -H tcp://127.0.0.1:2376 --registry-mirror=https://docker.mirrors.ustc.edu.cn
+MountFlags=slave
+LimitNOFILE=1048576
+LimitNPROC=1048576
+LimitCORE=infinity
+TimeoutStartSec=0
+# set delegate yes so that systemd does not reset the cgroups of docker containers
+Delegate=yes
+
+[Install]
+WantedBy=multi-user.target
+#+END_SRC
+
+主要是把原来的
+#+BEGIN_SRC conf
+ExecStart=/usr/bin/docker daemon -H fd://
+#+END_SRC
+
+注释掉,然后添加
+#+BEGIN_SRC conf
+ExecStart=/usr/bin/docker daemon  -H fd:// -H tcp://127.0.0.1:2376 --registry-mirror=https://docker.mirrors.ustc.edu.cn
+#+END_SRC
+
+这样之后systemctl daemon-reload,然后systemctl restart docker,随后就可以愉快的docker pull了.
