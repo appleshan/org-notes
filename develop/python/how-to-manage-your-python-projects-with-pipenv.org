@@ -1,0 +1,93 @@
+#+TITLE: how to manage your python projects with pipenv
+:description: "怎么使用 pipenv 管理你的 python 项目"
+:category: "python"
+:tags: [pipenv]
+
+    在thoughtbot，我们用Ruby和Rails工作，但通常我们总是尝试使用最合适的语言或者框架来解决问题。我最近一直在探索机器学习技术，所以Python使用地更多。
+
+    Ruby和Python项目处理有一个很大区别，就是对依赖关系的管理方式不同。目前在Python语言中，没有类似于Bundler或Gemfiles的东西，所以通常情况下Python开发人员使用Virtualenv创建一个虚拟环境，再创建一个依赖包列表requirements.txt，然后使用 Pip安装依赖项。
+
+    这种方法一般都会正常工作，但有时它也会表现出一些怪异的行为，因此你必须手动安装或删除某些特定版本的包，并记得定期更新requirements.txt文件，以保持项目环境的一致。特别是当你想要在你的虚拟环境中安装Python包，但它不一定与项目本身相关联。 此外，一些项目有时会保留requirements.txt文件的两个版本——一个用于开发环境，一个用于生产环境，这可能会导致更多的复杂性。
+
+    幸运的是，Kenneth Reitz的最新工具Pipenv可以用于简化Python项目中依赖项的管理。 它汇集了Pip，Pipfile和Virtualenv的功能，是一个强大的命令行工具。
+
+
+* 入门
+
+    首先使用pip安装Pipenv及其依赖项，
+#+BEGIN_SRC bash
+pip install pipenv
+#+END_SRC
+
+    然后将目录更改为包含你的Python项目的文件夹，并启动Pipenv，
+#+BEGIN_SRC bash
+cd my_project
+
+pipenv install
+#+END_SRC
+
+    这将在项目目录中创建两个新文件Pipfile和Pipfile.lock，如果项目不存在，则为项目创建一个新的虚拟环境。 如果你添加--two或--three标志到上面的最后一个命令，它分别使用Python 2或3来初始化你的项目。 否则将使用默认版本的Python。
+
+
+* 管理Python依赖关系
+
+    Pipfile包含关于项目的依赖包的信息，并取代通常在Python项目中使用的requirements.txt文件。 如果你在具有requirements.txt文件的项目中启动了Pipenv，则在把它从项目中删除之前，应该使用Pipenv安装该文件中列出的所有依赖包。
+
+    要为你的项目安装Python包，请使用install关键字。 例如，
+#+BEGIN_SRC bash
+pipenv install beautifulsoup4
+#+END_SRC
+    将安装当前版本的Beautiful Soup包。 可以使用uninstall关键字以类似的方式删除包，
+#+BEGIN_SRC bash
+pipenv uninstall beautifulsoup4
+#+END_SRC
+    可以通过更新Pipfile.lock来冻结软件包名称及其版本以及其自己的依赖关系的列表。 这是使用lock关键字完成的，
+#+BEGIN_SRC bash
+pipenv lock
+#+END_SRC
+   如果另一个用户克隆存储库，可以添加Pipfiles到你的Git存储库，这样他们只需要在他们的系统中安装Pipenv，然后键入，
+#+BEGIN_SRC bash
+pipenv install
+#+END_SRC
+    Pipenv会自动找到Pipfiles，创建一个新的虚拟环境，并安装必要的软件包。
+
+
+* 管理你的开发环境
+
+    通常有一些Python包只在你的开发环境中需要，而不是在你的生产环境中，例如单元测试包。 Pipenv将使用--dev标志保持两个环境分开。 例如，
+#+BEGIN_SRC bash
+pipenv install --dev nose2
+#+END_SRC
+    将安装nose2，但也将其关联为只在你的开发环境中需要的软件包。 这很有用，因为现在，如果你要在你的生产环境中安装你的项目，
+#+BEGIN_SRC bash
+pipenv install
+#+END_SRC
+    默认情况下不会安装nose2包。 但是，如果另一个开发人员将你的项目克隆到自己的开发环境中，他们可以使用--dev标志，
+#+BEGIN_SRC bash
+pipenv install –dev
+#+END_SRC
+    并安装所有依赖项，包括开发包。
+
+
+* 运行你的代码
+
+    为了激活与你的Python项目相关联的虚拟环境，你可以简单使用shell命令，比如，
+#+BEGIN_SRC bash
+pipenv run which python
+#+END_SRC
+    将在您的虚拟环境中运行which python命令，并显示与您的虚拟环境相关联的python可执行文件所在的路径。 这个功能是在虚拟环境中运行你自己的Python代码的一个整洁的方法，
+#+BEGIN_SRC bash
+pipenv run python my_project.py
+#+END_SRC
+   如果你不想每次运行Python时都输入这么多，你可以在shell中设置一个别名，例如，
+#+BEGIN_SRC bash
+alias prp="pipenv run python"
+#+END_SRC
+
+* 保持简单
+
+    我希望这篇文章已经告诉你如何管理你的Python项目与Pipenv。 它出现还不到一个月，所以我很有兴趣，看看它随着时间的推移如何发展。我当然不希望它变得完全像Ruby的Bundler，但我肯定会支持它，以简化Python项目中依赖的管理。 我希望你也这样！
+
+
+英文原文：https://robots.thoughtbot.com/how-to-manage-your-python-projects-with-pipenv 
+译者：jiong
