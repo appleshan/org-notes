@@ -1,0 +1,34 @@
+#+TITLE: 自动连接 ssh 并输入密码
+
+这年头不翻墙就看不到真像了，前几天整了个 ssh 代理，就研究了下自动登录。
+ssh 自动登录首选就是使用 key 了，可对方不干，那就只能使用密码了。自动输入密码可以用 expect。查这个的时候发现了一个 expect-lite，发现也挺有意思的，他把写 expect 脚本简单化了，比如想 send xxx，那就用 >xxxx 就行了，想 expect yyy 那就
+
+#+BEGIN_SRC bash
+spawn autossh -M 20000 -p SSH_PORT -N -D 7070 YOUR_NAME@YOUR_SERVER
+set timeout 60
+expect {
+     assword: {
+         stty -echo
+         send "YOUR_PASS\r"
+         stty echo
+         #exp_continue
+     }
+    incorrect {
+         send_user "invalid password or account\n"
+         exit
+     }
+    timeout {
+         send_user "connection to host timed out\n"
+         exit
+     }
+    eof {
+         send_user "connection to host failed\n"
+         exit
+     }
+}
+if {[fork]!=0} exit
+disconnect
+#+END_SRC
+
+那里面那个 autossh 能自动给你重连，没仔细研究。那个 20000 后面的参数都是给 ssh 的，具体含意可以看 ssh 的 man。
+最主要是最后那两行，能做到连接上之后主程序就退出了，不占用你的终端，而不影响 ssh 的连接。
