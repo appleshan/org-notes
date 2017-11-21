@@ -1,4 +1,4 @@
-#+TITLE:GitHub - Delete Commits History
+#+TITLE: GitHub - Delete Commits History
 
 Here are the git commands to clean up the messy, ugly commits history in a GitHub
 repository. This is like a repository reset.
