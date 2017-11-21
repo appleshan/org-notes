@@ -1,0 +1,27 @@
+#+TITLE: 如何删除 Github 上的项目的某一个 commit?
+
+@see http://notes.iissnan.com/2013/delete-specific-commit-git/
+
+如果不小心将账户密码或者私钥信息提交到了 [[http://github.com][Github]] 上，应该怎么删除那个提交呢？需要以下步骤：
+
+1. 首先，在本地仓库中移除这个提交，可以使用 git rebase -i 命令。
+如果带有重要信息的提交是最后一个提交，那么可以使用：
+
+#+BEGIN_EXAMPLE
+git rebase -i HEAD~2
+#+END_EXAMPLE
+
+删除掉对应的提交后保存退出。
+
+
+
+2. 强制更新 Github上 的分支，有两种方法：
+
+#+BEGIN_EXAMPLE
+git push origin +master # 方法一，使用+强制更新
+git push -f origin HEAD^:master # 方法二，使用-f参数
+#+END_EXAMPLE
+
+参考：
+
+[[http://stackoverflow.com/questions/448919/how-can-i-remove-a-commit-on-github][How do remove a commit on Github?]]
