@@ -1,0 +1,6 @@
+学习一门语言最重要的是5点:
+1. syntax
+2. semantics
+3. idioms
+4. libraries
+5. tools

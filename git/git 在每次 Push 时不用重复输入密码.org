@@ -1,0 +1,14 @@
+git 在每次 Push 时不用重复输入密码
+
+
+1. SSH 协议
+使用 SSH 方式进行推送，您需要配置 SSH 公钥后进行操作，详情请阅读 SSH 公钥配置文档
+
+2. Https 协议
+首先在全局配置保存你的密码， ~/.git-credentials （没有就创建），
+内添加 https://{username}:{passwd}@git.coding.net，
+然后执行配置 Git 命令存储认 证命令：
+
+git config –global credential.helper store
+
+执行后在 ~/.gitconfig 文件会多出下面配置项: credential.helper = store

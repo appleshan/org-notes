@@ -77,21 +77,104 @@ cat /etc/shells
 # random bira blinks fino gnzh rkj-repos tjkirch xiong-chiamiov-plus ys
 ZSH_THEME="fino"
 
+# 开启 archlinux 插件
+plugins=(archlinux)
+
+* 安装驱动程序
+
+** 显卡驱动
+
+查询显卡类型：
+
+$ lspci | grep VGA
+查询可用的开源驱动：
+
+$ pacman -Ss xf86-video | less
+安装通用驱动（vesa）：
+
+$ pacman -S xf86-video-vesa
+支持硬件加速的驱动程序可以在安装 X 时自动提示你安装，只需要选择正确的显卡类型，不需要显式安装。
+
+** 声卡驱动
+通常不需要配置就能工作，只需解除静音。需要做的只是安装 alsa-utils 软件包：
+
+$ pacman -S alsa-utils
+
+** 输入设备驱动
+$ pacman -S xf86-input-vmmouse
+
+** 安装显示驱动程序包
+@see https://hyjk2000.github.io/2014/01/23/arch-linux-install-guide/
+如果是在 VMware 中安装的 linux，就安装专门用于虚拟机的 xf86-video-vmware 驱动程序：
+
+$ pacman -S xf86-video-vmware svga-dri
+
+** 安装 VMware Tools
+在 VMware 中选择“安装 VMware Tools”，然后：
+
+$ pacman -S linux-headers
+$ for x in {0..6}; do mkdir -pv /etc/init.d/rc$x.d; done
+$ mount /dev/cdrom /mnt
+$ cd /root
+$ tar zxf /mnt/VMwareTools*.tar.gz
+$ cd vmware-tools-distrib
+$ ./vmware-install.pl
+按提示一步步进行，如果最后报错，一般也不用担心，重启后 VMware Tools 能正确启动。
+
+
 * 安装一些工具
 
-sudo pacman -S vi
-sudo pacman -S w3m
-sudo pacman -S wget
-sudo pacman -S screenfetch
-sudo pacman -S shadowsocks-qt5
-sudo pacman -S ttf-hack
-sudo pacman -S adobe-source-code-pro-fonts
+pacin vi
+pacin w3m
+pacin wget
+pacin axel
+pacin tmux
+pacin bind-utils
+pacin unbound
+pacin screenfetch
+pacin shadowsocks-qt5
+pacin the_silver_searcher
 
+pacin cloc
+pacin jq
+pacin tig
+pacin shellcheck
+
+pacin yaourt
+
+pip install --user pipenv
+
+sudo pip install ipython
+sudo pip install ptpython
+sudo pip install pythonpy
+sudo pip install pygments
+sudo pip install ansible
 sudo pip install percol
+sudo pip install rm-protection
+
+# tldr
+mkdir -p ~/bin
+curl -o ~/bin/tldr https://raw.githubusercontent.com/raylee/tldr/master/tldr
+chmod +x ~/bin/tldr
+
+** docker
+Installation:
+sudo pacman -S docker
+
+Starting Docker:
+
+There is a systemd service unit created for docker. To start the docker service:
+
+sudo systemctl start docker
+
+To start on system boot:
+
+sudo systemctl enable docker
+
 
 * 安装 theme
 https://github.com/horst3180/Arc-theme
-sudo pacman -S arc-gtk-theme
+pacin arc-gtk-theme
 
 * 时间同步
 
@@ -242,6 +325,11 @@ GLXVersion: 3.0 Mesa 11.2.2
 
 更多的字体可以在 https://wiki.archlinux.org/index.php/Fonts_(简体中文) 找到。
 
+
+pacin adobe-source-code-pro-fonts
+pacin ttf-hack wqy-zenhei wqy-microhei
+
+
 * 字体显示效果
 设置好源和驱动以后我们还要折腾两个东西，首先是字体显示效果：
 如果你使用的是xfce版，那么先在设置—外观里调整到像这样：
@@ -291,7 +379,7 @@ Xft.lcdfilter: lcddefault
 （5）重启系统，你就会看到效果了。
 
 * 解决屏幕撕裂（tearing）问题，对于xfce桌面：
-（1）安装Compton，在终端输入以下命令：sudo pacman -S compton
+（1）安装Compton，在终端输入以下命令：pacin compton
 （2）配置Compton，sudo nano ~/.config/compton.conf,把以下代码黏贴进去：
 backend = "glx";
 paint-on-overlay = true;
@@ -360,10 +448,10 @@ Hidden=false
 
 （2）通过命令安装/卸载软件：
 安装软件命令（package_name即是指软件名字，如firefox）：
-sudo pacman -S package_name
+pacin package_name
 
 卸载软件命令：
-sudo pacman -R package_name
+pacre package_name
 
 卸载软件＋不需要的依赖（类似sudo apt autoremove）：
 sudo pacman -Rs package_name
@@ -371,9 +459,9 @@ sudo pacman -Rs package_name
 * 安装中文输入法
 
 ** 8.1 以安装搜狗为例
-sudo pacman -S fcitx-sogoupinyin
-sudo pacman -S fcitx-im
-sudo pacman -S fcitx-configtool # 图形化的配置工具
+pacin fcitx-sogoupinyin
+pacin fcitx-im
+pacin fcitx-configtool # 图形化的配置工具
 
 ** 8.2 设置中文输入法环境变量，否则中文输入法无法启动
 # 需要修改配置文件 `~/.xprofile`
@@ -412,3 +500,52 @@ yaourt -S android-studio
 #模拟器
 yaourt -S genymotion
 
+* 一些优化
+
+** SATA 启用 AHCI 模式
+
+SATA 有两种工作模式：原生的 AHCI 模式提供更好的性能（如热插拔和 NCQ 支持）、模拟的 IDE 模式提供更好的兼容性。一般主板出厂默认将 SATA 模式设置为 IDE 模式，但如今先进的 Linux 和 Windows 都早已原生支持 AHCI，所以我们最好打开 AHCI 模式以优化性能。
+
+Arch Linux 在安装好以后，内核镜像默认没有载入 AHCI 驱动模块。修改 /etc/mkinitcpio.conf，添加 ahci 到 MODULES 变量：
+
+MODULES="ahci"
+然后重建内核镜像，重新启动后 AHCI 驱动就会加载：
+
+$ mkinitcpio -p linux
+在主板 UEFI 或 BIOS 中，将 SATA 模式从 IDE（或 PATA Emulation 等等），设置为 AHCI（或 Native 等等）。
+
+设置好以后，你可以从 dmesg 命令的输出里，找到 AHCI 和 NCQ 成功启用的证据：
+
+$ dmesg
+...
+SCSI subsystem initialized
+libata version 3.00 loaded.
+ahci 0000:00:1f.2: version 3.0
+ahci 0000:00:1f.2: irq 24 for MSI/MSI-X
+ahci 0000:00:1f.2: AHCI 0001.0300 32 slots 6 ports 6 Gbps 0x10 impl SATA mode
+ahci 0000:00:1f.2: flags: 64bit ncq led clo pio slum part ems apst
+scsi host0: ahci
+scsi host1: ahci
+scsi host2: ahci
+scsi host3: ahci
+scsi host4: ahci
+scsi host5: ahci
+...
+ata5.00: 976773168 sectors, multi 16: LBA48 NCQ (depth 31/32), AA
+...
+
+
+** 优化系统启动速度
+
+Arch Linux 的 systemd-analyze 是个很不错的工具，利用它你可以很直观地观察到系统启动的时间都花到哪儿去了：
+
+$ systemd-analyze
+Startup finished in 6.857s (firmware) + 3.157s (loader) + 1.870s (kernel) + 8.157s (userspace) = 20.044s
+我注意到打开 AHCI 后，内核和用户空间的载入速度明显提高了，总启动时间从约 30 秒缩短到 20 秒，效果非常明显。
+
+用下面这个命令，可以了解到是什么东西启动最慢：
+
+$ systemd-analyze blame
+此外，还可以把启动过程绘制成 SVG 图表供你审阅（用 GNOME 的图片预览或 Chrome 浏览器都可以打开），这个图表中你还可以观察到是否有启动慢的组件影响到了依赖它的组件的启动：
+
+$ systemd-analyze plot > plot.svg

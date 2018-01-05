@@ -1,0 +1,56 @@
+#+TITLE:Development environment for Linux machines
+
+* Install the essentials
+
+#+BEGIN_SRC bash
+sudo pacman -Syy
+sudo pacman -Syu
+sudo pacman -S build-essential cmake exuberant-ctags docker zsh tmux vim htop pv enca parallel tree jq -y
+#+END_SRC
+
+- build-essential
+  软件编译工具集，用于以后从源代码编译和安装软件。
+
+- cmake
+  CMake是个开源的跨平台自动化建构系统，它用配置文件控制建构过程（build process）的方式和Unix的Make相似，只是CMake的配置文件
+  取名为CMakeLists.txt。
+
+- exuberant-ctags
+ctags 为源代码产生标签文件。
+Exuberant Ctags最初由Darren Hiebert编写并随Vim发布，但在Vim6时独立出来为一个项目，它提供了对更多的编程语言
+（支持多达41种语言，并可以添加自定义语言），同时兼 容原始Ctags的索引文件格式。
+
+- docker
+
+- pv
+  显示当前在命令行执行的命令的进度信息
+
+- enca
+  Linux下使用enca查看文件编码并转换
+
+- parallel
+  并行执行Linux命令
+
+* Install miniconda
+
+#+BEGIN_SRC bash
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash ./Miniconda3-latest-Linux-x86_64.sh
+rm -rf ./Miniconda3-latest-Linux-x86_64.sh
+#+END_SRC
+
+* Install oh-my-zsh
+
+#+BEGIN_SRC bash
+sh -c "$(curl -fsSL https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh)"
+USER=$(whoami)
+sudo chsh -s `which zsh` $USER
+#+END_SRC
+
+* Configure the system
+
+** Start tmux automatically with the shell
+
+#+BEGIN_SRC bash
+echo "if command -v tmux>/dev/null; then [[ ! xterm-256color =~ screen ]] && [ -z  ] && exec tmux attach; fi" >> ~/.zshrc
+#+END_SRC

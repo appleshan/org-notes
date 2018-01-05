@@ -1,0 +1,483 @@
+#+TITLE: the-python-way
+#+AUTHOR: lujun9972
+#+CATEGORY: Python
+#+DATE: [2016-05-01 日 10:14]
+#+OPTIONS: ^:{}
+
+* Pythonic Code
+** Python 代码规范
++ 包和模块的命名采用小谢,单数形式,而且短小
++ 包仅作为命名空间,即只包含空的__init__.py 文件
+** for 循环
+python 的 ~for~ 与 C++中的 for 是不同的,它专指 "for each"
+
++ 若只想遍历 list 中的元素,只需要使用 =for in= 便利即可
+
+  #+BEGIN_SRC python
+    for i in ['a', 'b', 'c']:
+        print(i)
+  #+END_SRC
+
+  #+RESULTS:
+  : a
+  : b
+  : c
+
++ 若想同时遍历多个 list,使用 ~for~ 与 ~zip~ 组合
+  #+BEGIN_SRC python
+    l1 = ["a", "b", "c", "d", "e"]
+    l2 = ["A", "B", "C", "D", "E"]
+    l3 = ["甲", "乙", "丙", "丁", "戊"]
+
+    for i in zip(l1, l2, l3):
+        print(i)
+  #+END_SRC
+
+  #+RESULTS:
+  : ('a', 'A', '甲')
+  : ('b', 'B', '乙')
+  : ('c', 'C', '丙')
+  : ('d', 'D', '丁')
+  : ('e', 'E', '戊')
+
++ 若想便利 list 中的元素同时还需要元素的索引,使用 ~for~ 与 ~enumerate~
+  #+BEGIN_SRC python
+    l1 = ["a", "b", "c", "d", "e"]
+
+    for index, value in enumerate(l1, start=1):
+        print(index, value)
+  #+END_SRC
+
+  #+RESULTS:
+  : 1 a
+  : 2 b
+  : 3 c
+  : 4 d
+  : 5 e
+
+** 连续比较
+这是诸多语言中少有的简便方法
+#+BEGIN_SRC python
+  print(3 > 2 > 1 > 0)
+  print(1 < 2 > 0)
+#+END_SRC
+
+#+RESULTS:
+: True
+: True
+
+** 交换变量
+Python 支持直接交换变量
+#+BEGIN_SRC python
+  a, b = 1, 2
+  print(a, b)
+  a, b = b, a
+  print(a, b)
+#+END_SRC
+
+#+RESULTS:
+: 1 2
+: 2 1
+
+** 格式化输出
+一般使用 string 的 format 方法进行格式化输出
+#+BEGIN_SRC python
+  # {}的内容会被 format()中的参赛所替代
+  print('{} is a {}'.format('Cescfangs', 'gooner'))
+
+  # 可以在{}里填上数字来指定 format()中的第几个参赛
+  print('{1} is a {0}'.format('gooner', 'Cescfangs'))
+
+  # 若{}里填上的是参数名,则会使用 format 中的同名函数的值
+  print('{Ramsey} is a {gunner}'.format(gunner='gooner', Ramsey='Cescfangs'))
+
+  # 还可以使用:对输出的范围进行控制,我们输出 pi 的小数点后三位
+  import math
+  print('value of pi is {0:.3f}'.format(math.pi))
+
+  # :还可以起到输出固定位数的作用
+  arsenal = {'Ramsey': 16, 'Rosciky': 7, 'Chambers': 21, 'Ozil': 11}
+  for player, number in arsenal.items():
+      print('{0:10}-->{1:3d}'.format(player, number))
+#+END_SRC
+
+#+RESULTS:
+: Cescfangs is a gooner
+: Cescfangs is a gooner
+: Cescfangs is a gooner
+: value of pi is 3.142
+: Chambers  --> 21
+: Ozil      --> 11
+: Ramsey    --> 16
+: Rosciky   -->  7
+
+** ++i 不等于 i+=1
+Python 不支持 =++/--= 操作,因此会将 =++i= 解释成 =+(+i)= ,其中+表示正数符号.
+#+BEGIN_SRC python
+  i = 1
+  print(+1)
+  print(++1)
+  print(+++1)
+#+END_SRC
+
+#+RESULTS:
+: 1
+: 1
+: 1
+
+对于 =--i= 也是类似
+
+** 使用 with 自动关闭资源
+with 语句的语法为:
+#+BEGIN_SRC python
+  with expr1 [as e1[,expr2 as e2]]:
+      codes
+#+END_SRC
+
+其中 expr 应该返回一个上下文对象,这个对象定义了 =__exit__()= 和 =__exit__()= 方法
+
++ __enter__()
+
+  进入运行时的上下文,返回运行时上下文相关的对象,with 语句会将这个返回值绑定到目标对象上.
+
++ __exit__(exception_type,exception_value,traceback)
+
+  退出运行时的上下文,定义在 code 执行之后上下文管理器应该做什么.
+
+为了更好地辅助上下文管理, Python 还提供了 contextlib 模块, 该模块中的
+ contentmanager 作为装饰器可以提供一种针对函数 j 级别的上下文管理机制, 可以直接
+作用于函数/对象而不用去关心 __enter()__ 和 __exit__() 方法的具体实现
+
+** 三元操作符"?:"
+
+Python 本身不支持三元操作符 =?:= . =C?X:Y= 在 Python 中等价形式为 =X if C else Y=
+#+BEGIN_SRC python
+  X = 0
+  Y = -2
+  print(X if X < Y else Y)
+#+END_SRC
+
+#+RESULTS:
+: -2
+
+** switch..case
+Python 中没有 C 语言那样的 =switch..case= 分支语句. 一般使用 =if..elif..else= 语
+句代替, 会使用跳转表来实现:
+#+BEGIN_SRC python
+  def f(x):
+      return {
+          0: "You typed zero.",
+          1: "You typed one.",
+          2: "You typed two."
+      }.get(x, "You Typed Other Number")
+
+
+  print(f(1))
+  print(f(3))
+#+END_SRC
+
+#+RESULTS:
+: You typed one.
+: You Typed Other Number
+
+** 快速交换一个字典的键和值
+使用字典推导式可以快速交换一个字典的键和值:
+#+BEGIN_SRC python
+  some_dict = {1: "a", 2: "b", 3: "c"}
+  {v: k for k, v in some_dict.items()}
+#+END_SRC
+
+#+RESULTS:
+:
+: {'c': 3, 'a': 1, 'b': 2}
+
+** 快速碾平一个列表
+可以通过使用 itertools 包中的 itertools.chain.from_iterable 轻松快速的辗平一个列表:
+#+BEGIN_SRC python
+  import itertools
+  a_list = [[1, 2], [3, 4], [5, 6]]
+  print(list(itertools.chain.from_iterable(a_list)))
+  print(list(itertools.chain(*a_list)))
+#+END_SRC
+
+#+RESULTS:
+:
+: [1, 2, 3, 4, 5, 6]
+: [1, 2, 3, 4, 5, 6]
+
+** 函数缓存
+函数缓存允许我们将函数对于给定参数的返回值缓存起来.
+在 Python3.2 以后版本,有个 lru_cache 的装饰器,允许我们将一个函数的返回值快速地缓存或取消缓存
+#+BEGIN_SRC python
+  from functools import lru_cache
+
+
+  @lru_cache(maxsize=32)
+  def fib(n):
+      if n < 2:
+          return n
+      return fib(n-1) + fib(n-2)
+#+END_SRC
+
+那个 maxsize 参数是告诉 lru_cache，最多缓存最近多少个返回值。
+我们也可以轻松地对返回值清空缓存:
+#+BEGIN_SRC python
+  fib.cache_clear()
+#+END_SRC
+
+若使用的是 python2,则需要自己创建缓存机制,也很容易
+#+BEGIN_SRC python
+  from functools import wraps
+
+
+  def memoize(function):
+      memo = {}
+
+      @wraps(function)
+      def wrapper(*args):
+          if args in memo:
+              return memo[args]
+          else:
+              rv = function(*args)
+              memo[args] = rv
+              return rv
+      return wrapper
+
+
+  @memoize
+  def fibonacci(n):
+      if n < 2:
+          return n
+      return fibonacci(n - 1) + fibonacci(n - 2)
+#+END_SRC
+** 使用推导式代替循环
+当出现如下类似的代码时,考虑改写成列表推导式
+#+BEGIN_SRC python
+  evens = []
+  for i in range(10):
+      if i % 2 == 0:
+          evens.append(i)
+
+  print(evens)
+#+END_SRC
+
+#+RESULTS:
+: [0, 2, 4, 6, 8]
+
+写成列表推导式的形式为:
+#+BEGIN_SRC python
+  evens = [i for i in range(10) if i % 2 == 0]
+  print(evens)
+#+END_SRC
+
+#+RESULTS:
+: [0, 2, 4, 6, 8]
+
+使用列表推导式的写法除了高效外,也更加简短,容易理解.
+** 使用生成器替代大的序列
+使用生成器可以不用将整个序列内容放入内存,从而节省内存开销.
+** 使用 collections.namedtuple 模拟结构体
+namedtuple 可以用来创建一些小的像类一样的数据结构来保存数据但无需任何关联逻辑
+(类似 C 语言中的 struct), 且如果之后需要添加逻辑的话, 将其转换成一个普通类即可.
+* 内部机理
+
+** with 语句
+
+包含 with 语句的代码看的执行过程如下:
+
+1. 计算表达式的值,它会返回一个上下文管理器对象
+2. 加载上下文管理器对象的 =__exit_()= 方法以备后用
+3. 调用上下文管理器对象的 =__enter__()= 方法
+4. 如果 with 语句中设置了目标对象,则将 =__enter__()= 方法的返回值赋值给目标对象
+5. 执行 with 中的代码看
+6. 若步骤 5 中的代码正常结束, 调用上下文管理器对象的 =__exit__()= 方法, 其返回值
+   被忽略
+7. 若步骤 5 中的代码执行过程发生异常, 调用上下文管理器对象的 =__exit__()= 方法,
+   并将异常类型, 值以及 traceback 信息作为参数传递给 =__exit__()= 方法. 如果
+   =__exit__()= 返回值为 false, 则异常会被重新抛出, 如果返回值为 true, 异常被
+   挂起, 程序继续执行.
+
+有两种实现上下文管理器的方式
+
+*** 基于类的上下文管理器的实现
+一个上下文管理器的类，最起码要定义 =__enter__= 和 =__exit__= 方法.
+#+BEGIN_SRC python
+  class File(object):
+      def __init__(self, file_name, method):
+          self.file_obj = open(file_name, method)
+
+      def __enter__(self):
+          return self.file_obj
+
+      def __exit__(self, type, value, traceback):
+          self.file_obj.close()
+
+
+  with File('/tmp/demo.txt', 'w') as opened_file:
+      opened_file.write("Hola!")
+#+END_SRC
+
+*** 基于生成器的上下文管理器的实现
+我们还可以基于装饰器(decorators)和生成器(generators)来实现上下文管理器.
+Python 有个 contextlib 模块专门用于这个目的。我们可以使用一个生成器函数来实现一个上下文管理器，而不是使用一个类.
+#+BEGIN_SRC python
+  from contextlib import contextmanager
+
+
+  @contextmanager
+  def open_file(name):
+      f = open(name, 'w')
+      yield f
+      f.close()
+
+
+  with open_file('/tmp/some_file') as f:
+      f.write('hola!')
+#+END_SRC
+** import 语句
+
+当加载一个模块时,解释器实际上要完成以下动作:
+
+1. 在 =sys.modules= 中搜索看该模块是否已经存在,如果存在,则将其倒入到当前局部命名
+   空间,加载结束
+2. 如果 =sys.modules= 中找不到对应模块的名词, 则为需要导入的模块创建一个字典对象,
+   并将该对象信息插入到 =sys.modules= 中
+3. 加载前确定是否需要对模块对应文件进行编译, 若需要则先编译
+4. 执行动态加载, 在当前模块的命名空间中执行编译后的字节码, 并将其中所有的对象放
+   入模块对应的字典中.
+
+** 装饰器
+装饰器其实只是一种语法糖
+#+BEGIN_SRC python
+  @decorator
+  def func():
+      pass
+#+END_SRC
+其实就是
+#+BEGIN_SRC python
+  func = decorator(func)
+#+END_SRC
+的简写形式.
+
+这里 decorator 甚至不需要是一个函数, 类也可以用来构建装饰器,只要它实现了 =__call__= 方法:
+#+BEGIN_SRC python
+  class logit(object):
+      def __init__(self, logfile='out.log'):
+          self.logfile = logfile
+
+      def __call__(self, func):
+          log_string = func.__name__ + " was called"
+          print(log_string)
+          with open(self.logfile, 'a') as opened_file:
+              opened_file.write(log_string+'\n')
+          self.notify()
+
+      def notify(self):
+          pass
+
+
+  @logit()
+  def myfunc1():
+      pass
+#+END_SRC
+
+#+RESULTS:
+: myfunc1 was called
+
+使用装饰器类的一个好处是可以使用继承.
+
+*** 使用装饰器的注意事项
+使用装饰器时,func 函数的 =__doc__= 与 =__name__= 属性往往会被 decorator 中的返回函数所替代.
+#+BEGIN_SRC python
+  def decorator1(func):
+      def decoratedFunc(*args, **kargs):
+          print("In decorator1")
+          func(*args, **kargs)
+      return decoratedFunc
+
+
+  @decorator1
+  def func():
+      print("In func")
+
+
+  print(func.__name__)
+#+END_SRC
+
+#+RESULTS:
+: decoratedFunc
+
+幸运的是,Python 提供了一个简单的函数来解决这个问题: =functools.wraps=
+#+BEGIN_SRC python
+  from functools import wraps
+
+
+  def decorator2(func):
+      @wraps(func)
+      def decoratedFunc(*args, **kargs):
+          print("In decorator2")
+          func(*args, **kargs)
+      return decoratedFunc
+
+
+  @decorator2
+  def func():
+      print("In func")
+
+
+  print(func.__name__)
+#+END_SRC
+
+#+RESULTS:
+: func
+
+*** 使用装饰器的常用场景
++ 权限检查
++ 日志跟踪
+
+** 迭代器
+迭代器是一个实现了迭代器协议的容器对象. 它基于两个方法
+
++ 容器的__iter__方法返回一个迭代器, 所谓迭代器就是指具有__next__方法的对象.
+
++ 当调用迭代器的__next__方法时, 迭代器会返回它的下一个值.
+
++ 当__next__方法被调用,但迭代器没有值返回时, 需要引发一个 ~StopIteration~ 异常.
+
+下面是一个例子:
+#+BEGIN_SRC python
+  class Fibs:
+      def __init__(self):
+          self.a = 0
+          self.b = 1
+
+      def __next__(self):
+          self.a, self.b = self.b, self.a+self.b
+          return self.a
+
+      def __iter__(self):
+          return self
+
+
+  fibs = Fibs()
+  for f in fibs:
+      if f > 1000:
+          print(f)
+          break
+#+END_SRC
+
+实现了__iter__方法的对象被称为可迭代对象, 而实现了__next__方法的对象被称为迭代器,
+注意两者的区别
+
+使用 =iter= 函数可以从可迭代对象中获取迭代器
+#+BEGIN_SRC python
+  it = iter([1, 2, 3])
+  it.next()                       # 1
+  it.next()                       # 2
+#+END_SRC
+
+* Local Variables Setting:
+# Local Variables:
+# org-babel-default-header-args:python: ((:session . "none") (:results . "output") (:exports . "code") (:cache))
+# org-babel-python-command: "python3"
+# End:

@@ -1,0 +1,112 @@
+emacs 常用功能－－calc
+
+* 功能
+** 解方程
+#+BEGIN_SRC calc :exports both
+fsolve(x*2+x=4,x)
+#+END_SRC
+
+#+results:
+: x = 1.33333333333
+
+输出结果
+
+fsolve(x*2+x=4,x)
+x = 1.33333333333
+
+** 解方程组
+#+BEGIN_SRC calc
+fsolve([x + y = a, x - y = b],[x,y])
+#+END_SRC
+
+#+RESULTS:
+: [x = a + (b - a) / 2, y = (a - b) / 2]
+
+** 求逆函数
+#+BEGIN_SRC calc :exports both
+finv(sqrt(x),x)
+#+END_SRC
+
+#+RESULTS:
+: x^2
+
+** 求导
+#+BEGIN_SRC calc :exports both
+deriv(sqrt(x),x)
+#+END_SRC
+
+#+RESULTS:
+: 0.5 / sqrt(x)
+
+** 积分
+#+BEGIN_SRC calc :exports both
+integ(x**2,x)
+#+END_SRC
+
+#+RESULTS:
+: x^3 / 3
+
+** Taylor 展开
+#+BEGIN_SRC calc :exports both
+taylor(sin(x),x,6)
+#+END_SRC
+
+#+RESULTS:
+: pi x / 180 - 2.85779606768e-8 pi^3 x^3 + 4.4101791168e-14 pi^5 x^5
+
+* org-babel
+** 基础
+#+BEGIN_SRC calc :var x=5 :var y=2
+2+a*x**y
+#+END_SRC
+
+#+RESULTS:
+: 25 a + 2
+输出如下
+
+2+a*x**y
+
+** 结果公式同时输出 :exports both
+#+BEGIN_SRC calc :exports both
+x*2+x=4
+#+END_SRC
+
+#+results:
+: 0.75 x = 1
+Which results in this:
+
+x*2+x=4
+0.75 x = 1
+
+** 在其他地方调用 Applying a formula repeatedly in org-mode
+*** 使用 noweb
+#+name: myformula
+#+BEGIN_SRC calc
+2+a*x**y
+#+END_SRC
+
+#+BEGIN_SRC calc :noweb yes :var x=5 :var y=2
+    <<myformula>>
+#+END_SRC
+
+#+RESULTS:
+: 25 a + 2
+
+
+#+BEGIN_SRC calc :noweb yes :var x=10 :var y=2
+    <<myformula>>
+#+END_SRC
+
+#+RESULTS:
+: 100 a + 2
+
+*** 使用 CALL
+#+NAME: mynewformula
+#+BEGIN_SRC calc
+   2+a*x**y
+#+END_SRC
+
+#+CALL: mynewformula(x=10,y=2)
+
+#+RESULTS:
+: 100 a + 2

@@ -1,0 +1,6 @@
+archlinux 下显示器管理利器 xrandr
+
+
+xrandr 显示可以识别到的显示器
+xrandr --output VGA --auto 当前桌面会复制到VGA上面，此时执行xrandr会看到有了VGA-0
+扩展桌面 xrandr ----output VGA-0 --auto --left-of LVDS

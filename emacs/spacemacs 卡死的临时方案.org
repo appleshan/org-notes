@@ -1,0 +1,7 @@
+spacemacs 卡死的临时方案
+
+在命令行输入:
+
+pkill -SIGUSR2 -i emacs
+
+然后观察 stack trace
