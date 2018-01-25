@@ -488,7 +488,7 @@ export XMODIFIERS="@im=fcitx"
 emacs 无法输入中文
 
 sudo nano ~/.bashrc
-alias myemacs ='LC_CTYPE="zh_CN.utf8" emacs'
+alias myemacs ='LC_CTYPE="zh_CN.UTF-8" emacs'
 source ~/.bashrc
 
 * 安装android开发环境
