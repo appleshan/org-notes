@@ -1,0 +1,37 @@
+#+TITLE: Emacs GUI 下不能输入中文的解决方案
+
+* 软件环境
+我用的 archlinux + xfce (GUI), 安装了 fctix 下的 google pinyin. 用的 emacs 下的
+spacemacs 配置。
+
+* 遇到的问题
+Emacs GUI 下 Ctrl+SPC 不能切换中文输入法 fctix 的 google pinyin.
+
+* 解决方案
+
+- 1. emacs start shell
+$ vim ~/.xprofile
+#+BEGIN_SRC sh
+# 最后追加：
+export LANG=en_US.UTF-8
+export LC_CTYPE=zh_CN.UTF-8
+
+# fcitx
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+#+END_SRC
+
+- 2. ~/.xinitrc
+$ vim ~/.xinitrc
+#+BEGIN_SRC sh
+# 最后追加：
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+fcitx &
+#+END_SRC
+
+* 参考资讯
+https://emacs-china.org/t/topic/1271/19
+https://wiki.archlinux.org/index.php/Fcitx_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#Emacs_.E6.97.A0.E6.B3.95.E4.BD.BF.E7.94.A8.E8.BE.93.E5.85.A5.E6.B3.95
