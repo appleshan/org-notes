@@ -1,0 +1,19 @@
+ssh连接virtualbox中的虚拟机
+
+* 虚拟机设置
+
+- 从机设置
+
+$ sudo pacman -S openssh
+$ sudo systemctl start sshd
+# 可能还需要一些其他的安全设置，这里不再多说
+
+- 虚拟机设置
+
+设置里，选择网络,端口转发，主机端口 9022, 从机端口 22
+
+* 连接虚拟机
+
+-主机
+
+$ ssh -p 9022 username@127.0.0.1
