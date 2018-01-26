@@ -13,7 +13,7 @@ Emacs GUI 下 Ctrl+SPC 不能切换中文输入法 fctix 的 google pinyin.
 $ vim ~/.xprofile
 #+BEGIN_SRC sh
 # 最后追加：
-export LANG=en_US.UTF-8
+export LANG=zh_CN.UTF-8
 export LC_CTYPE=zh_CN.UTF-8
 
 # fcitx
