@@ -1,0 +1,13 @@
+#+TITLE: virtualbox 挂载共享文件夹
+
+设置 -->
+
+共享文件夹
+固定分配
+自动挂载
+共享文件夹名称 Share
+
+#+BEGIN_SRC sh
+sudo mkdir /mnt/share
+sudo mount -t vboxsf Share /mnt/share
+#+END_SRC
