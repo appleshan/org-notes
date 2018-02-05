@@ -1,195 +1,5 @@
 #+TITLE: manjaro 安装好之后的配置
 
-* 设置基本系统
-
-** 设置时区（中国的时区是 Asia/Shanghai）
-# ln -s <源文件> <目标> 创建一个符号链接
-
-# ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-
-** 设置时间标准 为 UTC，并调整 时间漂移:
-# hwclock --systohc --utc
-
-** /etc/locale.gen 是一个仅包含注释文档的文本文件。指定您需要的本地化类型，去掉对应行前面的注释符号（＃）就可以啦，还是用 nano 打开，建议选择帶 UTF-8 的項：
-# nano /etc/locale.gen
-
-en_US.UTF-8 UTF-8
-zh_CN.UTF-8 UTF-8
-zh_TW.UTF-8 UTF-8
-
-** 执行 locale-gen 以生成 locale 讯息：
-# locale-gen
-
-Generating locales...
-  en_US.UTF-8... done
-  en_HK.UTF-8... done
-  en_US.UTF-8... done
-  zh_CN.UTF-8... done
-  zh_HK.UTF-8... done
-  zh_TW.UTF-8... done
-Generation complete.
-
-
-创建 locale.conf 并提交您的本地化选项：
-
-将系统 locale 设置为 en_US.UTF-8，系统的 Log 就会用英文显示，这样更容易问题的判断和处理。用户可以设置自己的 locale。
-警告: 不推荐在此设置任何中文 locale，或导致 tty 乱码。
-
-# echo 用来输出某些文字，后面的大于号表示把输出保存到某个文件里啦~
-# 或者可以用文字编辑器新建这个文件加上这一行。
-# echo LANG=en_US.UTF-8 > /etc/locale.conf
-
-** 设置一个喜欢的主机名（用汝的主机名代替 myhostname）：
-# echo myhostname > /etc/hostname
-
-** 设置 root 的密码（输入密码的时候就是啥也没有 ╮(￣▽￣)╭ ）：
-[root@archiso /]# passwd
-New password:
-Retype new password:
-passwd: password updated successfully
-
-
-* 安装后更新系统
-
-在终端输入以下命令更新系统
-
-sudo pacman -Syy
-sudo pacman -Syu
-
-* 安装 zsh，及 oh-my-zsh 的配置
-
-# 最新版本已经默认安装了。
-sudo pacman -S zsh
-
-# 安装 oh-my-zsh
-sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-
-# 更换默认的 shell
-chsh -s $(which zsh)
-
-# 查看当前 shell
-echo $SHELL
-
-# 查看本地有哪几种 shell
-cat /etc/shells
-
-# 更换默认的 shell 提示符
-# random bira blinks fino gnzh rkj-repos tjkirch xiong-chiamiov-plus ys
-ZSH_THEME="fino"
-
-# 开启 archlinux 插件
-plugins=(archlinux)
-
-* 安装驱动程序
-
-** 显卡驱动
-
-查询显卡类型：
-
-$ lspci | grep VGA
-查询可用的开源驱动：
-
-$ pacman -Ss xf86-video | less
-安装通用驱动（vesa）：
-
-$ pacman -S xf86-video-vesa
-支持硬件加速的驱动程序可以在安装 X 时自动提示你安装，只需要选择正确的显卡类型，不需要显式安装。
-
-** 声卡驱动
-通常不需要配置就能工作，只需解除静音。需要做的只是安装 alsa-utils 软件包：
-
-$ pacman -S alsa-utils
-
-** 输入设备驱动
-$ pacman -S xf86-input-vmmouse
-
-** 安装显示驱动程序包
-@see https://hyjk2000.github.io/2014/01/23/arch-linux-install-guide/
-如果是在 VMware 中安装的 linux，就安装专门用于虚拟机的 xf86-video-vmware 驱动程序：
-
-$ pacman -S xf86-video-vmware svga-dri
-
-** 安装 VMware Tools
-在 VMware 中选择“安装 VMware Tools”，然后：
-
-$ pacman -S linux-headers
-$ for x in {0..6}; do mkdir -pv /etc/init.d/rc$x.d; done
-$ mount /dev/cdrom /mnt
-$ cd /root
-$ tar zxf /mnt/VMwareTools*.tar.gz
-$ cd vmware-tools-distrib
-$ ./vmware-install.pl
-按提示一步步进行，如果最后报错，一般也不用担心，重启后 VMware Tools 能正确启动。
-
-
-* 安装一些工具
-
-pacin vi
-pacin w3m
-pacin wget
-pacin axel
-pacin tmux
-pacin bind-utils
-pacin unbound
-pacin screenfetch
-pacin shadowsocks-qt5
-pacin the_silver_searcher
-
-pacin cloc
-pacin jq
-pacin tig
-pacin shellcheck
-
-pacin yaourt
-
-pip install --user pipenv
-
-sudo pip install ipython
-sudo pip install ptpython
-sudo pip install pythonpy
-sudo pip install pygments
-sudo pip install ansible
-sudo pip install percol
-sudo pip install rm-protection
-
-# tldr
-mkdir -p ~/bin
-curl -o ~/bin/tldr https://raw.githubusercontent.com/raylee/tldr/master/tldr
-chmod +x ~/bin/tldr
-
-** docker
-Installation:
-sudo pacman -S docker
-
-Starting Docker:
-
-There is a systemd service unit created for docker. To start the docker service:
-
-sudo systemctl start docker
-
-To start on system boot:
-
-sudo systemctl enable docker
-
-
-* 安装 theme
-https://github.com/horst3180/Arc-theme
-pacin arc-gtk-theme
-
-* 时间同步
-
-用 timedatectl set-ntp true 保证时间同步 。
-
-root@archiso ~ # timedatectl set-ntp true
-root@archiso ~ # timedatectl status
-    Local time: Fri 2016-10-28 17:39:42 UTC
-Universal time: Fri 2016-10-28 17:39:42 UTC
-        RTC time: Fri 2016-10-28 17:39:42
-    Time zone: UTC (UTC, +0000)
-Network time on: yes
-NTP synchronized: yes
-RTC in local TZ: no
-
 * 如何更换和添加源
 
 软件仓库（在 Debian 系发行版中，又叫做“软件源”）是软件包存储的地方。通常我们所说的软件仓库指在线软件仓库，亦即用户从互联网获取软件的地方。
@@ -204,24 +14,24 @@ sudo nano /etc/pacman.d/mirrorlist
 然后自己输入一个 Mirror，下面给出几个中国国内的 Mirror：
 
 ## Country : China
-# 首都在线科技股份有限公司
-Server = http://mirrors.yun-idc.com/archlinux/$repo/os/$arch
-
-## Country : China
 # 清华大学 TUNA 协会
-Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
-
-## Country : China
-# 网易
-Server = http://mirrors.163.com/archlinux/$repo/os/$arch
-
-## Country : China
-# 北京交通大学
-Server = http://mirror.bjtu.edu.cn/cn/archlinux/$repo/os/$arch
+Server = http://mirrors.tuna.tsinghua.edu.cn/manjaro/stable/$repo/$arch
+# Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
 
 ## Country : China
 # 中国科学技术大学
-Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
+# Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
+
+## Country : China
+Server = https://mirrors.zju.edu.cn/manjaro/stable/$repo/$arch
+
+## Country : China
+Server = https://mirrors.shuosc.org/manjaro/stable/$repo/$arch
+
+## Country : Hong_Kong
+Server = http://ftp.cuhk.edu.hk/pub/Linux/manjaro/stable/$repo/$arch
+
 
 然后用 pacman -Syy 刷新一下软件包数据库。
 
@@ -271,172 +81,36 @@ sudo pacman -Syyu
 
 Tips：注意第二步会对固态硬盘出现问题。
 
-** 添加 archlinuxCN 源：
-@see https://mirrors.ustc.edu.cn/help/index.html
+** AUR 镜像
+修改 /etc/yaourtrc，去掉 # AURURL 的注释，修改为
 
-sudo nano /etc/pacman.conf
+AURURL="https://aur.tuna.tsinghua.edu.cn"
 
-在打开的文件最后黏贴上以下几行：
+** ArchlinuxCN 镜像
+@See https://github.com/archlinuxcn/repo
+
+Arch Linux 中文社区仓库 是由 Arch Linux 中文社区驱动的非官方用户仓库。包含中文用户常用软件、工具、字体/美化包等。
+
+完整的包信息列表（包名称/架构/维护者/状态）请 点击这里 查看。
+
+ 官方仓库地址：http://repo.archlinuxcn.org
+ 镜像地址: https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/
+使用方法：在 /etc/pacman.conf 文件末尾添加以下两行：
 
 [archlinuxcn]
-SigLevel = Optional TrustedOnly
-# Server =https://mirrors.ustc.edu.cn/archlinuxcn/$arch
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
 
-"Server = "后面是一个网址，具体请去 tuna 源配置那里找 archlinuxCN 源看看
-(https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxcn/)
-
-按 ctrl+X 键保存，y 确认，回车。
-之后同步一下：sudo pacman -Syyu
-导入 GPG key：sudo pacman -S archlinuxcn-keyring
-
-* 关于笔记本双显卡驱动：
-如果安装的时候没有选择 boot（non-free)，那么我们装好系统以后也可以安装 bumblebee，
-图形化安装方法是点击设置里的 Manjaro Setting Mannager 如图：
-[./images/Setting.jpg]
-
-[./images/Manjaro-Setting-Mannager.jpg]
+之后安装 archlinuxcn-keyring 包导入 GPG key。
+sudo pacman -Syy && sudo pacman -S archlinuxcn-keyring
 
 
-抱怨中文化不全的同学点进去 Language，点击右上角 install 安装中文语言包。
+* 安装后更新系统
 
-在这里安装显卡等各种驱动我们点击下面的 HardwareDetection：
-[./images/HardwareDetection.jpg]
+在终端输入以下命令更新系统
 
-在此我们只需点击右边按钮—AutoInstall Proprietary Driver，系统会自动为你安装适合的驱动。
-装好后可以输入 inxi-G 查看驱动安装情况，我的是：
+sudo pacman -Syy
+sudo pacman -Syu
 
-Graphics: Card-1: Intel Haswell-ULT Integrated Graphics Controller
-Card-2:NVIDIA GK107M [GeForce GT 750M]
-DisplayServer: X.Org 1.17.4 driver: intel
-Resolution:1366x768@60.01hz
-GLXRenderer: Mesa DRI Intel Haswell Mobile
-GLXVersion: 3.0 Mesa 11.2.2
-
-说明驱动已经装好了，我的独显是 GT750m。再输入 lspci，可以看到一条：
-08:00.03D controller: NVIDIA Corporation GK107M [GeForce GT 750M] (rev ff)
-这表示独显处于关闭状态，现在运行的是 intel 核显，这正是我们安装 bumblebee 目的。
-
-* 安装中文字体
-
-- Google Noto Fonts 系列：noto-fonts noto-fonts-cjk noto-fonts-emoji
-- 思源黑体：adobe-source-han-sans-otc-fonts (adobe-source-han-sans-cn-fonts , adobe-source-han-sans-tw-fonts)
-- 文泉驿：wqy-microhei wqy-zenhei
-
-更多的字体可以在 https://wiki.archlinux.org/index.php/Fonts_(简体中文) 找到。
-
-
-pacin adobe-source-code-pro-fonts
-pacin ttf-hack wqy-zenhei wqy-microhei
-
-
-* 字体显示效果
-设置好源和驱动以后我们还要折腾两个东西，首先是字体显示效果：
-如果你使用的是 xfce 版，那么先在设置—外观里调整到像这样：
-[./images/appearance.jpg]
-
-简单说就是开启抗锯齿，显示调整为略微，次像素 RGB。我用的谷歌思源黑体，想用这个字体可以输入
-sudo pacman -S noto-fonts-cjk
-进行安装，再在字体里选用。
-
-接下来还要做一些微小的工作提升字体显示效果：
-（1）新建文件：/etc/fonts/local.conf
-sudo nano /etc/fonts/local.conf
-把以下代码黏贴到文件里：
-<match target="font">
-    <edit name="autohint" mode="assign">
-        <bool>true</bool>
-    </edit>
-    <edit name="hinting" mode="assign">
-        <bool>true</bool>
-    </edit>
-    <edit mode="assign" name="hintstyle">
-        <const>hintslight</const>
-    </edit>
-    <edit mode="assign" name="lcdfilter">
-        <const>lcddefault</const>
-    </edit>
-</match>
-
-然后 Ctrl+X 保存并退出。
-
-（2）.Xresources 文件
-打开/新建 ~/.Xresources 文件：
-nano ~/.Xresources
-删除文件里原有内容（如果有的话），把以下代码黏贴进去：
-
-Xft.dpi: 96
-Xft.antialias: true
-Xft.hinting: true
-Xft.rgba: rgb
-Xft.autohint: false
-Xft.hintstyle: hintslight
-Xft.lcdfilter: lcddefault
-
-然后 Ctrl+X 保存文件并退出。
-（3）在终端运行以下命令：xrdb -merge ~/.Xresources
-（4）请确保在字体设置里开启抗锯齿，显示调整为略微，次像素 RGB。
-（5）重启系统，你就会看到效果了。
-
-* 解决屏幕撕裂（tearing）问题，对于 xfce 桌面：
-（1）安装 Compton，在终端输入以下命令：pacin compton
-（2）配置 Compton，sudo nano ~/.config/compton.conf,把以下代码黏贴进去：
-backend = "glx";
-paint-on-overlay = true;
-glx-no-stencil = true;
-vsync = "opengl-swc";
-
-# Shadow
-shadow = true; # Enabled client-side shadows on windows.
-no-dock-shadow = true; # Avoid drawing shadows on dock/panel windows.
-no-dnd-shadow = true; # Don't draw shadows on DND windows.
-clear-shadow = true; # Zero the part of the shadow's mask behind the window (experimental).
-shadow-radius = 7; # The blur radius for shadows. (default 12)
-shadow-offset-x = -7; # The left offset for shadows. (default -15)
-shadow-offset-y = -7; # The top offset for shadows. (default -15)
-shadow-exclude = [
-"n:e:Notification",
-"n:e:Docky",
-"g:e:Synapse",
-"g:e:Conky",
-"n:w:*Firefox*",
-"n:w:*Chromium*",
-"n:w:*Chrome*",
-"n:w:*dockbarx*",
-"class_g ?= 'Cairo-dock'",
-"class_g ?= 'Xfce4-notifyd'",
-"class_g ?= 'Xfce4-power-manager'",
-"class_g ?= 'Notify-osd'",
-"_GTK_FRAME_EXTENTS@:c"
-];
-
-# Opacity
-detect-client-opacity = true;
-
-# Window type settings
-wintypes:
-{
-tooltip = { shadow = false; };
-};
-
-
-（3）关闭 xfwm4 窗口混合器并打开 Compton，终端输入：
-xfconf-query -c xfwm4 -p /general/use_compositing -s false
-新建~/.config/autostart/compton.desktop，终端输入：
-sudo nano ~/.config/autostart/compton.desktop
-把以下内容复制黏贴进去：
-[Desktop Entry]
-Encoding=UTF-8
-Version=0.9.4
-Type=Application
-Name=Compton
-Comment=X11 compositor
-Exec=compton -b
-OnlyShowIn=XFCE;
-StartupNotify=false
-Terminal=false
-Hidden=false
-然后 CTRL+X 保存并退出，注销系统重新登陆后屏幕撕裂应该就消失了。
 
 * 在 Manjaro 中安装卸载软件：
 （1）在设置里找到添加/删除软件，打开：
@@ -456,101 +130,302 @@ pacre package_name
 卸载软件＋不需要的依赖（类似 sudo apt autoremove）：
 sudo pacman -Rs package_name
 
-* 安装中文输入法
 
-** 8.1 以安装搜狗为例
+* 设置基本系统
+
+** 基本中文支持
+@See https://wiki.archlinux.org/index.php/Arch_Linux_Localization_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)
+
+*** /etc/locale.gen
+是一个仅包含注释文档的文本文件。指定您需要的本地化类型，去掉对应行前面的注释符号（＃）就可以啦，
+还是用 nano 打开，建议选择帶 UTF-8 的項：
+# nano /etc/locale.gen
+
+en_HK.UTF-8 UTF-8
+en_US.UTF-8 UTF-8
+zh_CN.UTF-8 UTF-8
+zh_HK.UTF-8 UTF-8
+zh_TW.UTF-8 UTF-8
+
+*** 执行 locale-gen 以生成 locale 讯息：
+# locale-gen
+
+Generating locales...
+  en_US.UTF-8... done
+  zh_CN.UTF-8... done
+  zh_HK.UTF-8... done
+  zh_TW.UTF-8... done
+Generation complete.
+
+*** locale.conf
+将系统 locale 设置为 en_US.UTF-8，系统的 Log 就会用英文显示，这样更容易问题的判断和处理。用户可以设置自己的 locale。
+警告: 不推荐在此设置任何中文 locale，或导致 tty 乱码。
+用文字编辑器 zai 这个文件 zhon 加上这一行。
+
+LANG=en_US.UTF-8
+
+or:
+
+# echo 用来输出某些文字，后面的大于号表示把输出保存到某个文件里啦~
+# 或者可以用文字编辑器新建这个文件加上这一行。
+echo LANG=en_US.UTF-8 > /etc/locale.conf
+
+*** 安装中文字体
+
+- Google Noto Fonts 系列：noto-fonts noto-fonts-cjk noto-fonts-emoji
+- 思源黑体：adobe-source-han-sans-otc-fonts (adobe-source-han-sans-cn-fonts , adobe-source-han-sans-tw-fonts)
+- 文泉驿：wqy-microhei wqy-zenhei
+
+更多的字体可以在 https://wiki.archlinux.org/index.php/Fonts_(简体中文) 找到。
+
+pacin ttf-hack
+pacin wqy-zenhei wqy-microhei
+pacin adobe-source-code-pro-fonts
+pacin adobe-source-han-sans-cn-fonts
+pacin adobe-source-han-serif-cn-fonts
+
+*** 安装中文输入法
+@See https://wiki.archlinux.org/index.php/fcitx#Chinese
+
+以安装 googlepinyin 为例
+
 pacin fcitx-googlepinyin
 pacin fcitx-im
 pacin fcitx-configtool # 图形化的配置工具
 
-** 8.2 设置中文输入法环境变量，否则中文输入法无法启动
-# 需要修改配置文件 `~/.xprofile`
-sudo vim ~/.xprofile
+保存成功后，注销重新登陆系统，在终端输入 fcitx 启动服务，就能切换 googlepinyin 了。
 
-# 最后追加如下语句：
-#+BEGIN_SRC sh
-export LANG=zh_CN.UTF-8
-export LC_CTYPE=zh_CN.UTF-8
+** 设置时区（中国的时区是 Asia/Shanghai）
+# ln -s <源文件> <目标> 创建一个符号链接
 
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS="@im=fcitx"
-#+END_SRC
+# ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-** 8.3 保存成功后，在终端输入 fcitx 启动服务
+** 设置时间标准 为 UTC，并调整 时间漂移:
+# hwclock --systohc
+[Fail]
 
-** 搜狗输入法无法切换问题（xfce 下发现此问题，KDE 下无此问题）。
-如上述我们装好搜狗输入法后打算配置输入法，首先发现无法打开图形界面配置，
-原因是没安装相关依赖，xfce 桌面安装 fcitx-configtool, kde 桌面安装 kcm-fcitx。
-安装好后，如果还是无法切出搜狗输入法，那么就在 ~/.xprofile 文件中添加如下内容：
+** 时间同步
 
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS="@im=fcitx"
+用 timedatectl set-ntp true 保证时间同步 。
 
-保存并退出后，注销重新登陆系统就能切换了。
+root@archiso ~ # timedatectl set-ntp true
+root@archiso ~ # timedatectl status
+    Local time: Fri 2016-10-28 17:39:42 UTC
+Universal time: Fri 2016-10-28 17:39:42 UTC
+        RTC time: Fri 2016-10-28 17:39:42
+    Time zone: UTC (UTC, +0000)
+Network time on: yes
+NTP synchronized: yes
+RTC in local TZ: no
 
-emacs 无法输入中文
+** 设置一个喜欢的主机名（用汝的主机名代替 myhostname）：
+# echo myhostname > /etc/hostname
 
-sudo nano ~/.bashrc
-alias myemacs ='LC_CTYPE="zh_CN.UTF-8" emacs'
-source ~/.bashrc
-
-* 安装 android 开发环境
-
-yaourt -S jdk
-#设置默认 JDK
-sudo archlinux-java set java-8-jdk
-yaourt -S android-studio
-#模拟器
-yaourt -S genymotion
-
-* 一些优化
-
-** SATA 启用 AHCI 模式
-
-SATA 有两种工作模式：原生的 AHCI 模式提供更好的性能（如热插拔和 NCQ 支持）、模拟的 IDE 模式提供更好的兼容性。一般主板出厂默认将 SATA 模式设置为 IDE 模式，但如今先进的 Linux 和 Windows 都早已原生支持 AHCI，所以我们最好打开 AHCI 模式以优化性能。
-
-Arch Linux 在安装好以后，内核镜像默认没有载入 AHCI 驱动模块。修改 /etc/mkinitcpio.conf，添加 ahci 到 MODULES 变量：
-
-MODULES="ahci"
-然后重建内核镜像，重新启动后 AHCI 驱动就会加载：
-
-$ mkinitcpio -p linux
-在主板 UEFI 或 BIOS 中，将 SATA 模式从 IDE（或 PATA Emulation 等等），设置为 AHCI（或 Native 等等）。
-
-设置好以后，你可以从 dmesg 命令的输出里，找到 AHCI 和 NCQ 成功启用的证据：
-
-$ dmesg
-...
-SCSI subsystem initialized
-libata version 3.00 loaded.
-ahci 0000:00:1f.2: version 3.0
-ahci 0000:00:1f.2: irq 24 for MSI/MSI-X
-ahci 0000:00:1f.2: AHCI 0001.0300 32 slots 6 ports 6 Gbps 0x10 impl SATA mode
-ahci 0000:00:1f.2: flags: 64bit ncq led clo pio slum part ems apst
-scsi host0: ahci
-scsi host1: ahci
-scsi host2: ahci
-scsi host3: ahci
-scsi host4: ahci
-scsi host5: ahci
-...
-ata5.00: 976773168 sectors, multi 16: LBA48 NCQ (depth 31/32), AA
-...
+** 设置 root 的密码（输入密码的时候就是啥也没有 ╮(￣▽￣)╭ ）：
+[root@archiso /]# passwd
+New password:
+Retype new password:
+passwd: password updated successfully
 
 
-** 优化系统启动速度
+* 安装 zsh，及 oh-my-zsh 的配置
 
-Arch Linux 的 systemd-analyze 是个很不错的工具，利用它你可以很直观地观察到系统启动的时间都花到哪儿去了：
+** 安装 zsh
+# 最新版本已经默认安装了。
+sudo pacman -S zsh
 
-$ systemd-analyze
-Startup finished in 6.857s (firmware) + 3.157s (loader) + 1.870s (kernel) + 8.157s (userspace) = 20.044s
-我注意到打开 AHCI 后，内核和用户空间的载入速度明显提高了，总启动时间从约 30 秒缩短到 20 秒，效果非常明显。
+** 安装 oh-my-zsh
+# 安装 oh-my-zsh
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-用下面这个命令，可以了解到是什么东西启动最慢：
+# 更换默认的 shell
+chsh -s $(which zsh)
 
-$ systemd-analyze blame
-此外，还可以把启动过程绘制成 SVG 图表供你审阅（用 GNOME 的图片预览或 Chrome 浏览器都可以打开），这个图表中你还可以观察到是否有启动慢的组件影响到了依赖它的组件的启动：
+# 查看当前 shell
+echo $SHELL
 
-$ systemd-analyze plot > plot.svg
+# 查看本地有哪几种 shell
+cat /etc/shells
+
+# 开启 archlinux 插件
+plugins=(archlinux)
+
+** 安装 zsh theme
+mkdir $ZSH_CUSTOM/themes
+git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
+ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+
+# 更换默认的 shell 提示符
+# random bira blinks fino gnzh rkj-repos tjkirch xiong-chiamiov-plus ys spaceship
+ZSH_THEME="spaceship"
+
+
+* 安装 theme
+https://github.com/horst3180/Arc-theme
+pacin arc-gtk-theme
+
+
+* 安装驱动程序
+
+** Intel CPU 安装Intel-ucode
+@See https://wiki.archlinux.org/index.php/Microcode
+
+非IntelCPU可以跳过此步骤。
+直接pacman安装：
+
+pacman -S intel-ucode
+
+** 显卡驱动
+Archlinux 中的显卡驱动都是以 xf86-video 开头的。
+
+Archlinux中列出所有的PCI设备：
+$ lspci
+
+查询显卡类型：
+$ lspci | grep VGA
+
+查询可用的开源驱动：
+$ pacman -Ss xf86-video | less
+
+发现 xf86-video-intel 是 Intel 显卡的驱动，安装之。
+
+- 物理机安装 Intel 核心显卡驱动（intel）：
+$ pacman -S xf86-video-intel
+
+- 虚拟机安装通用驱动（vesa）：
+$ pacman -S xf86-video-vesa
+支持硬件加速的驱动程序可以在安装 X 时自动提示你安装，只需要选择正确的显卡类型，不需要显式安装。
+
+** 配置双屏
+@See http://blog.ggshiney.com/posts/2012/11/14/config-dual-monitor-for-archlinux.html
+
+显卡驱动就绪后两个显示器显示相同，如果需要扩展显示桌面，还需要进行一番配置。
+
+randr(X Resize, Rotate and Reflect Extension)可以控制桌面的显示输出效果，如镜像、旋转等。xrandr是randr的命令行接口。
+安装 xrandr
+$ pacman -S xorg-xrandr
+
+首先查看当前显示状态，列出目前環境支援的解析度和頻率：
+xrandr -q
+
+看到我的两个显示器对应着 DP1 和 DP3，接下来设置两个显示器位置：
+xrandr --output DP1 --auto --output DP3 --auto --right-of DP1
+
+** 自动启动
+可以把通过这条命令预览好的位置，加入配置文件 /etc/X11/xorg.conf.d/10-monitor.conf，以实现自动启动。
+
+Section "Monitor"
+    Identifier  "DP3"
+    Option      "Primary" "true"
+EndSection
+
+Section "Monitor"
+    Identifier  "DP1"
+    Option      "LeftOf" "DP3"
+EndSection
+
+
+* 安装一些工具
+
+** linux-headers
+pacman -S linux-headers
+
+** inotify-tools
+pacman -S inotify-tools
+
+** net tools
+ifconfig, route 在 net-tools 中，
+nslookup, dig 在 dnsutils 中，
+ftp, telnet 等在 inetutils 中,
+ip 命令在 iproute2 中。
+
+pacman -S net-tools dnsutils inetutils iproute2
+
+** yaourt
+Yaourt 是 archlinux 方便使用的关键部件之一，但没有被整合到系统安装中的工具。
+建议在装完系统重启之后，更新完pacman和基本系统之后，就安装这个工具。
+
+以root权限打开编译/etc/pacman.conf，将下面这三行加入到文件末尾并保存：
+
+[archlinuxcn]
+SigLevel = Never
+Server   =  http://repo.archlinuxcn.org/$arch
+同步软件信息库并安装yaourt：
+
+pacman -S yaourt
+
+配置 AUR 镜像：修改 /etc/yaourtrc，去掉 # AURURL 的注释，修改为
+
+AURURL="https://aur.tuna.tsinghua.edu.cn"
+
+参考：
+https://mirrors.tuna.tsinghua.edu.cn/help/AUR/
+
+yaourt -Syua
+
+** google-chrome
+在上一步安装了 yaourt 之后，就可以安装 google-chrome 了
+yaourt -S google-chrome
+
+** 下载代理插件 Proxy SwitchyOmega
+chrome扩展商店的地址在这里：
+https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif
+
+同样提供另外的地址：
+http://pan.baidu.com/s/1slrU97B
+
+** shadowsocks-qt5
+pacin shadowsocks-qt5
+
+** Sublime text 3
+
+/opt/text/sublime_text_3
+
+ln -s /opt/text/sublime_text_3/sublime_text /usr/local/bin/sublime_text
+
+** emacs 25.3
+@See build-emacs.sh
+
+** percol
+pacin percol
+
+** 远程桌面连接 windows
+
+*** remmina
+pacman -S remmina
+
+*** rdesktop
+pacman -S rdesktop
+
+rdesktop连接windows远程桌面
+打开命令行，仅需要一条命令：
+rdesktop -f -u username -p password IP -r sound:on/off -g 1024*768
+
+说明：
+1、username和password分别是目标电脑的帐号和密码，-a 16表示位色，最高就是16位；
+2、IP为目标电脑的IP地址（可能需要先连接VPN）；
+3、sound：on表示传送目标电脑的声音，off则为关闭；
+4、-g 后接想要显示的分辨率，使用 -g workarea 可自适应铺满当前linux窗口大小
+5、-f 参数默认全屏打开，使用 Ctrl + Alt + Enter 可以退出全屏模式（不知道的就郁闷了）。
+6、-r** disk:share_name=/local-disk** 将本地磁盘映射到远程电脑，其中share_name为显示名称，可自定义，local-disk表示本地linux的一个目录，比如 /data。
+7、-r clipboard:PRIMARYCLIPBOARD 允许在远程主机和本机之间共享剪切板，就是可以复制粘贴。
+
+比如如下命令：
+
+$ rdesktop -f -u administrator -p ncl@2017.com 192.168.2.160
+这里的ip对应远程 windows 的 ip 地址
+
+如果不想每次都敲命令的，可以简单的写个shell脚本，每次点击就可以连接。
+
+** Tencent QQ
+提供在Linux上运行最新版腾讯QQ与TIM的解决方案：
+https://github.com/askme765cs/Wine-QQ-TIM
+
+** 虚拟机
+有些时候需要使用windows而不想切换系统或干脆没有windows的情况下，我们可以使用windows虚拟机来代替。当然虚拟机的用处不止于此。
+
+Arch下的虚拟机首先开源的VirtualBox，安装官方源的 virtualbox virtualbox-ext-vnc virtualbox-guest-iso virtualbox-host-modules-arch这几个包。
+
+再去官网下载Oracle VM VirtualBox Extension Pack ，在设置中导入使用。
+安装windows的过程不在这里讲解，记得安装之后在windows内安装扩展客户端软件即可。
+
