@@ -1,0 +1,19 @@
+加速yaourt
+
+都知道 pacman 能够调用外部下载工具来代替默认的 wget 来给 pacman 提速
+比如将 /etc/pacman.conf 中
+
+XferCommand = /usr/bin/wget –passive-ftp -c -O %o %u
+
+注释掉,同时添加
+
+XferCommand = /usr/bin/axel -o %o %u
+
+即可使用axel多线程下载工具
+
+而要让yaourt也支持多线程,只需修改 /etc/makepkg.conf
+
+将
+’http::/usr/bin/wget -c -t 3 –waitretry=3 -O %o %u’
+改成了
+’http::/usr/bin/axel -o %o %u’
