@@ -1,36 +1,66 @@
 #+TITLE: Emacs GUI 下不能输入中文的解决方案
 
 * 软件环境
-我用的 archlinux + xfce (GUI), 安装了 fctix 下的 google pinyin. 用的 emacs 下的
-spacemacs 配置。
+我用的 archlinux + xfce (GUI), 安装了 fctix 下的 google pinyin. 用的 emacs 下的 spacemacs 配置。
 
 * 遇到的问题
 Emacs GUI 下 Ctrl+SPC 不能切换中文输入法 fctix 的 google pinyin.
 
 * 解决方案
 
+- 0. LC_ALL=zh_CN.UTF-8
+
+LC_ALL=zh_CN.UTF-8 emacs
+这个命令的确可以使用 fcitx-googlepinyin 了
+
 - 1. emacs start shell
+$ sudo mv /usr/local/bin/emacs /usr/local/bin/emacs.origin
+$ sudo touch /usr/local/bin/emacs
+$ sudo vim /usr/local/bin/emacs
+
+#+BEGIN_SRC sh
+#!/bin/zsh
+LC_ALL=zh_CN.UTF-8
+/usr/local/bin/emacs.origin "$@"
+#+END_SRC
+
+- 2. /etc/locale.conf
+$ vim /etc/locale.conf
+
+#+BEGIN_SRC conf
+LANG=en_US.UTF-8
+LANGUAGE=zh_CN:en_US:en
+LC_ADDRESS=zh_CN.UTF-8
+LC_IDENTIFICATION=zh_CN.UTF-8
+LC_MEASUREMENT=zh_CN.UTF-8
+LC_MONETARY=zh_CN.UTF-8
+LC_NAME=zh_CN.UTF-8
+LC_NUMERIC=zh_CN.UTF-8
+LC_PAPER=zh_CN.UTF-8
+LC_TELEPHONE=zh_CN.UTF-8
+LC_TIME=zh_CN.UTF-8
+LC_CTYPE=zh_CN.UTF-8
+#+END_SRC
+
+- 3. ~/.xprofile
 $ vim ~/.xprofile
 #+BEGIN_SRC sh
-# 最后追加：
-export LANG=zh_CN.UTF-8
-export LC_CTYPE=zh_CN.UTF-8
-
-# fcitx
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS="@im=fcitx"
 #+END_SRC
 
-- 2. ~/.xinitrc
-$ vim ~/.xinitrc
-#+BEGIN_SRC sh
-# 最后追加：
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS="@im=fcitx"
-fcitx &
+- 4. ~/.config/fcitx/config
+$ vim ~/.config/fcitx/config
+
+#+BEGIN_SRC conf
+...
+TriggerKey=CTRL_RSPACE
+...
+IMSwitchHotkey=ALT_SUPER
+...
 #+END_SRC
+
 
 * 参考资讯
 https://emacs-china.org/t/topic/1271/19
