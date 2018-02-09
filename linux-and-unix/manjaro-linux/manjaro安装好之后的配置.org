@@ -267,18 +267,18 @@ pacin arc-gtk-theme
 
 * 安装驱动程序
 
-** Intel CPU 安装Intel-ucode
+** Intel CPU 安装 Intel-ucode
 @See https://wiki.archlinux.org/index.php/Microcode
 
-非IntelCPU可以跳过此步骤。
-直接pacman安装：
+非 IntelCPU 可以跳过此步骤。
+直接 pacman 安装：
 
 pacman -S intel-ucode
 
 ** 显卡驱动
 Archlinux 中的显卡驱动都是以 xf86-video 开头的。
 
-Archlinux中列出所有的PCI设备：
+Archlinux 中列出所有的 PCI 设备：
 $ lspci
 
 查询显卡类型：
@@ -301,7 +301,7 @@ $ pacman -S xf86-video-vesa
 
 显卡驱动就绪后两个显示器显示相同，如果需要扩展显示桌面，还需要进行一番配置。
 
-randr(X Resize, Rotate and Reflect Extension)可以控制桌面的显示输出效果，如镜像、旋转等。xrandr是randr的命令行接口。
+randr(X Resize, Rotate and Reflect Extension)可以控制桌面的显示输出效果，如镜像、旋转等。xrandr 是 randr 的命令行接口。
 安装 xrandr
 $ pacman -S xorg-xrandr
 
@@ -325,6 +325,12 @@ Section "Monitor"
 EndSection
 
 
+* 其他美化
+
+** 设置pacman彩色输出
+打开 /etc/pacman.conf 文件，找到被注释的 #Color，改为 Color。pacman 就会输出彩色信息，方便查看。
+
+
 * 安装一些工具
 
 ** linux-headers
@@ -343,14 +349,14 @@ pacman -S net-tools dnsutils inetutils iproute2
 
 ** yaourt
 Yaourt 是 archlinux 方便使用的关键部件之一，但没有被整合到系统安装中的工具。
-建议在装完系统重启之后，更新完pacman和基本系统之后，就安装这个工具。
+建议在装完系统重启之后，更新完 pacman 和基本系统之后，就安装这个工具。
 
-以root权限打开编译/etc/pacman.conf，将下面这三行加入到文件末尾并保存：
+以 root 权限打开编译/etc/pacman.conf，将下面这三行加入到文件末尾并保存：
 
 [archlinuxcn]
 SigLevel = Never
 Server   =  http://repo.archlinuxcn.org/$arch
-同步软件信息库并安装yaourt：
+同步软件信息库并安装 yaourt：
 
 pacman -S yaourt
 
@@ -368,14 +374,15 @@ yaourt -Syua
 yaourt -S google-chrome
 
 ** 下载代理插件 Proxy SwitchyOmega
-chrome扩展商店的地址在这里：
+chrome 扩展商店的地址在这里：
 https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif
 
 同样提供另外的地址：
 http://pan.baidu.com/s/1slrU97B
 
-** shadowsocks-qt5
-pacin shadowsocks-qt5
+** shadowsocks-libev
+@See https://github.com/madeye/shadowsocks-libev#usage
+sudo pacman -S shadowsocks-libev
 
 ** Sublime text 3
 
@@ -397,35 +404,34 @@ pacman -S remmina
 *** rdesktop
 pacman -S rdesktop
 
-rdesktop连接windows远程桌面
+rdesktop 连接 windows 远程桌面
 打开命令行，仅需要一条命令：
 rdesktop -f -u username -p password IP -r sound:on/off -g 1024*768
 
 说明：
-1、username和password分别是目标电脑的帐号和密码，-a 16表示位色，最高就是16位；
-2、IP为目标电脑的IP地址（可能需要先连接VPN）；
-3、sound：on表示传送目标电脑的声音，off则为关闭；
-4、-g 后接想要显示的分辨率，使用 -g workarea 可自适应铺满当前linux窗口大小
+1、username 和 password 分别是目标电脑的帐号和密码，-a 16 表示位色，最高就是 16 位；
+2、IP 为目标电脑的 IP 地址（可能需要先连接 VPN）；
+3、sound：on 表示传送目标电脑的声音，off 则为关闭；
+4、-g 后接想要显示的分辨率，使用 -g workarea 可自适应铺满当前 linux 窗口大小
 5、-f 参数默认全屏打开，使用 Ctrl + Alt + Enter 可以退出全屏模式（不知道的就郁闷了）。
-6、-r** disk:share_name=/local-disk** 将本地磁盘映射到远程电脑，其中share_name为显示名称，可自定义，local-disk表示本地linux的一个目录，比如 /data。
+6、-r** disk:share_name=/local-disk** 将本地磁盘映射到远程电脑，其中 share_name 为显示名称，可自定义，local-disk 表示本地 linux 的一个目录，比如 /data。
 7、-r clipboard:PRIMARYCLIPBOARD 允许在远程主机和本机之间共享剪切板，就是可以复制粘贴。
 
 比如如下命令：
 
 $ rdesktop -f -u administrator -p ncl@2017.com 192.168.2.160
-这里的ip对应远程 windows 的 ip 地址
+这里的 ip 对应远程 windows 的 ip 地址
 
-如果不想每次都敲命令的，可以简单的写个shell脚本，每次点击就可以连接。
+如果不想每次都敲命令的，可以简单的写个 shell 脚本，每次点击就可以连接。
 
 ** Tencent QQ
-提供在Linux上运行最新版腾讯QQ与TIM的解决方案：
+提供在 Linux 上运行最新版腾讯 QQ 与 TIM 的解决方案：
 https://github.com/askme765cs/Wine-QQ-TIM
 
 ** 虚拟机
-有些时候需要使用windows而不想切换系统或干脆没有windows的情况下，我们可以使用windows虚拟机来代替。当然虚拟机的用处不止于此。
+有些时候需要使用 windows 而不想切换系统或干脆没有 windows 的情况下，我们可以使用 windows 虚拟机来代替。当然虚拟机的用处不止于此。
 
-Arch下的虚拟机首先开源的VirtualBox，安装官方源的 virtualbox virtualbox-ext-vnc virtualbox-guest-iso virtualbox-host-modules-arch这几个包。
+Arch 下的虚拟机首先开源的 VirtualBox，安装官方源的 virtualbox virtualbox-ext-vnc virtualbox-guest-iso virtualbox-host-modules-arch 这几个包。
 
-再去官网下载Oracle VM VirtualBox Extension Pack ，在设置中导入使用。
-安装windows的过程不在这里讲解，记得安装之后在windows内安装扩展客户端软件即可。
-
+再去官网下载 Oracle VM VirtualBox Extension Pack，在设置中导入使用。
+安装 windows 的过程不在这里讲解，记得安装之后在 windows 内安装扩展客户端软件即可。
