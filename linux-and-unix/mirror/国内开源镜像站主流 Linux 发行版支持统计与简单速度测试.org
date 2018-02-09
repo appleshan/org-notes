@@ -19,6 +19,7 @@
 - 个人简单统计难免有失误，还请各位谅解
 
 * 企业类：
+
 ** 网易开源镜像站
 http://mirrors.163.com/
 包含发行版：
@@ -40,6 +41,14 @@ ubuntu
 平均速度：3.324M/s
 
 * 大学类
+
+** 浙江大学开源镜像站
+http://mirrors.zju.edu.cn/
+包含发行版：
+archlinux、centos、debian、deepin、fedora、gentoo、kali、linux mint、openSUSE、
+raspbian、ubuntu
+平均速度：4.0M/s
+
 ** 中国科技大学镜像
 https://mirrors.ustc.edu.cn/
 包含发行版：
@@ -61,13 +70,6 @@ http://mirrors.neusoft.edu.cn/
 包含发行版：
 archlinux、centos、gentoo、kali、raspbian、ubuntu
 平均速度：1.115M/s
-
-** 浙江大学开源镜像站
-http://mirrors.zju.edu.cn/
-包含发行版：
-archlinux、centos、debian、deepin、fedora、gentoo、kali、linux mint、openSUSE、
-raspbian、ubuntu
-平均速度：478.61K/s
 
 ** 兰州大学开源镜像站
 http://mirror.lzu.edu.cn/
