@@ -180,7 +180,11 @@ echo LANG=en_US.UTF-8 > /etc/locale.conf
 
 pacin ttf-hack
 pacin wqy-zenhei wqy-microhei
+
+# adobe 字体全家桶：
 pacin adobe-source-code-pro-fonts
+pacin adobe-source-sans-pro-fonts
+pacin adobe-source-serif-pro-fonts
 pacin adobe-source-han-sans-cn-fonts
 pacin adobe-source-han-serif-cn-fonts
 
