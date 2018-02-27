@@ -397,6 +397,9 @@ ln -s /opt/text/sublime_text_3/sublime_text /usr/local/bin/sublime_text
 ** emacs 25.3
 @See build-emacs.sh
 
+** meld
+pacin meld
+
 ** percol
 pacin percol
 
