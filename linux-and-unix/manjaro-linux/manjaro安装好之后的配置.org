@@ -188,6 +188,54 @@ pacin adobe-source-serif-pro-fonts
 pacin adobe-source-han-sans-cn-fonts
 pacin adobe-source-han-serif-cn-fonts
 
+*** 字体显示效果
+设置好源和驱动以后我们还要折腾两个东西，首先是字体显示效果：
+如果你使用的是 xfce 版，那么先在设置—外观里调整到像这样：
+[./images/appearance.jpg]
+
+简单说就是开启抗锯齿，显示调整为略微，次像素 RGB。我用的谷歌思源黑体，想用这个字体可以输入
+sudo pacman -S noto-fonts-cjk
+进行安装，再在字体里选用。
+
+接下来还要做一些微小的工作提升字体显示效果：
+（1）新建文件：/etc/fonts/local.conf
+sudo nano /etc/fonts/local.conf
+把以下代码黏贴到文件里：
+<match target="font">
+    <edit name="autohint" mode="assign">
+        <bool>true</bool>
+    </edit>
+    <edit name="hinting" mode="assign">
+        <bool>true</bool>
+    </edit>
+    <edit mode="assign" name="hintstyle">
+        <const>hintslight</const>
+    </edit>
+    <edit mode="assign" name="lcdfilter">
+        <const>lcddefault</const>
+    </edit>
+</match>
+
+然后 Ctrl+X 保存并退出。
+
+（2）.Xresources 文件
+打开/新建 ~/.Xresources 文件：
+nano ~/.Xresources
+删除文件里原有内容（如果有的话），把以下代码黏贴进去：
+
+Xft.dpi: 96
+Xft.antialias: true
+Xft.hinting: true
+Xft.rgba: rgb
+Xft.autohint: false
+Xft.hintstyle: hintslight
+Xft.lcdfilter: lcddefault
+
+然后 Ctrl+X 保存文件并退出。
+（3）在终端运行以下命令：xrdb -merge ~/.Xresources
+（4）请确保在字体设置里开启抗锯齿，显示调整为略微，次像素 RGB。
+（5）重启系统，你就会看到效果了。
+
 *** 安装中文输入法
 @See https://wiki.archlinux.org/index.php/fcitx#Chinese
 
@@ -300,7 +348,12 @@ $ pacman -S xf86-video-intel
 $ pacman -S xf86-video-vesa
 支持硬件加速的驱动程序可以在安装 X 时自动提示你安装，只需要选择正确的显卡类型，不需要显式安装。
 
-** 配置双屏
+- 安装显示驱动程序包
+@see https://hyjk2000.github.io/2014/01/23/arch-linux-install-guide/
+如果是在 VMware 中安装的 linux，就安装专门用于虚拟机的 xf86-video-vmware 驱动程序：
+$ pacman -S xf86-video-vmware svga-dri
+
+*** 配置双屏
 @See http://blog.ggshiney.com/posts/2012/11/14/config-dual-monitor-for-archlinux.html
 
 显卡驱动就绪后两个显示器显示相同，如果需要扩展显示桌面，还需要进行一番配置。
@@ -315,7 +368,7 @@ xrandr -q
 看到我的两个显示器对应着 DP1 和 DP3，接下来设置两个显示器位置：
 xrandr --output DP1 --auto --output DP3 --auto --right-of DP1
 
-** 自动启动
+*** 自动启动
 可以把通过这条命令预览好的位置，加入配置文件 /etc/X11/xorg.conf.d/10-monitor.conf，以实现自动启动。
 
 Section "Monitor"
@@ -328,6 +381,23 @@ Section "Monitor"
     Option      "LeftOf" "DP3"
 EndSection
 
+** 声卡驱动
+通常不需要配置就能工作，只需解除静音。需要做的只是安装 alsa-utils 软件包：
+
+$ pacman -S alsa-utils
+
+** 安装 VMware Tools
+在 VMware 中选择“安装 VMware Tools”，然后：
+
+$ pacman -S linux-headers
+$ for x in {0..6}; do mkdir -pv /etc/init.d/rc$x.d; done
+$ mount /dev/cdrom /mnt
+$ cd /root
+$ tar zxf /mnt/VMwareTools*.tar.gz
+$ cd vmware-tools-distrib
+$ ./vmware-install.pl
+按提示一步步进行，如果最后报错，一般也不用担心，重启后 VMware Tools 能正确启动。
+
 
 * 其他美化
 
@@ -336,6 +406,34 @@ EndSection
 
 
 * 安装一些工具
+
+** linux tool
+pacin vi
+pacin w3m
+pacin wget
+pacin axel
+pacin tmux
+pacin bind-utils
+pacin unbound
+pacin screenfetch
+pacin shadowsocks-qt5
+pacin the_silver_searcher
+
+pacin cloc
+pacin jq
+pacin tig
+pacin shellcheck
+
+** python tool
+pip install --user pipenv
+
+sudo pip install ipython
+sudo pip install ptpython
+sudo pip install pythonpy
+sudo pip install pygments
+sudo pip install ansible
+sudo pip install percol
+sudo pip install rm-protection
 
 ** linux-headers
 pacman -S linux-headers
@@ -442,3 +540,82 @@ Arch 下的虚拟机首先开源的 VirtualBox，安装官方源的 virtualbox v
 
 再去官网下载 Oracle VM VirtualBox Extension Pack，在设置中导入使用。
 安装 windows 的过程不在这里讲解，记得安装之后在 windows 内安装扩展客户端软件即可。
+
+** gnu parallel
+使用gnu parallel的目的只要一个，就是为了快！
+
+安装:
+
+(wget -O - pi.dk/3 || curl pi.dk/3/) | bash
+
+** tldr
+mkdir -p ~/bin
+curl -o ~/bin/tldr https://raw.githubusercontent.com/raylee/tldr/master/tldr
+chmod +x ~/bin/tldr
+
+** docker
+Installation:
+sudo pacman -S docker
+
+Starting Docker:
+
+There is a systemd service unit created for docker. To start the docker service:
+
+sudo systemctl start docker
+
+To start on system boot:
+
+sudo systemctl enable docker
+
+
+* 一些优化
+
+** SATA 启用 AHCI 模式
+
+SATA 有两种工作模式：原生的 AHCI 模式提供更好的性能（如热插拔和 NCQ 支持）、模拟的 IDE 模式提供
+更好的兼容性。一般主板出厂默认将 SATA 模式设置为 IDE 模式，但如今先进的 Linux 和 Windows 都
+早已原生支持 AHCI，所以我们最好打开 AHCI 模式以优化性能。
+
+Arch Linux 在安装好以后，内核镜像默认没有载入 AHCI 驱动模块。修改 /etc/mkinitcpio.conf，
+添加 ahci 到 MODULES 变量：
+
+MODULES="ahci"
+然后重建内核镜像，重新启动后 AHCI 驱动就会加载：
+
+$ mkinitcpio -p linux
+在主板 UEFI 或 BIOS 中，将 SATA 模式从 IDE（或 PATA Emulation 等等），设置为 AHCI（或 Native 等等）。
+
+设置好以后，你可以从 dmesg 命令的输出里，找到 AHCI 和 NCQ 成功启用的证据：
+
+$ dmesg
+...
+SCSI subsystem initialized
+libata version 3.00 loaded.
+ahci 0000:00:1f.2: version 3.0
+ahci 0000:00:1f.2: irq 24 for MSI/MSI-X
+ahci 0000:00:1f.2: AHCI 0001.0300 32 slots 6 ports 6 Gbps 0x10 impl SATA mode
+ahci 0000:00:1f.2: flags: 64bit ncq led clo pio slum part ems apst
+scsi host0: ahci
+scsi host1: ahci
+scsi host2: ahci
+scsi host3: ahci
+scsi host4: ahci
+scsi host5: ahci
+...
+ata5.00: 976773168 sectors, multi 16: LBA48 NCQ (depth 31/32), AA
+...
+
+** 优化系统启动速度
+
+Arch Linux 的 systemd-analyze 是个很不错的工具，利用它你可以很直观地观察到系统启动的时间都花到哪儿去了：
+
+$ systemd-analyze
+Startup finished in 6.857s (firmware) + 3.157s (loader) + 1.870s (kernel) + 8.157s (userspace) = 20.044s
+我注意到打开 AHCI 后，内核和用户空间的载入速度明显提高了，总启动时间从约 30 秒缩短到 20 秒，效果非常明显。
+
+用下面这个命令，可以了解到是什么东西启动最慢：
+
+$ systemd-analyze blame
+此外，还可以把启动过程绘制成 SVG 图表供你审阅（用 GNOME 的图片预览或 Chrome 浏览器都可以打开），这个图表中你还可以观察到是否有启动慢的组件影响到了依赖它的组件的启动：
+
+$ systemd-analyze plot > plot.svg
