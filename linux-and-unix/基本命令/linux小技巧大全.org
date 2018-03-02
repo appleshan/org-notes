@@ -1,5 +1,5 @@
 .1.提升到 root 用户
-在终端窗口里面输入: sudo -s.然后输入普通用户登陆的密码，回车即可进入 root用户权限模式.
+在终端窗口里面输入: sudo -s.然后输入普通用户登陆的密码，回车即可进入 root 用户权限模式.
 
 .2.查看文件系统格式和容量
 df -h
@@ -40,7 +40,7 @@ $ tar -czpf folder_name.tar.gz folder_name
 该命令将 folder_name 创建为 folder_name.tar.gz 存档文件。
 
 .14.递归查找文件内的字符串
-$ find ./ -name ‘*.html’ -exec grep “breadcrumbs.inc.php” ‘{}’ \; -print 
+$ find ./ -name ‘*.html’ -exec grep “breadcrumbs.inc.php” ‘{}’ \; -print
 这条命令将查找所有包含 breadcrumbs.inc.php 的 HTML 文件。
 
 .15.搜索并替换文件里的内容
@@ -65,8 +65,8 @@ or
 $ reset
 
 .19.
-如何获取吃掉你磁盘空间的最大的6个文件？
-一个使用du命令的简单单行脚本即可实现，du命令主要用于获取文件的空间使用情况。
+如何获取吃掉你磁盘空间的最大的 6 个文件？
+一个使用 du 命令的简单单行脚本即可实现，du 命令主要用于获取文件的空间使用情况。
 $ du -hsx * | sort -rh | head -6
 
 命令和选项的解释：
@@ -78,22 +78,35 @@ head – 输出文件的头几行
 
 .20.
 获取一个文件的详细状态信息
-可以使用stat命令
+可以使用 stat 命令
 # stat filename_ext  （例如：stat abc.pdf）
 
 .21.
 显示帮助
-下面的命令会随机显示一个man手册页。
+下面的命令会随机显示一个 man 手册页。
 $ man $(ls /bin | shuf | head -1)
 
 命令和选项的解释：
-man – Linux man手册
+man – Linux man 手册
 ls – 列出文件
 /bin – 系统可执行文件的路径
 shuf – 把输入内容按行随机打乱并输出
 head – 输出文件的头几行
 
 .22.
-查看glibc的版本
+查看 glibc 的版本
 ldd --version
 
+.23.
+删除大文件的前 n 行
+
+tail -n +3 old_file > new_file
+mv new_file old_file
+
+这样就删除了前 2 行，速度要比 sed 命令快
+
+.24.
+制造并发
+seq 50 | parallel -n0 -q  curl 'example.com'
+
+以你核的个数并发请求。-n0 的意思是 seq 输出不作为参数传给后面的命令。
