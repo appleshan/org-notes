@@ -401,7 +401,7 @@ $ ./vmware-install.pl
 
 * 其他美化
 
-** 设置pacman彩色输出
+** 设置 pacman 彩色输出
 打开 /etc/pacman.conf 文件，找到被注释的 #Color，改为 Color。pacman 就会输出彩色信息，方便查看。
 
 
@@ -542,7 +542,7 @@ Arch 下的虚拟机首先开源的 VirtualBox，安装官方源的 virtualbox v
 安装 windows 的过程不在这里讲解，记得安装之后在 windows 内安装扩展客户端软件即可。
 
 ** gnu parallel
-使用gnu parallel的目的只要一个，就是为了快！
+使用 gnu parallel 的目的只要一个，就是为了快！
 
 安装:
 
@@ -566,13 +566,36 @@ To start on system boot:
 
 # systemctl enable docker
 
-如果你想用你的使用者帳戶(非root帳戶)來使用Docker，把你的帳戶加到Docker的群組中：
+如果你想用你的使用者帳戶(非 root 帳戶)來使用 Docker，把你的帳戶加到 Docker 的群組中：
 
 # gpasswd -a user docker
 
 記得重新登入來套用新權限，或者你可以用這個指令讓現在的使用者階段套用新群組：
 
 $ newgrp docker
+
+** dnscrypt-proxy
+@See:
+https://wiki.archlinux.org/index.php/DNSCrypt
+https://github.com/jedisct1/dnscrypt-proxy/wiki/installation#installing-dnscrypt-proxy-on-arch-linux-as-a-system-service
+
+1. Install it with :
+
+yaourt -S dnscrypt-proxy-go
+
+2. Activate & Start the service:
+
+systemctl enable dnscrypt-proxy.service
+systemctl start dnscrypt-proxy.service
+
+3. Check successful service start:
+
+systemctl status dnscrypt-proxy.service
+
+And look for the Log Line
+
+dnscrypt-proxy is ready - live servers:
+dnscrypt-proxy is now listening on 127.0.0.1:53
 
 
 * 一些优化
