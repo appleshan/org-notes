@@ -1,0 +1,7 @@
+Docker 官方出了镜像服务
+
+# /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\config\daemon.json（Window)
+
+{
+  "registry-mirrors": ["https://registry.docker-cn.com"]
+}
