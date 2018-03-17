@@ -1,0 +1,35 @@
+#+TITLE: MacPort和Homebrew的差别
+
+* MacPort
+
+macports的工作方式是下载source code然后在本地编译。macport的理念是尽量减少对系统现有库的依赖。
+所以，第一次用macport的时候，需要很长时间让macport重新build整个基本库，什么perl啊，python啊的。
+
+代价是较长的编译时间，较多的依赖关系下载。好处是不怎么依赖系统，也就是说，更新Mac OS不会破坏你现有的
+package。
+
+另外，macports安装所有的package到/opt/local下面。这样不会和系统现有的/usr/local有什么冲突。
+
+* Homebrew
+
+这个比较新，是在Lion之后才兴起的。
+工作方式和macport类似，也是下载source并在本地编译安装。但是和macports有两个根本的区别。
+
+homebrew的理念是尽量使用系统现有的库。这样可以大大的减少编译时间。
+package都安装到/usr/local下面。
+这两点和macports是完全相反的。结果也是有利有弊。
+
+最大的好处莫过于编译时间变短，安装简单。问题就是和系统紧密依赖。
+
+另外Homebrew假设你的Mac是单用户系统，所以/usr/local的owner应该是你，而不是传统的root。
+这个假设在大多数情况下都成立。 （当然你可以改变homebrew的安装路径，然后修改你的PATH）
+
+另外，一个不太重要的区别：
+macport是用rsync来同步repository tree和获取新的package的。 
+homebrew是用git来管理repository的。
+如果你是在内部网或者firewall后通过proxy使用，这点可能会给你带来影响--一些proxy不支持rsync的。
+
+* 总结
+
+如果你是重量级的Linux用户，希望使用所有的open source package，那么macports是你不二的选择。
+如果你只希望很快的安装一些便利的工具，那么homebrew是个不错的选择。
