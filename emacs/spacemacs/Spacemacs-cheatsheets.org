@@ -288,23 +288,23 @@ Layouts 的作用是隔离缓冲区，为每个工程分配一个单独的环境
 存到文件，下次打开 Emacs 的时候自动加载保存过的 layout，上次使用 Emacs 时的多个
 工程上下文（缓冲区，窗口等）就自动恢复了。
 
-| 快捷键                | 功能                                                                         |
-|-----------------------+------------------------------------------------------------------------------|
-| SPC p l               | switch to project and create a layout (创建一个基于项目的 layout)            |
-| SPC l                 | activate the transient- state                                                |
-| SPC l ?               | toggle the documentation                                                     |
-| SPC l [1..9, 0]       | switch to nth layout                                                         |
-| SPC l [C-1..C-9, C-0] | switch to nth layout and keep the transient state active                     |
-| SPC l TAB             | switch to the latest layout                                                  |
-| SPC l b               | select a buffer in the current layout                                        |
-| SPC l d               | close current layout and keep its buffers                                    |
-| SPC l l               | select/create a layout with helm                                             |
-| SPC l L               | load layouts from file                                                       |
-| SPC l s/S             | save current open layouts (to a file)                                        |
-| SPC l w               | workspaces transient state (needs eyebrowse layer enabled)                   |
-| SPC l o               | custom layout                                                                |
-| SPC l x               | kill current layout with its buffers                                         |
-| SPC l X               | kill other layouts with their buffers                                        |
+| 快捷键                | 功能                                                              |
+|-----------------------+-------------------------------------------------------------------|
+| SPC p l               | switch to project and create a layout (创建一个基于项目的 layout) |
+| SPC l                 | activate the transient- state                                     |
+| SPC l ?               | toggle the documentation                                          |
+| SPC l [1..9, 0]       | switch to nth layout                                              |
+| SPC l [C-1..C-9, C-0] | switch to nth layout and keep the transient state active          |
+| SPC l TAB             | switch to the latest layout                                       |
+| SPC l b               | select a buffer in the current layout                             |
+| SPC l d               | close current layout and keep its buffers                         |
+| SPC l l               | select/create a layout with helm                                  |
+| SPC l L               | load layouts from file                                            |
+| SPC l s/S             | save current open layouts (to a file)                             |
+| SPC l w               | workspaces transient state (needs eyebrowse layer enabled)        |
+| SPC l o               | custom layout                                                     |
+| SPC l x               | kill current layout with its buffers                              |
+| SPC l X               | kill other layouts with their buffers                             |
 
 #+CAPTION: 设定图片宽度为 300
 #+ATTR_HTML: :width 450
@@ -330,7 +330,7 @@ Layouts 的作用是隔离缓冲区，为每个工程分配一个单独的环境
 | RET 或者 a | 打开文件         |
 | R          | 重命名文件       |
 | +          | 创建子目录       |
-| g          | 刷新            |
+| g          | 刷新             |
 
 * treemacs
 treemacs 就是左边的文件树, 真心比 vim 的强不少, 打开的快捷键是 [<spc> f t]。
