@@ -110,6 +110,7 @@ $ conda env update -f=/path/to/environment.yml
 其中-f 表示你要导出文件在本地的路径，所以/path/to/environment.yml 要换成你本地的实际路径
 
 ** 删除 Python 环境
+就是删除这个环境下所有的东西。
 #+BEGIN_EXAMPLE
 $ conda remove --name python26 --all
 #+END_EXAMPLE
@@ -120,6 +121,7 @@ $ conda env remove -n python26
 
 * 管理包
 ** 查看当前已经安装的包
+查看当前虚拟环境中安装了的 python 包
 #+BEGIN_EXAMPLE
 $ conda list
 # packages in environment at /opt/python/miniconda3/envs/python35:
