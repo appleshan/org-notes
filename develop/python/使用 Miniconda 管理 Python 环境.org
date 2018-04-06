@@ -1,0 +1,177 @@
+#+TITLE: 用 Miniconda 管理 Python 环境
+
+* 介绍
+Anaconda 是一个用于科学计算的 Python 发行版，支持 Linux, Mac, Windows 系统，提供
+python 环境管理和包管理功能，可以很方便在多个版本 python 之间切换和管理第三方包，
+Anaconda 使用 conda 来进行 Python 环境管理和包管理。
+
+* 安装
+可以从 Miniconda 官方网站下载 https://conda.io/miniconda.html。
+
+这里安装的是 Linux 版本
+#+BEGIN_EXAMPLE
+Miniconda3-latest-Linux-x86_64.sh
+#+END_EXAMPLE
+
+安装完成后，Anaconda 会在 ~/.bashrc 文件中把 Anaconda2 的路径加到 PATH 里。如下：
+#+BEGIN_SRC sh
+# added by Anaconda3 installer
+export PATH="/apps/anaconda3/bin:$PATH"
+#+END_SRC
+
+* 管理 python 环境
+conda 可以为不同的项目建立不同的运行环境。
+** 查看当前使用的 Python 版本
+#+BEGIN_EXAMPLE
+$ python -V
+Python 3.6.4 :: Anaconda, Inc.
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+$ conda info --envs
+# conda environments:
+#
+base                  *  /opt/python/miniconda3
+#+END_EXAMPLE
+或者
+#+BEGIN_EXAMPLE
+$ conda env list
+# conda environments:
+#
+base                  *  /opt/python/miniconda3
+#+END_EXAMPLE
+
+** 创建新的环境
+创建环境时，可以指定要安装在环境中的 Python 版本。
+这里创建了两个 Python 环境分别使用 2.6。x 和 3.5.x
+#+BEGIN_EXAMPLE sh
+$ conda create --name python35 python=3.5
+$ conda create --name python26 python=2.6
+#+END_EXAMPLE
+
+查看 Python 环境
+#+BEGIN_EXAMPLE
+$ conda info --envs
+# conda environments:
+#
+python26                 /opt/python/miniconda3/envs/python26
+python27                 /opt/python/miniconda3/envs/python27
+python35                 /opt/python/miniconda3/envs/python35
+base                  *  /opt/python/miniconda3
+#+END_EXAMPLE
+其中 * 号表示当前使用的 Python 环境
+
+** 切换 Python 环境
+*** 列出环境
+#+BEGIN_EXAMPLE
+$ conda env list
+#+END_EXAMPLE
+
+*** 进入环境
+进入环境后，你会在终端提示符中看到环境名称
+
+#+BEGIN_EXAMPLE
+$ source activate python35
+
+$ python -V
+Python 3.5.4 :: Anaconda, Inc.
+
+$ conda info --envs
+# conda environments:
+#
+python26                 /opt/python/miniconda3/envs/python26
+python27                 /opt/python/miniconda3/envs/python27
+python35              *  /opt/python/miniconda3/envs/python35
+base                     /opt/python/miniconda3
+#+END_EXAMPLE
+
+*** 离开环境
+如果不想使用当前版本，而想恢复到默认版面，那么
+#+BEGIN_EXAMPLE
+$ source deactivate
+#+END_EXAMPLE
+
+*** 共享环境
+共享环境非常有用，它能让其他人安装你的代码中使用的所有包，并确保这些包的版本正确。
+**** 导出环境文件
+#+BEGIN_EXAMPLE
+$ conda env export > environment.yaml
+#+END_EXAMPLE
+以上命令将你当前的环境保存到文件中（包括 Pyhton 版本和所有包的名称）。
+在 GitHub 上共享代码时，最好同样创建环境文件并将其包括在代码库中。这能让其他人更
+轻松地安装你的代码的所有依赖项。
+
+**** 导入环境文件
+首先在 conda 中进入你的环境。
+然后在使用以下命令更新你的环境：
+#+BEGIN_EXAMPLE
+$ conda env update -f=/path/to/environment.yml
+#+END_EXAMPLE
+其中-f 表示你要导出文件在本地的路径，所以/path/to/environment.yml 要换成你本地的实际路径
+
+** 删除 Python 环境
+#+BEGIN_EXAMPLE
+$ conda remove --name python26 --all
+#+END_EXAMPLE
+或者
+#+BEGIN_EXAMPLE
+$ conda env remove -n python26
+#+END_EXAMPLE
+
+* 管理包
+** 查看当前已经安装的包
+#+BEGIN_EXAMPLE
+$ conda list
+# packages in environment at /opt/python/miniconda3/envs/python35:
+#
+ca-certificates           2017.08.26           h1d4fec5_0
+certifi                   2017.7.27.1      py35h19f42a1_0
+libedit                   3.1                  heed3624_0
+libffi                    3.2.1                h4deb6c0_3
+libgcc-ng                 7.2.0                h7cc24e2_2
+libstdcxx-ng              7.2.0                h7a57d05_2
+ncurses                   6.0                  h06874d7_1
+openssl                   1.0.2l               h077ae2c_5
+pip                       9.0.1            py35haa8ec2a_3
+python                    3.5.4               he2c66cf_20
+readline                  7.0                  hac23ff0_3
+setuptools                36.5.0           py35ha8c1747_0
+sqlite                    3.20.1               h6d8b0f3_1
+tk                        8.6.7                h5979e9b_1
+wheel                     0.29.0           py35h601ca99_1
+xz                        5.2.3                h2bcbf08_1
+zlib                      1.2.11               hfbfcf68_1
+#+END_EXAMPLE
+
+** 安装包
+conda 的包管理功能可 pip 是一样的，当然你选择 pip 来安装包也是没问题的。
+#+BEGIN_EXAMPLE
+conda install -n python35 psutil
+#+END_EXAMPLE
+
+** 删除包
+#+BEGIN_EXAMPLE
+$ conda uninstall -n python35 psutil
+#+END_EXAMPLE
+
+** 更新包
+conda 本身可以看作是一个包，python 环境可以看作是一个包，anaconda 也可以看作是
+一个包，因此除了普通的第三方包支持更新之外，这 3 个包也支持。比如：
+#+BEGIN_EXAMPLE
+# 更新 conda 本身
+conda update conda
+# 更新 anaconda 应用
+conda update anaconda
+# 更新 python，假设当前 python 环境是 3.6.1，而最新版本是 3.6.2，那么就会升级到 3.6.2
+conda update python
+#+END_EXAMPLE
+
+* 修改镜像地址
+Anaconda 的镜像地址默认在国外，用 conda 安装包的时候会很慢，目前可用的国内镜像
+源地址有清华大学的。修改 ~/.condarc 配置：
+#+BEGIN_SRC yaml
+channels:
+ - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+ - defaults
+show_channel_urls: true
+#+END_SRC
