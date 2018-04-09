@@ -1,0 +1,173 @@
+#+TITLE: manjaro 系统 i3wm
+
+* 默认快捷键
+** 系统提示的快捷键
+- default mod=<Super>
+- help: mod+Shift+h
+
+- open new terminal: mod+Enter
+- kill focused: mod+Shift+q
+- toggle split direction: mod+q
+- dmenu: mod+d
+- bmenu: mod+Ctrl+b
+- morc_menu: mod+z
+- switch to workspace 1-8: mod+1-8
+- send to workspace 1-8: mod+Ctrl+1-8
+- navigate workspaces: mod+Ctrl+arrowkeys
+
+- toggle floating: mod+Shift+Space
+- exit: mod+0
+
+** change focus
+- mod+j : 焦点左右移动
+- mod+k : 焦点上下移动
+- mod+l : 焦点上下移动
+- mod+; : 焦点左右移动
+
+也可以使用方向键（左、下、上、右）替代（j、k、l、;）：
+- mod+Left  : 焦点左右移动
+- mod+Down  : 焦点上下移动
+- mod+Up    : 焦点上下移动
+- mod+Right : 焦点左右移动
+
+** move focused window
+- mod+Shift+j : 窗口左右移动
+- mod+Shift+k : 窗口上下移动
+- mod+Shift+l : 窗口上下移动
+- mod+Shift+; : 窗口左右移动
+
+也可以使用方向键替代（j、k、l、;）：
+- mod+Shift+Left  : 窗口左右移动
+- mod+Shift+Down  : 窗口上下移动
+- mod+Shift+Up    : 窗口上下移动
+- mod+Shift+Right : 窗口左右移动
+
+** workspace back and forth
+- mod+b       : 返回上一个工作区
+- mod+Shift+b : 携带当前焦点所在容器一起移动到上一个工作区
+
+** split orientation（窗口分割的方向）
+- mod+h : 设置为水平方向分割
+- mod+v : 设置为垂直方向分割
+
+** toggle fullscreen mode for the focused container
+- mod+f : fullscreen toggle
+
+** change container layout (stacked, tabbed, toggle split)
+- mod+s : layout stacking
+- mod+w : layout tabbed
+- mod+e : layout toggle split
+
+** toggle tiling / floating
+mod+Shift+space : floating toggle
+
+** change focus between tiling / floating windows
+mod+space : focus mode_toggle
+
+** navigate workspace next / previous
+- mod+Ctrl+Left  : workspace prev
+- mod+Ctrl+Right : workspace next
+
+** switch to workspace
+- mod+1 : 打开 1# 工作区
+- mod+2 : 打开 2# 工作区
+- mod+3 : 打开 3# 工作区
+- mod+4 : 打开 4# 工作区
+- mod+5 : 打开 5# 工作区
+- mod+6 : 打开 6# 工作区
+- mod+7 : 打开 7# 工作区
+- mod+8 : 打开 8# 工作区
+
+** Move focused container to workspace
+- mod+Ctrl+1 : move focused to workspace 1#
+- mod+Ctrl+2 : move focused to workspace 2#
+- mod+Ctrl+3 : move focused to workspace 3#
+- mod+Ctrl+4 : move focused to workspace 4#
+- mod+Ctrl+5 : move focused to workspace 5#
+- mod+Ctrl+6 : move focused to workspace 6#
+- mod+Ctrl+7 : move focused to workspace 7#
+- mod+Ctrl+8 : move focused to workspace 8#
+
+** Move to workspace with focused container
+- mod+Shift+1 : move container to workspace 1#
+- mod+Shift+2 : move container to workspace 2#
+- mod+Shift+3 : move container to workspace 3#
+- mod+Shift+4 : move container to workspace 4#
+- mod+Shift+5 : move container to workspace 5#
+- mod+Shift+6 : move container to workspace 6#
+- mod+Shift+7 : move container to workspace 7#
+- mod+Shift+8 : move container to workspace 8#
+
+** 重载 i3 配置（修改过配置文件后使用该操作）
+mod+Shift+c : reload
+
+** 重启 i3 进程（更新了 i3 程序后使用该操作）
+mod+Shift+r : restart
+
+** exit i3
+mod+Shift+e
+
+** 关机、重启与锁屏
+*** 进入“系统模式”菜单
+mod+0
+
+*** 在“resize”模式中
+- l : lock
+- s : suspend
+- u : switch_user
+- e : logout
+- h : hibernate
+- r : reboot
+- Shift+s : shutdown
+
+*** exit system mode
+Enter or Escape
+
+** Resize window
+*** 进入“resize”模式
+mod+r
+
+*** 在“resize”模式中改变窗口大小
+- mod+j : 收缩宽度
+- mod+k : 增长高度
+- mod+l : 收缩高度
+- mod+; : 增长宽度
+
+也可以使用方向键（左、下、上、右）替代（j、k、l、;）：
+- mod+Left  : 收缩宽度
+- mod+Down  : 增长高度
+- mod+Up    : 收缩高度
+- mod+Right : 增长宽度
+
+*** exit resize mode
+Enter or Escape
+
+** 改变音量
+mod+Ctrl+m : 打开音量浮动窗口
+
+* 默认软件
+- 锁屏/关机/重启/退出 菜单
+  按下 mod+0 唤出该菜单，然后按下：
+  - l 锁屏
+  - Shift+s 关机
+  - r 重启
+  - e 退出 i3
+- pcmanfm - 文件管理器
+  - mod+F3       : 以普通用户权限打开文件管理器
+  - mod+Shfit+F3 : 使用 gksu 以 root 用户权限打开文件管理器
+- i3lock-fancy - 屏保程序
+  锁屏：mod+9
+  解锁：输入用户密码再按回车键即锁屏。
+- i3status - i3 状态显示条
+  - mod+m : bar mode toggle
+- dmenu - 程序启动器
+- scrot - 截图（本配置使用的截屏快捷键调用此工具）
+  - PrtSc           : 截屏（PrtSc 即 PrintScreen 键）
+  - mod+PrtSc       : 选择窗口截图
+  - mod+Shift+PrtSc : 选择区域截图
+- networkmanager 用户
+  - nm-connection-editor 图形界面的联网管理工具
+  - nm-applet 托盘图标（推荐）
+- palemoon - 蒼月瀏覽器
+  - mod+F2
+- xkill : 杀进程，可以通过鼠标点击目标杀进程
