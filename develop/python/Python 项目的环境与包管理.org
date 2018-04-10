@@ -1,0 +1,206 @@
+#+TITLE: Python 项目的环境与包管理
+
+@see https://zhuanlan.zhihu.com/p/32913361
+
+* pipenv 是什么？
+Pipenv 是 Python 项目的环境与包管理。
+
+这个库相当于是环境管理和包管理二合一，由 Kenneth Reitz（Requests 的作者 ）编写，
+现在移交给 Python 官方来维护，提供比 pip 体验更好的开发包管理。它的 Slogon 是
+Python Development Workflow for Humans，用来解决各种环境不一致、安装包的问题。
+
+其实它不是什么先进的理念和技术，如果你熟悉
+Node.js 的 npm/yarn 或 Ruby 的 bundler，那么就非常好理解了，它在思路上与这些工具
+类似。尽管 pip 可以安装 Python 包，但仍推荐使用 Pipenv，因为它是一种更高级的工具，
+可简化依赖关系管理的常见使用情况。
+
+主要特性包含：
+
+- 根据 Pipfile 自动寻找项目根目录。
+- 如果不存在，可以自动生成 Pipfile 和 Pipfile.lock。
+- 自动在项目目录的 .venv 目录创建虚拟环境。
+  （当然这个目录地址通过设置 WORKON_HOME 改变）
+- 自动管理 Pipfile 新安装和删除的包。
+- 自动更新 pip。
+
+对于新手和老手来说都是更好的选择。
+
+* pipenv 都包含什么？
+pipenv 是 Pipfile 主要倡导者、requests 作者 Kenneth Reitz 写的一个命令行工具，主
+要包含了 Pipfile、pip、click、requests 和 virtualenv。Pipfile 和 pipenv 本来都是
+Kenneth Reitz 的个人项目，后来贡献给了 pypa 组织。Pipfile 是社区拟定的依赖管理文
+件，用于替代过于简陋的 requirements.txt 文件。
+
+Pipfile 的基本理念是：
+
+- Pipfile 文件是 TOML 格式而不是 requirements.txt 这样的纯文本。
+- 一个项目对应一个 Pipfile，支持开发环境与正式环境区分。
+  默认提供 default 和 development 区分。提供版本锁支持，存为 Pipfile.lock。
+- click 是 Flask 作者 Armin Ronacher 写的命令行库，现在 Flask 已经集成了它。
+
+接下来，我们看看怎么使用它吧
+
+* 入门
+pipenv 兼容 Python 2/3，我们这里以 Mac 下 Python 3 为例：
+
+** 安装 pipenv
+#+BEGIN_SRC sh
+❯ brew install python3  # 如果已经安装了可以忽略
+❯ python3 -m pip install --upgrade --force-reinstall pip
+❯ pip3 install pipenv --user  # 推荐安装在个人目录下
+❯ export PATH="/Users/dongweiming/Library/Python/3.6/bin:$PATH"  # 把用户目录下 bin 放在最前面，这样可以直接使用 pipenv 了
+#+END_SRC
+
+** 使用 pipenv
+用一个空目录体验一下：
+#+BEGIN_EXAMPLE
+❯ mkdir test_pipenv
+❯ cd test_pipenv
+❯ pipenv install  # 创建一个虚拟环境
+Creating a virtualenv for this project…
+...
+Installing setuptools, pip, wheel...done.
+Virtualenv location: /Users/dongweiming/.virtualenvs/test_pipenv-GP_s2TW5
+Creating a Pipfile for this project…
+Pipfile.lock not found, creating…
+Locking [dev-packages] dependencies…
+Locking [packages] dependencies…
+Updated Pipfile.lock (c23e27)!
+Installing dependencies from Pipfile.lock (c23e27)…
+  🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0/0 — 00:00:00
+To activate this project's virtualenv, run the following:
+ $ pipenv shell
+❯ which python3
+/usr/local/Cellar/python3/3.6.1/bin/python3  # 还是 mac 自带的 Python
+❯ pipenv shell  # 激活虚拟环境
+Spawning environment shell (/bin/zsh). Use 'exit' to leave.
+source /Users/dongweiming/.virtualenvs/test_pipenv-GP_s2TW5/bin/activate
+❯ which python3  # 已经在虚拟环境里了
+/Users/dongweiming/.virtualenvs/test_pipenv-GP_s2TW5/bin/python3
+❯ exit  # 退出虚拟环境
+❯ which python3
+/usr/local/Cellar/python3/3.6.1/bin/python3
+#+END_EXAMPLE
+以上就是原来 virtualenv 的基本用法了。
+
+我们看一下当前目录现在是什么样子的:
+#+BEGIN_EXAMPLE
+❯ ls
+Pipfile  Pipfile.lock
+#+END_EXAMPLE
+
+这个环境下目前什么都没有。我们安装 2 个包：
+#+BEGIN_EXAMPLE
+❯ pipenv install elasticsearch-dsl requests
+Installing elasticsearch-dsl…
+...
+Adding elasticsearch-dsl to Pipfile's [packages]…
+Installing requests…
+...
+Adding requests to Pipfile's [packages]…
+  PS: You have excellent taste! ✨ 🍰 ✨
+Locking [dev-packages] dependencies…
+Locking [packages] dependencies…
+Updated Pipfile.lock (8d307d)!
+#+END_EXAMPLE
+
+现在 Pipfile.lock 已经更新了，包含了 elasticsearch-dsl、requests 和相关依赖的包
+信息。
+
+另外如果你添加--two 或--three 标志到上面的最后一个命令，它分别使用 Python 2 或 3
+来初始化你的项目。 否则将使用默认版本的 Python。
+
+可以看一下依赖关系：
+#+BEGIN_EXAMPLE
+❯ pipenv graph
+elasticsearch-dsl==6.1.0
+  - elasticsearch [required: <7.0.0,>=6.0.0, installed: 6.1.1]
+    - urllib3 [required: <1.23,>=1.21.1, installed: 1.22]
+  - ipaddress [required: Any, installed: 1.0.19]
+  - python-dateutil [required: Any, installed: 2.6.1]
+    - six [required: >=1.5, installed: 1.10.0]
+  - six [required: Any, installed: 1.10.0]
+requests==2.18.4
+  - certifi [required: >=2017.4.17, installed: 2017.11.5]
+  - chardet [required: <3.1.0,>=3.0.2, installed: 3.0.4]
+  - idna [required: <2.7,>=2.5, installed: 2.6]
+  - urllib3 [required: <1.23,>=1.21.1, installed: 1.22]
+#+END_EXAMPLE
+
+可以看到，他俩都依赖了 urllib3。虽然现在 pipenv 不能直接卸载包及其依赖，但是由于
+它提供了良好的接口，我们还是可以实现：
+#+BEGIN_EXAMPLE
+❯ pipenv uninstall `pipenv graph --json |python3 depends.py requests`
+Un-installing certifi…
+Uninstalling certifi-2017.11.5:
+  Successfully uninstalled certifi-2017.11.5
+No package certifi to remove from Pipfile.
+Un-installing requests…
+Uninstalling requests-2.18.4:
+  Successfully uninstalled requests-2.18.4
+Removing requests from Pipfile…
+Un-installing idna…
+Uninstalling idna-2.6:
+  Successfully uninstalled idna-2.6
+No package idna to remove from Pipfile.
+Un-installing chardet…
+Uninstalling chardet-3.0.4:
+  Successfully uninstalled chardet-3.0.4
+No package chardet to remove from Pipfile.
+Locking [dev-packages] dependencies…
+Locking [packages] dependencies…
+Updated Pipfile.lock (c05ac4)!
+#+END_EXAMPLE
+
+其中 depends.py 脚本会解析依赖关系，排除其他包依赖的项目然后删除：
+#+BEGIN_SRC sh
+❯ cat depends.py
+#+END_SRC
+#+BEGIN_SRC python
+import sys
+import json
+package = sys.argv[1]
+other_dependencies = set()
+removing_dependencies = set([package])
+for i in json.load(sys.stdin):
+    for p in i['dependencies']:
+        key = p['key']
+        if i['package']['key'] == package:
+            removing_dependencies.add(key)
+        else:
+            other_dependencies.add(key)
+print(' '.join(removing_dependencies - other_dependencies))
+#+END_SRC
+
+再看一下现在环境中的包依赖关系：
+#+BEGIN_EXAMPLE
+❯ pipenv graph
+elasticsearch-dsl==6.1.0
+  - elasticsearch [required: >=6.0.0,<7.0.0, installed: 6.1.1]
+    - urllib3 [required: >=1.21.1,<1.23, installed: 1.22]
+  - ipaddress [required: Any, installed: 1.0.19]
+  - python-dateutil [required: Any, installed: 2.6.1]
+    - six [required: >=1.5, installed: 1.10.0]
+  - six [required: Any, installed: 1.10.0]
+#+END_EXAMPLE
+是不是很干净呢？
+
+* 其他功能
+除了上述基本功能以外，pipenv 还有很多附加的功能，我举几个日常比较常用的例子：
+#+BEGIN_EXAMPLE
+❯ pipenv run which python # 「pipenv run」可以激活虚拟环境，并使用 shell 命令
+/Users/dongweiming/.virtualenvs/test_pipenv-GP_s2TW5/bin/python
+❯ pipenv check  # 检查装的包的安全性
+Checking PEP 508 requirements…
+Passed!
+Checking installed package safety…
+All good!
+❯ pipenv --man  # 传统的看文档的方法
+❯ pipenv check --style depends.py  # 代码 Flake8 检查，在这里我修改了 depends.py 让它故意有问题
+/Users/dongweiming/test_pipenv/depends.py:1:1: F401 'os' imported but unused
+#+END_EXAMPLE
+
+另外由于 autoenv 也是 Kenneth Reitz 写的，所以 pipenv 默认也包含了对.env 文件的
+支持。
+
+是不是方便很多呢？
