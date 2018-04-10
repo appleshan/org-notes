@@ -55,3 +55,6 @@ echo "进入 pipenv.";
 deactivate
 echo "离开了 pipenv.";
 #+END_SRC
+
+* 参考资料
+- [[https://blog.kuoe0.tw/posts/2016/06/30/cli-auto-setup-development-environment-based-on-directory-autoenv/][基於資料夾來自動設定開發環境 - autoenv]]
