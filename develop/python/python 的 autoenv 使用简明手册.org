@@ -56,5 +56,11 @@ deactivate
 echo "离开了 pipenv.";
 #+END_SRC
 
+* 搭配 pyenv
+如果启用了 pyenv，则退出环境的命令是：
+#+BEGIN_EXAMPLE
+source deactivate
+#+END_EXAMPLE
+
 * 参考资料
 - [[https://blog.kuoe0.tw/posts/2016/06/30/cli-auto-setup-development-environment-based-on-directory-autoenv/][基於資料夾來自動設定開發環境 - autoenv]]
