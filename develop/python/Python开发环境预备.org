@@ -1,0 +1,41 @@
+#+TITLE: Python开发环境预备
+
+* 以 pyenv 及 pipenv + autoenv 的方式开发 Python
+所涉及到的工具有：
+
+- pyenv 版本管理
+- pipenv 开发工作流管理
+- autoenv 基于目录的环境自动构建
+
+* Python版本管理
+Pyenv 是一种可以实现安装不同版本Python并可在不同版本间任意切换的管理工具。
+
+* Python项目的环境及包管理
+Pipenv是python项目中的包管理工具，通过pipenv安装的pyhon包将被记录于pipfile当中，方便项目中包的依赖管理及安装部署;
+Pipenv工具是集pip, pipfile, virtualenv于一身，故它也实现了项目目录的虚拟环境创建，使得其项目的运行环境能够满足独立且隔离，不受系统及其他环境的影响;
+
+- 在第一次执行`pipenv install`时，会在该项目创建对应的虚拟环境;
+- 同时生成Pipfile及Pipfile.lock文件，用于管理项目中Python包依赖;
+- 第一次安装依赖包,需要指定`--two`或`--three`参数指定python2/3.x的运行环境
+
+$ pipenv install --three <packageName>
+
+* Python项目环境的自启动
+Autoenv可以实现在进入项目目录时，将自启动需要的运行环境;
+
+1 . 安装autoenv
+使用pip方式安装存在问题，会导致terminal异常退出，之后的版本可能会有更新;
+目前是以git方式进行安装：
+#+BEGIN_EXAMPLE
+$ git clone git://github.com/kennethreitz/autoenv.git ~/.autoenv
+$ echo 'source ~/.autoenv/activate.sh' >> ~/.bashrc
+#+END_EXAMPLE
+
+2 . 创建.env文件
+在已有的pipenv项目中运行pipenv shell,
+会得到虚拟环境路径信息，通过信息创建.env运行环境文件;
+#+BEGIN_EXAMPLE
+$ echo "source /home/{userName}/.local/share/virtualenvs/{projectName}/bin/activate" > {projectName}/.env
+#+END_EXAMPLE
+
+3 . 再次进入项目目录，将自启动该项目的虚拟环境
