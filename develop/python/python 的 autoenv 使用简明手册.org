@@ -1,10 +1,15 @@
 #+TITLE: python 的 autoenv 使用简明手册
 
 * kennethreitz/autoenv
-当只使用 kennethreitz/autoenv，
-先使用 git 方式安装了 autoenv。
+只需了解：
+- 当进入目录，载入： .env
+- 当离开目录，载入： .env.leave
 
-配置如下：
+** 安装
+当只使用 kennethreitz/autoenv，
+先使用 git 方式安装了 autoenv 。
+
+** 配置
 - .zshrc
 #+BEGIN_SRC sh
 source ~/.autoenv/activate.sh
@@ -22,10 +27,15 @@ deactivate
 #+END_EXAMPLE
 
 * Tarrasch/zsh-autoenv
-当只使用 Tarrasch/zsh-autoenv
-先使用 git 方式安装了 zsh-autoenv。
+只需了解：
+- 当进入目录，载入： .autoenv.zsh
+- 当离开目录，载入： .autoenv_leave.zsh
 
-配置如下：
+** 安装
+当只使用 Tarrasch/zsh-autoenv，
+使用 git 方式安装了 zsh-autoenv 。
+
+** 配置
 - .zshrc
 #+BEGIN_SRC sh
 source ~/.oh-my-zsh/custom/plugins/zsh-autoenv/autoenv.zsh
