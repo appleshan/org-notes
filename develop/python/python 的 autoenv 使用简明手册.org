@@ -7,7 +7,7 @@
 
 ** 安装
 当只使用 kennethreitz/autoenv，
-先使用 git 方式安装了 autoenv 。
+先使用 git 方式安装了 autoenv。
 
 ** 配置
 - .zshrc
@@ -31,9 +31,12 @@ deactivate
 - 当进入目录，载入： .autoenv.zsh
 - 当离开目录，载入： .autoenv_leave.zsh
 
+而這兩個檔案其實就只是一般的 shell script，autoenv 做的就只是幫你自動執行這兩個
+shell script 而已。
+
 ** 安装
 当只使用 Tarrasch/zsh-autoenv，
-使用 git 方式安装了 zsh-autoenv 。
+使用 git 方式安装了 zsh-autoenv。
 
 ** 配置
 - .zshrc
