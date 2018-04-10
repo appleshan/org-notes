@@ -1,0 +1,44 @@
+#+TITLE: python 的 autoenv 使用简明手册
+
+* kennethreitz/autoenv
+当只使用 kennethreitz/autoenv，
+先使用 git 方式安装了 autoenv。
+
+配置如下：
+- .zshrc
+#+BEGIN_SRC sh
+source ~/.autoenv/activate.sh
+export AUTOENV_ENABLE_LEAVE=true
+#+END_SRC
+
+- .env
+#+BEGIN_EXAMPLE
+. /home/appleshan/.local/share/virtualenvs/test_pipenv-iVWx5v4Q/bin/activate
+#+END_EXAMPLE
+
+- .env.leave
+#+BEGIN_EXAMPLE
+deactivate
+#+END_EXAMPLE
+
+* Tarrasch/zsh-autoenv
+当只使用 Tarrasch/zsh-autoenv
+先使用 git 方式安装了 zsh-autoenv。
+
+配置如下：
+- .zshrc
+#+BEGIN_SRC sh
+source ~/.oh-my-zsh/custom/plugins/zsh-autoenv/autoenv.zsh
+#+END_SRC
+
+- .autoenv.zsh
+#+BEGIN_SRC sh
+echo "进入 pipenv.";
+. /home/appleshan/.local/share/virtualenvs/test_pipenv-iVWx5v4Q/bin/activate
+#+END_SRC
+
+- .autoenv_leave.zsh
+#+BEGIN_SRC sh
+deactivate
+echo "离开了 pipenv.";
+#+END_SRC
