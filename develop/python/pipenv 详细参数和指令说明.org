@@ -1,0 +1,431 @@
+#+TITLE: pipenv 详细参数和指令说明
+
+pipenv
+pipenv [OPTIONS] COMMAND [ARGS]...
+Options：
+
+--upgrade
+
+更新pipenv＆pip到最新版本
+
+--where
+
+输出项目根目录信息
+
+--venv
+
+输出虚拟环境信息
+
+--py
+
+输出python解释器的信息
+
+--envs
+
+输出环境变量信息
+
+--rm
+
+删除当前虚拟环境
+
+--bare
+
+精简输出
+
+--man
+
+显示帮助手册页面
+
+--three, --two
+
+使用python3/2创建虚拟环境
+
+--python \<python>
+
+指定应该使用哪个版本的Python虚拟环境
+
+--site-packages
+
+为虚拟环境启用site-packages
+
+--version
+
+显示版本并退出
+
+check
+检查装的包的安全性
+
+pipenv check [OPTIONS] [ARGS]...
+Options：
+
+--three, --two
+
+使用python3/2创建虚拟环境
+
+--python \<python>
+
+指定应该使用哪个版本的Python虚拟环境
+
+--system
+
+使用系统的Python
+
+--unused \<unused>
+
+指定项目路径，显示可能未使用的依赖关系。
+
+clean
+卸载未在pipfile.lock中指定的所有软件包
+
+pipenv clean [OPTIONS]
+Options:
+
+-v，--verbose
+
+详细信息模式
+
+--three, --two
+
+使用python3/2创建虚拟环境
+
+--python \<python>
+
+指定应该使用哪个版本的Python虚拟环境
+
+--dry-run
+
+只输出不需要的包
+
+graph
+显示当前安装的依赖关系图信息
+
+pipenv graph [OPTIONS]
+Options:
+
+--bare
+
+最小的输出 (备注：这个不太理解，尝试过指定了这个参数会输出所有的包，不指定却只输出pip安装的包，感觉和官方注释相反)
+
+--json
+
+输出JSON格式
+
+--reverse
+
+逆转依赖关系图
+
+install
+安装参数提供的软件包并将它们添加到pipfile，如果没有提供参数，就安装所有软件包。
+
+pipenv install [OPTIONS] [PACKAGE_NAME] [MORE_PACKAGES]...
+Options:
+
+-d, --dev
+
+在[dev-packages]中安装软件包
+
+--three, --two
+
+使用python3/2创建虚拟环境
+
+--python \<python>
+
+指定应该使用哪个版本的Python虚拟环境
+
+--system
+
+系统pip管理
+
+-r, --requirements \<requirements>
+
+导入一个requirements.txt文件。
+
+-c, --code \<code>
+
+从代码库导入
+
+-v, --verbose
+
+详细信息模式
+
+--ignore-pipfile
+
+在安装时忽略pipfile，使用pipfile.lock
+
+--sequential
+
+一次只安装一个依赖项，而不是同时安装。
+
+--skip-lock
+
+相反，在安装时忽略锁定机制 - 使用pipfile
+
+--deploy
+
+如果pipfile.lock过时或python版本错误则中止
+
+--pre
+
+允许预发布
+
+--keep-outdated
+
+防止在pipfile.lock中更新过时的依赖关系
+
+--selective-upgrade
+
+更新指定的包
+
+Arguments:
+
+PACKAGE_NAME
+
+包名（可选参数）
+
+MORE_PACKAGES
+
+多个包（可选参数）
+
+lock
+生成pipfile.lock
+
+pipenv lock [OPTIONS]
+Options:
+
+-v，--verbose
+
+详细信息模式
+
+--three, --two
+
+使用python3/2创建虚拟环境
+
+--python \<python>
+
+指定应该使用哪个版本的Python虚拟环境
+
+-r, --requirements
+
+生成与requirements.txt兼容的lock文件
+
+-d, --dev
+
+生成与requirements.txt兼容的开发模式依赖项
+
+--clear
+
+清除依赖关系缓存
+
+--pre
+
+允许预发布
+
+--keep-outdated
+
+防止在pipfile.lock中更新过时的依赖关系
+
+open
+在编辑器中查看指定的模块
+
+pipenv open [OPTIONS] MODULE
+Options：
+
+--three, --two
+
+使用python3/2创建虚拟环境
+
+--python \<python>
+
+指定应该使用哪个版本的Python虚拟环境
+
+MODULE
+
+模块名（必填项）
+
+run
+运行一个虚拟环境中的命令(就是在未激活虚拟环境时可以直接用虚拟环境的python执行）
+
+pipenv run [OPTIONS] COMMAND [ARGS]...
+Options:
+
+--three, --two
+
+使用python3/2创建虚拟环境
+
+--python \<python>
+
+指定应该使用哪个版本的Python虚拟环境
+
+Arguments
+
+COMMAND
+
+命令（必填项）
+
+ARGS
+
+参数（可选项）
+
+shell
+在虚拟环境中产生一个shell(就是激活虚拟环境)
+
+pipenv shell [OPTIONS] [SHELL_ARGS]...
+Options:
+
+--three, --two
+
+使用python3/2创建虚拟环境
+
+--python \<python>
+
+指定应该使用哪个版本的Python虚拟环境
+
+--fancy
+
+以好看的模式运行shell（用于如果优化过配置的shell）
+
+--anyway
+
+产生一个子shell，即使已经在虚拟环境中
+
+这个比较很少用，但就是虚拟环境中的虚拟环境，执行后在终端前面看到两个虚拟环境的括号：
+
+(my_project-dhpIKgdN) (my_project-dhpIKgdN) [root@centos my_project]#
+
+Arguments:
+
+SHELL_ARGS
+
+可选项
+
+sync
+安装所有在pipfile.lock中指定的软件包
+
+pipenv sync [OPTIONS]
+Options:
+
+-v，--verbose
+
+详细信息模式
+
+-d, --dev
+
+另外在[dev-packages]中安装软件包
+
+--three, --two
+
+使用python3/2创建虚拟环境
+
+--python \<python>
+
+指定应该使用哪个版本的Python虚拟环境
+
+--bare
+
+精简输出
+
+--clear
+
+清除依赖关系缓存
+
+--sequential
+
+一次只安装一个依赖项，而不是同时安装
+
+uninstall
+卸载指定的软件包并将其从pipfile中删除
+
+pipenv uninstall [OPTIONS] [PACKAGE_NAME] [MORE_PACKAGES]...
+Options:
+
+-v，--verbose
+
+详细信息模式
+
+--three, --two
+
+使用python3/2创建虚拟环境
+
+--python \<python>
+
+指定应该使用哪个版本的Python虚拟环境
+
+--system
+
+系统的pip管理
+
+--lock
+
+卸载之后锁定
+
+--all-dev
+
+从[dev-packages]中卸载所有软件包
+
+--all
+
+从虚拟环境中清除所有包。但不会编辑pipfile
+
+--keep-outdated
+
+防止在pipfile.lock中更新过时的依赖关系
+
+Arguments:
+
+PACKAGE_NAME
+
+包名（可选参数）
+
+MORE_PACKAGES
+
+多个包（可选参数）
+
+update
+更新指定包
+
+pipenv update [OPTIONS] [PACKAGES]...
+Options:
+
+-d, --dev
+
+在[dev-packages]中安装软件包
+
+--three, --two
+
+使用python3/2创建虚拟环境
+
+--python \<python>
+
+指定应该使用哪个版本的Python虚拟环境
+
+-v, --verbose
+
+详细信息模式
+
+--clear
+
+清除依赖关系缓存
+
+--bare
+
+精简输出
+
+--pre
+
+允许预发布
+
+--keep-outdated
+
+防止在pipfile.lock中更新过时的依赖关系
+
+--sequential
+
+一次只安装一个依赖项，而不是同时安装
+
+--outdated
+
+列出过时的依赖关系
+
+--dry-run
+
+列出过时的依赖关系
