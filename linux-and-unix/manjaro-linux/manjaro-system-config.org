@@ -398,6 +398,22 @@ $ cd vmware-tools-distrib
 $ ./vmware-install.pl
 按提示一步步进行，如果最后报错，一般也不用担心，重启后 VMware Tools 能正确启动。
 
+* 加速Pacman
+
+pacman -S axel
+vim /etc/axelrc
+注释掉如下行：
+alternate_output = 1
+vim /etc/pacman.conf
+增加如下行
+XferCommand = /usr/bin/axel -n 5 -a -o %o %u
+
+* 加速Yaourt
+Yaourt下载使用的是makepkg，所以上述pacman加速方式对yaourt不生效，所以需要进行如下操作：
+
+vim /etc/makepkg.conf
+将 http::/usr/bin/curl -c -t 3 --waitretry=3 -O %o %u
+改成 http::/usr/bin/axel -o %o %u
 
 * 其他美化
 
