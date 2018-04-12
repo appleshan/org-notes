@@ -171,3 +171,17 @@ mod+Ctrl+m : 打开音量浮动窗口
 - palemoon - 蒼月瀏覽器
   - mod+F2
 - xkill : 杀进程，可以通过鼠标点击目标杀进程
+
+* update
+
+** change focus
+- mod+h : 焦点左右移动
+- mod+j : 焦点上下移动
+- mod+k : 焦点上下移动
+- mod+l : 焦点左右移动
+
+** move focused window
+- mod+Shift+h : 窗口左右移动
+- mod+Shift+j : 窗口上下移动
+- mod+Shift+k : 窗口上下移动
+- mod+Shift+l : 窗口左右移动
