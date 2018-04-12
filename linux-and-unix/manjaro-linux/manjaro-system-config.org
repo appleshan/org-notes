@@ -624,6 +624,12 @@ And look for the Log Line
 dnscrypt-proxy is ready - live servers:
 dnscrypt-proxy is now listening on 127.0.0.1:53
 
+** wine
+sudo pacman -S wine q4wine playonlinux
+
+** 安裝影音播放軟體
+$ sudo pacman -S audacious smplayer smplayer-themes vlc
+
 
 * 一些优化
 
