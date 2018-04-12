@@ -557,6 +557,17 @@ Arch 下的虚拟机首先开源的 VirtualBox，安装官方源的 virtualbox v
 再去官网下载 Oracle VM VirtualBox Extension Pack，在设置中导入使用。
 安装 windows 的过程不在这里讲解，记得安装之后在 windows 内安装扩展客户端软件即可。
 
+$ sudo pacman -S virtualbox virtualbox-guest-iso virtualbox-guest-dkms virtualbox-guest-utils virtualbox-host-dkms virtualbox-host-modules phpvirtualbox linux-headers
+
+將電腦重開機
+$ sudo dkms autoinstall
+$ sudo systemctl enable dkms.service
+$ sudo systemctl enable vboxservice.service
+$ sudo gpasswd -a yuan vboxusers
+
+將電腦重開機
+$ sudo VBoxManage hostonlyif create
+
 ** gnu parallel
 使用 gnu parallel 的目的只要一个，就是为了快！
 
