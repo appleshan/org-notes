@@ -18,7 +18,7 @@
 - toggle floating: mod+Shift+Space
 - exit: mod+0
 
-** change focus
+** 切换焦点窗口
 - mod+j : 焦点左右移动
 - mod+k : 焦点上下移动
 - mod+l : 焦点上下移动
@@ -30,7 +30,7 @@
 - mod+Up    : 焦点上下移动
 - mod+Right : 焦点左右移动
 
-** move focused window
+** 移动焦点窗口（平铺模式）
 - mod+Shift+j : 窗口左右移动
 - mod+Shift+k : 窗口上下移动
 - mod+Shift+l : 窗口上下移动
@@ -46,17 +46,18 @@
 - mod+b       : 返回上一个工作区
 - mod+Shift+b : 携带当前焦点所在容器一起移动到上一个工作区
 
-** split orientation（窗口分割的方向）
-- mod+h : 设置为水平方向分割
-- mod+v : 设置为垂直方向分割
+** 分割窗口（窗口分割的方向）
+- mod+h : 水平分割（默认风格，h-horizon）
+- mod+v : 垂直分割（v-vertical）
 
 ** toggle fullscreen mode for the focused container
 - mod+f : fullscreen toggle
 
-** change container layout (stacked, tabbed, toggle split)
-- mod+s : layout stacking
-- mod+w : layout tabbed
-- mod+e : layout toggle split
+** 窗口平铺模式
+change container layout (stacked, tabbed, toggle split)
+- mod+s : 堆叠式（layout stacking）
+- mod+w : 标签式（layout tabbed）
+- mod+e : 在垂直平铺和水平平铺之间来回切换（layout toggle split）
 
 ** toggle tiling / floating
 mod+Shift+space : floating toggle
@@ -64,7 +65,13 @@ mod+Shift+space : floating toggle
 ** change focus between tiling / floating windows
 mod+space : focus mode_toggle
 
-** navigate workspace next / previous
+** 隐藏和再现窗口
+- mod+minus       : 隐藏和再现窗口
+- mod+Shift+minus : 隐藏窗口
+minus即是减号所在键，plus即是加号所在键
+
+** 相邻工作区切换
+navigate workspace next / previous
 - mod+Ctrl+Left  : workspace prev
 - mod+Ctrl+Right : workspace next
 
@@ -98,27 +105,28 @@ mod+space : focus mode_toggle
 - mod+Shift+7 : move container to workspace 7#
 - mod+Shift+8 : move container to workspace 8#
 
-** 重载 i3 配置（修改过配置文件后使用该操作）
-mod+Shift+c : reload
+** 重启和重载i3
+- mod+Shift+c : reload
+  重载 i3 配置（修改过配置文件后使用该操作）
 
-** 重启 i3 进程（更新了 i3 程序后使用该操作）
-mod+Shift+r : restart
+- mod+Shift+r : restart
+  重启 i3 进程（更新了 i3 程序后使用该操作）
 
 ** exit i3
 mod+Shift+e
 
-** 关机、重启与锁屏
+** 锁屏/关机/重启/退出 菜单
 *** 进入“系统模式”菜单
 mod+0
 
-*** 在“resize”模式中
-- l : lock
+*** 在模式中
+- l : 锁屏 (lock)
 - s : suspend
 - u : switch_user
-- e : logout
+- e : 退出i3 (logout)
 - h : hibernate
-- r : reboot
-- Shift+s : shutdown
+- r : 重启 (reboot)
+- Shift+s : 关机 (shutdown)
 
 *** exit system mode
 Enter or Escape
@@ -146,6 +154,9 @@ Enter or Escape
 mod+Ctrl+m : 打开音量浮动窗口
 
 * 默认软件
+- lxappearance
+  更改主题 文字过小或过大
+- xfce4-terminal
 - 锁屏/关机/重启/退出 菜单
   按下 mod+0 唤出该菜单，然后按下：
   - l 锁屏
@@ -156,12 +167,18 @@ mod+Ctrl+m : 打开音量浮动窗口
   - mod+F3       : 以普通用户权限打开文件管理器
   - mod+Shfit+F3 : 使用 gksu 以 root 用户权限打开文件管理器
 - i3lock-fancy - 屏保程序
+  图片路径是 ~/Pictures/wallpaper/lock/lock.jpg
   锁屏：mod+9
   解锁：输入用户密码再按回车键即锁屏。
 - i3status - i3 状态显示条
   - mod+m : bar mode toggle
-- dmenu - 程序启动器
-- scrot - 截图（本配置使用的截屏快捷键调用此工具）
+- feh - 壁纸
+随机模式是本配置的默认模式，它使用了 ~/.i3/wallpaper.sh 这个脚本。编辑 i3/config 文件可切换模式。
+- 随机模式
+  自动切换壁纸，将要用作壁纸的图片放到 ~/Pictures/wallpapers 即可。
+- 静态模式
+  使用一张图片作壁纸，图片路径是 ~/Pictures/wallpaper/wallpaper.jpg 。
+- i3-scrot - 截图（本配置使用的截屏快捷键调用此工具）
   - PrtSc           : 截屏（PrtSc 即 PrintScreen 键）
   - mod+PrtSc       : 选择窗口截图
   - mod+Shift+PrtSc : 选择区域截图
