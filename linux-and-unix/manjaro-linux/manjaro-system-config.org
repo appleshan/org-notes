@@ -13,26 +13,35 @@ sudo nano /etc/pacman.d/mirrorlist
 最简单的方法还是把下面那些 Mirrors 先全删掉然后输入一个新的，用光标指向某一行以后同时按下 Ctrl+K 就好。
 然后自己输入一个 Mirror，下面给出几个中国国内的 Mirror：
 
-## Country : China
-# 清华大学 TUNA 协会
-Server = http://mirrors.tuna.tsinghua.edu.cn/manjaro/stable/$repo/$arch
-# Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
+## Country : China - Hong_Kong
+Server = http://ftp.cuhk.edu.hk/pub/Linux/manjaro/stable/$repo/$arch
 
-## Country : China
-# 中国科学技术大学
-Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
-# Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
-
-## Country : China
+## 浙江大学 (浙江杭州) (ipv4, ipv6, http, https)
+## Added: 2017-06-05
 Server = https://mirrors.zju.edu.cn/manjaro/stable/$repo/$arch
+
+## 清华大学 (ipv4, ipv6, http, https)
+Server = https://mirrors.tuna.tsinghua.edu.cn/manjaro/stable/$repo/$arch
 
 ## Country : China
 Server = https://mirrors.shuosc.org/manjaro/stable/$repo/$arch
 
-## Country : Hong_Kong
-Server = http://ftp.cuhk.edu.hk/pub/Linux/manjaro/stable/$repo/$arch
+## Country : China
+Server = https://mirrors.shu.edu.cn/manjaro/stable/$repo/$arch
 
+## 中国科学技术大学 (ipv4, ipv6, http, https)
+Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
 
+## Country : Japan
+Server = http://ftp.riken.jp/Linux/manjaro/stable/$repo/$arch
+
+## Country : Japan
+Server = http://ftp.tsukuba.wide.ad.jp/Linux/manjaro/stable/$repo/$arch
+
+## Country : Singapore
+Server = https://download.nus.edu.sg/mirror/manjaro/stable/$repo/$arch
+
+** 安装后更刷新一下软件包数据库
 然后用 pacman -Syy 刷新一下软件包数据库。
 
 root@archiso ~ # pacman -Syy
@@ -42,49 +51,39 @@ extra                                1755.6 KiB  5.24M/s 00:00 [################
 community                               3.7 MiB  6.82M/s 00:01 [##################################] 100%
 root@archiso ~ #
 
-** 自动选择软件仓库镜像
-1.1.
-sudo nano /etc/pacman.d/mirrors/China
-manjaro 17 中 China 文件已经内置了中国的源，建议把清华的源镜像放在第一位，也可以不做更改
-
-1.2.
-sudo nano /etc/pacman.d/mirrorlist
-建议把清华的源镜像放在第一位，更新列表和系统的时候速度会快，也可以不做更改
-
-调整镜像列表
-
-1.3.
-sudo nano /etc/pacman-mirrors.conf
-修改 OnlyCountry = China（注意把前面的注释 # 删掉）
-
-修改 OnlyCoutntry = China
-保存退出
-
-1.4.
-sudo nano /etc/pacman.conf
-文末添加
-
-[archlinuxcn]
-SigLevel = Optional TrustedOnly
-Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
-
-sudo pacman -Syy
+** 安装 archlinuxcn-keyring 包导入 GPG key
 sudo pacman -S archlinuxcn-keyring
 
-1.5.
-排列源(在终端输入）：
-sudo pacman-mirrors -g
-然后同步：
-sudo pacman-optimize && sync
-升级系统：
-sudo pacman -Syyu
+** 安装 yaourt
+sudo pacman -S yaourt
 
-Tips：注意第二步会对固态硬盘出现问题。
-
-** AUR 镜像
+AUR 镜像:
 修改 /etc/yaourtrc，去掉 # AURURL 的注释，修改为
 
 AURURL="https://aur.tuna.tsinghua.edu.cn"
+
+** 安装 axel
+sudo pacman -S axel
+
+** 加速 pacman
+都知道 pacman 能够调用外部下载工具来代替默认的 wget 来给 pacman 提速
+比如将 /etc/pacman.conf 中
+
+XferCommand = /usr/bin/wget –passive-ftp -c -O %o %u
+
+注释掉,同时添加
+
+XferCommand = /usr/bin/axel -n5 -o %o %u
+
+即可使用axel多线程下载工具
+
+** 加速 yaourt
+而要让yaourt也支持多线程,只需修改 /etc/makepkg.conf
+
+将
+’http::/usr/bin/wget -c -t 3 –waitretry=3 -O %o %u’
+改成了
+’http::/usr/bin/axel -n5 -o %o %u’
 
 ** ArchlinuxCN 镜像
 @See https://github.com/archlinuxcn/repo
@@ -100,15 +99,11 @@ Arch Linux 中文社区仓库 是由 Arch Linux 中文社区驱动的非官方�
 [archlinuxcn]
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
 
-之后安装 archlinuxcn-keyring 包导入 GPG key。
-sudo pacman -Syy && sudo pacman -S archlinuxcn-keyring
-
 
 * 安装后更新系统
 
 在终端输入以下命令更新系统
 
-sudo pacman -Syy
 sudo pacman -Syu
 
 
@@ -141,11 +136,8 @@ sudo pacman -Rs package_name
 还是用 nano 打开，建议选择帶 UTF-8 的項：
 # nano /etc/locale.gen
 
-en_HK.UTF-8 UTF-8
 en_US.UTF-8 UTF-8
 zh_CN.UTF-8 UTF-8
-zh_HK.UTF-8 UTF-8
-zh_TW.UTF-8 UTF-8
 
 *** 执行 locale-gen 以生成 locale 讯息：
 # locale-gen
@@ -157,7 +149,7 @@ Generating locales...
   zh_TW.UTF-8... done
 Generation complete.
 
-*** locale.conf
+*** /etc/locale.conf
 将系统 locale 设置为 en_US.UTF-8，系统的 Log 就会用英文显示，这样更容易问题的判断和处理。用户可以设置自己的 locale。
 警告: 不推荐在此设置任何中文 locale，或导致 tty 乱码。
 用文字编辑器 zai 这个文件 zhon 加上这一行。
@@ -166,7 +158,6 @@ LANG=en_US.UTF-8
 
 or:
 
-# echo 用来输出某些文字，后面的大于号表示把输出保存到某个文件里啦~
 # 或者可以用文字编辑器新建这个文件加上这一行。
 echo LANG=en_US.UTF-8 > /etc/locale.conf
 
@@ -239,13 +230,13 @@ Xft.lcdfilter: lcddefault
 *** 安装中文输入法
 @See https://wiki.archlinux.org/index.php/fcitx#Chinese
 
-以安装 googlepinyin 为例
+以安装 rime 为例
 
-pacin fcitx-googlepinyin
+pacin fcitx-rime
 pacin fcitx-im
 pacin fcitx-configtool # 图形化的配置工具
 
-保存成功后，注销重新登陆系统，在终端输入 fcitx 启动服务，就能切换 googlepinyin 了。
+保存成功后，注销重新登陆系统，在终端输入 fcitx 启动服务，就能切换 rime 了。
 
 ** 设置时区（中国的时区是 Asia/Shanghai）
 # ln -s <源文件> <目标> 创建一个符号链接
@@ -305,11 +296,10 @@ plugins=(archlinux)
 ** 安装 zsh theme
 mkdir $ZSH_CUSTOM/themes
 git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
-ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
 
 # 更换默认的 shell 提示符
 # random bira blinks fino gnzh rkj-repos tjkirch xiong-chiamiov-plus ys spaceship
-ZSH_THEME="spaceship"
+ZSH_THEME="spaceship-prompt/spaceship"
 
 
 * 安装 theme
@@ -384,7 +374,7 @@ EndSection
 ** 声卡驱动
 通常不需要配置就能工作，只需解除静音。需要做的只是安装 alsa-utils 软件包：
 
-$ pacman -S alsa-utils
+pacin alsa-utils
 
 ** 安装 VMware Tools
 在 VMware 中选择“安装 VMware Tools”，然后：
@@ -397,23 +387,6 @@ $ tar zxf /mnt/VMwareTools*.tar.gz
 $ cd vmware-tools-distrib
 $ ./vmware-install.pl
 按提示一步步进行，如果最后报错，一般也不用担心，重启后 VMware Tools 能正确启动。
-
-* 加速Pacman
-
-pacman -S axel
-vim /etc/axelrc
-注释掉如下行：
-alternate_output = 1
-vim /etc/pacman.conf
-增加如下行
-XferCommand = /usr/bin/axel -n 5 -a -o %o %u
-
-* 加速Yaourt
-Yaourt下载使用的是makepkg，所以上述pacman加速方式对yaourt不生效，所以需要进行如下操作：
-
-vim /etc/makepkg.conf
-将 http::/usr/bin/curl -c -t 3 --waitretry=3 -O %o %u
-改成 http::/usr/bin/axel -o %o %u
 
 * 其他美化
 
@@ -429,27 +402,18 @@ pacin w3m
 pacin wget
 pacin axel
 pacin tmux
-pacin bind-utils
-pacin unbound
+
 pacin screenfetch
 pacin shadowsocks-qt5
-pacin the_silver_searcher
 
 pacin cloc
 pacin jq
 pacin tig
 pacin shellcheck
 
-** python tool
-pip install --user pipenv
-
-sudo pip install ipython
-sudo pip install ptpython
-sudo pip install pythonpy
-sudo pip install pygments
-sudo pip install ansible
-sudo pip install percol
-sudo pip install rm-protection
+** full text search
+pacin ripgrep
+pacin the_silver_searcher
 
 ** linux-headers
 pacman -S linux-headers
@@ -459,7 +423,7 @@ pacman -S inotify-tools
 
 ** net tools
 ifconfig, route 在 net-tools 中，
-nslookup, dig 在 dnsutils 中，
+nslookup, dig 在 dnsutils or bind-tools 中，
 ftp, telnet 等在 inetutils 中,
 ip 命令在 iproute2 中。
 
@@ -511,6 +475,9 @@ ln -s /opt/text/sublime_text_3/sublime_text /usr/local/bin/sublime_text
 ** emacs 25.3
 @See build-emacs.sh
 
+** 截图
+yaourt flameshot-git
+
 ** meld
 pacin meld
 
@@ -552,12 +519,13 @@ https://github.com/askme765cs/Wine-QQ-TIM
 ** 虚拟机
 有些时候需要使用 windows 而不想切换系统或干脆没有 windows 的情况下，我们可以使用 windows 虚拟机来代替。当然虚拟机的用处不止于此。
 
-Arch 下的虚拟机首先开源的 VirtualBox，安装官方源的 virtualbox virtualbox-ext-vnc virtualbox-guest-iso virtualbox-host-modules-arch 这几个包。
+Arch 下的虚拟机首先开源的 VirtualBox，安装官方源的 virtualbox 这个包。
 
 再去官网下载 Oracle VM VirtualBox Extension Pack，在设置中导入使用。
 安装 windows 的过程不在这里讲解，记得安装之后在 windows 内安装扩展客户端软件即可。
 
-$ sudo pacman -S virtualbox virtualbox-guest-iso virtualbox-guest-dkms virtualbox-guest-utils virtualbox-host-dkms virtualbox-host-modules phpvirtualbox linux-headers
+$ sudo pacman -S linux-headers
+$ sudo pacman -S virtualbox virtualbox-guest-iso virtualbox-guest-dkms virtualbox-guest-utils virtualbox-host-dkms
 
 將電腦重開機
 $ sudo dkms autoinstall
@@ -601,6 +569,9 @@ To start on system boot:
 
 $ newgrp docker
 
+** unbound
+pacin unbound
+
 ** dnscrypt-proxy
 @See:
 https://wiki.archlinux.org/index.php/DNSCrypt
@@ -629,6 +600,17 @@ sudo pacman -S wine q4wine playonlinux
 
 ** 安裝影音播放軟體
 $ sudo pacman -S audacious smplayer smplayer-themes vlc
+
+** python tool
+pip install --user pipenv
+
+sudo pip install ipython
+sudo pip install ptpython
+sudo pip install pythonpy
+sudo pip install pygments
+sudo pip install ansible
+sudo pip install percol
+sudo pip install rm-protection
 
 
 * 一些优化
