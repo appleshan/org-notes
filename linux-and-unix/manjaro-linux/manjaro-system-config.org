@@ -563,7 +563,7 @@ To start on system boot:
 
 如果你想用你的使用者帳戶(非 root 帳戶)來使用 Docker，把你的帳戶加到 Docker 的群組中：
 
-# gpasswd -a user docker
+# gpasswd -a appleshan docker
 
 記得重新登入來套用新權限，或者你可以用這個指令讓現在的使用者階段套用新群組：
 
