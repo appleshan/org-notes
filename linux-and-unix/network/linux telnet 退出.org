@@ -1,0 +1,38 @@
+#+TITLE: linux telnet 退出
+
+在运维过程中，常常会telnet某个ip端口，如果 能telnet通，怎么退出呢 ？
+
+
+* 1、telnet 63.172.25.18 6463 回车
+
+Trying 63.172.25.18...
+Connected to 63.172.25.18 (63.172.25.18).
+Escape character is '^]'.
+
+* 2、ctrl + ] 回车
+
+telnet>
+
+* 3、? 回车
+
+close           close current connection
+logout          forcibly logout remote user and close the connection
+display         display operating parameters
+mode            try to enter line or character mode ('mode ?' for more)
+open            connect to a site
+quit            exit telnet
+send            transmit special characters ('send ?' for more)
+set             set operating parameters ('set ?' for more)
+unset           unset operating parameters ('unset ?' for more)
+status          print status information
+toggle          toggle operating parameters ('toggle ?' for more)
+slc             change state of special charaters ('slc ?' for more)
+auth            turn on (off) authentication ('auth ?' for more)
+encrypt         turn on (off) encryption ('encrypt ?' for more)
+forward         turn on (off) credential forwarding ('forward ?' for more)
+z               suspend telnet
+!               invoke a subshell
+environ         change environment variables ('environ ?' for more)
+?               print help information
+
+* 4、quit 回车
