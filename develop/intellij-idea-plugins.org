@@ -10,6 +10,7 @@
 生成右侧代码缩略图，用过 Sublime 的肯定知道
 
 - EasyShortcut
+EasyShortcut 是使用IntelliJ IDEA系列开发工具中常用的快捷键介绍,查看方便,并且更容易记住快捷键. 绝对是开发必备神器,欢迎下载该插件使用,掌握这些快捷键,绝对会提高开发效率.
 
 - Grep Console
 自定义设置控制台输出颜色
