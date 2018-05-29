@@ -294,6 +294,8 @@ cat /etc/shells
 plugins=(archlinux)
 
 ** 安装 zsh theme
+
+*** spaceship
 mkdir $ZSH_CUSTOM/themes
 git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
 
@@ -301,11 +303,16 @@ git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/theme
 # random bira blinks fino gnzh rkj-repos tjkirch xiong-chiamiov-plus ys spaceship
 ZSH_THEME="spaceship-prompt/spaceship"
 
+*** powerlevel9k
+mkdir $ZSH_CUSTOM/themes
+git clone https://github.com/bhilburn/powerlevel9k.git "$ZSH_CUSTOM/themes/powerlevel9k"
+
+# 更换默认的 shell 提示符
+ZSH_THEME="powerlevel9k/powerlevel9k"
 
 * 安装 theme
 https://github.com/horst3180/Arc-theme
 pacin arc-gtk-theme
-
 
 * 安装驱动程序
 
