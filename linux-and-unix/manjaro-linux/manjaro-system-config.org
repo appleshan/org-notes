@@ -393,6 +393,30 @@ $ ./vmware-install.pl
 ** 设置 pacman 彩色输出
 打开 /etc/pacman.conf 文件，找到被注释的 #Color，改为 Color。pacman 就会输出彩色信息，方便查看。
 
+* 安装 i3 wm
+
+** 安装字体图标
+yaourt -S ttf-font-awesome
+yaourt -S ttf-material-icons
+
+** 安装 i3-gaps
+pacman -S i3-gaps
+
+** 安装 compton
+pacman -S compton
+
+** 安装 polybar
+yaourt -S polybar-git
+
+** 安装 feh
+pacman -S feh
+
+** 安装 i3lock-fancy
+yaourt -S i3lock-fancy-git
+
+** 安装ranger
+pacman -S ranger
+
 
 * 安装一些工具
 
