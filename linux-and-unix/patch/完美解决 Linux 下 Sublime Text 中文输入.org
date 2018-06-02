@@ -109,7 +109,7 @@ LD_PRELOAD=./libsublime-imfix.so sublime_text
 为了不用每次启动 Sublime Text 都打这么一长串东西，写了个启动 Sublime 的脚本：
 #+BEGIN_SRC bash
 #!/bin/bash
-SUBLIME_HOME="/opt/sublime_text"
+SUBLIME_HOME="/opt/text/sublime_text_3"
 LD_LIB=$SUBLIME_HOME/libsublime-imfix.so
 sh -c "LD_PRELOAD=$LD_LIB $SUBLIME_HOME/sublime_text $@"
 #+END_SRC
