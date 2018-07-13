@@ -1,0 +1,10 @@
+#+TITLE: IP 地址为 0.0.0.0 是什么意思？
+
+* 所有本机的 IPv4 地址 
+
+In the context of servers, 0.0.0.0 can mean "all IPv4 addresses on the local machine". 
+
+https://en.wikipedia.org/wiki/0.0.0.0
+
+* 可以把它理解为*.*.*.* 
+比如一个网络服务绑定到 0.0.0.0，相当于同时绑定了公网 IP、局域网 IP、本机 IP
