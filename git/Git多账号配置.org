@@ -1,0 +1,30 @@
+#+TITLE: Git 多账号配置
+
+* 前言
+
+如果拥有多个 Git 远程仓库，并且使用 HTTP 协议来连接，这样做会惹来麻烦。因为每一个
+连接都是需要用户名和密码的。我经过阅读 git 使用手册和实验，发现一个简单、方便且容
+易理解的办法可以解决这个问题。
+该方法的一句话说明：利用 git 的凭证系统将用户名和密码永久存放在文本文件中，在 git
+仓库的项目本地配置中添加这个存储凭证的文件。
+
+* 操作
+
+1. 为每个 git 仓库平台单独创建凭证存储文件，配置账号密码。
+Git 有一个凭证系统，“store” 模式会将凭证用明文的形式存放在磁盘中，并且永不过期。
+这意味着除非你修改了你在 Git 服务器上的密码，否则你永远不需要再次输入你的凭证信
+息。这种方式的缺点是你的密码是用明文的方式存放在你的 home 目录下。
+2. 取消 git 全局设置中的 user.name 和 user.email。
+#+BEGIN_SRC sh
+git config --global --unset user.name
+git config --global --unset user.email
+#+END_SRC
+3. 为每个项目单独配置 user.name 和 user.email。
+进入项目目录，然后执行命令：
+git config user.name "yourname"
+git config user.email "youremail"
+已经在本地存在的项目，只需再配置一下 user.name 和 user.email 即可，不需要额外的操作。
+这里配置的 name 和 email 要针对具体项目来配置，对应不同远程仓库的项目 name 和 email 可能并不一致。
+4. 为每个项目单独配置保存了储账号密码的凭证存储文件。
+git config credential.helper store --file ~/.my-credentials
+通过这个实践，我发现扩展 git 这个系统是相当简单的。
