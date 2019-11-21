@@ -1,0 +1,13 @@
+linux安装deamon
+
+wget http://libslack.org/daemon/download/daemon-0.6.4.tar.gz
+
+tar xfz daemon-0.6.4.tar.gz
+
+cd daemon-0.6.4
+
+./config
+
+make
+
+sudo make install
