@@ -1,0 +1,270 @@
+#+TITLE: 在 Arch Linux (Manjaro) 中使用 KVM 虚拟机
+
+KVM(Kernel-based Virtual Machine, 即内核级虚拟机) 是一个开源的系统虚拟化模块。
+
+QEMU 是个独立的虚拟化解决方案，从这个角度它并不依赖 KVM。而 KVM 是另一套虚拟化
+解决方案，不过因为这个方案实际上只实现了内核中对处理器（Intel VT, AMD SVM)
+虚拟化特性的支持，换言之，它缺乏设备虚拟化以及相应的用户空间管理虚拟机的工具，
+所以它借用了 QEMU 的代码并加以精简，连同 KVM 一起构成了另一个独立的虚拟化解决方
+案：KVM + QEMU。
+先来试用下 =Qemu + KVM= 。
+
+* 环境准备
+如标题所述，这里使用 Arch Linux (Manjaro 是一样的) 作为宿主机操作系统。
+- 宿主机： Archlinux x86_64
+- 虚拟机： Windows7 64bit
+
+* 环境检查
+要使用起来，需要硬件支持，并且需要加载相应的模块。按以下的步骤去检测安装即可。
+
+#+BEGIN_SRC bash
+# 检测宿主机cpu是否支持虚拟化，如果flags 里有vmx 或者svm就说明支持VT（硬件虚拟化技术）
+grep -E "(vmx|svm)" --color=always /proc/cpuinfo
+
+# 或者使用，输出 Virtualization 技术的名称
+LC_ALL=C lscpu | grep Virtualization
+#+END_SRC
+
+KVM 依赖硬件虚拟化技术，需要使用支持虚拟化技术的 CPU 并在 BIOS 中开启虚拟化功能。
+
+虚拟化技术在各个厂商这里名称不同，Intel 这里称为 Intel VT，AMD 称之为 SVM。
+
+我的 CPU 为 Intel 6770HQ@2.60GHz 4 Core。
+查询 [[https://ark.intel.com/content/www/us/en/ark/products/93341/intel-core-i7-6770hq-processor-6m-cache-up-to-3-50-ghz.html][Intel Product Specifications]] 可以看到这块 CPU 支持 Intel® Virtualization
+Technology (VT-x) 技术，也支持 Intel® Virtualization Technology for Directed
+I/O (VT-d) 。
+
+VT-x 也就是我们常说的硬件虚拟化，VT-d 用于是使宿主机硬件直通虚拟机。
+
+这里只需要硬件虚拟化技术，所以是满足 KVM 的使用要求的。
+
+* 检查内核
+#+BEGIN_SRC bash
+# 检查内核的KVM和VirtIO模块是否可用
+zgrep KVM /proc/config.gz
+zgrep VIRTIO /proc/config.gz
+
+# 这里输出中需要包含 kvm kvm_intel
+lsmod | grep kvm
+
+# 这里输出中需要包含 virtio
+lsmod | grep virtio
+
+# 手动加载内核模块（没有 virtio 时执行）
+sudo modprobe virtio
+#+END_SRC
+
+* 安装使用
+执行下面的指令来安装所需的软件包：
+
+#+BEGIN_SRC bash
+# 当前用户加入组kvm
+sudo usermod -a -G kvm appleshan
+
+# 安装qemu
+yay -Sy qemu libvirt
+# 图形化的管理界面，如果使用带桌面环境的操作系统可选安装。
+yay -Sy virt-manager
+
+# 要连接网络，还要安装包
+yay -Sy ebtables dnsmasq bridge-utils openbsd-netcat
+#+END_SRC
+
+- qemu QEMU 软件，提供 qemu-img 等命令
+- libvirt 提供管理虚拟机、存储、网络的功能
+- ebtables 桥接网络管理，用于 default NAT 网络
+- dnsmasq DHCP DNS 服务，用于 default NAT 网络
+- bridge-utils 桥接网络管理，用于桥接网络
+- openbsd-netcat 用于通过 SSH 管理
+
+#+BEGIN_SRC bash
+# 设置授权
+sudo vim /etc/polkit-1/rules.d/50-libvirt.rules
+/* Allow users in kvm group to manage the libvirt daemon without authentication */
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.libvirt.unix.manage" &&
+        subject.isInGroup("kvm")) {
+            return polkit.Result.YES;
+    }
+});
+#+END_SRC
+
+* 启动服务
+执行以下命令启动所需服务：
+#+BEGIN_SRC bash
+# 启动虚拟机管理后台服务
+sudo systemctl enable libvirtd
+sudo systemctl start libvirtd
+sudo systemctl start virtlogd
+
+# 启动 default NAT 网络
+sudo virsh net-start default
+#+END_SRC
+
+按照以上方式安装好软件包之后，应当已经存在 default network，若启动上述服务时出
+现错误可使用以下命令检查：
+#+BEGIN_SRC bash
+# 列出网络
+sudo virsh net-list --all
+# 若没有任何网络，可手动定义网络
+sudo virsh net-define /etc/libvirt/qemu/networks/default.xml
+#+END_SRC
+
+对于 =virt-manager= 的使用比较简单，按图形操作即可。
+
+如无意外，以上步骤执行完之后，就可以开始安装系统了。
+
+* 下载 virtio 驱动
+在 KVM 中使用 virtio 设备将 io 设备 (例如：磁盘、网卡等) 半虚拟化可以提高虚拟机
+的 io 性能，但需要在虚拟机中安装 virtio 设备驱动。
+
+从 https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.164-2/ 下载：
+#+BEGIN_EXAMPLE
+virtio-win-0.1.164.iso
+virtio-win-0.1.164_amd64.vfd
+virtio-win-0.1.164_x86.vfd
+#+END_EXAMPLE
+两个 vfd 分别 Windows 为 32 位系统与 64 位系统的 KVM 使用的软盘驱动，iso 为驱动
+光盘。
+
+* 安装虚拟机
+通过以下命令安装虚拟机，这里安装 Windows 7 x86 作为示例：
+#+BEGIN_SRC bash
+# 创建磁盘，这里创建一个 40G 的 qcow2 磁盘 (Copy on Write)
+qemu-img create -f qcow2 win7.qcow2 40G
+# 安装虚拟机
+sudo virt-install \
+    --name win7 \
+    --memory 1024 \
+    --vcpus 2 \
+    --cpu host \
+    --cdrom GRMCENVOL_ZH-CN_PIP.iso \
+    --os-variant win7 \
+    --disk win7.qcow2,bus=virtio \
+    --disk virtio-win-0.1.164_x86.vfd,device=floppy \
+    --network network=default,model=virtio \
+    --graphics vnc,listen=0.0.0.0,port=5920
+#+END_SRC
+以上命令通过参数指定了：
+
+- 虚拟机名称为 win7
+- 内存 1024M，即 1G
+- 虚拟机 CPU 2 核心
+- 虚拟机 CPU 指定为透传宿主机
+- 安装光盘镜像
+- 操作系统类型指定为 Windows 7
+- 磁盘路径与总线类型为 virtio
+- virtio x86 驱动软盘
+- 网络为 default NAT，总线类型为 virtio
+- VNC 远程访问监听地址与端口
+
+执行命令后，可使用 vnc 客户端连接宿主机的 5920 端口看到系统已经启动，按照步骤安
+装即可。
+
+需要注意的是，由于我们使用了 virtio 磁盘，在选择安装位置时是找不到磁盘的。需要
+点击加载驱动程序，然后扫描后会列出软盘中的驱动程序。此时选择
+=VirtIO SCSI controller= Win7 对应的驱动，点击下一步 (此时也可一并选择显卡与网卡
+对应的驱动进行安装，一并安装)，就可以看到磁盘了。新建分区、安装即可。
+
+* 安装驱动
+安装完成后进入系统，先关机，然后执行：
+#+BEGIN_SRC bash
+sudo virsh edit win7
+#+END_SRC
+此时进入 vi 编辑 win7 虚拟机的配置 xml。找到 cdrom 章节，将系统镜像路径改为
+virtio 驱动光盘 iso 镜像的路径，保存退出。
+
+执行以下命令开机:
+#+BEGIN_SRC bash
+sudo virsh start win7
+#+END_SRC
+进入到 win7 的设备管理器，安装其他设备的驱动 (在光盘中搜索即可)。
+
+* 其他说明
+** 气球设备
+在安装驱动时，有一个 balloon 设备，也就是气球设备，气球设备允许在客户机运行时
+修改客户机的内存大小：
+#+BEGIN_SRC bash
+# 将内存限制为 512M
+virsh qemu-monitor-command --domain win7 --hmp 'balloon 512'
+#+END_SRC
+
+** 嵌套虚拟化
+启用嵌套虚拟化功能：
+#+BEGIN_SRC bash
+sudo modprobe -r kvm_intel
+sudo modprobe kvm_intel nested=1
+#+END_SRC
+永久生效：
+#+BEGIN_SRC bash
+sudo vim /etc/modprobe.d/modprobe.conf
+# 修改或添加以下内容
+options kvm_intel nested=1
+#+END_SRC
+检查嵌套虚拟化是否激活：
+#+BEGIN_SRC bash
+# 输出  nested              = "Y"
+systool -m kvm_intel -v | grep nested
+#+END_SRC
+
+** 磁盘缓存
+推荐使用 none；提高客户机性能可选 unsafe；提高安全性可选 writeback。
+可参考 [[https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/7/html/virtualization_tuning_and_optimization_guide/sect-virtualization_tuning_optimization_guide-blockio-caching][虚拟化调试和优化指南 6.3. 缓存]]
+
+** 后期转换磁盘总线
+如果安装时选择了 SCSI 磁盘总线，安装后改为 virtio 时。由于没有对应的驱动，系统
+将启动不了。可按照以下方法安装 virtio 磁盘驱动：
+
+1. 若已修改了磁盘总线为 virtio，需要将原系统磁盘改回 SCSI；
+2. 为客户机创建一个新磁盘；
+3. 通过 virt-manager 或编辑 xml 添加新磁盘到客户机，使用 virtio 总线；
+4. 启动客户机，在 设备管理器 通过光盘安装新磁盘的 virtio 驱动；
+5. 关机，移除并删除新磁盘；
+6. 启动客户机，此时由于系统已有 virtio 驱动，可以正常启动。
+
+** 完全使用命令安装 Linux 系统
+这里以 CentOS 7 为例：
+#+BEGIN_SRC bash
+sudo virt-install \
+    --name centos \
+    --memory 1024 \
+    --vcpus 2 \
+    --cpu host \
+    --location CentOS-7-x86_64-Minimal-1810.iso \
+    --os-variant 'centos7.0' \
+    --disk centos.qcow2,bus=virtio \
+    --network network=default,model=virtio \
+    --graphics none \
+    --extra-args console=ttyS0
+#+END_SRC
+
+- 这里使用 --location 而不是 --cdrom 为了支持 --extra-args 内核扩展参数；
+- --location 配合 iso 使用时 virt-install 会使用 isoinfo 命令来从 iso 获取信息，
+  所以必须安装 yay -Sy cdrtools。
+
+** 其他命令
+一些有用的其他命令：
+#+BEGIN_SRC bash
+# 列出虚拟机
+virsh list --all
+# 导出虚拟机定义，可将磁盘文件与导出的定义复制到其他机器使用
+virsh dumpxml win7 > win7.xml
+# 导入虚拟机
+virsh define --file=win7.xml
+# 给虚拟机发送关机指令
+virsh shutdown win7
+# 强制关闭虚拟机 (直接断电)
+virsh destory win7
+# 删除虚拟机
+virsh undefine win7
+#+END_SRC
+
+* 参考链接
+Arch 文档：
+- https://wiki.archlinux.org/index.php/Libvirt
+- https://wiki.archlinux.org/index.php/QEMU
+- https://wiki.archlinux.org/index.php/KVM
+虚拟机时钟问题：
+- https://bugzilla.redhat.com/show_bug.cgi?id=742736
+- https://www.linuxquestions.org/questions/linux-software-2/kvm-trouble-width-time-4175546057/
+
