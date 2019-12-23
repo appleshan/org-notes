@@ -1,0 +1,110 @@
+#+TITLE: Linux服务器安全加固之fail2ban配置
+
+配置步骤:
+
+* sudo apt-get install postfix mailutils fail2ban
+* 检查postfix监听地址为本地回环地址
+* 验证sendmail服务工作正常
+
+** mail <dst_mail>
+** 输入CTRL-D完成邮件内容编辑并发送
+** 去<dst_mail>查收邮件
+
+* 添加nginx日志过滤规则，示例是匹配所有404请求
+#+BEGIN_EXAMPLE
+[Definition]
+
+failregex = <HOST>-.*.*HTTP/1.*404.*$
+ignoreregex =
+#+END_EXAMPLE
+
+* 添加jail.local文件，以下是一个多站点保护的示例
+#+BEGIN_EXAMPLE
+[DEFAULT]
+action=%(action_mwl)s
+ignoreip = 127.0.0.1
+bantime = 3600
+maxretry = 20
+findtime = 60
+destemail = huangwei1983@gmail.com
+
+[nginx-huangwei.me]
+enabled = true
+port    = http,https
+filter = nginx
+logpath =  /var/log/nginx/huangwei.me/huangwei.me.access.log
+
+[nginx-fendou.us]
+enabled = true
+port    = http,https
+filter = nginx
+logpath =  /var/log/nginx/fendou.us/fendou.us.access.log
+
+[nginx-gooddocs.cn]
+enabled = true
+port    = http,https
+filter = nginx
+logpath =  /var/log/nginx/gooddocs.cn/gooddocs.cn.access.log
+#+END_EXAMPLE
+
+* 配置jail.conf
+#+BEGIN_EXAMPLE
+# ... 省略
+ 
+#
+# Destination email address used solely for the interpolations in
+# jail.{conf,local} configuration files.
+destemail = huangwei1983@gmail.com
+ 
+#
+# ACTIONS
+#
+ 
+# 建议开启ssh暴力登录破解保护
+# in /etc/fail2ban/jail.local.
+#
+# Optionally you may override any other parameter (e.g. banaction,
+# action, port, logpath, etc) in that section within jail.local
+ 
+[ssh]
+ 
+enabled = true
+port    = ssh
+filter  = sshd
+logpath  = /var/log/auth.log
+maxretry = 6
+ 
+# 建议开启pam暴力破解保护
+# Generic filter for pam. Has to be used with action which bans all ports
+# such as iptables-allports, shorewall
+[pam-generic]
+ 
+enabled = true
+# pam-generic filter can be customized to monitor specific subset of 'tty's
+filter  = pam-generic
+# port actually must be irrelevant but lets leave it all for some possible uses
+port = all
+banaction = iptables-allports
+port     = anyport
+logpath  = /var/log/auth.log
+maxretry = 6
+#+END_EXAMPLE
+
+* 配置系统默认iptables规则 [[https://huangwei.me/wiki/tech_linux_svr_sec_iptables.html][Linux服务器安全加固之iptables配置]]
+
+* 验证fail2ban的匹配规则
+#+BEGIN_EXAMPLE
+fail2ban-regex /var/log/nginx/huangwei.me/huangwei.me.access.log /etc/fail2ban/filter.d/nginx.conf
+#+END_EXAMPLE
+
+* 开启fail2ban服务
+
+* 参考文献
+** fail2ban配置
+- [[http://www.fail2ban.org/wiki/index.php/MANUAL_0_8][官方0.8版配置手册]]
+- http://serverfault.com/questions/257439/stop-fail2ban-stop-start-notifications
+- [[http://dipplum.com/2010/09/09/fail2ban-nginx-log/][用fail2ban监控nginx日志]]
+** 发送邮件服务器简明配置
+- http://www.rackspace.com/knowledge_center/article/postfix-installation
+- http://www.cyberciti.biz/faq/postfix-receive-mail-on-specific-network-interfaces/
+
