@@ -427,6 +427,14 @@ pacman -S ranger
 
 * 安装一些工具
 
+** U盘自动挂载
+pacman -S udisks2 gvfs gvfs-mtp
+
+** 文件管理器
+thunar-archive-plugin # thunar 用于压缩解压缩的插件
+thunar-volman # 管理 usb 自动挂载等
+thunar # 文件管理器
+
 ** linux tool
 pacin vi
 pacin w3m
