@@ -1,0 +1,18 @@
+#+TITLE: iptables 访问控制规则 - 网络限速
+
+这是我这次搜索 iptables 相关信息的本意。起因是这样子的，在本地测试的时候，经常会发现本地连接的速度实在是太快了。对于网站，不能反映其真实的使用体验；对于网络程序，无法测试其在网络不良时的表现，由于测试的规模小，一些真实使用时容易出现的竞态也由于操作完成得太快而无法重现。
+
+很早就知道 iptables 能够对转发流量进行限速。既然是 iptables 而不是某些商业软件，它就没理由只能对外部流量而不对本地接口 lo 进行限速。于是最后弄到如下命令：
+
+#+BEGIN_SRC sh
+iptables -A INPUT -s 127.0.0.1 -p tcp -d 127.0.0.1 --dport 6900:6901 -m limit --limit 1/s -j ACCEPT
+iptables -A INPUT -s 127.0.0.1 -p tcp -d 127.0.0.1 --dport 6900:6901 -j DROP
+#+END_SRC
+
+这两条规则组合起来是说，对于所有从 127.0.0.1 到同样的地址的 6900 到 6901 端口的 TCP 连接，每秒只接受一个数据包，多余的丢弃。后边那句是必要的，如果不写的话就没作用了，因为默认策略是接受。
+
+要注意的是，如果使用域名localhost的话，很可能会使用 IPv6 地址::1而不是127.0.0.1了。
+
+参考链接
+- [[https://www.debian-administration.org/articles/187][Using iptables to rate-limit incoming connections]]
+
