@@ -1,0 +1,9 @@
+#+TITLE: web开发的字符编码规范
+
+新项目要求国际化，需要能够显示多种语言，于是一开始就规定统统使用 UTF-8 编码。
+
+- 所有代码文件使用 UTF-8 编码存盘
+- MySQL数据库所有表，所有字段设置 Collation 属性为 “utf8_general_ci”
+- 所有页面输出：
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
