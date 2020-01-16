@@ -1,0 +1,163 @@
+#+TITLE: Git 常见问题及解决办法
+
+* 如何检查当前分支中没有什么要提交的？
+手动更新代码（包括子模块），不利于有些项目自动化执行；而利用脚本执行，需要执行检查是否存在有需要提交的内容，否则会产生错误，导致脚本执行中断；[[https://stackoverflow.com/questions/5139290/how-to-check-if-theres-nothing-to-be-committed-in-the-current-branch][如何检查当前分支中没有什么要提交的]]？下面这段代码可以参考：
+#+BEGIN_SRC sh
+#!/usr/bin/env sh
+
+# 确保脚本抛出遇到的错误
+set -e
+
+# 更新项目下所用到的所有子模块 & 提交
+git submodule foreach git pull
+
+if [ -n "$(git status --porcelain)" ]; then
+  git add tools
+  git commit -m '📌 uodate tools submodule'
+  git push
+else
+  echo "there no changes about submodule 🖥";
+fi
+#+END_SRC
+
+* Git 如何创建干净的空分支?
+#+BEGIN_SRC sh
+git checkout --orphan empty-branch
+git rm -rf .
+git commit --allow-empty -m "root commit"
+git push origin empty-branch
+#+END_SRC
+更详细的内容，可以参见 [[https://stackoverflow.com/questions/34100048/github-create-empty-branch/34100189#34100189][Github create empty branch]]。
+
+* 如何解决 .gitignore 不起作用问题
+=.gitignore= 仅适用于未跟踪的文件。如果您正在跟踪，那么 =.gitignore= 将不适用；如果想暴力的解决，可以使用如下方法，予以修复：
+#+BEGIN_SRC sh
+git rm --cached -r .
+git add .
+#+END_SRC
+更详细的答案，可参见: [[https://stackoverflow.com/questions/1139762/ignore-files-that-have-already-been-committed-to-a-git-repository][ignore-files-that-have-already-been-committed-to-a-git-repository]]。
+
+* 如何删除远程分支
+#+BEGIN_SRC sh
+git push origin --delete branch-name
+// eg:
+git push origin --delete develop
+#+END_SRC
+
+* Git 同时 push 到多个仓库(同步)
+为防止一个 Git 仓库由于各种原因造成无法访问，可以将代码 push 到多个仓库。编辑本地仓库目录下面的 .git 目录下的 config 文件（命令：=vim ./git/config=）。添加类如以下命令：
+#+BEGIN_SRC conf
+[remote "all"]
+url = git@github.com:licess/licess.git
+url = git@gitcafe.com:licess/licess.git
+#+END_SRC
+再 push 时，运行如下命令即可：
+#+BEGIN_SRC sh
+git push all master
+#+END_SRC
+
+* 如何切换多个 GitHub 账号
+Git 共有三个级别的 config 文 件，分别是 system、global 和 local。可以使用 =git config --list | grep user= （windows 需用 sls 替换 grep）来查看配置；当 git commit 时，Author 信息依次读取 local、global 和 system 的配置，如果找到则不再继续读取。其他配置的读取顺序也是如此。更改配置可运行：=git config --local user.name your-name= ，更多详情可查看 [[http://www.jianshu.com/p/0ad3d88c51f4][这里]]。
+
+* 从 Git 存储库中删除敏感数据
+#+BEGIN_SRC sh
+git filter-branch --commit-filter '
+if [ "$GIT_AUTHOR_EMAIL" = "your-secret-email" ];
+then
+        GIT_AUTHOR_NAME="your-can-be-known-name";
+        GIT_AUTHOR_EMAIL="your-can-be-known-email";
+        GIT_COMMITTER_NAME="your-can-be-known-name";
+        GIT_COMMITTER_EMAIL="your-can-be-known-email";
+        git commit-tree "$@";
+else
+        git commit-tree "$@";
+fi' HEAD
+#+END_SRC
+具体可参见：[[https://help.github.com/articles/removing-sensitive-data-from-a-repository/][Removing sensitive data from a repository]]。
+
+* 如何修改提交的 Message
+- =git commit --amend= 可以对上一次提交做修改（如果还没 push 的话）；
+- =git commit --amend --no-edit= 修改提交，却不更改 commit message；
+- =push -f= 如果上一次的提交已经 push 了，那么需要加 f 参数覆盖（需慎重）。
+
+* Git stash 用于保存和恢复工作进度
+- Git stash
+保存当前的工作进度。会分别对暂存区和工作区的状态进行保存
+- Git stash save "message..."
+这条命令实际上是第一条 =git stash= 命令的完整版
+- Git stash list
+显示进度列表。此命令显然暗示了 Git stash 可以多次保存工作进度，并用在恢复时候进行选择
+- Git stash pop [--index] []
+如果不使用任何参数，会恢复最新保存的工作进度，并将恢复的工作进度从存储的工作进度列表中清除。
+如果提供参数（来自 =git stash list= 显示的列表），则从该选项中恢复。恢复完毕也将从进度列表中删除。
+--index 除了恢复工作区的文件外，还尝试恢复暂存区。
+- Git stash apply [--index] []
+除了不删除恢复的进度之外，其余和 =git stash pop= 命令一样
+- Git stash clear
+删除所有存储的进度
+
+* 使用 Git Submodule 管理子模块
+=git Submodule= 是一个很好的多项目使用共同类库的工具，他允许类库项目做为=repository=,子项目做为一个单独的git项目存在父项目中，子项目可以有自己的独立的=commit=，=push=，=pull=。而父项目以=Submodule=的形式包含子项目，父项目可以指定子项目=header=，父项目中会的提交信息包含=Submodule=的信息，再=clone=父项目的时候可以把=Submodule=初始化。
+
+** 在项目中使用 Submodule
+#+BEGIN_SRC sh
+git submodule add https://github.com/nicejade/awesome-vue-cli3-example.git custom-module-name
+#+END_SRC
+
+** 更新 Submodule
+#+BEGIN_SRC sh
+# 方法一：在父项目的目录下直接运行
+git submodule foreach git pull
+
+# 方法二：在Submodule的目录下面更新
+cd  custom-module-name && git pull
+#+END_SRC
+
+=Submodule= 的目录中,使用=git=和单独的一个项目是一样的,注意更新=Submodule=的时候如果有新的=commit id=产生，需要在父项目产生一个新的提交，子模块文件中的 =Subproject commit=会变为最新的=commit id=。
+
+** 克隆含有子模块的项目
+#+BEGIN_SRC sh
+# 初始化本地配置文件
+git submodule init
+# 抓取所有数据并检出父项目中列出的合适的提交（`--recursive`递归）
+git submodule update --recursive
+#+END_SRC
+
+** 如何有效删除 Submodule
+#+BEGIN_SRC sh
+git submodule deinit -f custom-module-name
+rm -rf .git/modules/custom-module-name
+git rm -f custom-module-name
+git rm --cached custom-module-name
+#+END_SRC
+
+* Git 如何合并多笔 Commit
+- 查看提交历史，Git log
+- 选择出想要合并的那几条
+#+BEGIN_SRC sh
+# 从HEAD版本开始往过去数 2个版本
+git rebase -i HEAD~2
+
+# 指名要合并的版本「之前」的版本号
+git rebase -i 1a3146b
+#+END_SRC
+注意 =1a3146b= 这个版本是不参与合并的，可以把它当做一个坐标。
+
+- 选取要合并的提交
+执行如上命令之后，会弹出如下内容窗口，将要合并的那（几）条 =pick=改为=squash=或者 =s=,之后保存并关闭文本编辑窗口即可。
+#+BEGIN_EXAMPLE
+0 pick 301747e test merge commit 01
+1 pick 5f83c1c test merge commit 02
+#+END_EXAMPLE
+然后保存退出，Git 会压缩提交历史，如果有冲突，需要修改，修改的时候要注意，保留最新的历史，不然我们的修改就丢弃了。修改以后要记得敲下面的命令：
+
+#+BEGIN_SRC sh
+git add .
+git rebase --continue
+#+END_SRC
+备注：如果你想放弃这次合并的话，可执行以下命令：
+
+#+BEGIN_SRC sh
+git rebase --abort
+#+END_SRC
+
