@@ -228,6 +228,7 @@ Xft.lcdfilter: lcddefault
 （5）重启系统，你就会看到效果了。
 
 *** 安装中文输入法
+**** fcitx
 @See https://wiki.archlinux.org/index.php/fcitx#Chinese
 
 以安装 rime 为例
@@ -237,6 +238,14 @@ pacin fcitx-im
 pacin fcitx-configtool # 图形化的配置工具
 
 保存成功后，注销重新登陆系统，在终端输入 fcitx 启动服务，就能切换 rime 了。
+
+**** fcitx5
+$ sudo pacman -S fcitx5-git # 安装fcitx5框架
+$ sudo pacman -S fcitx5-gtk-git # 增加对gtk程序的支持
+$ sudo pacman -S fcitx5-qt5-git # 增加对QT5程序的支持，有QT4程序的话请自己安装fcitx5-qt4-git
+$ sudo pacman -S fcitx5-chinese-addons-git # 增加对中文输入的组件
+$ sudo pacman -S fcitx5-rime-git
+$ sudo pacman -S kcm-fcitx5-git # 增加内嵌的输入设置，只限KDE
 
 ** 设置时区（中国的时区是 Asia/Shanghai）
 # ln -s <源文件> <目标> 创建一个符号链接
