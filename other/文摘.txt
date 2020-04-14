@@ -16,3 +16,12 @@
 菜的意思不就是这两点么：表达不清楚自己所看到的，以及无法针对性地回答别人的问题。
 
 
+Linux is for people who want to know why it works.
+Mac is for people who don't want to know why it works.
+DOS is for people who want to know why it does not work.
+Windows is for people who don't want to know why it does not work.
+Linux 适用于想知道它为什么起作用的人。
+Mac 适用于不想知道它为什么起作用的人。
+DOS 适用于想知道为什么它不起作用的人。
+Windows 适用于不想知道为什么它不起作用的人。
+
