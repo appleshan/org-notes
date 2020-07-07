@@ -1,0 +1,7 @@
+#+TITLE: Linux更换difftool为meld
+
+#设置默认的git diff的比较工具
+#配置比较工具.可以用git difftool 调用.
+git config --global diff.tool meld
+git config --global difftool.prompt false
+

@@ -1,0 +1,18 @@
+#+TITLE: linux 默认值 open files为1024
+
+#+BEGIN_SRC bash
+$ ulimit -n
+1024
+#+END_SRC
+
+说明server只允许同时打开1024个文件
+使用ulimit -a 可以查看当前系统的所有限制值，使用ulimit -n 可以查看当前的最大打开文件数。
+新装的linux 默认只有1024 ，当作负载较大的服务器时，很容易遇到error: too many open files。因此，需要将其改大
+在/etc/security/limits.conf最后增加：
+#+BEGIN_EXAMPLE
+*               soft    nofile          65535
+*               hard    nofile          65535
+*               soft    noproc          65535
+*               hard    noproc          65535
+#+END_EXAMPLE
+

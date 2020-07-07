@@ -1,0 +1,52 @@
+#+TITLE: Manjaro 的几项优化与设置
+
+* 关闭 swap
+如果你的内存够大，建议关闭 swap：
+#+BEGIN_SRC bash
+sudo systemctl mask swap
+#+END_SRC
+
+同时编辑 =/etc/sysctl.d/99-sysctl.conf= 将 =vm.swappiness = ...= 后面的数字改成 0。
+
+* pacman 镜像测速
+#+BEGIN_SRC bash
+sudo pacman-mirrors --api --protocol https
+#+END_SRC
+
+这里我只检测了支持 https 的镜像，其实 http 协议也没啥问题，就算有人中途篡改了软件包的内容也没法通过签名验证，只是会让别人知道你都安装了哪些软件包而已。
+
+* 让 make 使用内存文件系统进行编译
+编辑 =/etc/makepkg.conf= 去掉 =#BUILDDIR=/tmp/makepkg= 这行中的 =#=。
+对内存容量足够自信时开启，否则编译比较大的项目时有可能会因为内存不足而失败。
+
+* Chrome 优化
+** 强制开启硬件加速
+先看一眼有没有自动开启，在 chrome 地址栏输入 =chrome://gpu/= 查看。
+需要强制开启的话，在 chrome 地址栏输入 =chrome://flags/=，把 =Override software rendering list= 设为 =Enabled= 即可。
+关闭 canvas fingerprint，这玩意是泄露隐私的途径之一，编辑 =~/.config/chrome-flags.conf= 添加：
+#+BEGIN_EXAMPLE
+--disable-reading-from-canvas
+#+END_EXAMPLE
+
+* 开启 BBR
+查看 BBR Module 是否存在
+#+BEGIN_SRC bash
+modinfo tcp_bbr
+#+END_SRC
+
+查看目前使用的 congestion control
+#+BEGIN_SRC bash
+sysctl net.ipv4.tcp_congestion_control
+#+END_SRC
+
+临时开启 BBR
+#+BEGIN_SRC bash
+sudo sysctl net.ipv4.tcp_congestion_control=bbr
+#+END_SRC
+
+永久开启 BBR
+#+BEGIN_SRC bash
+echo 'net.core.default_qdisc=fq' | sudo tee -a /etc/sysctl.d/80-bbr.conf
+echo 'net.ipv4.tcp_congestion_control=bbr' | sudo tee -a /etc/sysctl.d/80-bbr.conf
+#+END_SRC
+

@@ -1,0 +1,15 @@
+#+TITLE: netsh端口转发
+
+* 查看存在的转发
+netsh interface portproxy show all
+
+* 监听本机端口10001，转发到 10.1.1.21:10001
+netsh interface portproxy add v4tov4 listenaddress=127.0.0.1 listenport=10001 connectaddress=10.1.1.21 connectport=10001
+
+# 监听10.1.1.19:10001，转发到 10.1.1.21:10001
+netsh interface portproxy add v4tov4 listenaddress=10.1.1.19 listenport=10001 connectaddress=10.1.1.21 connectport=8083
+
+# 指定监听ip和端口可以删除
+netsh interface portproxy delete v4tov4 listenaddress=127.0.0.1 listenport=10001
+netsh interface portproxy delete v4tov4 listenaddress=10.1.1.19 listenport=10001
+
