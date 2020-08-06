@@ -1,0 +1,116 @@
+MongoDB 开启安全模式启用身份验证
+
+我将 MongoDB 用户分为两类：全局用户和库用户。
+全局用户保存在admin库中，对所有数据库都有访问权限；
+库用户保存在单个数据库中，只能访问单个库。
+用户信息保存在哪个库，身份验证时就得到那个库中才能验证。
+用户信息保存在db.system.users中。
+
+创建用户流程为：
+先在非安全模式下启动数据库，创建全局用户，再停止数据库;
+在安全模式下重新启动，然后用全局用户登录并进行管理。
+
+1.创建用户
+
+①.在非安全模式下启动数据库：
+
+D:\mongodb\bin>mongod --dbpath d:\mongodb\db
+
+②.创建全局用户：
+
+D:\mongodb\bin>mongo localhost/admin
+MongoDB shell version: 2.0.6
+connecting to: localhost/admin
+> db.addUser("admin","666666")
+{ "n" : 0, "connectionId" : 1, "err" : null, "ok" : 1 }
+{
+        "user" : "admin",
+        "readOnly" : false,
+        "pwd" : "c5436ae68764137eb0a564620d299d0e",
+        "_id" : ObjectId("5059c7c9efafcf4143548dbb")
+}
+> use test
+switched to db test
+> db.addUser("testadmin","666666")
+{ "n" : 0, "connectionId" : 1, "err" : null, "ok" : 1 }
+{
+        "user" : "testadmin",
+        "readOnly" : false,
+        "pwd" : "6a9f75616b386f43421b1d53e01c1cd1",
+        "_id" : ObjectId("5059c7f3efafcf4143548dbc")
+}
+> db.addUser("testuser","666666",true)
+{ "n" : 0, "connectionId" : 1, "err" : null, "ok" : 1 }
+{
+        "user" : "testuser",
+        "readOnly" : true,
+        "pwd" : "ac9ffa0bb70668810023330e4d3324ec",
+        "_id" : ObjectId("5059c80aefafcf4143548dbd")
+}
+>
+
+说明：testadmin和testuser用户等全局用户登录后再创建也是可以的，注意testuser只有只读权限。
+
+2.用户登录
+
+①.在安全模式下启动数据库：
+
+D:\mongodb\bin>mongod --auth --dbpath d:\mongodb\db
+
+②.测试是否开启安全模式：
+
+D:\mongodb\bin>mongo
+MongoDB shell version: 2.0.6
+connecting to: test
+> show collections
+Wed Sep 19 21:31:53 uncaught exception: error: {
+        "$err" : "unauthorized db:test lock type:-1 client:127.0.0.1",
+        "code" : 10057
+}
+>
+
+③.全局用户登录：
+
+D:\mongodb\bin>mongo
+MongoDB shell version: 2.0.6
+connecting to: test
+> db.auth("admin","666666")
+0
+> use admin
+switched to db admin
+> db.auth("admin","666666")
+1
+> use test
+switched to db test
+> show collections
+system.indexes
+system.users
+>
+
+注意：全局用户必须在admin库中才可以验证
+
+④.库用户登录：
+
+D:\mongodb\bin>mongo
+MongoDB shell version: 2.0.6
+connecting to: test
+> db.auth("testadmin","666666")
+1
+> show collections
+system.indexes
+system.users
+>
+
+3.修改用户密码
+
+> db.addUser("admin","777777")
+
+4.删除用户
+
+> db.removeUser("testuser")
+
+
+参考资料
+
+[1].Security and Authentication：http://www.mongodb.org/display/DOCS/Security+and+Authentication
+

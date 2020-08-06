@@ -1,0 +1,587 @@
+#+TITLE: 面向对象编程之七大设计原则
+
+@See http://vc2x.com/articles/2019/08/19/1566223268202.html
+
+* 七大设计原则 — SOLID
+这五大原则是业界在面向对象设计中经过总结精炼得出，在英文表示下各个原则
+首字母缩写就是 SOLID。
+
+- Single Responsibility Principle：单一职责原则
+- Open Closed Principle：开闭原则
+- Liskov Substitution Principle：里氏替换原则
+- Interface Segregation Principle：接口隔离原则
+- Dependence Inversion Principle：依赖倒置原则
+另外还有两个设计原则。
+
+- Law of Demeter：迪米特法则
+- Composite/Aggregate Reuse Principle：组合/聚合复用原则
+
+* 单一职责原则(SRP)
+** 概念：
+一个类，应该只有一个引起它变化的原因。通俗的讲就是一个类应该只负责一个职责，如果这个类需要修改的话，
+也只是因为这个职责的变化了才引发类的修改。
+
+** 例子:
+以下是一个 Car 类，它包含行驶汽车所需的技能，同时又包含的士司机工作所需的方法（接送、加油）。
+#+BEGIN_SRC java
+public class Car {
+    /**
+     * 启动引擎
+     */
+    public void start() {
+        System.out.println("车辆启动了！");
+    }
+    /**
+     * 熄火
+     */
+    public void stop() {
+        System.out.println("车辆熄火了！");
+    }
+    /**
+     * 加速
+     */
+    public void speed() {
+        System.out.println("车辆加速中！");
+    }
+    /**
+     * 接送乘客
+     */
+    public void pickUpPassenger(){
+        System.out.println("接送乘客中！");
+    }
+    /**
+     * 去加油站加油
+     */
+    public void gasUp(){
+        System.out.println("去加油站加汽油！");
+    }
+}
+#+END_SRC
+在以上的例子当中，如果汽车启动的参数变化了就需要修改这个 Car 类，如果接送乘客的规则改变的话也需要修
+改这个 Car 类当中的代码。而正确的设计应该将接送客人的方法和加油的方法提取出来赋予 TaxiDriver 类中。
+将这个类当中属于汽车的方法和属于的士司机的方法进行隔离。将代码修改带来影响的范围限定得越小越好。一旦
+类包含的职责越来越多的话，类就会变得低内聚高耦合。
+
+接下来我们进行改造这个 Car 类的设计，新增一个 TaxiDriver 类来承担接送客人和加油的职责。
+#+BEGIN_SRC java
+public class Car {
+    /**
+     * 启动引擎
+     */
+    public void start() {
+        System.out.println("车辆启动了！");
+    }
+    /**
+     * 熄火
+     */
+    public void stop() {
+        System.out.println("车辆熄火了！");
+    }
+    /**
+     * 加速
+     */
+    public void speed() {
+        System.out.println("车辆加速中！");
+    }
+}
+
+class TaxiDriver{
+    /**
+     * 汽车实例
+     */
+    public Car car;
+    /**
+     * 接送乘客
+     */
+    public void pickUpPassenger(){
+        System.out.println("接送乘客中！");
+    }
+
+    /**
+     * 去加油站加油
+     */
+    public void gasUp(){
+        System.out.println("去加油站加汽油！");
+    }
+}
+#+END_SRC
+在以上这个例子中就将 Car 类中汽车的方法和 TaxiDriver 类中的士司机的方法进行了解耦。
+
+** 优点：
+1. 降低了类的复杂性。
+2. 提高类的可读性，提高系统的可维护性。
+3. 降低变更引起的风险（降低对其他功能的影响）。
+
+* 开闭原则(OCP)
+** 概念：
+一个实体（类、函数、模块等）应该对外扩展开放，对内修改封闭。某实体应该易于扩展，在扩展某类的功能时
+应该通过添加新的代码来实现而不是修改其内部的代码。
+
+** 例子:
+以下是一个司机类，他需要通过判断当前驾驶的车是什么牌子来进行对应的操作。
+#+BEGIN_SRC java
+public class Driver {
+    public void drive(Car car) {
+	    // 做一些驾驶前准备
+        if ("BMW".equals(car.getBrand())) {
+            System.out.println("驾驶宝马车！");
+        }
+        if ("BENZ".equals(car.getBrand())) {
+            System.out.println("驾驶奔驰车！");
+        }
+    }
+}
+
+class Car {
+    /**
+     * 汽车品牌
+     */
+    private String brand;
+    
+    public String getBrand() {
+        return brand;
+    }
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+}
+#+END_SRC
+在上面的例子当中，司机类当前只会驾驶宝马车和奔驰车，那如果我想要让司机也需要驾驶奥迪车呢？这个时候我
+们就需要去修改司机类的 drive 方法中的 if-else 代码片段了。如果在新增某一个功能却需要去修改原本的
+代码时，很容易引发 bug。而原本的代码时经过测试好的，一经修改的话又需要进行重新的测试。而所谓的对修改
+关闭对拓展开放的意思是，我们代码的设计要尽量做到在新增功能的时候不需要去修改原先的代码，这个时候我们
+可以通过引入一层抽象，利用多态来实现策略模式以支持开闭原则。
+
+以下我们通过将不同品牌的驾驶方法分散到各自的子类中实现，原先的 drive 方法只管执行 car.start()即可。
+#+BEGIN_SRC java
+public class Driver {
+    public void drive(Car car) {
+	    // 做一些驾驶前准备
+        car.start();
+    }
+}
+
+class Car {
+    /**
+     * 汽车品牌
+     */
+    private String brand;
+
+    public String getBrand() {
+        return brand;
+    }
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+    public void start() {
+    
+    }
+
+}
+
+class BMW extends Car {
+    public void start() {
+        System.out.println("驾驶宝马车！");
+    }
+}
+
+class BENZ extends Car {
+    public void start() {
+        System.out.println("驾驶奔驰车！");
+    }
+}
+#+END_SRC
+在以上的例子当中，如果需要给司机在新增一种品牌车型的驾驶技能的时候，就不需要去修改原本的 drive 方法
+了，而仅需要新增一种品牌车型，并实现 Car 类中的 start 方法即可。
+
+** 优点：
+1. 对类的功能扩展变得灵活。
+2. 扩展变得灵活的话，维护性自然就提高了。
+
+* 里氏替换原则(LSP)
+** 概念：
+任何基类可以出现的地方，子类一定可以出现。LSP 是继承复用的基石，只有当子类可以替换掉基类，软件单位的
+功能不受到影响时，基类才能真正被复用。（个人理解里氏替换原则是用来检验继承是否合理的原则。）
+
+** 例子:
+以下是鸟类及其子类鸵鸟的例子，鸟类会飞，并可以通过航程和速度求得飞行时间。但是鸵鸟其实并不会飞，当将
+鸵鸟也当做鸟类，计算飞行时间的时候，程序就会出错了。这里鸵鸟类并不能与它的父类鸟类同的能对待。这里便
+违背了里氏替换原则中阐述的，任何基类可以出现的地方，子类一定可以实现。
+#+BEGIN_SRC java
+public class Bird {
+    // 飞行速度
+    int velocity;
+    // 飞行操作
+    public void fly() {
+        System.out.println("扑打翅膀！");
+        velocity = 20;
+    }
+    public int getVelocity() {
+        return velocity;
+    }
+    public void setVelocity(int velocity) {
+        this.velocity = velocity;
+    }
+}
+
+/**
+ * 鸵鸟类
+ */
+class Ostrich extends Bird {
+    // 由于鸵鸟不会飞 所以方法里面为空
+    public void fly() {
+        //I do nothing
+    }
+}
+
+
+/**
+ * 测试鸟类
+ */
+class TestBird {
+    public void getFlyTime() {
+        // 测试普通鸟类 将会得到飞行时间为 10 分钟
+        Bird bird = new Bird();
+        int flyTimeBird = 200 / bird.getVelocity();
+        // 测试鸵鸟 将会得到无限的飞行时间 程序将直接报错
+        Bird ostrich = new Ostrich();
+        int flyTimeOstrich = 200 / ostrich.getVelocity();
+    }
+}
+#+END_SRC
+在以上的例子当中，当你的同事调用计算飞行时间方法的时候，并不会去查看每个子类中的方法实现，所以就会
+得出莫名其妙的结果。这种就是子类无法替换父类的例子。
+
+里氏替换原则的实践可以归纳为以下四点：
+
+- 子类必须实现父类的抽象方法，但不得重写（覆盖）父类的非抽象（已实现）方法。
+- 子类中可以增加自己特有的方法。
+- 当子类覆盖或实现父类的方法时，方法的前置条件（即方法的形参）要比父类方法的输入参数更宽松。
+- 当子类的方法实现父类的抽象方法时，方法的后置条件（即方法的返回值）要比父类更严格。
+
+** 优点：
+1. 规范了父类与子类之间安全的继承，继承是安全的，代码的复用才是安全的。
+2. 继承也提高了代码可维护性，方便修改父类的公共方法和子类的特定方法。
+
+* 依赖倒置原则(DIP)
+** 概念：
+依赖倒置原则（Dependence Inversion Principle）是程序要依赖于抽象接口，不要依赖于具体实现。简单
+的说就是要求对抽象进行编程，不要对实现进行编程，这样就降低了客户与实现模块间的耦合。
+
+** 例子：
+我们还是以车和司机的类关系进行阐述。司机类对宝马车的实现类进行硬编程。
+#+BEGIN_SRC java
+public class Driver {
+    public void drive(BMW car) {
+        car.start();
+    }
+}
+class BMW {
+    public void start() {
+        System.out.println("驾驶宝马车！");
+    }
+}
+#+END_SRC
+在以上的例子中呢，司机类直接依赖于宝马车进行驾驶，如果有一天我们想让司机开奔驰车呢？只能去重载一个
+参数类型为奔驰车的方法。如果我们一开始就为所有车抽象出一个抽象车类呢？让司机对车的抽象类进行软编程。
+此时就不需要对新品牌的车子进行重载了，只需要实现新品牌车子的类即可。
+
+** 例子：
+#+BEGIN_SRC java
+public class Driver {
+    // 此时可以传 BMW 车，也可以传入 BENZ 车
+    // 如果想让司机换开奔驰车的话，不需要更改这部分的代码
+    public void drive(Car car) {
+        car.start();
+    }
+}
+
+class Car {
+    void start() {
+    
+    }
+}
+
+class BMW extends Car{
+    public void start() {
+        System.out.println("驾驶宝马车！");
+    }
+}
+class BENZ extends Car{
+    public void start() {
+        System.out.println("驾驶奔驰车！");
+    }
+}
+#+END_SRC
+这种依赖抽象的例子很多，例如我们在开发的时候定义 DAO，在 Service 当中调用这些 DAO 时是通过声明
+接口引用而不是通过声明实现类引用。假设我们需要将数据库框架从 Hibernate 转到 Mybatis 的时候，
+Service 可以毫无感知的无缝切换。因为之前 Service 当中并无与实现类耦合。还有比如我们项目中的日志
+工具，记录日志依赖的都是规范好的日志接口，如果需要从 log4j 迁移到 logback 也是无需修改的。
+
+** 优点：
+1. 减少类之间的耦合。
+2. 低耦合使得代码更容易进行维护和扩展。
+
+* 接口隔离原则(ISP)
+** 概念：
+客户端不应该依赖它不需要的接口；一个类对另一个类的依赖应该建立在最小的接口上。接口隔离原则和单一职责
+原则很像。单一职责是从对象的职责上面去限定，而接口隔离原则希望每个接口都是最小的接口，接口小的话才使
+得复用接口变得更加容易。
+
+** 例子：
+以下我们声明了一个海陆空兼具的交通工具类
+#+BEGIN_SRC java
+/**
+ * 交通工具类
+ */
+public interface Vehicle {
+    // 飞行
+    void fly();
+    // 航行
+    void sail();
+    // 陆行
+    void run();
+}
+
+class AirPlane implements Vehicle {
+    @Override
+    public void fly() {
+        System.out.println("飞行");
+    }
+    @Override
+    public void sail() {
+    
+    }
+    @Override
+    public void run() {
+
+    }
+}
+#+END_SRC
+交通工具类集合了所有交通的方式，这种方式不可取，如果飞机实现这个接口，却也要去实现与飞机不相关的航行
+和陆行方法。如果跑车实现这个接口，却也需要实现不相关的飞行和航行方法。所以我们应该缩小接口的粒度。
+
+接下来我们将交通工具类，拆分成飞行，航行，陆行三个接口独立存在，实现解耦。
+#+BEGIN_SRC java
+/**
+ * 飞行接口
+ */
+public interface Fly {
+    // 飞行
+    void fly();
+}
+
+/**
+ * 航行接口
+ */
+interface Sail {
+    // 航行
+    void sail();
+}
+
+
+/**
+ * 陆行接口
+ */
+interface Run {
+    // 陆行
+    void run();
+}
+
+/**
+ * 飞行器类
+ */
+class AirCraft implements Fly {
+    @Override
+    public void fly() {
+        System.out.println("飞行");
+    }
+}
+#+END_SRC
+** 优点：
+1. 避免大接口被许多子类实现，造成耦合。降低了耦合，代码也变得好维护。
+2. 小接口可以赋予特定的含义，使得代码更好理解（例如 Comparable 接口和 Serialization 接口一目了然）。
+3. 减少没必要实现的冗余代码。
+
+* 组合/聚合复用原则(CARP)
+** 概念：
+尽量使用组合和聚合，尽量少使用继承。为什么呢？继承不是面向对象的良好特性吗？继承有很多局限性。首先，
+继承属于一种硬编码。如果没有遵守里氏替换原则，父类一旦修改，所有子类都需要进行改变。
+
+** 例子:
+以下我们通过一步一步继承让手机拥有音乐，游戏，打电话的功能。
+#+BEGIN_SRC java
+/**
+ * 手机类有打电话、游戏、音乐功能
+ */
+public class Phone extends GameBoy {
+    // 拨打电话
+    void call() {
+        System.out.println("播放电话");
+    }
+}
+
+/**
+ * 播放音乐类
+ */
+class Pods {
+    void playMusic() {
+        System.out.println("播放音乐");
+    }
+}
+
+/**
+ * 游戏机类，有游戏和音乐功能
+ */
+class GameBoy extends Pods{
+    void playGame() {
+        System.out.println("玩游戏");
+    }
+}
+#+END_SRC
+在以上的例子当中，如果 Pods 类增加了播放磁带的功能，而手机类并不需要播放磁带音乐的功能。或者游戏机类
+增加了摇杆按键功能，而我们的手机同样不需要这个功能。这种继承会导致手机类平台无故的继承了不需要的方法。
+或者这时候我们新出了一个智能手机类 SmartPhone 类，又想使用之前的所有功能呢？再一次继承 Phone 类，
+使得继承的层级更深了，各个类耦合得更紧密。还有一点，Gameboy 类也不一点需要播放音乐的功能。
+
+在下面的例子，我们使用组合/聚合的方式来实现我们的手机类。我们通过持有 Pods 类来拓展音乐功能，持有
+Gameboy 类来拓展游戏功能。
+#+BEGIN_SRC java
+public class Phone {
+    private Pods pods;
+    private GameBoy gameBoy;
+    // 拨打电话
+    void call() {
+        System.out.println("播放电话");
+    }
+    // 播放音乐
+    void playMusic() {
+        pods.playMusic();
+    }
+    // 玩游戏
+    void playGame() {
+        gameBoy.playGame();
+    }
+}
+
+/**
+ * 播放音乐类
+ */
+class Pods {
+    void playMusic() {
+        System.out.println("播放音乐");
+    }
+}
+
+/**
+ * 游戏机类，有游戏和音乐功能
+ */
+class GameBoy {
+    void playGame() {
+        System.out.println("玩游戏");
+    }
+}
+#+END_SRC
+此时我们已经通过组合的方式，去除掉了之前的继承耦合。
+
+** 优点：
+1. 修改各个复用到的类变得容易，不用担心会影响到其子类。
+2. 可以动态的替换各个复用类。
+3. 各个复用类各司其职，在其他地方一样也可以使用，提高了代码复用。
+
+* 迪米特法则(LOD)
+** 概念：
+又叫作最少知识原则（Least Knowledge Principle 简写 LKP），就是说一个对象应当对其他对象有尽可能少
+的了解,不和陌生人说话。也就是说类应该尽可能地少的了解其他对象的细节。如果对象 A 知道对象 B 的所有细节，
+那么对象 A 就可能会去使用到这些细节。如果你修改了其中对象 B 中的细节，就会不经意影响到 A。
+
+** 例子:
+以下我们通过一个煮汤的类来进行阐述
+#+BEGIN_SRC java
+/**
+ * 煮汤类
+ * 一共有四个步骤
+ */
+public class CookSoup {
+    void addWater() {
+        System.out.println("加水");
+    }
+    void addFood() {
+        System.out.println("加食物");
+    }
+    void addSalt() {
+        System.out.println("加盐");
+    }
+    void heat() {
+        System.out.println("加热");
+    }
+}
+
+/**
+ * 这个例子当中用户知道煮汤的步骤
+ */
+class TestCookSoup {
+    public void testCook() {
+        CookSoup cookSoup = new CookSoup();
+        cookSoup.addWater();
+        cookSoup.addFood();
+        cookSoup.addSalt();
+        cookSoup.heat();
+        System.out.println("得到一碗汤");
+    }
+}
+#+END_SRC
+在以上的这个例子中，用户必须知道煮汤的顺序，如果不知道的话，就会把汤煮坏。又或者煮汤类修改了一条规则，
+addFood() 加食物方法前一定要将食物切好。那么所以引用这段代码的地方都需要进行增加切食物的动作。对其他
+对象了解得越多，或是了解越多对象都会导致对象之间的强烈耦合，一旦耦合的话，修改一处代码就会造成其他耦合
+对象也需要跟着修改。
+
+下面这个例子，我们将类中的方法进行封装，尽量让用户少知道其中的细节。
+#+BEGIN_SRC java
+/**
+ * 煮汤类
+ * 一共有四个步骤
+ */
+public class CookSoup {
+    void addWater() {
+        System.out.println("加水");
+    }
+    void addFood() {
+        System.out.println("加食物");
+    }
+    void addSalt() {
+        System.out.println("加盐");
+    }
+    void heat() {
+        System.out.println("加热");
+    }
+    /**
+     * 封装煮汤步骤
+     */
+    void cook() {
+        addWater();
+        addFood();
+        addSalt();
+        heat();
+    }
+}
+
+
+/**
+ * 这个例子当中用户并不知道煮汤的具体步骤
+ */
+class TestCookSoup {
+    public void testCook() {
+        CookSoup cookSoup = new CookSoup();
+        cookSoup.cook();
+        System.out.println("得到一碗汤");
+    }
+}
+#+END_SRC
+在这个例子中，调用者不需要知道煮汤的步骤，直接调用 cook() 方法即可，就不会再煮出一锅难吃的汤。而如果
+厨师想在煮汤操作中间添加一些特殊操作的话，也不会影响到调用煮汤的代码。因为调用者并不知道真正的煮汤方法。
+
+** 优点：
+1. 降低了类之间的耦合。
+2. 提高了可维护性。
+3. 减少了代码的可维护性。

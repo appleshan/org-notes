@@ -1,0 +1,232 @@
+#+TITLE: 应急响应笔记之Linux篇
+
+@See https://mp.weixin.qq.com/s/cdmHQevhVRvU9dlewx9Xvg
+
+整理下自己之前做的应急响应相关的碎片笔记，太多了，没办法全部列出来，先整理一些常用的。
+
+* 1. 系统日志
+=/var/log/cron= ：crontab 命令日志
+
+=/var/log/lastlog= ：登录用户日志
+
+=/var/log/secure= ：记录登录成功与否（有次在这个文件里面找到了一些关键性的 web 访问日志。。。）
+
+=/var/log/wtmp= ：记录登录系统成功的账户信息，等同于 last
+
+=/var/log/utmp= ：查看当前登录系统的情况，等同于 who
+
+=/var/log/faillog= ：记录登录系统不成功的账号信息
+
+=history= ：查看所有历史命令记录
+
+=~/.bash_history= ：黑客可能会使用 =history -c= 清除日志，使用 =cat ~/.bash_history= 仍可查看相关的记录
+
+=/var/log/cups= ：记录打印信息的日志
+
+=/var/log/dmesg= ：记录了系统在开机时内核自检的信息，也可以使用 dmesg 命令直接查看内核自检信息
+
+=/var/log/mailog= ：记录邮件信息
+
+* 2. 访问日志
+web 服务器的种类很多，比如 apache、tomcat、Nginx 等。web 访问日志需要根据配置获取，大部分在默认存储位置，比如 nginx 的在 =/var/log/nginx= 目录下。
+
+主要关注两个文件，即 =access_log= 和 =error_log= ，一般在确定了可疑点之后通过 find、grep、xargs、awk 等组合命令进一步获取日志信息。
+
+* 3. 进程
+=ps -ef= ：查看可疑进程
+
+=top -c= ：查看资源占有情况，并显示文件路径
+
+=lsof -g $GID= ：通常能找到恶意文件进程关联的 lib 文件
+
+=lsof -p $PID= ：查看进程详细信息
+
+=netstat -anltp | grep $PID= ：查看进程端口情况
+
+=ls -la /proc/$PID/exe= ：查看进程可执行文件
+
+=strace -tt -T -e trace=all -p $PID= ：跟踪异常进程运行情况
+
+=lsof -c $PID= ：查看进程关联文件
+
+* 4. 用户
+Linux 所有用户都会在 =/etc/passwd= 、 =/etc/shadow= 、 =/etc/group= 文件中记录
+
+=cat /etc/passwd= ：查看是否有其他 uid，gid 为 0 的情况
+
+=less /etc/passwd= ：查看是否有新增用户
+
+=grep :0 /etc/passwd= ：查看是否有特权用户
+
+=ls -l /etc/passwd= ：查看 passwd 最后修改时间
+
+=awk -F: 'length($2)==0 {print $1}' /etc/shadow= ：查看是否存在空口令用户
+
+* 5. 系统命令
+查看系统命令是否存在异常，比如文件大小、创建时间、修改时间等，比如：
+#+BEGIN_SRC bash
+ls -alt /bin/ | head -n 10
+ls -alt /usr/sbin/ | head -n 10
+ls -alt /usr/bin/ | head -n 10
+
+find /etc/ /usr/bin/ /usr/sbin/ /bin/ /usr/local/bin/ /var/spool/cron/ -type f -mtime -3 | xargs ls -al
+#+END_SRC
+=rpm -Va= ：查看系统命令是否被替换
+
+显示 =S.5…T.= 表示是被修改过的，可以选择 yum 重新还原回去，也可以使用系统命令工具包 busybox
+
+* 6. 计划任务
+常见计划任务位置：
+#+BEGIN_EXAMPLE
+/var/spool/cron/*
+/var/spool/anacron/*
+/etc/crontab
+/etc/anacrontab
+/etc/cron.*
+/etc/anacrontab
+/etc/rc.d/init.d/
+#+END_EXAMPLE
+
+* 7. 开机启动项
+#+BEGIN_EXAMPLE
+ls /etc/rc.d
+systemctl list-unit-files
+chkconfig --list [service_name]
+#+END_EXAMPLE
+
+* 8. 文件
+文件的范围就比较大了，但是无非就是基于文件的创建时间、修改时间、所属组、所属用户、权限、文件大小、文件名称、md5 信息、文件内容、suid 等。
+
+以查找具有 SUID 的文件为例
+#+BEGIN_SRC bash
+find / -perm +4000 -ls
+find / -perm -u=s -type f 2>/dev/null
+find / -user root -perm -4000 -print 2>/dev/null
+find / -user root -perm -4000 -exec ls -ldb {} \;
+#+END_SRC
+
+* 9. 端口
+=netstat -anltp | grep $PID= ：查看进程端口情况
+
+=lsof -i:5000= ：查看 5000 端口的占用情况
+
+=netstat -alntp= ：查看端口
+
+=netstat -an | grep tcp | awk '{print $5}' | awk -F: '{print $1}' | sort | uniq -c | sort -nr | more= ：查看所有 tcp 连接
+
+=netstat -antlp| grep ESTABLISHED= ：查看所有建立连接的详细记录
+
+=netstat -antlp | grep LISTEN= ：检查监听的端口
+
+=netstat -antlp | grep 80 | awk '{print $7}' | cut -d/ -f1= ：根据端口列进程
+
+* 10. 技巧
+** 10.1 日志如果被软链接到/dev/null
+
+1.删除 log
+2.重启 rsyslog
+
+** 10.2 文件/目录无法删除
+可使用 lsattr 查看文件/目录属性，如果有 =-i= 属性可使用 =chattr -i= 去除
+
+** 10.3 查找 777 的权限的文件
+#+BEGIN_SRC bash
+find / *.php -perm 777
+#+END_SRC
+因为大部分黑客普遍喜欢直接赋于文件/目录 777 的权限
+
+** 10.4 搜集 SSH 爆破字典
+#+BEGIN_SRC bash
+grep "Failed password" /var/log/secure | awk {'print $9'} | sort | uniq -c | sort -nr
+#+END_SRC
+
+** 10.5 查看恶意文件里面的 IP
+#+BEGIN_SRC bash
+strings //usr/bin/.sshd | egrep '[1-9]{1,3}\.[1-9]{1,3}\.'
+#+END_SRC
+
+** 10.6 根据特征删除指定进程
+#+BEGIN_SRC bash
+ps aux|grep -v grep|grep "mysqlc"|awk '{print $2}'|xargs kill -9
+#+END_SRC
+
+** 10.7 获取进程 id 数组，并循环杀死所有进程
+#+BEGIN_SRC bash
+ps -ef|grep "java" | grep -v grep|awk '{print $2}'
+kill -9 `ps -ef|grep "java" | grep -v grep|awk '{print $2}'`
+for pid in $(ps -ef|grep "java" | grep -v grep|awk '{print $2}'); do
+  echo $pid
+  kill -9 $pid
+done
+#+END_SRC
+
+** 10.8 隐藏进程查找：
+
+进程都存在于内存中，而内存中的数据又都是写入到/proc/目录下，基于此可查找隐藏文件
+#+BEGIN_SRC bash
+ps -ef | awk '{print}' | sort -n | uniq >1
+ls /proc | sort -n |uniq >2
+diff 1 2
+#+END_SRC
+
+另外，针对挖矿命令被劫持的情况下可以使用 perf top -s pid,comm,dso,symbol 来看到挖矿进程
+
+** 10.9 SEO 文件搜索
+#+BEGIN_SRC bash
+grep -ri baiduspider web_root_master
+#+END_SRC
+
+** 10.10 netstat 被替换，可使用 ss、lsof 来替换
+
+** 10.11 查看 arp 记录是否正常
+#+BEGIN_SRC bash
+arp -a
+#+END_SRC
+
+** 10.12 关注 Content-Length 值
+#+BEGIN_SRC bash
+awk '{if($10>5000000){print $0}}' /var/log/httpd/access_log
+#+END_SRC
+
+** 10.13 查看动态库是否被修改
+#+BEGIN_SRC bash
+echo $LD_PRELOAD
+busybox cat /etc/ld.so.preload
+#+END_SRC
+也可使用 strace、ldd、readefl 等命令
+
+** 10.14 利用 iptables 阻断通讯
+#+BEGIN_SRC bash
+iptables -A INPUT -s xmr.crypto-pool.fr -j DROP
+iptables -A OUTPUT -d xmr.crypto-pool.fr -j DROP
+#+END_SRC
+
+** 10.15 文件监控
+
+创建文件监控规则
+#+BEGIN_SRC bash
+auditctl -w /etc/passwd -p war -k password_monitor
+#+END_SRC
+
+监听日志
+#+BEGIN_SRC bash
+tail -f /var/log/audit/audit.log|grep password_monitor
+#+END_SRC
+
+** 10.16 网页挖矿多数都是加载 =conhive.min.js= ，script 标签里有 =miner.start= 关键字，全局查找即可
+
+** 10.17 检查 SSH 后门
+
+- 对比 ssh 版本： =ssh -V=
+- 查看 ssh 配置文件和 =/usr/sbin/sshd= 的时间: =stat /usr/sbin/sshd=
+- strings 检查 /=/usr/sbin/sshd= ，看是否有邮箱、IP 等信息: =strings /usr/bin/.sshd | egrep '[1-9]{1,3}\.[1-9]{1,3}\.'=
+- 通过 strace 监控 sshd 进程读写文件的操作，一般的 sshd 后门都会将账户密码记录到文件，可以通过 strace 进程跟踪到 ssh 登录密码文件。
+
+** 10.18 清除僵尸进程
+
+父进程调用 fork 创建子进程后，子进程运行直至其终止，它立即从内存中移除，但进程描述符仍然保留在内存中。
+#+BEGIN_SRC bash
+ps -e -o stat,ppid,pid,cmd | grep -e '^[Zz]' | awk '{print $2}' | xargs kill -9
+#+END_SRC
+
+** 10.19 扫描是否存在恶意驱动

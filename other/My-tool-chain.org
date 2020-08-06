@@ -184,6 +184,8 @@ detect and convert encoding of text files
 文档转换工具
 ** except
 可以实现自动化操作。
+** 磁盘分区
+Linux下 最好用的分区工具 gparted
 
 * Windows
 尽量不要用 windows 进行开发，除非你只用 dotnet 开发软件，不然 osx/ubuntu 会是更好的

@@ -1,0 +1,114 @@
+真正高效的SQLSERVER分页查询
+
+Sqlserver数据库分页查询一直是Sqlserver的短板，闲来无事，想出几种方法，假设有表ARTICLE,字段ID、YEAR...(其他省略)，数据53210条(客户真实数据，量不大)，分页查询每页30条，查询第1500页（即第45001-45030条数据），字段ID聚集索引，YEAR无索引，Sqlserver版本：2008R2
+
+第一种方案、最简单、普通的方法：
+
+SELECT TOP 30 * FROM ARTICLE WHERE ID NOT IN(SELECT TOP 45000 ID FROM ARTICLE ORDER BY YEAR DESC, ID DESC) ORDER BY YEAR DESC,ID DESC  
+     平均查询100次所需时间：45s
+
+第二种方案：
+
+SELECT * FROM 
+(
+　　SELECT TOP 30 * FROM (SELECT TOP 45030 * FROM ARTICLE ORDER BY YEAR DESC, ID DESC) f ORDER BY f.YEAR ASC, f.ID DESC
+) s ORDER BY s.YEAR DESC,s.ID DESC  
+     平均查询100次所需时间：138S
+
+第三种方案：
+
+复制代码
+SELECT * FROM ARTICLE w1, 
+(
+    SELECT TOP 30 ID FROM 
+    (
+        SELECT TOP 50030 ID, YEAR FROM ARTICLE ORDER BY YEAR DESC, ID DESC
+    ) w ORDER BY w.YEAR ASC, w.ID ASC
+) w2 WHERE w1.ID = w2.ID ORDER BY w1.YEAR DESC, w1.ID DESC  
+复制代码
+     平均查询100次所需时间：21S
+
+第四种方案：
+
+复制代码
+SELECT * FROM ARTICLE w1 
+    WHERE ID in 
+        (
+            SELECT top 30 ID FROM 
+            (
+                SELECT top 45030 ID, YEAR FROM ARTICLE ORDER BY YEAR DESC, ID DESC
+            ) w ORDER BY w.YEAR ASC, w.ID ASC
+        ) 
+    ORDER BY w1.YEAR DESC, w1.ID DESC  
+复制代码
+     平均查询100次所需时间：20S
+
+第五种方案：
+
+SELECT w2.n, w1.* FROM ARTICLE w1, 
+(
+　　SELECT TOP 50030 row_number() OVER (ORDER BY YEAR DESC, ID DESC) n, ID FROM ARTICLE 
+) w2 WHERE w1.ID = w2.ID AND w2.n > 50000 ORDER BY w2.n ASC  
+     平均查询100次所需时间：15S
+
+ 
+
+ 
+
+查询第1000-1030条记录
+
+第一种方案：
+
+SELECT TOP 30 * FROM ARTICLE WHERE ID NOT IN(SELECT TOP 1000 ID FROM ARTICLE ORDER BY YEAR DESC, ID DESC) ORDER BY YEAR DESC,ID DESC  
+     平均查询100次所需时间：80s
+
+第二种方案：
+
+SELECT * FROM  
+(
+ 　　SELECT TOP 30 * FROM (SELECT TOP 1030 * FROM ARTICLE ORDER BY YEAR DESC, ID DESC) f ORDER BY f.YEAR ASC, f.ID DESC
+) s ORDER BY s.YEAR DESC,s.ID DESC  
+     平均查询100次所需时间：30S
+
+第三种方案：
+
+复制代码
+SELECT * FROM ARTICLE w1, 
+(
+    SELECT TOP 30 ID FROM 
+    (
+        SELECT TOP 1030 ID, YEAR FROM ARTICLE ORDER BY YEAR DESC, ID DESC
+    ) w ORDER BY w.YEAR ASC, w.ID ASC
+) w2 WHERE w1.ID = w2.ID ORDER BY w1.YEAR DESC, w1.ID DESC  
+复制代码
+     平均查询100次所需时间：12S
+
+第四种方案：
+
+复制代码
+SELECT * FROM ARTICLE w1 
+    WHERE ID in 
+        (
+            SELECT top 30 ID FROM 
+            (
+                SELECT top 1030 ID, YEAR FROM ARTICLE ORDER BY YEAR DESC, ID DESC
+            ) w ORDER BY w.YEAR ASC, w.ID ASC
+        ) 
+    ORDER BY w1.YEAR DESC, w1.ID DESC  
+复制代码
+     平均查询100次所需时间：13S
+
+第五种方案：
+
+SELECT w2.n, w1.* FROM ARTICLE w1,
+(
+ 　　SELECT TOP 1030 row_number() OVER (ORDER BY YEAR DESC, ID DESC) n, ID FROM ARTICLE
+) w2 WHERE w1.ID = w2.ID AND w2.n > 1000 ORDER BY w2.n ASC  
+     平均查询100次所需时间：14S
+
+ 
+
+ 
+
+     由此可见在查询页数靠前时，效率3>4>5>2>1，页码靠后时5>4>3>1>2，再根据用户习惯，一般用户的检索只看最前面几页，因此选择3 4 5方案均可，若综合考虑方案5是最好的选择，但是要注意SQL2000不支持row_number()函数，由于时间和条件的限制没有做更深入、范围更广的测试，有兴趣的可以仔细研究下。
+

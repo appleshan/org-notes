@@ -1,0 +1,50 @@
+#+TITLE: docker安装部署mysql持久化到宿主机
+
+@See http://vc2x.com/articles/2020/02/26/1582681169384.html
+
+* 环境
+#+BEGIN_EXAMPLE
+Centos:7
+Docker: 17.05-ce
+Mysql: 5.7
+#+END_EXAMPLE
+
+* 1. 宿主机外部数据和配置文件路径
+创建宿主机目录
+#+BEGIN_EXAMPLE
+msyql配置文件路径：/etc/mysql
+mysql数据卷路径：/var/lib/mysql
+#+END_EXAMPLE
+
+* 2. 拉取mysql:5.7镜像
+#+BEGIN_SRC bash
+docker pull mysql:5.7
+#+END_SRC
+
+* 3. 创建并启动mysql:5.7容器
+#+BEGIN_SRC bash
+docker run -d --name mysql5.7 -p 33306:3306 
+--restart always --privileged=true 
+-v /etc/mysql:/etc/mysql 
+-v /var/lib/mysql:/var/lib/mysql 
+-e MYSQL_USER="admin" 
+-e MYSQL_PASSWORD="admin" 
+-e MYSQL_ROOT_PASSWORD="root" mysql:5.7
+#+END_SRC
+
+* 4. 大功告成，查看容器日志
+#+BEGIN_SRC bash
+docker logs mysql5.7
+#+END_SRC
+
+涉及到的命令行参数
+#+BEGIN_EXAMPLE
+--restart always                       -> 开机启动
+--privileged=true                      -> 提升容器内权限
+-v /etc/mysql:/etc/mysql               -> 映射配置文件
+-v /var/lib/mysql:/var/lib/mysql       -> 映射数据目录
+-e MYSQL_USER="admin"                  -> admin
+-e MYSQL_PASSWORD="admin"              -> 设置admin用户的密码为admin
+-e MYSQL_ROOT_PASSWORD="root"          -> 设置root的密码为root
+#+END_EXAMPLE
+

@@ -1,0 +1,57 @@
+#+TITLE: 国内 Java 开发者必备的两个装备，你配置上了么？
+
+@See https://mp.weixin.qq.com/s/p7IfNiGasrbcaEHPMIPNsw
+
+虽然目前越来越多的国产优秀技术产品走出了国门，但是对于众领域的开发者来说，对国外的各种基础资源依赖还是非常的强。
+所以，一些网络基本技能一直都是我们需要掌握的，然而速度和稳定性问题一直都在困扰着大家。
+
+所以，今天就给众 Java 开发者推荐两个提速神器：
+
+- Maven 的国内镜像
+- Spring 的国内脚手架
+
+* Maven 的国内镜像
+
+官网地址：http://maven.aliyun.com/
+
+对于每一个 Java 开发来说，拉不到依赖的情况一定都有碰到过。所以，强烈建议大家在安装开发环境的时候，就把阿里的国内
+镜像配置上，省去日后各种不必要的麻烦。
+
+配置方法很简单，只需要找到 Maven 的 =setting.xml= 文件，然后在镜像配置中加入阿里云的仓库配置，具体如下：
+#+BEGIN_EXAMPLE
+<mirrors>
+    <mirror>
+        <id>aliyunmaven</id>
+        <mirrorOf>*</mirrorOf>
+        <name>阿里云公共仓库</name>
+        <url>https://maven.aliyun.com/repository/public</url>
+    </mirror>
+</mirrors>
+#+END_EXAMPLE
+
+* Spring 的国内脚手架
+
+官网地址：https://start.aliyun.com/
+
+Spring 的国内脚手架是近日阿里巴巴中间件发布不久的定制版 Spring Initializr，归功于亲切的中文与流畅的速度，被
+广大开发者关注与热传。
+[[file:../../images/aliyun-java-01.jpg]]
+
+使用 Spring 的 Java 开发者可以很方便的通过该界面创建一个基础的 Spring Boot 项目，并引入你所需要的各种
+Spring Boot Starter 组件或者 Spring Cloud 的各种功能。
+
+除此之外，其实我们也可以将它用于 IDEA 的新建工程中，来提速原来的创建方式。操作很简单，只需要下面两步：
+
+第一步：先从菜单中选择 “File”  ->  “New” -> “Project...”
+[[file:../../images/aliyun-java-02.jpg]]
+
+第二步：左侧项目类型中选择 “Spring Initializr”，右侧可以看到模式使用的是 Spring 官方的脚手架地址，我们只
+需要选择 custom，然后填入 https://start.aliyun.com/，点击 “Next”！
+[[file:../../images/aliyun-java-03.jpg]]
+
+大功告成！在后续的创建指引中与原有的操作一模一样，但是项目的组件的元数据获取与生成过程已经不再通过远在国外的官网
+地址，而改为了离我们更近、服务更好的 start.aliyun.com 了。
+[[file:../../images/aliyun-java-04.jpg]]
+
+这些环境都搞定了，是不是很爽？爽了那么就可以开始学习了！
+

@@ -1,0 +1,60 @@
+#+TITLE: Git 工作流程
+
+=版本控制= 几乎是所有开发项目的必备，Git 是目前主流的版本控制系统，下面介绍几种常用的工作流程。
+
+* 1. 最简模式
+[[file:../images/git-workflow-01.jpg]]
+这是最简单的工作流模式，只使用 =master分支= 。
+
+这种方式只适合于非常小的项目，例如个人项目。
+
+当团队增长后，这种方式会极其混乱，产生大量的代码冲突。
+
+* 2. Feature 特征分支
+[[file:../images/git-workflow-02.jpg]]
+在上种方式上添加了 =feature 特征分支= 。
+
+每个 feature 分支都是用来开发某个新功能，以便与项目的其他部分隔离。
+
+当 feature 分支中的功能开发完成后，这个分支就合并到 master 分支。
+
+所以 feature 分支的生命周期比较短。
+
+* 3. Develop 开发分支
+[[file:../images/git-workflow-03.jpg]]
+开发分支基于 master 分支创建，并与 master 一样长期存在。
+
+开发分支是开发时随时提交的代码，master 分支中是达到可发布状态的代码。
+
+这种模式与最简模式一样，只适合非常小的团队。
+
+* 4. Develop + Feature 混搭
+[[file:../images/git-workflow-04.jpg]]
+这 2 种策略可以很好的混合使用。
+
+master 分支中总是可发布的代码。
+
+feature 分支只与 develop 分支合并。
+
+当 develop 分支中的代码测试通过后，合并到 master 分支，然后发布。
+
+* 5. Release 发布分支
+[[file:../images/git-workflow-05.jpg]]
+在上一种模式上进行了扩展，这种方式适用于频繁发布的大型项目。
+
+当 feature 都开发完成，合并到 develop 分支，测试通过后进入到发布状态，这时，创建一个 release 分支。
+
+release 为 =预上线分支= ，如果上线前发现了 bug，在 release 上进行修改提交，这样就可以允许其他团队在不干扰发布
+工作的情况下处理新功能。
+
+当 release 确定发布时，要合并到 master 和 develop 分支。
+
+这种模式基础上还有一种扩展： =hotfix分支= ，用于修复紧急 bug，从 master 创建，修复完成后，合并到 master 和
+develop 分支。
+
+也就形成了这个经典的 git 工作流图：
+[[file:../images/git-workflow-06.jpg]]
+
+翻译整理自：
+https://medium.com/@jurtzmarcel/git-workflows-cb0c023ca88
+
