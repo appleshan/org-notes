@@ -1,0 +1,78 @@
+#+TITLE: Maven下载速度过慢问题
+
+@See https://www.cnblogs.com/chenyanbin/p/11706339.html
+
+因为Maven 默认仓库的服务器在国外所以我们国内的使用效果极差，我们可以修改成为国内镜像地址加速下载。
+
+两种方法
+- 修改全局文件
+C:\Users\您电脑帐号\ .m2\settings.xml
+没有文件的下载附件里面的。
+
+- 修改局部,需要使用的时候指定配置文件
+修改Maven安装目录下 =/conf/settings.xml= 文件。
+
+找到 =<mirrors></mirrors>= 在这里面 加入国内镜像源·华为云和阿里云提供的镜像。
+
+注：您要是觉得手动配置节点麻烦的，请直接下载，覆盖相应路径文件即可：[[https://files-cdn.cnblogs.com/files/chenyanbin/settings.xml][直接下载]]
+#+BEGIN_SRC xml
+<mirror>
+    <id>HuaweiCloud</id>
+    <mirrorOf>*,!HuaweiCloudSDK</mirrorOf>
+     <url>https://mirrors.huaweicloud.com/repository/maven/</url>
+</mirror>
+<mirror>
+<id>AliYUN</id>
+    <name>AliYUN Maven</name>
+    <mirrorOf>*,!HuaweiCloudSDK</mirrorOf>
+    <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+</mirror>
+#+END_SRC
+
+注意:
+如果需要使用华为云套件的话,请加入以下配置
+在profiles节点中添加如下内容：
+
+#+BEGIN_SRC xml
+<profile>
+    <id>HWSDK</id>
+    <repositories>
+        <repository>
+            <id>HuaweiCloudSDK</id>
+            <url>https://mirrors.huaweicloud.com/repository/maven/huaweicloudsdk/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>HuaweiCloudSDK</id>
+            <url>https://mirrors.huaweicloud.com/repository/maven/huaweicloudsdk/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+</profile>
+#+END_SRC
+
+增加activeProfiles标签激活配置：
+#+BEGIN_SRC xml
+<activeProfiles>
+    <activeProfile>HWSDK</activeProfile>
+</activeProfiles>
+#+END_SRC
+
+然后在Idea 等工具指定使用你设置好的配置文件：
+[[file:../../images/maven-01.png]]
+
+效果：
+[[file:../../images/maven-02.png]]
+

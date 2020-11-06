@@ -1,0 +1,144 @@
+#+TITLE: SpringMvc 跨域处理
+
+@See https://www.cnblogs.com/chenyanbin/p/12045237.html
+
+* 导读#
+　　由于浏览器对于JavaScript的同源策略的限制，导致A网站(Ajax请求)不能通过JS去访问B网站的数据，于是跨域问题就出现了。
+
+跨域指的是域名、端口、协议的组合不同就是跨域。
+- http://www.chenyanbin.com/
+- https://www.chenyanbin.com/
+- http://www.chenyanbin.cn
+- http://www.chenyanbin.com:8080/
+
+* 为什么要有同源策略？
+　　举个例子：比如一个黑客程序，他利用IFrame把真正的银行登录页面嵌套到他的页面上，当你使用真实的用户名，密码登录时，他的页面就可以通过JavaScript读取到你的表单中input中的内容，这样用户名、密码就轻松到手啦。
+
+[[file:../../images/CORS-01.png]]
+
+*  如何解决跨域?
+　　解决跨域的方式有多种，比如基于JavaScript的解决方式、基于Jquery的JSONP、以及基于CORS的方式。
+
+　　JSONP和CORS的区别之一：JSONP只能解决get方式提交、CORS不仅支持GET方式，同时还支持POST提交方式。
+
+　　我们重点讲解CORS跨域方式。
+
+* 什么是CORS？
+　　CORS是一个W3C标准，全称是“跨域资源共享”(Cross-origin resource sharing)。
+
+　　它允许浏览器向跨资源服务器，发出XMLHttpRequest请求，从而克服了AJAX只能同源使用的限制。
+
+　　CORS需要浏览器和服务器同时支持。目前，所有浏览器都支持该功能，浏览器不能低于IE10。
+
+　　CORS原理：只需要向响应头header中注入：Access-Control-Allow-Origin，这样浏览器检测到header中的：Access-Control-Allow-Origin，则就可以跨域操作了。
+
+* CORS请求分类标准
+　　浏览器将CORS请求分成两类：简单请求(simple request)和非简单请求(not-so-simple-request)。
+
+** 简单请求
+
+[[file:../../images/CORS-02.png]]
+
+　　凡是不同时满足上面两个条件，就属于非简单请求。
+
+　　浏览器对这两种请求的处理，是不一样的。
+
+　　对于一个简单请求，浏览器直接发出CORS请求，具体来说，就是在头信息之中，加上一个Origin字段。
+
+*** 请求信息
+[[file:../../images/CORS-03.png]]
+
+*** 响应信息
+[[file:../../images/CORS-04.png]]
+
+*** 字段说明
+- Access-Control-Allow-Origin：该字段是必须的。它的值要么是请求时Origin字段的值，要么是一个*，表示接收任意域名的请求。
+- Access-Control-Allow-Credentials：该字段可选。它的值是一个布尔值，表示是否允许发送Cookie。默认情况下，Cookie不包括在CORS请求之中，设为True，即表示服务器明确许可，Cookie可以包含在请求中，一起发送给服务器。这个值也只能设为True，如果服务器不要浏览器发送Cookie，删除即可。
+
+** 非简单请求
+　　非简单请求是那种对服务器有特殊要求的请求，比如请求方法是PUT或者DELETE，或者Content-Type字段的类型是：application/json。
+
+　　非简单请求的CORS请求，会在正式通信之前，增加一次HTTP查询请求，称为“预检”请求(preflight)。
+
+　　浏览器先咨问服务器，当前网页所在的域名是否在服务器的许可名单之中，以及可以使用哪些HTTP动词和头信息字段。只有得到肯定答复，浏览器才会发出正式的XMLHttpRequest请求，否则就报错。
+
+*** 请求信息
+　　Http请求的方式是put，并发送一个自定义头信息：X-Custom-Header。
+
+　　浏览器发现，这是一个非简单请求，就自动发出一个“预检”请求，要求服务器确认可以这样请求。下面是这个“预检”请求的HTTP头信息。
+
+[[file:../../images/CORS-05.png]]
+
+ “预检”请求用的请求方法是OPTIONS，表示这个请求是用来咨问的。头信息里面，关键字端是Origin，表示请求来自那个源。
+
+除了Origin字段，“预检”请求的头信息包括两个特殊字段。
+- Access-Control-Request-Method：该字段是必须的，用来列出浏览器的CORS请求会用到哪些HTTP方法，上例是PUT。
+- Access-Control-Request-Header：该字段是一个逗号分隔的字符串，指定浏览器CORS请求会额外发送的头信息字段，上例是X-Custom-Header。
+一旦服务器通过了“预检”请求，以后每次浏览器正常的CORS请求，就都跟简单请求一样了。会有一个Origin头信息字段。服务器的回应，也都会有一个Access-Control-Allow-Origin头信息字段。
+
+* CORS实现
+** 使用SpringMvc的拦截器实现
+具体的【[[https://www.cnblogs.com/chenyanbin/p/12041228.html][SpringMvc 拦截器]]】参考
+
+** 跨域不提交Cookie
+
+#+BEGIN_SRC java
+package com.cyb.ssm.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.HandlerInterceptor;
+
+public class MyHandlerIntercepter implements HandlerInterceptor {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        System.out.println("Origin:"+request.getHeader("Origin"));
+        if (request.getHeader("Origin") != null) {
+            response.setContentType("text/html;charset=UTF-8");
+            // 允许哪一个URL
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            // 允许那种请求方法
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+            response.setHeader("XDomainRequestAllowed", "1");
+            System.out.println("正在跨域");
+        }
+        return true; //True：允许访问；False：不允许访问
+    }
+}
+#+END_SRC
+拦截器的配置，请参考【[[https://www.cnblogs.com/chenyanbin/p/12041228.html][SpringMvc 拦截器]]】
+
+** 跨域提交Cookie
+　　Access-Control-Allow-Credentials为True的时候，Access-Control-Allow-Origin一定不能设置为“*”，否则报错。
+
+　　如果有多个拦截器，一定要把处理跨域请求的拦截器放到首位。
+
+AJAX代码示例：
+[[file:../../images/CORS-06.png]]
+
+JAVA代码：
+#+BEGIN_SRC java
+public class AllowOriginInterceptor implements HandlerInterceptor {
+ 
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
+       if (request.getHeader("Origin") != null) {
+           response.setContentType("text/html;charset=UTF-8");
+           // 允许哪一个URL 访问 request.getHeader("Origin") 根据请求来的url动态允许
+          response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+           // 允许那种请求方法
+          response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE,HEAD");
+           response.setHeader("Access-Control-Max-Age", "0");
+           // 允许请求头里的参数列表
+           response.setHeader("Access-Control-Allow-Headers",
+                  "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With,userId,token");
+           // 允许对方带cookie访问
+     response.setHeader("Access-Control-Allow-Credentials", "true");
+          response.setHeader("XDomainRequestAllowed", "1");
+           System.out.println("正在跨域");
+       }
+       return true;
+    }
+}
+#+END_SRC
+
