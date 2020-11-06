@@ -1,0 +1,40 @@
+#+TITLE: Docker国内镜像的使用
+
+@See https://www.cnblogs.com/anliven/p/6218741.html
+
+由于众所周知的原因，国内从 Docker Hub 拉取镜像速度缓慢，甚至中断，此时可以配置 Docker 加速器（国内镜像）来
+解决此问题。
+国内很多云服务商都提供了国内加速器服务，主要分为两种，一种需要创建登录账号，另一种则不需要创建登录账号。
+
+* 需要登录账号
+大致等同于阿里云的 Docker 加速器，主要环节也就是以下三步：
+1. 注册账号，获得专属的镜像加速地址。
+2. 根据提示和系统类型，升级、配置并重启 Docker。
+3. 实际操作，验证配置是否正确。
+
+* 不需要登录账号（支持匿名 pull）
+对于使用 systemd 的系统(Ubuntu 16.04+、Debian 8+、CentOS 7+)，可以创建
+=/etc/docker/daemon.json= 文件，并写入如下内容：
+#+BEGIN_EXAMPLE
+{
+  "registry-mirrors": [
+    "https://dockerhub.azk8s.cn",
+    "https://docker.mirrors.ustc.edu.cn",
+    "https://registry.docker-cn.com"
+  ]
+}
+#+END_EXAMPLE
+
+然后重新启动 Docker 服务
+#+BEGIN_SRC sh
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker
+#+END_SRC
+注意：文件内容必须符合 =json= 规范，否则 Docker 无法启动。
+参考信息： [[https://lug.ustc.edu.cn/wiki/mirrors/help/docker][Docker 镜像使用帮助 - 中国科学技术大学]]
+
+一些支持匿名 pull 的国内镜像：
+ - Docker-CN: https://registry.docker-cn.com
+ - 中科大镜像: https://docker.mirrors.ustc.edu.cn
+ - Azure 中国镜像: https://dockerhub.azk8s.cn
+
