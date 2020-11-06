@@ -1,0 +1,37 @@
+#+TITLE: 删除 GitHub 所有 Commit 记录
+
+@See https://p3terx.com/archives/github-warehouse-cleaning-delete-all-commit-records.html
+
+把项目提交到 GitHub 上，有时候可能不小心提交了一些隐私信息，如密码和邮箱。如何删除这些记录，形成一个全新的
+仓库，并且保持代码不变呢？
+
+- 新建一个空白分支
+#+BEGIN_SRC sh
+git checkout --orphan latest_branch
+#+END_SRC
+
+- 添加所有文件
+#+BEGIN_SRC sh
+git add -A
+#+END_SRC
+
+- 提交
+#+BEGIN_SRC sh
+git commit -am "."
+#+END_SRC
+
+- 强制删除旧的分支，如果是 master
+#+BEGIN_SRC sh
+git branch -D master
+#+END_SRC
+
+- 将当前分支重命名为 master
+#+BEGIN_SRC sh
+git branch -m master
+#+END_SRC
+
+- 强制推送到远程仓库
+#+BEGIN_SRC sh
+git push -f origin master
+#+END_SRC
+

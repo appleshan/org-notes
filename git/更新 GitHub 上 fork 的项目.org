@@ -1,0 +1,41 @@
+#+TITLE: 更新 GitHub 上 fork 的项目
+
+@See https://p3terx.com/archives/update-the-project-on-fork-on-github.html
+
+* 为 fork 分配远程链接
+ - 使用 =git remote -v= 查看远程状态。
+ - 添加一个将被同步给 fork 远程的上游仓库。
+#+BEGIN_EXAMPLE
+git remote add upstream https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git
+#+END_EXAMPLE
+
+ - 再次查看状态确认是否配置成功。
+#+BEGIN_EXAMPLE
+git remote -v
+# origin    https://github.com/YOUR_USERNAME/YOUR_FORK.git (fetch)
+# origin    https://github.com/YOUR_USERNAME/YOUR_FORK.git (push)
+# upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (fetch)
+# upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (push)
+#+END_EXAMPLE
+
+* 同步 fork
+ - 从上游仓库 fetch 分支和提交点，传送到本地，并会被存储在一个本地分支 =upstream/master=
+#+BEGIN_SRC sh
+git fetch upstream
+#+END_SRC
+
+ - 切换到本地主分支（如果不在的话）
+#+BEGIN_SRC sh
+git checkout master
+#+END_SRC
+
+ - 把 =upstream/master= 分支合并到本地 =master= 上，这样就完成了同步，并且不会丢掉本地修改的内容。
+#+BEGIN_SRC sh
+git merge upstream/master
+#+END_SRC
+
+如果想更新到 GitHub 的 fork 上，直接 =git push origin master= 就好了。
+
+* 参考
+ - [[https://gaohaoyang.github.io/2015/04/12/Syncing-a-fork/][同步一个 fork]]
+

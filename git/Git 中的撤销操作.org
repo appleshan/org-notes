@@ -1,0 +1,66 @@
+#+TITLE: Git 中的撤销操作
+
+@See https://p3terx.com/archives/undo-operation-in-git.html
+
+* 使用 git checkout 撤销本地修改
+即放弃对本地已修改但尚未提交的文件的修改，还原其到未修改前的状态。
+注意： 已 =add / commit= 的文件不适用个方法，应该用 =git reset= 。
+#+BEGIN_SRC sh
+git checkout .      # 撤销对所有已修改但未提交的文件的修改，但不包括新增的文件
+git checkout [filename]     # 撤销对指定文件的修改，[filename]为文件名
+#+END_SRC
+
+* 使用 git reset 回退项目版本
+可以回退到任意已经提交过的版本。已 =add / commit= 但未 =push= 的文件也适用。
+#+BEGIN_SRC sh
+git reset --hard [commit-hashcode]  #[commit-hashcode]是某个 commit 的哈希值
+#+END_SRC
+使用 =git log= 或 =git reflog= 查看日志，获取提交的哈希值，再使用 =git reset= 进行撤回。
+#+BEGIN_EXAMPLE
+$ git reflog
+d22f8a5 (HEAD -> master, origin/master) HEAD@{0}: commit: update
+45d05fd HEAD@{1}: commit: Add -a option,modify permissions
+bffd561 HEAD@{2}: commit: .
+6ca5e6c HEAD@{3}: commit: update  # 比如我要回退到这一次提交
+5e1c0ea HEAD@{4}: pull: Fast-forward
+7031306 HEAD@{5}: commit: Remove redundant commands
+77f3e3d HEAD@{6}: commit: Modify function
+ae76ba8 HEAD@{7}: commit (initial): add ikey.sh
+#+END_EXAMPLE
+那么就可以用 =git reset 6ca5e6c --hard=
+
+- =--mixed= ：默认，这个模式会把暂存区的文件丢弃，但不会动到工作目录的文件
+- =--soft= ：这个模式下的，工作目录跟暂存区的文件都不会被丢弃
+- =--hard= ：在这个模式下，不管是工作目录以及暂存区的文件都会丢弃。
+
+** 与 git revert 的区别
+=revert= 撤销一个提交的同时会创建一个新的提交。这是一个安全的方法，因为它不会重写提交历史。它会把此次操作
+之前和之后的 com­mit 和 his­tory 都会保留，并且把这次撤销作为一次最新的提交。可以理解为比 =reset= 多了
+一次 =commit= 操作。
+
+** 简单的撤销方式
+撤销到上一个版本：
+#+BEGIN_SRC sh
+git reset --hard HEAD^
+#+END_SRC
+^ 代表撤销到上一个版本，后面跟几 ^ 个就撤销几次。
+
+还可以在后面加入 ~ 符号和数字。比如如撤销 6 次：
+#+BEGIN_SRC sh
+git reset --hard HEAD~6
+#+END_SRC
+HEAD 指针指向的是最新的提交节点。而 HEAD^代表的是前一次的提交节点。而 HEAD~6 代表的是前 6 次的提交
+节点。
+
+- =git reset --soft HEAD^= ：将最近一次提交节点的提交记录回退到暂存区
+- =git reset --mixed HEAD^= ：将最近一次提交节点的提交记录回退到工作区
+- =git reset --hard HEAD^= ：将最近一次提交节点的提交记录全部清除
+
+* 撤销已经 push 到远端的 commit
+先在本地回退到相应的版本，如果此时使用 =git push= 命令，会提示本地的版本落后于远端的版本。
+
+为了覆盖掉远端的版本信息，使远端的仓库也回退到相应的版本，需要加上参数 =--force=
+#+BEGIN_SRC sh
+git push origin <分支名> --force
+#+END_SRC
+
