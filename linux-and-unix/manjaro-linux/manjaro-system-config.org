@@ -41,19 +41,6 @@ Server = http://ftp.tsukuba.wide.ad.jp/Linux/manjaro/stable/$repo/$arch
 ## Country : Singapore
 Server = https://download.nus.edu.sg/mirror/manjaro/stable/$repo/$arch
 
-** 安装后更刷新一下软件包数据库
-然后用 pacman -Syy 刷新一下软件包数据库。
-
-root@archiso ~ # pacman -Syy
-:: Synchronizing package databases...
-core                                  120.9 KiB  4.92M/s 00:00 [##################################] 100%
-extra                                1755.6 KiB  5.24M/s 00:00 [##################################] 100%
-community                               3.7 MiB  6.82M/s 00:01 [##################################] 100%
-root@archiso ~ #
-
-** 安装 archlinuxcn-keyring 包导入 GPG key
-sudo pacman -S archlinuxcn-keyring
-
 ** 安装 yaourt
 sudo pacman -S yaourt
 
@@ -99,6 +86,18 @@ Arch Linux 中文社区仓库 是由 Arch Linux 中文社区驱动的非官方�
 [archlinuxcn]
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
 
+** pacman 设置后更刷新一下软件包数据库
+然后用 pacman -Syy 刷新一下软件包数据库。
+
+root@archiso ~ # pacman -Syy
+:: Synchronizing package databases...
+core                                  120.9 KiB  4.92M/s 00:00 [##################################] 100%
+extra                                1755.6 KiB  5.24M/s 00:00 [##################################] 100%
+community                               3.7 MiB  6.82M/s 00:01 [##################################] 100%
+root@archiso ~ #
+
+** 安装 archlinuxcn-keyring 包导入 GPG key
+sudo pacman -S archlinuxcn-keyring
 
 * 安装后更新系统
 
@@ -117,7 +116,7 @@ sudo pacman -Syu
 
 （2）通过命令安装/卸载软件：
 安装软件命令（package_name 即是指软件名字，如 firefox）：
-pacin package_name
+pacman -S package_name
 
 卸载软件命令：
 pacre package_name
@@ -169,15 +168,15 @@ echo LANG=en_US.UTF-8 > /etc/locale.conf
 
 更多的字体可以在 https://wiki.archlinux.org/index.php/Fonts_(简体中文) 找到。
 
-pacin ttf-hack
-pacin wqy-zenhei wqy-microhei
+pacman -S ttf-hack
+pacman -S wqy-zenhei wqy-microhei
 
 # adobe 字体全家桶：
-pacin adobe-source-code-pro-fonts
-pacin adobe-source-sans-pro-fonts
-pacin adobe-source-serif-pro-fonts
-pacin adobe-source-han-sans-cn-fonts
-pacin adobe-source-han-serif-cn-fonts
+pacman -S adobe-source-code-pro-fonts
+pacman -S adobe-source-sans-pro-fonts
+pacman -S adobe-source-serif-pro-fonts
+pacman -S adobe-source-han-sans-cn-fonts
+pacman -S adobe-source-han-serif-cn-fonts
 
 *** 字体显示效果
 设置好源和驱动以后我们还要折腾两个东西，首先是字体显示效果：
@@ -233,9 +232,9 @@ Xft.lcdfilter: lcddefault
 
 以安装 rime 为例
 
-pacin fcitx-rime
-pacin fcitx-im
-pacin fcitx-configtool # 图形化的配置工具
+pacman -S fcitx-rime
+pacman -S fcitx-im
+pacman -S fcitx-configtool # 图形化的配置工具
 
 保存成功后，注销重新登陆系统，在终端输入 fcitx 启动服务，就能切换 rime 了。
 
@@ -321,7 +320,7 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 
 * 安装 theme
 https://github.com/horst3180/Arc-theme
-pacin arc-gtk-theme
+pacman -S arc-gtk-theme
 
 * 安装驱动程序
 
@@ -390,7 +389,7 @@ EndSection
 ** 声卡驱动
 通常不需要配置就能工作，只需解除静音。需要做的只是安装 alsa-utils 软件包：
 
-pacin alsa-utils
+pacman -S alsa-utils
 
 ** 安装 VMware Tools
 在 VMware 中选择“安装 VMware Tools”，然后：
@@ -412,8 +411,8 @@ $ ./vmware-install.pl
 * 安装 i3 wm
 
 ** 安装字体图标
-yaourt -S ttf-font-awesome
-yaourt -S ttf-material-icons
+yay -S ttf-font-awesome
+yay -S ttf-material-icons
 
 ** 安装 i3-gaps
 pacman -S i3-gaps
@@ -422,17 +421,19 @@ pacman -S i3-gaps
 pacman -S compton
 
 ** 安装 polybar
-yaourt -S polybar-git
+yay -S polybar-git
 
 ** 安装 feh
 pacman -S feh
 
 ** 安装 i3lock-fancy
-yaourt -S i3lock-fancy-git
+yay -S i3lock-fancy-git
 
 ** 安装ranger
 pacman -S ranger
 
+** 安装vifm
+pacman -S vifm
 
 * 安装一些工具
 
@@ -445,23 +446,23 @@ thunar-volman # 管理 usb 自动挂载等
 thunar # 文件管理器
 
 ** linux tool
-pacin vi
-pacin w3m
-pacin wget
-pacin axel
-pacin tmux
+pacman -S vi
+pacman -S w3m
+pacman -S wget
+pacman -S axel
+pacman -S tmux
 
-pacin screenfetch
-pacin shadowsocks-qt5
+pacman -S screenfetch
+pacman -S shadowsocks-qt5
 
-pacin cloc
-pacin jq
-pacin tig
-pacin shellcheck
+pacman -S cloc
+pacman -S jq
+pacman -S tig
+pacman -S shellcheck
 
 ** full text search
-pacin ripgrep
-pacin the_silver_searcher
+pacman -S ripgrep
+pacman -S the_silver_searcher
 
 ** linux-headers
 pacman -S linux-headers
@@ -527,10 +528,10 @@ ln -s /opt/text/sublime_text_3/sublime_text /usr/local/bin/sublime_text
 yaourt flameshot-git
 
 ** meld
-pacin meld
+pacman -S meld
 
 ** percol
-pacin percol
+pacman -S percol
 
 ** 远程桌面连接 windows
 
@@ -611,14 +612,14 @@ To start on system boot:
 
 如果你想用你的使用者帳戶(非 root 帳戶)來使用 Docker，把你的帳戶加到 Docker 的群組中：
 
-# gpasswd -a appleshan docker
+# gpasswd -a alecshan docker
 
 記得重新登入來套用新權限，或者你可以用這個指令讓現在的使用者階段套用新群組：
 
 $ newgrp docker
 
 ** unbound
-pacin unbound
+pacman -S unbound
 
 ** dnscrypt-proxy
 @See:
