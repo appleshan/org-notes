@@ -1,0 +1,8 @@
+#+TITLE: Linux 环境变量配置错误，导致所有命令找不到
+
+@See https://www.cnblogs.com/chenyanbin/p/12563078.html
+
+在命令行界面，输入以下内容
+
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+

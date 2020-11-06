@@ -1,0 +1,151 @@
+#+TITLE: 使用 ssh-keygen 和 ssh-copy-id 配置 SSH 密钥实现免密登陆
+
+@See https://p3terx.com/archives/configuring-ssh-keys-with-sshkeygen-and-sshcopyid.html
+
+* 前言
+SSH 提供两种认证方式，密码认证和密钥认证，一般我们买来的 VPS 都是密码认证。密码的缺点是很容易被暴力破解，
+而且密码需要记忆，使用起来麻烦。密钥的好处是，你只需要一对密钥文件：公钥和私钥，公钥相当于门锁，装在 VPS
+上，私钥相当于钥匙，放在本地计算机上，登录的过程就像是用钥匙去开锁，有钥匙的人才能打得开，不仅安全，而且方便。
+此外，公钥可以复制到其它主机和账户，这就像是你装了很多同样门锁。本篇教程将讲解在本地终端使用 ssh-keygen
+和 ssh-copy-id 给 VPS 配置 SSH 密钥的方法以及使用 ssh 命令进行密钥登录方法，适用于 Win­dows 10
+(1803 后) 的 PowerShell 或 WSL，Linux 发行版和 macOS 自带的终端，但不仅限于这些环境。如果你在
+Windows 下使用 Xshell ，那么推荐去看《[[https://p3terx.com/archives/configuring-ssh-key-with-xshell.html][使用 Xshell 给 Linux VPS 配置 SSH 密钥实现免密登录]]》这篇教程，
+配置起来相对更简单。
+
+* 使用 ssh-keygen 生成密钥对（私钥和公钥）
+在本地终端中执行 =ssh-keygen= 命令，提示都不用管，一路回车 (Enter)。
+#+BEGIN_EXAMPLE
+p3terx@hk2:~$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/p3terx/.ssh/id_rsa):
+Created directory '/home/p3terx/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/p3terx/.ssh/id_rsa.
+Your public key has been saved in /home/p3terx/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:qssp3ZnX0bgxbSUOlecZllcDAjX4nqjL3hA/HRtoGd8 p3terx@hk2
+The key's randomart image is:
++---[RSA 2048]----+
+|         .++ o.oo|
+|         .  = = o|
+|         ... + + |
+|          *.o +  |
+|       .S+oX.E   |
+|       .+.*oO    |
+|   . ..+.+ O     |
+|  ...o=.+ +      |
+|   .=..=..       |
++----[SHA256]-----+
+#+END_EXAMPLE
+
+操作完后会在 =~/.ssh= 目录中生两个密钥文件， =id_rsa= 为私钥， =id_rsa.pub= 为公钥。
+
+科普： =~= 符号代表 =用户主目录= ，俗称 =家目录= 。其路径与当前登陆的用户有关，在 Linux 中普通用户家目录的路径
+是 =/home/用户名= ，而 root 用户是 =/root= 。Windowd 10 中路径是 =C:\Users\用户名= 。在 macOS 中路径是
+=/Users/用户名= 。
+
+* 使用 ssh-copy-id 配置公钥
+执行以下命令自动将公钥上传并配置到 VPS 上：
+#+BEGIN_SRC sh
+ssh-copy-id -i ~/.ssh/id_rsa.pub User@HostName -p Port
+#+END_SRC
+=-i= 为指定公钥路径，后面的 =~/.ssh/id_rsa.pub= 是公钥路径。
+=User= 为用户名， =HostName= 为 IP 地址， =Port= 为端口号。
+
+=ssh-copy-id= 命令相当于执行了以下复杂的手动操作：
+
+- 复制公钥文件中的内容
+#+BEGIN_SRC sh
+cat ~/.ssh/id_rsa.pub
+#+END_SRC
+
+- 登录到远程主机
+#+BEGIN_SRC sh
+ssh User@HostName -p Port
+#+END_SRC
+
+- 创建 ~/.ssh 目录
+#+BEGIN_SRC sh
+mkdir -p ~/.ssh
+#+END_SRC
+
+- 把公钥文件写入到 ~/.ssh/authorized_keys
+#+BEGIN_SRC sh
+vim ~/.ssh/authorized_keys
+#+END_SRC
+
+- 设置权限
+#+BEGIN_SRC sh
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+#+END_SRC
+
+所以使用 =ssh-copy-id= 大大简化了 SSH 密钥的配置过程。
+
+* 使用 ssh 命令进行密钥登录
+当私钥存在于默认位置 (=~/.ssh/id_rsa=) 时，会优先使用密钥登录，所以执行的命令与密码登录没有区别。
+#+BEGIN_SRC sh
+ssh User@HostName -p Port
+#+END_SRC
+=User= 为用户名， =HostName= 为 IP 地址， =Port= 为端口号。
+当私钥为非默认名称或者不在 =~/.ssh= 目录时，就需要指定私钥路径。比如我将 id_rsa 改成了 p3terx：
+#+BEGIN_SRC sh
+ssh -i ~/.ssh/p3terx User@HostName -p Port
+#+END_SRC
+=-i= 为指定私钥路径，后面的 =~/.ssh/p3terx= 是私钥路径。
+
+** 使用 SSH 配置文件管理会话
+如果你有多个 VPS 使用不同密钥，那么使用 SSH 配置文件 ( =~/.ssh/config= ) 进行管理是一种优雅且灵活的方式。这相当于在类似 Xshell 这样的图形化 SSH 工具中对每个 SSH 会话连接进行单独设置并保存起来，省去了重复输入复杂参数的过程。
+
+SSH 配置文件默认是不存在的，所以使用 nano 编辑器创建并编辑：
+#+BEGIN_SRC sh
+nano ~/.ssh/config
+#+END_SRC
+
+然后参照下面的例子进行填写。
+#+BEGIN_EXAMPLE
+Host P3TERX_VPS
+    HostName 233.233.233.233
+    Port 2333
+    User p3terx
+    IdentityFile "~/.ssh/id_rsa"
+    IdentitiesOnly yes
+
+Host P3TERX_VPS2
+    HostName 66.66.66.66
+    Port 6666
+    User p3terx
+    IdentityFile "~/.ssh/id_ecdsa"
+    IdentitiesOnly yes
+#+END_EXAMPLE
+
+- Host 别名
+- HostName 主机名，可以用 IP 地址或域名
+- Port 端口，不填写默认为 22
+- User 用户名
+- IdentityFile 私钥的路径，可指定多个私钥，在连接的过程中会依次尝试。
+- IdentitiesOnly 只接受 SSH key 登录
+
+编辑好保存并退出，然后设置权限，不然可能无法正常使用。
+#+BEGIN_SRC sh
+chmod 600 ~/.ssh/config
+#+END_SRC
+当以上操作完成，以后登录 VPS 就只需要在终端内输入 =ssh Host= 就可以登录到 VPS ，就像下面这样：
+#+BEGIN_SRC sh
+ssh P3TERX_VPS
+#+END_SRC
+
+* 禁用密码登录
+在确认使用密钥能正常登录后，为了提高 VPS 的安全性建议禁用密码登录。
+
+执行以下命令，对 sshd 配置文件 (=/etc/ssh/sshd_config=) 进行修改。
+#+BEGIN_SRC sh
+sudo sed -i '/PasswordAuthentication /c\PasswordAuthentication no' /etc/ssh/sshd_config
+#+END_SRC
+
+最后重启 sshd 服务，使配置生效。
+#+BEGIN_SRC sh
+sudo service sshd restart
+#+END_SRC
+

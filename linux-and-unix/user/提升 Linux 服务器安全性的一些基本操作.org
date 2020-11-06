@@ -1,0 +1,116 @@
+#+TITLE: 提升 Linux 服务器安全性的一些基本操作
+
+@See https://p3terx.com/archives/improve-linux-server-security.html
+
+* 前言
+大多数的 VPS 购买来默认是 root 账户登录，这就像在电脑城买的电脑奸商装的盗版 Windows 默认账户是
+Administrator 。起初跟大多数人一样，我都是直接使用的，为了方便也曾把 GCP 弄成了 root 账户直接登录，所
+以对用户权限、密钥登录等安全知识没什么概念。后来通过一系列的学习和实践，开始配置密钥登录，也随着使用 Linux
+桌面版 和 WSL ，开始习惯使用普通账户，对这些安全知识也逐渐有了全面的认识。这篇文章将讲解在 Linux 下如何
+添加普通用户、授予用户 sudo 权限、配置密钥登录、禁止 root 登录等一些列提升安全性的操作，相信这对于刚接触
+VPS 的萌新应该会很有用。
+
+* 添加普通用户
+为了安全，平时我们应该以普通用户的身份操作 VPS，所以需要添加一个普通用户。添加用户有两个命令，adduser 和
+useradd，在不同系统中的定义以及用法上有区别，想了解具体区别可以看《[[https://p3terx.com/archives/add-normal-users-with-adduser-and-useradd.html][Linux 使用 adduser 与 useradd 添加
+普通用户的正确姿势]]》这篇文章。
+
+这里提供一个通用添加方法：
+
+以添加用户名为 p3terx 的普通用户为例子，输入命令
+#+BEGIN_SRC sh
+useradd -m -s /bin/bash p3terx
+#+END_SRC
+
+然后对该用户设置密码，输入命令后会提示输入两次密码
+#+BEGIN_SRC sh
+passwd p3terx
+#+END_SRC
+
+* 授予普通用户 sudo 权限
+有时需要使用 root 权限，比如安装软件、启动服务等操作时就需要用到 sudo 命令来提升权限才能进行操作。授予
+用户 sudo 权限最简单的方法是把用户添加到 sudo 用户组。
+
+如果系统中没有 sudo，需要先安装。
+#+BEGIN_SRC sh
+# Debian
+apt install sudo -y
+# Centos
+yum install sudo -y
+#+END_SRC
+
+以添加 p3terx 这个用户到 sudo 用户组为例子，输入下面命令：
+#+BEGIN_SRC sh
+usermod -aG sudo p3terx
+#+END_SRC
+
+如果你不想每次进行 sudo 操作时都输入密码，可以进行免密设置。方法参考《[[https://p3terx.com/archives/linux-grants-normal-user-sudo-permission.html][Linux 中授予普通用户 sudo 权限的
+正确方法]]》这篇文章。但是为了安全，不推荐在 VPS/服务器进行免密的设置。
+
+* 配置 SSH 密钥登录
+密码的缺点是很容易被暴力破解，而且密码需要记忆，使用起来麻烦。密钥的好处是，你只需要一对密钥文件：公钥和
+私钥，公钥相当于门锁，装在 VPS 上，私钥相当于钥匙，放在本地计算机上，登录的过程就像是用钥匙去开锁，有钥匙的
+人才能打得开，不仅安全，而且方便。
+
+由于不同系统环境的操作会有差异，配置的方法我分别写了《[[https://p3terx.com/archives/configuring-ssh-key-with-xshell.html][使用 Xshell 给 Linux VPS 配置 SSH 密钥实现免密
+登录]]》和《[[https://p3terx.com/archives/configuring-ssh-keys-with-sshkeygen-and-sshcopyid.html][使用 ssh-keygen 和 ssh-copy-id 配置 SSH 密钥实现免密登陆]]》两篇教程。需要注意的是配置前一定
+要切换到之前新建的普通用户，以切换到 p3terx 这个用户为例子，输入以下命令：
+#+BEGIN_SRC sh
+su -l p3terx
+#+END_SRC
+
+* 禁用不安全的登录方式
+前面的一系列操作都是铺垫，是为禁止 root 账户登录和密码登录以及修改 SSH 端口做准备，这才是提升 VPS 安全性
+的主要目的。
+
+打开 sshd 配置文件 (=/etc/ssh/sshd_config=) 进行修改。
+#+BEGIN_SRC sh
+sudo nano /etc/ssh/sshd_config
+#+END_SRC
+
+** 禁止密码登录
+找到 PasswordAuthentication，一般情况看到的应该是这样的：
+#+BEGIN_EXAMPLE
+#PasswordAuthentication yes
+#+END_EXAMPLE
+
+去掉前面的#，把 yes 改为 no，像下面这样：
+#+BEGIN_EXAMPLE
+PasswordAuthentication no
+#+END_EXAMPLE
+
+** 禁止 root 登录
+找到 PermitRootLogin，对默认使用 root 登录的 VPS ，看到的应该是这样的：
+#+BEGIN_EXAMPLE
+PermitRootLogin yes
+#+END_EXAMPLE
+
+要完全禁止 root 登录，把 yes 改为 no，像下面这样：
+#+BEGIN_EXAMPLE
+PermitRootLogin no
+#+END_EXAMPLE
+
+** 修改 SSH 端口
+找到 Port，默认情况下这个选项是被注释，像下面这样：
+#+BEGIN_EXAMPLE
+#Port 22
+#+END_EXAMPLE
+
+去掉前面的#，把后面的 22 换成其它端口，比如 2333，像下面这样：
+#+BEGIN_EXAMPLE
+Port 2333
+#+END_EXAMPLE
+
+** 重启 sshd 服务
+为了使以上修改生效，需要重启 sshd 服务
+#+BEGIN_SRC sh
+sudo service sshd restart
+#+END_SRC
+
+* 清除 root 用户密码
+当清除 root 用户密码后，就无法使用 su 命令切换到 root 用户。只有被授予 sudo 权限的用户执行 sudo -i
+命令并输入当前用户的密码才能切换到 root 用户，进一步提升了安全性。
+#+BEGIN_SRC sh
+sudo passwd -d root
+#+END_SRC
+

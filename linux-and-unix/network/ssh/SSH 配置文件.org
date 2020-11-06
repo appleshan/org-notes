@@ -1,0 +1,73 @@
+#+TITLE: SSH 配置文件
+
+@See https://p3terx.com/archives/ssh-configuration-file.html
+
+* 前言
+在使用个 VPS 和多个 Git 账户的情况下，使用 SSH 配置文件 ( =~/.ssh/config= ) 管理密钥是一种优雅且灵活的
+方式。
+
+* 常用配置项
+ - Host 别名
+ - HostName 主机名，可以用 IP 地址或域名
+ - Port 端口，默认为 22
+ - User 用户名
+ - IdentityFile 密钥文件的路径，可以指定多个密钥文件，在连接的过程中会依次尝试这些密钥文件。
+ - IdentitiesOnly 只接受 SSH key 登录
+ - PreferredAuthentications 强制使用 Public Key 验证
+
+提示：可以通过 =man ssh_config=，查看 =~/.ssh/config= 的语法。
+
+** 转义符
+ - %d 本地用户目录
+ - %u 本地用户名称
+ - %l 本地主机名
+ - %h 远程主机名
+ - %r 远程用户名
+
+* 使用示例
+** 使用别名登录到远程主机
+#+BEGIN_EXAMPLE
+Host P3TERX
+    HostName p3terx.com
+    Port 2333
+    User root
+    IdentityFile  ~/.ssh/id_rsa
+    IdentitiesOnly yes
+#+END_EXAMPLE
+
+当配置好后，就可以直接使用别名来登录了：
+#+BEGIN_SRC sh
+ssh P3TERX
+#+END_SRC
+
+** 不同主机使用相同密钥进行登录
+#+BEGIN_EXAMPLE
+Host github.com git.coding.net
+    HostName %h
+    User git
+    IdentityFile  ~/.ssh/id_rsa_git
+#+END_EXAMPLE
+
+#+BEGIN_SRC sh
+ssh -T git@git.coding.net
+ssh -T git@github.com
+#+END_SRC
+
+** 不同主机使用不同密钥进行登录
+#+BEGIN_EXAMPLE
+Host P3TERX
+    HostName p3terx.com
+    Port 2333
+    User root
+    IdentityFile  ~/.ssh/id_rsa
+    IdentitiesOnly yes
+
+Host github.com git.coding.net
+    HostName %h
+    User git
+    IdentityFile  ~/.ssh/id_rsa_git
+#+END_EXAMPLE
+
+* 参考
+ - [[https://www.hi-linux.com/posts/14346.html][利用 SSH 的用户配置文件 Config 管理 SSH 会话]]
+

@@ -1,0 +1,37 @@
+#+TITLE: Manjaro的蓝牙设置
+
+@See https://bbs.archlinuxcn.org/viewtopic.php?pid=45163#p45163
+
+Manjaro默认的蓝牙总会有点小问题！所以在安装好Manjaro后如下设置下：
+一、安装基本的包（默认只安装了bluez）
+pacman -S bluez-utils
+如果你蓝牙与音频有关，还要确认下面的包安装了（有些包默认没有安装，默认安装的包根据manjaro版本的不同不一样）
+pacman -S pulseaudio-bluetooth pavucontrol pulseaudio-alsa pulseaudio-bluetooth-a2dp-gdm-fix
+二、修改设置
+nano /etc/bluetooth/main.conf
+修改FastConnectable=false，取消#注释，改为FastConnectable=true
+修改AutoEnable=false，去掉前面的#注释，改为AutoEnable=true
+重启！！！
+三、连接蓝牙设备
+不知道为什么Manjaro下的配对码显示不出来，所以我们的控制台下进行连接配对操作：
+1、进入蓝牙控制台
+bluetoothctl
+2、打开相关项
+power on
+agent on
+default-agent
+3、扫描蓝牙设备
+scan on
+4、根据上面扫出来的蓝牙MAC码，对设备配对
+pair 相应的MAC地址（可用TAB自动出来，下同）
+如果是键盘，会输出类似于以下的信息：
+[agent] Passkey: xxxxxx
+这时候在你的蓝牙键盘上输入6位配对码后再回车即可完成配对！
+5、设备信任设备
+trust 相应的MAC地址
+6、连接设备
+connect 相应的MAC地址
+7、退出蓝牙控制台
+exit
+重启电脑！
+

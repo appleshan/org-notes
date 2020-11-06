@@ -1,0 +1,86 @@
+#+TITLE: 安装和配置 UFW（简单防火墙）
+
+@See https://p3terx.com/archives/installing-and-configuring-ufw-in-debian.html
+
+* 前言
+UFW 是一个 Arch Linux、De­bian 或 Ubuntu 中管理防火墙规则的前端，可大大简化防火墙的配置过程。
+
+* 安装 UFW
+如还没有安装，可以使用 apt 命令来安装
+#+BEGIN_SRC sh
+apt-get update && apt-get install ufw
+#+END_SRC
+
+在使用前，你应该检查下 UFW 是否已经在运行。
+#+BEGIN_SRC sh
+ufw status
+#+END_SRC
+如果你发现状态是 =inactive= ，意思是没有被激活或不起作用。
+
+* 启用/禁用
+#+BEGIN_SRC sh
+ufw enable  #启用
+ufw disable  #禁用
+#+END_SRC
+
+* 使用与配置
+** 列出当前UFW规则
+#+BEGIN_SRC sh
+ufw status verbose
+#+END_SRC
+
+** 添加规则
+*** 允许入站（allow）
+默认情况，没有允许就是拒绝（入站），使用 =ufw allow <端口>= 来添加允许访问的端口或协议。
+#+BEGIN_SRC sh
+ufw allow ssh  #添加22端口
+
+ufw allow http  #添加80端口
+
+ufw allow https  #添加443端口
+
+ufw allow 2333/tcp   #添加2333端口，仅TCP协议
+
+ufw allow 6666/udp   #添加6666端口，仅UDP协议
+
+ufw allow 8888:9999  #添加8888到9999之间的端口
+#+END_SRC
+
+*** 拒绝访问（deny）
+使用 =ufw deny <端口>= 来添加拒绝入站的端和协议，与添加允许的类似。
+
+删除规则
+先使用 ufw status 查看规则，再使用 =ufw delete [规则] <端口>= 来删除规则。
+#+BEGIN_SRC sh
+ufw delete allow 2333/tcp
+#+END_SRC
+如果你有很多条规则，使用 numbered 参数，可以在每条规则上加个序号数字。
+
+然后使用 =ufw delete <序号>= 来删除规则。
+#+BEGIN_EXAMPLE
+root@p3terx:~# ufw status numbered  #列出规则，并加上序号。
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 20,21,22,80,888,8888/tcp   ALLOW IN    Anywhere
+[ 2] 39000:40000/tcp            ALLOW IN    Anywhere
+[ 3] 8896/tcp                   ALLOW IN    Anywhere
+[ 4] 8896/udp                   ALLOW IN    Anywhere
+[ 5] 443/tcp                    ALLOW IN    Anywhere
+[ 6] 20,21,22,80,888,8888/tcp (v6) ALLOW IN    Anywhere (v6)
+[ 7] 39000:40000/tcp (v6)       ALLOW IN    Anywhere (v6)
+[ 8] 8896/tcp (v6)              ALLOW IN    Anywhere (v6)
+[ 9] 8896/udp (v6)              ALLOW IN    Anywhere (v6)
+[10] 443/tcp (v6)               ALLOW IN    Anywhere (v6)
+
+root@p3terx:~# ufw delete 4  #删除上面的第4条规则
+Deleting:
+ allow 8896/udp
+Proceed with operation (y|n)? y  #最后会询问你是否进行操作
+#+END_EXAMPLE
+以上都是一些简单常用的一些命令，想要深入了解，可以输入 =man ufw= 查看 ufw 用户手册。
+
+* 参考
+ - [[https://linux.cn/article-2489-1.html][Debian/Ubuntu 系统中安装和配置 UFW－简单的防火墙]]
+

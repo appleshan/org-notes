@@ -1,0 +1,55 @@
+#+TITLE: Linux 中授予普通用户 sudo 权限的正确方法
+
+@See https://p3terx.com/archives/linux-grants-normal-user-sudo-permission.html
+
+* 前言
+有时需要使用 root 权限，比如安装软件、启动服务等操作时就需要用到 sudo 命令来提升权限才能进行操作。而新添加
+的普通用户是没有权限进行 sudo 操作的，所以我们需要对普通用户授予 sudo 权限。授予 sudo 权限有三个方法，
+第一个是把用户添加到 sudo 用户组，第二个是修改 sudo 配置文件 (=/etc/sudoers=)，第三个是添加配置文件到 =/etc/sudoers.d/= 目录中。选其中一个即可，推荐第三个方法。
+
+* 安装 sudo
+如果系统中没有 sudo，需要先安装。
+#+BEGIN_SRC sh
+# Debian
+apt install sudo -y
+# Centos
+yum install sudo -y
+#+END_SRC
+
+* 添加用户到 sudo 用户组
+以添加 p3terx 这个用户到 sudo 用户组为例子，输入下面命令：
+#+BEGIN_SRC sh
+usermod -aG sudo p3terx
+#+END_SRC
+
+* 修改 sudo 配置文件(etc/sudoers)
+打开 sudo 配置文件
+#+BEGIN_SRC sh
+visudo
+#+END_SRC
+
+以授予 p3terx 这个用户 sudo 权限为例子，添加如下内容。
+#+BEGIN_EXAMPLE
+p3terx ALL=(ALL) ALL
+#+END_EXAMPLE
+
+* 添加配置文件到/etc/sudoers.d/目录中
+这个是系统文档推荐的做法。 =/etc/sudoers.d/= 目录中的文件相当于是 =/etc/sudoers= 文件的补充。如果你写的
+配置文件有问题或者是想去除用户的 sudo 权限，直接删除文件即可，不用去修改 =/etc/sudoers= 文件，不会影响到
+系统默认配置。
+
+以授予 p3terx 这个用户 sudo 权限为例子，在终端中输入以下命令直接添加配置文件：
+#+BEGIN_SRC sh
+tee /etc/sudoers.d/p3terx <<< 'p3terx ALL=(ALL) ALL'
+#+END_SRC
+如果你不想输入每次 sudo 都输入密码，可以设置免密。
+#+BEGIN_SRC sh
+tee /etc/sudoers.d/p3terx <<< 'p3terx ALL=(ALL) NOPASSWD: ALL'
+#+END_SRC
+服务器不要设置免密！不安全！
+
+最后赋予正确的权限：
+#+BEGIN_SRC sh
+chmod 440 /etc/sudoers.d/p3terx
+#+END_SRC
+
