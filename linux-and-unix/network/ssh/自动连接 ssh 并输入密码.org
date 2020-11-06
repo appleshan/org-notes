@@ -7,24 +7,24 @@ ssh 自动登录首选就是使用 key 了，可对方不干，那就只能使�
 spawn autossh -M 20000 -p SSH_PORT -N -D 7070 YOUR_NAME@YOUR_SERVER
 set timeout 60
 expect {
-     assword: {
-         stty -echo
-         send "YOUR_PASS\r"
-         stty echo
-         #exp_continue
-     }
+    assword: {
+        stty -echo
+        send "YOUR_PASS\r"
+        stty echo
+        #exp_continue
+    }
     incorrect {
-         send_user "invalid password or account\n"
-         exit
-     }
+        send_user "invalid password or account\n"
+        exit
+    }
     timeout {
-         send_user "connection to host timed out\n"
-         exit
-     }
+        send_user "connection to host timed out\n"
+        exit
+    }
     eof {
-         send_user "connection to host failed\n"
-         exit
-     }
+        send_user "connection to host failed\n"
+        exit
+    }
 }
 if {[fork]!=0} exit
 disconnect
@@ -32,3 +32,4 @@ disconnect
 
 那里面那个 autossh 能自动给你重连，没仔细研究。那个 20000 后面的参数都是给 ssh 的，具体含意可以看 ssh 的 man。
 最主要是最后那两行，能做到连接上之后主程序就退出了，不占用你的终端，而不影响 ssh 的连接。
+
