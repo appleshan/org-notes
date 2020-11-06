@@ -1,0 +1,10 @@
+#+TITLE: curl在windows上安装方法
+
+网上有安装curl在windows上的方法，但是貌似不好用，今天总结了：
+1， http://curl.haxx.se/download.html 这个网站下安装包，选择后面的我选了windows然后第二个。
+2，下载下zip包但是不用解压，直接把包里面的curl.exe文件复制粘贴到新建的一个文件夹：C:\curl里面
+3， http://curl.haxx.se/docs/caextract.html到这个网站下载cacert.pm，如果需要框架ssl这种东西就需要，用了，就是http的测试。
+4，把这个文件重命名为：curl-ca-bundle.crt ，粘贴到C:\curl
+5，修改环境变量：path中加入该保存路径：c：\curl；
+6，cmd打开文件，输入curl，查看是否安装成功。
+
