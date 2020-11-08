@@ -1,0 +1,43 @@
+使用GoAccess构建实时日志分析系统
+
+@See https://www.cnblogs.com/longren/p/10945623.html
+
+一、安装GoAccess
+yum install goaccess --with-libmaxminddb
+
+确认安装成功，并且查看构建参数
+goaccess -V
+
+二、配置
+# vim /usr/local/etc/goaccess.conf
+填入内容：
+time-format %H:%M:%S
+date-format %d/%b/%Y
+log-format %h %^[%d:%t %^] "%r" %s %b "%R" "%u"
+
+三、控制台下的操作方法
+goaccess -f /var/log/nginx/access.log -p /usr/local/etc/goaccess.conf
+
+四、使用命令指定配置，将生成的信息保存为html
+1.测试是否能通过终端直接展示
+# goaccess -f /var/log/nginx/access.log -p /usr/local/etc/goaccess.conf
+
+2.将分析结果保存为HTML
+# goaccess -f /var/log/nginx/access.log -o /mnt/share/kphealth/pdfdownload/tmp/nginx-logs.html -p /usr/local/etc/goaccess.conf
+
+3.将其写入脚本
+由于对日志实时性要求不是非常高，于是写个小脚本，配置crontab，让其每隔一段时间转换一次，也可以实现伪实时性观察log，如下：
+# vim /home/app/zhuoyi-lims/nginx/goaccess.sh
+#!/bin/bash
+LANG="zh_CN.UTF-8"  #页面转换为中文
+/usr/bin/goaccess /var/log/nginx/access.log \
+-o /mnt/share/kphealth/pdfdownload/nginx-logs.html \
+-p /usr/local/etc/goaccess.conf 
+
+4.然后再将脚本加入到crontab即可
+# crontab -e
+#定时goaccess生成的信息保存为html
+30 * * * * /bin/bash /home/app/zhuoyi-lims/nginx/goaccess.sh
+
+确认定时任务添加成功：
+# crontab -l
