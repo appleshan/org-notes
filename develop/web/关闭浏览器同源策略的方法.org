@@ -1,0 +1,20 @@
+#+TITLE: 关闭浏览器同源策略的方法
+
+@See https://segmentfault.com/q/1010000038151710
+
+这个是用于 *本地临时调试* 的方法。
+
+* 设置浏览器参数，关闭浏览器同源策略
+
+1. 桌面上 浏览器快捷方式 鼠标右键 属性> 快捷方式> 目标>
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --args --disable-web-security --user-data-dir="C:\abc"
+》保存。
+
+2. C 盘下建个abc 文件夹 （因为 --user-data-dir="C:\abc"）
+3. 然后启动浏览器，访问原先的跨域页面，就没有跨域的问题了。
+
+* 使用 chrome 插件
+
+一个开发环境简单的跨域处理：
+chrome 插件 [[https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf][Allow CORS: Access-Control-Allow-Origin]]
+
