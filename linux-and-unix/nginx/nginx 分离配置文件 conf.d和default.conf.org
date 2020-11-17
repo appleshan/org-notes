@@ -1,0 +1,41 @@
+#+TITLE: nginx 分离配置文件 conf.d和default.conf
+
+* 1. 在 nginx.conf 文件中引用 conf.d 下的所有配置文件
+
+#+BEGIN_EXAMPLE
+#在http配置节的末尾添加配置引用
+http {
+    ...
+
+    #gzip  on;
+
+    include /etc/nginx/conf.d/*.conf;
+}
+#+END_EXAMPLE
+
+* 2. 在 conf.d 中添加 default.conf 配置文件
+#+BEGIN_EXAMPLE
+server {
+    listen       80;
+    server_name  localhost;
+
+    charset utf-8;
+    access_log  /var/log/nginx/host.access.log  main;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+    
+    #代理配置
+    location /business {
+        proxy_pass  http://business.app.com;
+    }
+    
+    #代理配置
+    location /user {
+        proxy_pass  http://user.app.com;
+    }
+}
+#+END_EXAMPLE
+
