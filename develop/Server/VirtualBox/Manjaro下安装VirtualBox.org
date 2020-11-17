@@ -1,0 +1,48 @@
+#+TITLE: Manjaro下安装VirtualBox
+
+@See https://www.cnblogs.com/zhuxiaoxi/p/8467181.html
+
+* 安装前需要知道
+你需要知道你当前的内核版本
+uname -r，比如输出了 5.8.18-1-MANJARO 那么你的内核版本为 58
+
+* Step 1) Install VirtualBox package
+1. 安装 VirtualBox
+sudo pacman -S virtualbox
+这里需要选择与当前内核相同的内核模块比如笔者正在使用的内核版本为 58，则需要安装 linux58-virtualbox-host-modules
+
+2.
+sudo pacman -S virtualbox-guest-iso
+
+3. 添加当前用户到vboxusers
+sudo gpasswd -a $USER vboxusers
+
+这里需要将$USER替换为你的用户名，如果不需要使用USB外设，可以不执行此操作。
+
+4. 验证VirtualBox内核模块是否已加载
+$ lsmod | grep -i vboxdrv
+
+5. 重新启动系统或执行sudo modprobe vboxdrv
+
+6. 配置 vboxdrv模块的自动加载
+“vboxdrv模块”可能在第1步的安装已经添加到了 /etc/modules-load.d/linux58-virtualbox-host-modules.conf 文件里。
+检查这个文件的内容，如果有“vboxdrv”行，就不需要做这一步了。
+
+要使vboxdrv模块在系统引导时自动加载，必须将驱动程序添加到 /etc/modules load.d/virtualbox.conf 文件。
+运行以下命令创建 /etc/modules load.d/virtualbox.conf 文件并使用nano文本编辑器打开：
+sudo nano /etc/modules-load.d/virtualbox.conf
+
+文件现在是空的。
+只需键入“vboxdrv”，然后按Ctrl+X，然后按y，然后按<Enter>保存文件。
+
+* Step 2) Install VirtualBox extension package
+
+1. 安装扩展包
+你也可以去官网下载扩展包
+
+sudo pacman -Ss virtualbox-ext-oracle
+
+2.
+$ sudo systemctl enable vboxweb.service
+$ sudo systemctl start vboxweb.service
+
