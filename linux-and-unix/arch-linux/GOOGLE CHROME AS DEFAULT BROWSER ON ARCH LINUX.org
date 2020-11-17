@@ -1,0 +1,20 @@
+#+TITLE: GOOGLE CHROME AS DEFAULT BROWSER ON ARCH LINUX
+
+@See https://ikacikax.wordpress.com/2012/03/07/google-chrome-as-default-browser-on-arch-linux/
+
+Then I stumbled upon this solution:
+#+BEGIN_SRC sh
+/opt/google/chrome/xdg-settings get default-web-browser
+/opt/google/chrome/xdg-settings check default-web-browser google-chrome.desktop
+#+END_SRC
+Here you can check which is your default browser and change it.
+
+It worked for me, and I hope it’ll work for you too 🙂
+
+Other solutions were:
+
+ - Exporting system variable BROWSER with path to your browser as it’s value
+ - Setting variable in your ~/.profile file (or ~/.bashrc)
+
+Anyway, that’s it. Bye!
+
