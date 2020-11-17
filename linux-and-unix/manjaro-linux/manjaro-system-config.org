@@ -405,8 +405,38 @@ $ ./vmware-install.pl
 
 * 其他美化
 
+** 修改 LightDM 的背景图片
+将需要的图片copy为文件：/usr/share/backgrounds/archlinux.jpg 。
+打开 /etc/lightdm/slick-greeter.conf 文件，找到：
+background=/usr/share/backgrounds/i3_default_background.jpg
+修改为：
+background=/usr/share/backgrounds/archlinux.jpg
+
 ** 设置 pacman 彩色输出
 打开 /etc/pacman.conf 文件，找到被注释的 #Color，改为 Color。pacman 就会输出彩色信息，方便查看。
+
+** themes
+
+*** vinceliuice/WhiteSur-icon-theme
+https://github.com/vinceliuice/WhiteSur-icon-theme
+
+*** vinceliuice/WhiteSur-cursors
+https://github.com/vinceliuice/WhiteSur-cursors
+
+*** vinceliuice/McMojave-circle
+https://github.com/vinceliuice/McMojave-circle
+
+*** vinceliuice/Qogir-icon-theme
+https://github.com/vinceliuice/Qogir-icon-theme
+
+*** keeferrourke/la-capitaine-icon-theme
+https://github.com/keeferrourke/la-capitaine-icon-theme
+
+*** hosxy/Fcitx5-Material-Color
+https://github.com/hosxy/Fcitx5-Material-Color
+
+*** xTpx/Psionics-Remix
+https://github.com/xTpx/Psionics-Remix
 
 * 安装 i3 wm
 
@@ -429,13 +459,13 @@ pacman -S feh
 ** 安装 i3lock-fancy
 yay -S i3lock-fancy-git
 
+* 安装一些工具
+
 ** 安装ranger
 pacman -S ranger
 
 ** 安装vifm
 pacman -S vifm
-
-* 安装一些工具
 
 ** U盘自动挂载
 pacman -S udisks2 gvfs gvfs-mtp
@@ -478,28 +508,6 @@ ip 命令在 iproute2 中。
 
 pacman -S net-tools dnsutils inetutils iproute2
 
-** yaourt
-Yaourt 是 archlinux 方便使用的关键部件之一，但没有被整合到系统安装中的工具。
-建议在装完系统重启之后，更新完 pacman 和基本系统之后，就安装这个工具。
-
-以 root 权限打开编译/etc/pacman.conf，将下面这三行加入到文件末尾并保存：
-
-[archlinuxcn]
-SigLevel = Never
-Server   =  http://repo.archlinuxcn.org/$arch
-同步软件信息库并安装 yaourt：
-
-pacman -S yaourt
-
-配置 AUR 镜像：修改 /etc/yaourtrc，去掉 # AURURL 的注释，修改为
-
-AURURL="https://aur.tuna.tsinghua.edu.cn"
-
-参考：
-https://mirrors.tuna.tsinghua.edu.cn/help/AUR/
-
-yaourt -Syua
-
 ** google-chrome
 在上一步安装了 yaourt 之后，就可以安装 google-chrome 了
 yaourt -S google-chrome
@@ -525,7 +533,7 @@ ln -s /opt/text/sublime_text_3/sublime_text /usr/local/bin/sublime_text
 @See build-emacs.sh
 
 ** 截图
-yaourt flameshot-git
+yay flameshot-git
 
 ** meld
 pacman -S meld
@@ -580,7 +588,7 @@ $ sudo pacman -S virtualbox virtualbox-guest-iso virtualbox-guest-dkms virtualbo
 $ sudo dkms autoinstall
 $ sudo systemctl enable dkms.service
 $ sudo systemctl enable vboxservice.service
-$ sudo gpasswd -a yuan vboxusers
+$ sudo gpasswd -a $USER vboxusers
 
 將電腦重開機
 $ sudo VBoxManage hostonlyif create
@@ -713,3 +721,4 @@ $ systemd-analyze blame
 此外，还可以把启动过程绘制成 SVG 图表供你审阅（用 GNOME 的图片预览或 Chrome 浏览器都可以打开），这个图表中你还可以观察到是否有启动慢的组件影响到了依赖它的组件的启动：
 
 $ systemd-analyze plot > plot.svg
+
