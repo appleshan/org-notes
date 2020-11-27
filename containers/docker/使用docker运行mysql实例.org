@@ -1,0 +1,143 @@
+#+TITLE: 使用 docker 运行 mysql 实例
+
+@see http://www.jianshu.com/p/c24e3e5f5b58
+
+实验主题：使用 docker 部署 mysql 实例
+实验环境：ubuntu 16.04, 64 位
+
+* 1.获取 mysql 镜像
+从 docker hub 的仓库中拉取 mysql 镜像：
+#+BEGIN_SRC bash
+docker pull mysql
+#+END_SRC
+
+查看镜像
+#+BEGIN_SRC bash
+docker images
+
+REPOSITORY    TAG       IMAGE ID        CREATED       SIZE
+mysql         latest    cf725f136fd2    7 days ago    383.4 MB
+#+END_SRC
+
+* 2.运行一个 mysql 容器
+运行一个 mysql 实例的命令如下：
+#+BEGIN_SRC bash
+docker run --name first-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql
+#+END_SRC
+
+上述命令各个参数含义：
+| 参数         | 含义                                                                      |
+|--------------+---------------------------------------------------------------------------|
+| run          | 运行一个容器                                                              |
+| --name       | 后面是这个镜像的名称                                                      |
+| -p 3306:3306 | 表示在这个容器中使用 3306 端口(第二个)映射到本机的端口号也为 3306(第一个) |
+| -d           | 表示使用守护进程运行，即服务挂在后台                                      |
+
+查看当前运行的容器状态：
+#+BEGIN_SRC bash
+docker ps
+
+CONTAINER ID    IMAGE    COMMAND                    CREATED         STATUS        PORTS                     NAMES
+5b6bf6f629bf    mysql    "docker-entrypoint.sh"     32 hours ago    Up 5 hours    0.0.0.0:3306->3306/tcp    first-mysql
+#+END_SRC
+
+想要访问 mysql 数据库，我的机器上需要装一个 mysql-client。
+#+BEGIN_SRC bash
+sudo apt-get install mysql-client-core-5.6
+#+END_SRC
+
+下面我们使用 mysql 命令访问服务器，密码如刚才所示为 123456 , 192.168.1.100 为我
+这台机器的 ip, 3306 为刚才所示的占用本物理机的端口（不是在 docker 内部的端口）。
+#+BEGIN_SRC bash
+mysql -h192.168.95.4 -P3306 -uroot -p123456
+#+END_SRC
+
+访问的结果如下：
+#+BEGIN_EXAMPLE
+mysql> show databases;
+
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+
+4 rows in set (0.00 sec)
+#+END_EXAMPLE
+
+* 3.运行第二个 mysql 实例
+使用 docker 相对于虚拟机而言的原因是耗费很少的资源，可以"开辟"非常多的隔离的环
+境，所以我们继续运行第二个 mysql 实例，还用之前的镜像，名字为 second-mysql。
+#+BEGIN_SRC bash
+docker run --name second-mysql -p 3306:3307 -e MYSQL_ROOT_PASSWORD=123456 -d mysql
+
+2de4ddb5bfb9b9434af8e72368631e7f4c3f83ee354157328049d7d0
+f5523661docker: Error response from daemon: driver failed programming external connectivity
+on endpoint second-mysql (33aa29d891a1cb540de250bcbbbe9a0a41cd98f61a4e9f129a2ad5db69da4984):
+Bind for 0.0.0.0:3306 failed: port is already allocated.
+#+END_SRC
+
+为了验证第一个是本机的端口号，就仍然使用了 3306 这个端口，那么创建如上所示，发生
+了错误，但是产生了一个容器 id，当我们修改端口后还会报错，因为名字冲突了，也即这
+次失败的创建会占用这个名字：
+#+BEGIN_SRC bash
+docker run --name second-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=123456 -d
+
+mysqldocker: Error response from daemon: Conflict. The name "/second-mysql" is already
+in use by container 2de4ddb5bfb9b9434af8e72368631e7f4c3f83ee354157328049d7d0f5523661.
+You have to remove (or rename) that container to be able to reuse that name..
+#+END_SRC
+
+为了验证 second-mysql 这个容器还在 docker 的进程中，我们使用 ps -a 这个命令，
+我们可以观察到 first-mysql 的状态为 Up 34 minutes，说明已经工作了 34 分钟，
+而 second-mysql 只是刚刚创建的。
+#+BEGIN_SRC bash
+docker ps -a
+
+CONTAINER ID    IMAGE    COMMAND                   CREATED               STATUS           PORTS                     NAMES
+2de4ddb5bfb9    mysql    "docker-entrypoint.sh"    About a minute ago    Created                                    second-mysql
+5b6bf6f629bf    mysql    ocker-entrypoint.sh"      34 minutes ago        Up 34 minutes    0.0.0.0:3306->3306/tcp    first-mysql
+#+END_SRC
+
+我们用 rm 命令删除这个容器,如下面命令所示：
+#+BEGIN_EXAMPLE
+docker rm second-mysql
+
+docker ps -a
+
+CONTAINER ID    IMAGE    COMMAND                   CREATED           STATUS           PORTS                     NAMES
+5b6bf6f629bf    mysql    "docker-entrypoint.sh"    42 minutes ago    Up 42 minutes    0.0.0.0:3306->3306/tcp    first-mysql
+#+END_EXAMPLE
+
+重新建立 second-mysql 这个容器，占用物理机的 3307 端口：
+#+BEGIN_SRC bash
+docker run --name second-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql
+#+END_SRC
+
+#+BEGIN_SRC bash
+docker ps
+
+CONTAINER ID    IMAGE    COMMAND                   CREATED           STATUS           PORTS                     NAMES
+5404fb11f29c    mysql    "docker-entrypoint.sh"    12 seconds ago    Up 11 seconds    0.0.0.0:3307->3306/tcp    second-mysql
+5b6bf6f629bf    mysql    "docker-entrypoint.sh"    43 minutes ago    Up 43 minutes    0.0.0.0:3306->3306/tcp    first-mysql
+#+END_SRC
+
+如上图所示，两个实例都正常运行了，为了访问第二个容器，我们指定端口 3307 登录到
+这个 mysql 的 client。
+#+BEGIN_SRC bash
+mysql -h192.168.1.100 -P3307 -uroot -p123456
+#+END_SRC
+
+* 存在的问题
+** docker 服务重启
+docker 这个服务挂了，容器也就跟着挂了，并没有重启，应该在运行容器的时候带上参数：
+#+BEGIN_EXAMPLE
+--restart=always
+#+END_EXAMPLE
+
+** docker 容器不应存数据
+docker 容器中不应该存放数据，还要配置将数据文件存到容器外面
+
