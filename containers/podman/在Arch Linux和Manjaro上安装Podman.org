@@ -1,0 +1,131 @@
+#+TITLE: 在Arch Linux/Manjaro上安装Podman
+
+* 安装 podman
+
+更新你的 Arch/Manjaro 系统：
+#+BEGIN_SRC bash
+sudo pacman -Syyu
+#+END_SRC
+
+更新所有软件包后，继续在 Arch Linux/Manjaro 上安装 Podman：
+#+BEGIN_SRC bash
+sudo pacman -S podman
+#+END_SRC
+
+确认安装的 Podman 版本：
+#+BEGIN_SRC bash
+$ podman --version
+
+$ pacman -Qi podman
+#+END_SRC
+
+要获得详细的输出，请运行：
+#+BEGIN_SRC bash
+$ podman info
+#+END_SRC
+
+安装完成后可以查看 /etc/containers 目录下是否有配置文件。
+
+* 配置 podman
+
+** 配置 subuid，subgid 映射
+podman 支持在非 root 用户下运行，这需要配置 /etc/subuid 和 /etc/subgid， 使得 podman 可以将
+host 的用户 id 映射到 container 里面去。
+
+如下是我的配置，更多详细信息可以通过 man /etc/subuid 查看。
+#+BEGIN_SRC bash
+$ cat /etc/subuid
+alecshan:10000:55537
+
+$ cat /etc/subgid
+alecshan:10000:55537
+#+END_SRC
+
+首先创建两个/etc/sub{u，g}id，并为所有其他人授予读取权限：
+#+BEGIN_SRC bash
+sudo touch /etc/sub{u,g}id
+sudo chmod o+r /etc/sub{g,u}id
+#+END_SRC
+
+然后将用户映射到 lxc g/u 标识：
+#+BEGIN_SRC bash
+sudo usermod --add-subuids 100000-165536 $USER
+sudo usermod --add-subgids 100000-165536 $USER
+#+END_SRC
+
+修改以上两个文件后，注意 podman 并不会加载新的变更，需要先执行 podman system migrate 命令更新。
+#+BEGIN_SRC bash
+$ podman system migrate
+#+END_SRC
+
+这个机制类似于 systemd 的 systemctl daemon-reload？在 man podman-system-migrate 里面有详细
+的解释。
+
+** 配置镜像源
+创建配置文件 $HOME/.config/containers/registries.conf
+#+BEGIN_SRC conf
+unqualified-search-registries = ["docker.io"]
+
+[[registry]]
+prefix = "docker.io"
+insecure = false
+blocked = false
+location = "docker.io"
+[[registry.mirror]]
+location = "hub-mirror.c.163.com"
+[[registry.mirror]]
+location = "registry.docker-cn.com"
+#+END_SRC
+
+使用这个配置，下载镜像时，会按照如下顺序查找下载：
+
+1. hub-mirror.c.163.com
+2. registry.docker-cn.com
+3. docker.io
+
+** 切换为 cgroupv2
+
+将 /etc/default/grub 文件中的 GRUB_CMDLINE_LINUX 字段内容中添加
+systemd.unified_cgroup_hierarchy=1，然后执行 sudo update-grub，重启电脑。
+
+** 切换之后需要安装 crun
+#+BEGIN_SRC bash
+sudo pacman -S crun
+#+END_SRC
+
+* 在 Arch Linux/Manjaro 上测试 Podman 的方法
+
+1、Pull Alpine Linux docker image：
+#+BEGIN_SRC bash
+$ podman pull alpine
+#+END_SRC
+
+2、List Downloaded images：
+#+BEGIN_SRC bash
+$ podman images
+#+END_SRC
+
+3、运行 alpine image 容器来测试我们的安装：
+#+BEGIN_SRC bash
+$ podman run --name test --rm docker.io/library/alpine "cat" etc/os-release
+#+END_SRC
+
+* 错误处理
+** 使用时如果出现类似这样的错误：
+#+BEGIN_EXAMPLE
+cannot clone: Operation not permitted
+user namespaces are not enabled in /proc/sys/kernel/unprivileged_userns_clone
+Error: could not get runtime: cannot re-exec process
+#+END_EXAMPLE
+
+执行命令：
+#+BEGIN_SRC bash
+sudo sysctl kernel.unprivileged_userns_clone=1
+echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf
+#+END_SRC
+
+** 可能需要删除一个 pid：
+#+BEGIN_SRC bash
+rm /run/user/$(id -u)/libpod/pause.pid
+#+END_SRC
+
