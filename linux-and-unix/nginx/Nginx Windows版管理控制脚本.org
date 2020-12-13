@@ -1,0 +1,84 @@
+#+TITLE: Nginx Windows版管理控制脚本
+
+@See https://www.dev996.com/nginx-windows-script.html
+
+项目采用了前后端分离模式，iView（VUE）+ Spring Boot。为了避免跨域问题，使用nginx反向代理解决。团队中大多数人不熟悉nginx，因此这个脚本诞生了。
+
+脚本默认要放在nginx的根目录中（和nginx.exe同级）。如果有需要，可以修改脚本中NGINX_DIR的值为nginx.exe所在目录。
+
+运行脚本后根据提示输入对应的数字，然后回车就可以了。
+#+BEGIN_EXAMPLE
+选项:
+****************************************************************
+  [1] 启动 nginx
+  [2] 关闭 nginx
+  [3] 重启 nginx
+  [4] 查看 nginx 进程
+  [5] 退出命令行窗口
+
+请输入选择项目的序号:
+#+END_EXAMPLE
+
+command.bat
+#+BEGIN_EXAMPLE
+@echo off
+
+rem 环境配置
+SET NGINX_DIR=%cd%
+
+color 0a
+
+TITLE Nginx 管理程序
+
+
+:SHOW_MSG
+
+    CLS
+
+    ECHO *************************************************************
+    ECHO **********              Nginx 管理程序             **********
+    ECHO **********   Update by school1024.com 2017-07-28   **********
+    ECHO *************************************************************
+    ECHO.
+    ECHO 脚本默认要放在nginx的根目录中（和nginx.exe同级）。如果有需要，可以修改脚本中NGINX_DIR的值为nginx.exe所在目录
+    ECHO.
+    ECHO nginx位置：%NGINX_DIR%\nginx.exe
+    ECHO.
+    tasklist /FO TABLE /FI "IMAGENAME eq nginx.exe"
+    ECHO.
+    ECHO.
+    ECHO 选项:
+    ECHO ****************************************************************
+    ECHO.  [1] 启动 nginx
+    ECHO.  [2] 关闭 nginx
+    ECHO.  [3] 重启 nginx
+    ECHO.  [4] 查看 nginx 进程
+    ECHO.  [5] 退出命令行窗口
+    ECHO.
+    ECHO.请输入选择项目的序号:
+
+    SET/p ID=
+
+        IF "%ID%"=="1" GOTO NGStart
+        IF "%ID%"=="2" GOTO NGStop
+        IF "%ID%"=="3" GOTO NGRestart
+        IF "%ID%"=="4" GOTO SHOW_MSG
+        IF "%ID%"=="5" EXIT
+
+    PAUSE
+    GOTO SHOW_MSG
+
+:NGStart
+    start "nginx" %NGINX_DIR%\nginx.exe
+    GOTO SHOW_MSG
+
+:NGStop
+    TASKKILL /F /IM nginx.exe
+    rem %NGINX_DIR%\nginx.exe -s quit
+    GOTO SHOW_MSG
+
+:NGRestart
+    %NGINX_DIR%\nginx.exe -s reload
+    GOTO SHOW_MSG
+#+END_EXAMPLE
+

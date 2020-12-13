@@ -1,0 +1,103 @@
+#+TITLE: Nginx 启动、停止、重启
+
+@See https://www.dev996.com/nginx-start-stop-restart.html
+
+nginx 控制分为2种，一种是用nginx自带的命令控制(有一些命令其实是发送信号到主进程，也是用的linux信号控制)，另一种是用linux的信号控制。在平时维护的时候，我通常都是用nginx自带的命令控制，后者因为需要去查询pid，有点繁琐。
+
+* nginx自带的命令控制
+
+#+BEGIN_EXAMPLE
+选项:
+  -?,-h         : 显示帮助信息
+  -v            : 显示版本信息
+  -V            : 显示版本信息和配置编译阶段的信息
+  -t            : 测试配置文件是否正确
+  -T            : 测试配置文件是否正确，并输出配置
+  -q            : 在配置测试期间禁止非错误消息。
+  -s signal     : 发送信号到主进程，参数有：stop, quit, reopen, reload
+  -p prefix     : 指定nginx的目录 (默认值: /usr/local/nginx/，编译安装的时候也有可能指定到了别的目录)
+  -c filename   : 指定配置文件位置 (默认值: /usr/local/conf/nginx.conf)
+  -g directives : 在配置文件中设置全局指令，具体可以看 http://nginx.org/en/docs/ngx_core_module.html
+#+END_EXAMPLE
+
+-g的参数：http://nginx.org/en/docs/ngx_core_module.html
+
+* nginx命令示例
+
+#+BEGIN_SRC bash
+cd /usr/local/nginx/sbin
+
+# 显示帮助信息
+nginx -?
+nginx -h
+
+# 查看nginx版本
+# 显示配置编译阶段的信息
+nginx -v
+nginx -V
+
+# 测试nginx配置文件是否正确
+nginx -t
+nginx -T
+
+# 立刻停止服务
+nginx -s stop
+
+# 处理完当前的请求后停止服务
+nginx -s quit
+
+# 重新加载配置文件，根据新的配置文件启动新的进程，处理完当前的请求后停止旧的服务
+nginx -s reopen
+
+# 重新打开log文件
+nginx -s reload
+
+# 启动nginx
+nginx
+
+# 指定其它目录的nginx启动
+nginx -p /your_dir/nginx/
+
+# 读取指定的nginx.conf配置文件来启动Nginx
+nginx -c /your_dir/nginx.conf
+#+END_SRC
+
+* 用信号控制
+主进程id默认位置：/usr/local/nginx/logs/nginx.pid
+
+可以直接打开这个文件查看进程号，也可以通过如下命令查询
+#+BEGIN_EXAMPLE
+$ ps -ef | grep nginx
+root      3863     1  0 Jul05 ?        00:00:00 nginx: master process /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+root     18390  3863  0 Jul17 ?        00:00:21 nginx: worker process
+root     18391  3863  0 Jul17 ?        00:00:13 nginx: worker process
+root     25985 25333  0 18:10 pts/0    00:00:00 grep --color=auto nginx
+#+END_EXAMPLE
+
+注意，你要使用master进程号，worker进程号不用关心，子进程由主进程管理
+
+* TERM, INT: 立刻停止服务
+* QUIT: 处理完当前的请求后停止服务
+* HUP: 重新加载配置文件，根据新的配置文件启动新的进程，处理完当前的请求后停止旧的服务
+* USR1: 重新打开log文件
+* USR2: 升级
+* WINCH: 关闭子进程（在处理完请求之后进行）
+另外子进程管理，支持: TERM, INT, QUIT, USR1，虽然一般情况不需要自己来管理子进程。
+
+* 信号控制示例
+#+BEGIN_EXAMPLE
+$ ps -ef | grep nginx
+# 输出主进程id
+echo `cat /usr/local/nginx/logs/nginx.pid`
+
+# 立刻停止服务
+kill TERM `cat /usr/local/nginx/logs/nginx.pid`
+kill INT `cat /usr/local/nginx/logs/nginx.pid`
+
+# 处理完请求停止服务
+kill QUIT `cat /usr/local/nginx/logs/nginx.pid`
+
+# 重启
+kill HUP `cat /usr/local/nginx/logs/nginx.pid`
+#+END_EXAMPLE
+

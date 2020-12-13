@@ -1,0 +1,23 @@
+#+TITLE: Nginx 301 永久重定向
+
+@See https://www.dev996.com/nginx-301-redirect.html
+
+通过nginx的301永久重定向实现不带www的域名跳转到带www的域名，除了这种方式还有cname等其它方式。
+
+这里建议使用301，这样可以把seo的权重带过去。
+
+#+BEGIN_EXAMPLE
+server
+{
+    listen 80;
+    server_name dev2019.com;
+    return 301 http://www.dev2019.com$request_uri;
+}
+server
+{
+    listen 80;
+    server_name www.dev2019.com;
+    # 其它配置...
+}
+#+END_EXAMPLE
+
