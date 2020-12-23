@@ -1,0 +1,9 @@
+#+TITLE: 国内使用 Gradle 要做的第一件事
+
+国内使用 Gradle 要做的第一件事就是在 build.gradle 里加上如下内容。
+这是一切教程的大前提，不然就会永远挣扎在痛苦的深渊中。
+
+tasks.withType(Wrapper) {
+enabled = false
+}
+
