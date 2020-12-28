@@ -84,7 +84,7 @@ location = "registry.docker-cn.com"
 3. docker.io
 
 ** 切换为 cgroupv2
-
+@See https://zorrozou.github.io/docs/%E8%AF%A6%E8%A7%A3Cgroup%20V2.html
 将 /etc/default/grub 文件中的 GRUB_CMDLINE_LINUX 字段内容中添加
 systemd.unified_cgroup_hierarchy=1，然后执行 sudo update-grub，重启电脑。
 
