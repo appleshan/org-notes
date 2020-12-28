@@ -1,0 +1,49 @@
+#+TITLE: Linux上的虚拟调音台：Alsamixer
+#+DESCRIPTION: Mixer in Linux: Alsamixer
+
+@See https://lado.me/2017/05/14/mixer-in-linux-alsamixer/
+
+很多刚从其他系统平台转到Linux系统的老铁会有疑虑，“我的声卡怎么装驱动？调音台在哪里？”。下面顺着Alsamixer的介绍跟您一一道来。
+
+大部分驱动在Linux都是开源的存在，为Linux内核的一部分，即“免驱动”的存在，设备能被内核操控。如果要知道您的声卡在Linux下是否被支持，Google一下你就知道。
+
+如果你的声卡确定还没有被内核支持，或还没有放出内核补丁，可以联系官方咨询，或放弃在Linux使用这个声卡。
+
+* 安装alsa-utils套件
+Alsamixer是alsa-utils套件的一部分，声卡能驱动就能用它，使用它要先安装alsa-utils：
+
+ - Arch Linux安装alsa-utils
+#+BEGIN_SRC bash
+sudo pacman -S alsa-utils
+#+END_SRC
+
+ - Ubuntu安装alsa-utils
+#+BEGIN_SRC bash
+sudo apt-get install alsa-utils
+#+END_SRC
+
+* Alsamixer的使用
+Alsamixer使用非常简单，在终端命令行输入"alsamixer"并运行即可。
+
+Alsamixer常用按键：
+ - H键弹出帮助菜单
+ - F6按键选择声卡
+ - 左右按键选择轨道
+ - M键静音所选轨道
+ - 上下按键调整音量
+
+退出Alsamixer：
+
+在已经打开Alsamixer的终端命令行按"Esc"键。
+
+调整过后不会自动保存，重新开机会恢复默认状态。
+需要手动保存调整后的状态。
+
+在终端命令行输入以下命令
+#+BEGIN_SRC bash
+alsactl store
+#+END_SRC
+
+* 参考资料
+http://alsa.opensrc.org/Alsamixer
+
