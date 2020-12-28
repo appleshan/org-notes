@@ -1,0 +1,42 @@
+#+TITLE: 容器基础镜像的选择
+
+@See https://ttys3.net/post/linux/container/do-not-use-alpine-in-production-environment/
+
+无论是构建应用，还是运行应用，以下几个镜像都比较适合生产环境：
+
+* debian-slim
+https://hub.docker.com/_/debian
+
+#+BEGIN_EXAMPLE
+FROM debian:buster-slim
+#+END_EXAMPLE
+
+* ubuntu
+https://hub.docker.com/_/ubuntu
+
+#+BEGIN_EXAMPLE
+FROM ubuntu:18.04
+FROM ubuntu:20.04
+#+END_EXAMPLE
+
+* centos
+https://hub.docker.com/_/centos
+
+#+BEGIN_EXAMPLE
+FROM centos:8.2.2004
+#+END_EXAMPLE
+
+* fedora
+https://hub.docker.com/_/fedora
+
+#+BEGIN_EXAMPLE
+FROM fedora:32
+#+END_EXAMPLE
+
+Fedora 官方 registry 还有mininal版：
+https://registry.fedoraproject.org/
+
+#+BEGIN_EXAMPLE
+FROM registry.fedoraproject.org/fedora-minimal:latest
+#+END_EXAMPLE
+
