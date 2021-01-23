@@ -41,13 +41,8 @@ Server = http://ftp.tsukuba.wide.ad.jp/Linux/manjaro/stable/$repo/$arch
 ## Country : Singapore
 Server = https://download.nus.edu.sg/mirror/manjaro/stable/$repo/$arch
 
-** 安装 yaourt
-sudo pacman -S yaourt
-
-AUR 镜像:
-修改 /etc/yaourtrc，去掉 # AURURL 的注释，修改为
-
-AURURL="https://aur.tuna.tsinghua.edu.cn"
+** 安装 yay
+sudo pacman -S yay
 
 ** 安装 axel
 sudo pacman -S axel
@@ -64,7 +59,7 @@ XferCommand = /usr/bin/axel -n5 -o %o %u
 
 即可使用axel多线程下载工具
 
-** 加速 yaourt
+** 加速 yay
 而要让yaourt也支持多线程,只需修改 /etc/makepkg.conf
 
 将
