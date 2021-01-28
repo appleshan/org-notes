@@ -1,0 +1,33 @@
+#+TITLE: Emacs-Rime 在 DOOM Emacs 中的安装说明
+
+* 安装
+在 packages.el 中添加：
+
+#+BEGIN_SRC emacs-lisp :results output
+(package! rime :recipe (:host github :repo "DogLooksGood/emacs-rime"))
+#+END_SRC
+
+在 config.el 中添加：
+
+#+BEGIN_SRC emacs-lisp :results output
+;; emacs-rime
+(use-package! rime
+  :custom
+  (default-input-method "rime")
+  )
+
+(setq!
+ rime-user-data-dir "~/.config/fcitx/rime"
+ ;; rime-show-candidate 'popup
+ )
+#+END_SRC
+
+rime-user-data-dir 是你的 rime 配置文件所在路径
+然后使用SPC-h-r-r进行安装
+
+* 安装后的额外操作
+1. cd 到你的 .emacs.d/.local/straight/repos/emacs-rime 路径下
+2. 执行 "make lib"
+3. 拷贝 "lib.c" 与 "librime-emacs.so" 文件 到
+   .emacs.d/.local/straight/build/rime 路径中
+4. 安装就完成了，应该能够在 DOOM Emacs 中正常地使用 emacs-rime
