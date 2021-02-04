@@ -1,0 +1,51 @@
+#+TITLE: 如何在命令行中连接 WiFi
+
+在命令行中连接 WiFi. 需要的工具有：
+
+| Package         | Command         | Note           |
+|-----------------|-----------------|----------------|
+| dialog          | wifi-menu       | WiFi 直连       | 
+| net-tools       | ifconfig        | 查看网络状态     |
+| wpa_supplicant  | wpa_supplicant, |                |
+|                 | wpa_passphrase  | 连接 WiFi       |
+| dhcpcd          | dhcpcd          | 动态 IP 地址获取 |
+
+* wpa_supplicant 方法
+
+** 获取无线接口名称
+#+BEGIN_SRC bash
+ip link
+#+END_SRC
+
+好了，现在知道了，是 *wlp3s0* . 一般也可能是 *wlan0* . 然后确认该接口的状态是 up，如图所示。
+
+** 扫描可用网络
+#+BEGIN_SRC bash
+iw wlp3s0 scan
+#+END_SRC
+
+确定你要连接的无线网络名称 (SSID)，假设是 shiki.
+
+** 生成配置文件
+#+BEGIN_SRC bash
+wpa_passphrase shiki > ~/shiki.conf
+#+END_SRC
+
+** 连接 WiFi
+#+BEGIN_SRC bash
+wpa_supplicant -B -i wlp3s0 -c ~/shiki.conf
+#+END_SRC
+
+** 获取 IP 地址
+#+BEGIN_SRC bash
+dhcpcd wlp3s0
+#+END_SRC
+
+** 查看连接状态
+#+BEGIN_SRC bash
+iw wlp3s0 link
+#+END_SRC
+
+* wifi-menu 方法
+
+另外，还有一种更加简单的方法，直接敲命令 *wifi-menu* 可以进行交互式 WiFi 连接，体验和图形界面一样。
