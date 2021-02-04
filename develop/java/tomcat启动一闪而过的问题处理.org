@@ -1,0 +1,36 @@
+#+TITLE: tomcat启动一闪而过的问题处理
+
+故障：启动tomcat一闪而过，无法访问 http://localhost:8080
+
+解决方法：
+
+首先是要调出错误信息:
+
+修改 tomcat 的 bin 目录下的启动文件 startup.bat
+
+原内容如下:
+
+call "%EXECUTABLE%" start %CMD_LINE_ARGS%
+:end
+
+修改后如下:
+
+call "%EXECUTABLE%" run  %CMD_LINE_ARGS%
+:end
+
+pause
+
+保存后启动 tomcat。
+
+在命令行下，运行 startup.bat 文件，这样程序就不会一闪而过，而会将启动不起来的原因打印到窗口上。
+
+在命令行下启动 tomcat 的方法读者应该都很清楚，大体就是：cmd 启动命令行窗口→通过 cd 命令到 tomcat 的 bin 目录下→运行 startup.bat。
+
+看到上图，我们基本可以确定我们的环境变量配置是正确的。
+
+为了更加详细的信息，我们在 startup.bat 文件的末尾
+
+call "%EXECUTABLE%" start %CMD_LINE_ARGS%中的 start 改为 run
+
+再次执行tomcat，出现详细的错误信息。
+最后具体问题再分析解决吧。

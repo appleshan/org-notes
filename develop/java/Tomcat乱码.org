@@ -1,0 +1,13 @@
+#+TITLE: Tomcat乱码
+
+TOMCAT乱码几种可能的解决方法：
+
+idea中配置VM options：-Dfile.encoding=UTF-8（针对idea控制台显示乱码）
+
+安装目录bin下catalina.bat中
+set "JAVA_OPTS=%JAVA_OPTS% "更改为
+set “JAVA_OPTS=%JAVA_OPTS% %JSSE_OPTS% -Dfile.encoding=UTF-8”
+如果不行继续操作
+
+安装目录conf下logging.properties中添加
+java.util.logging.ConsoleHandler.encoding = GBK（针对windows，linux不要添加）
