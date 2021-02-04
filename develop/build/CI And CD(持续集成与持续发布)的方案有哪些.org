@@ -1,0 +1,24 @@
+#+TITLE: CI And CD(持续集成与持续发布)的方案有哪些?
+
+* 生产环境部署在 AWS 中国区
+Github
+    -> AWS Codebuild
+    -> AWS ECR
+    -> AWS ECS
+
+Github 是存代码；
+Codebuild 唯一的用途就是把代码打包成一个 Docker Image；
+AWS ECR 是存这个镜像；
+ECS 等同于 k8s。
+
+* 生产环境部署在微软的 Azure
+azure devops repo
+    -> DevOps Pipeline
+    -> Azure Container Registry
+    -> DevOps Realease
+    -> Azure K8S Service
+
+azure devops repo 是代码托管。
+
+* 自己的项目
+github + github actions + k3s + helm
