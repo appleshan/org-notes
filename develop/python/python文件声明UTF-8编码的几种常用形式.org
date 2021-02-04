@@ -1,0 +1,11 @@
+#+TITLE: python文件声明UTF-8编码的几种常用形式
+
+Python默认ASCII编码，如包含中文，为防止乱码，往往需要在编码开头重新声明编码类型
+常用的形式有以下几种，放在码文件的第一行或第二行
+
+1. # -*- coding: <encoding name> -*- : # -*- coding: utf-8 -*-
+
+2. # coding=<encoding name> ： # coding=utf-8
+
+3. # coding：<encoding name> ： # coding: utf-8
+注意：coding不可省略，如 # utf-8 起不到声明编码的作用！
