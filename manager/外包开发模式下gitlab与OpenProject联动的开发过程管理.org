@@ -1,0 +1,14 @@
+#+TITLE: 外包开发模式下gitlab与OpenProject联动的开发过程管理
+
+@See https://bebugless.com/blogs/10717733/
+
+* 背景
+所负责的消金业务是由之前采购的多家公司的多个系统及其驻场人员维护开发的。由于技术架构不统一，系统运维标准也很不相同。甚至经常出现工程师在本地开发机上直接打包拷贝到生产机投产的情况。由此可以想象投产质量。
+在连续出现多次生产事故之后，对一个需求从开发到投产，做了如下的流程约定。
+
+* 过程管理分解
+一个需求在开始开发之前，需要在系统里将该需求对应的task状态改为“开发中”，同时在 gitlab里创建与这个feature（或其对应的task）对应的分支（如f/f{id}——f代表feature，id对应openProject里对应的taskID）。
+
+[[file:../images/OpenProject.png]]
+
+[[file:../images/gitlab.png]]
