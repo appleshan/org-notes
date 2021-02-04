@@ -1,0 +1,17 @@
+#+TITLE: 从系统中踢出某个用户
+
+#+BEGIN_SRC bash
+# See the pid of the user's login process.
+$ who -u
+yychi    tty1         2020-02-19 21:06  旧        460
+
+# Let him know he will be kick off.
+$ echo "You'll be kick off by system administrator." | write yychi
+
+# Kick off.
+$ kill -9 460
+
+# Done.
+#+END_SRC
+
+Ref: https://www.putorius.net/kick-user-off-linux-system.html
