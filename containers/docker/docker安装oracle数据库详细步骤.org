@@ -1,0 +1,132 @@
+#+TITLE: docker 安装 oracle 数据库详细步骤
+
+1. 拉取 oracle 11g 数据库镜像
+# docker pull registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g
+
+下载的过程少长，等待吧，喝杯咖啡，休息一会！（镜像6.8G）
+下载完成后，查看镜像： 
+# docker images
+
+2. 启动oracle  自动启动镜像 --restart=always
+# docker run -d -p 1521:1521 --name oracle_11g --restart=always registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g
+如果创建成功能会返回容器id
+
+如果空间不足可以清理数据：
+删除所有dangling数据卷（即无用的Volume）：
+
+$ docker volume rm $(docker volume ls -qf dangling=true)
+
+3. 启动容器
+# docker start oracle_11g
+
+podman 没有这一步骤。
+
+4. 进入镜像进行配置
+4.1. 进入控制台设置用户信息 
+# docker exec -it oracle_11g bash
+
+4.2. 切换到root用户下
+$ su root
+输入密码 helowin
+
+4.3. 编辑profile文件配置ORACLE环境变量
+# vi /etc/profile
+# 在最后加上:
+export ORACLE_HOME=/home/oracle/app/oracle/product/11.2.0/dbhome_2
+export ORACLE_SID=helowin
+export PATH=$ORACLE_HOME/bin:$PATH
+
+4.4. 重新加载配置文件
+# source /etc/profile
+
+4.5. 建立sqlplus软连接
+# ln -s $ORACLE_HOME/bin/sqlplus /usr/local/bin
+
+4.6. 切换到oracle用户
+# su - oracle
+
+4.7. 登录sqlplus并修改oracle的相关账号sys、system用户密码
+
+$ sqlplus /nolog
+SQL> conn /as sysdba
+connected.
+
+修改密码
+SQL> alter user system identified by oracle;
+User altered.
+
+SQL> alter user sys identified by oracle;
+User altered.
+
+SQL> ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
+Profile altered.
+
+创建用户
+SQL> create user test identified by test;
+User created.
+
+并给用户赋予权限
+SQL> grant connect,resource,dba to test;
+Grant succeeded.
+
+当执行修改密码的时候出现：
+database not open
+提示数据库没有打开，不急按如下操作
+输入：
+alter database open;
+
+注意了：
+这里也许还会提示：
+ORA-01507: database not mounted
+
+不急！继续输入：
+alter database mount;
+
+然后就可执行 修改数据库密码的命令了
+
+改完之后输入：
+ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
+
+最后：
+用 exit 退休 sqlplus 连接。
+
+5. 客户端安装
+
+5.1. instantclient_11_2 软件目录放置到 C:\oracle目录下
+
+5.2. 配置环境变量：
+变量名：ORACLE_HOME
+变量值：C:\Oracle\instantclient_11_2
+变量名：TNS_ADMIN
+变量值：C:\Oracle\instantclient_11_2\NETWORK\ADMIN
+变量名：NLS_LANG
+变量值：AMERICAN_AMERICA.AL32UTF8
+修改Path变量：在后面添加 C:\Oracle\instantclient_11_2
+
+5.3. 配置 instantclient 的连接
+把 instantclient_11_2 目录中 ADMIN 文件夹中的 tnsnames.ora 连接配置文件，复制进入 instantclient_11_2 根目录，并修改连接配置。
+host:指代服务所在ip地址。port指代：端口号 SERVICE_NAME 指代服务名
+
+docker_oracle11g =
+(DESCRIPTION =
+    (ADDRESS_LIST =
+        (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.100.26)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+        (SERVICE_NAME = helowinXDB)
+    )
+)
+
+6. 使用 PLSQL Developer 连接 Oracle
+6.1. 安装：plsqldev11.0.4.exe 除了可以选择安装路径外，其他全部默认。
+
+6.2 登录：
+管理员账号 system；密码 oracle
+connect as sysdba
+
+或者：
+新增的账号 test；密码 test
+connect as normal
+
+7. 参考地址
+ - https://blog.csdn.net/DNS_kiss/article/details/80349794
