@@ -3,22 +3,28 @@
 @See https://blog.csdn.net/weilixin88/article/details/90680777
 
 * 简单的人脸识别
-一直想做机器学习的东东，最近由于工作的调整，终于有开始接触的机会了，哈哈。本文主要代码是来源于“就是这个七昂”的博文，
+一直想做机器学习的东东，最近由于工作的调整，终于有开始接触的机会了。
+本文主要代码是来源于“就是这个七昂”的博文，
 传送门在此：https://blog.csdn.net/qq_42633819/article/details/81191308。
-”就是这个七昂”大大在他的博文中已经将人脸识别的过程讲的很清楚了。说来忏愧，在算法上我没有改变（我自己还没搞清楚，打算好好看看keras)，因为在大大博文评论区看到好多人问怎么实现多个用户的人脸识别。刚开始我也在纳闷，怎么做呢？于是我就大胆尝试了一把，
+”就是这个七昂”大大在他的博文中已经将人脸识别的过程讲的很清楚了。说来忏愧，在算法上我没有改变（我自己还没
+搞清楚，打算好好看看 keras)，因为在大大博文评论区看到好多人问怎么实现多个用户的人脸识别。刚开始我也在纳闷，
+怎么做呢？于是我就大胆尝试了一把，
 
 ** 准备工作
-在做人脸识别前，你的有一个可以做的环境吧，在这里我当一次搬运工。开发环境的配置可以在网上找一堆，这里简单介绍一下我自己的。
+在做人脸识别前，你的有一个可以做的环境吧，在这里我当一次搬运工。开发环境的配置可以在网上找一堆，这里简单
+介绍一下我自己的。
 
-1. 安装Anaconda
+*** 1. 安装 Anaconda
 
  - Windows
 官网下载地址 https://www.anaconda.com/download/
-选择相应的Anaconda进行安装(可能会很慢）
+选择相应的 Anaconda 进行安装(可能会很慢）
 
-我电脑是win10 64位系统，我选择安装的是 Anaconda3-2020.11-Windows-x86_64.exe 这个版本。
-下载好了安装包，就像安装普通软件一样，安装就行。一路点下去，在Advanced Option界面时，如果你电脑里面没有其他版本Python就两个都选了。
-安装完了可以测试一下，打开cmd，输入conda --version
+我电脑是 win10 64 位系统，我选择安装的是 Anaconda3-2020.11-Windows-x86_64.exe 这个版本。
+下载好了安装包，就像安装普通软件一样，安装就行。一路点下去，在 Advanced Option 界面时，如果你电脑
+里面没有其他版本 Python 就两个都选了。
+
+安装完了可以测试一下，打开 cmd，输入 conda --version
 
  - Linux
 使用 Linux 发行版的包管理器安装
@@ -56,20 +62,23 @@ index-url = https://mirrors.aliyun.com/pypi/simple/
 trusted-host=mirrors.aliyun.com
 #+END_EXAMPLE
 
-2. 安装Pycharm
-首先去Pycharm官网，或者直接输入网址：http://www.jetbrains.com/pycharm/download/#section=windows，下载PyCharm安装包，根据自己电脑的操作系统进行选择，对于windows系统选择下图的框框所包含的安装包。这个也可以从网上找很多，而且安装很成功，个人学习的话，建议安装免费版本。
+*** 2. 安装 Pycharm
+首先去 Pycharm 官网，或者直接输入网址：
+http://www.jetbrains.com/pycharm/download/#section=windows ，
+下载 PyCharm 安装包，根据自己电脑的操作系统进行选择，对于 windows 系统选择下图的框框所包含的安装包。
+这个也可以从网上找很多，而且安装很成功，个人学习的话，建议安装免费版本。
 
-3. Python环境配置
-打开Pycharm，随便先创建一个工程或者.py文件。
-点击File→Setting，打开界面在这个选择你刚才安装的anconda，具体可以找找教程。
+*** 3. Python 环境配置
+打开 Pycharm，随便先创建一个工程或者.py 文件。
+点击 File→Setting，打开界面在这个选择你刚才安装的 anconda，具体可以找找教程。
 [[file:./images/Pycharm-Project-Interpreter.png]]
 
-同时你可以在箭头2的位置添加我们这个项目的第三方库。
+同时你可以在箭头 2 的位置添加我们这个项目的第三方库。
 你需要到的依赖库主要有：
 
  - python3.7.1
- - tensorflow 2.1.0（文章中1.13.1）
- - keras 2.3.1（文章中2.2.4）
+ - tensorflow 2.1.0（文章中 1.13.1）
+ - keras 2.3.1（文章中 2.2.4）
  - scikit-learn 0.20.3
  - numpy（这个随便）
  - opecv-python 4.1.0.25
@@ -90,7 +99,7 @@ pip3 install opencv-python==4.1.0.25
 ** 开始——先获取必要的人脸图像
 人脸识别其实就是分类和聚类的过程。
 人脸图像获取的代码，我分为了三个脚本，代码如下：
-首先是一个newuser_information_collection.py，这个脚本将调用其他脚本。
+首先是一个 newuser_information_collection.py，这个脚本将调用其他脚本。
 #+BEGIN_SRC python
 ###################################################
 #相当于公司人力组织一次所有员工人脸信息采集
@@ -106,20 +115,23 @@ while True:
         print("请看摄像头！")
 
         #采集员工图像的数量自己设定，越多识别准确度越高，但训练速度贼慢
-        window_name = '信息采集'                                                                                  #图像窗口
-        camera_id = 0                                                                                            #相机的ID号
-        images_num = 200                                                                                         #采集图片数量
-        path = 'C:\\Python-Project\\Face-recognition\\data\\' + new_user_name   #图像保存位置
+        window_name = '信息采集'
+        #图像窗口
+        camera_id = 0
+        #相机的ID号
+        images_num = 200
+        #采集图片数量
+        path = 'C:\\Python-Project\\Face-recognition\\data\\' + new_user_name
+        #图像保存位置
 
         CatchPICFromVideo(window_name,camera_id,images_num,path)
     else:
         break
-
 #+END_SRC
 
 这个脚本可以让你不断写入图像数据，自定义每组数据大小，自动以你输入命名文件夹，这样就有了多个人脸的分类。
 
-下面是gain_face.py的代码：
+下面是 gain_face.py 的代码：
 #+BEGIN_SRC python
 ################
 #获取人的脸部信息，并保存到所属文件夹
@@ -145,7 +157,8 @@ def CatchPICFromVideo(window_name,camera_idx,catch_pic_num,path_name):
     cap = cv2.VideoCapture(camera_idx)
 
     # 告诉OpenCV使用人脸识别分类器
-    classfier = cv2.CascadeClassifier("C:\Program Files (x86)\Python\Python37\Lib\site-packages\cv2\data\haarcascade_frontalface_alt2.xml")
+    classfier = cv2.CascadeClassifier(
+        "C:\Program Files (x86)\Python\Python37\Lib\site-packages\cv2\data\haarcascade_frontalface_alt2.xml")
 
     #识别出人脸后要画的边框的颜色，RGB格式
     color = (0, 255, 0)
@@ -159,7 +172,8 @@ def CatchPICFromVideo(window_name,camera_idx,catch_pic_num,path_name):
         grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # 将当前桢图像转换成灰度图像
 
         # 人脸检测，1.2和2分别为图片缩放比例和需要检测的有效点数
-        faceRects = classfier.detectMultiScale(grey, scaleFactor=1.2, minNeighbors=2, minSize=(32, 32))
+        faceRects = classfier.detectMultiScale(
+            grey, scaleFactor=1.2, minNeighbors=2, minSize=(32, 32))
         if len(faceRects) > 0:  # 大于0则检测到人脸
             for faceRect in faceRects:  # 单独框出每一张人脸
                 x, y, w, h = faceRect
@@ -177,11 +191,21 @@ def CatchPICFromVideo(window_name,camera_idx,catch_pic_num,path_name):
                         break
 
                     #画出矩形框的时候稍微比识别的脸大一圈
-                    cv2.rectangle(frame, (x - 10, y - 10), (x + w + 10, y + h + 10), color, 2)
+                    cv2.rectangle(frame,
+                                  (x - 10, y - 10),
+                                  (x + w + 10, y + h + 10),
+                                  color,
+                                  2)
 
                     # 显示当前捕捉到了多少人脸图片了，这样站在那里被拍摄时心里有个数，不用两眼一抹黑傻等着
                     font = cv2.FONT_HERSHEY_SIMPLEX
-                    cv2.putText(frame, 'num:%d' % (num), (x + 30, y + 30), font, 1, (255, 0, 255), 4)
+                    cv2.putText(frame,
+                                'num:%d' % (num),
+                                (x + 30, y + 30),
+                                font,
+                                1,
+                                (255, 0, 255),
+                                4)
 
         # 超过指定最大保存数量结束程序
         if num > (catch_pic_num): break
@@ -202,12 +226,12 @@ if __name__ == '__main__':
     if len(sys.argv) != 1:
         print("Usage:%s camera_id face_num_max path_name\r\n" % (sys.argv[0]))
     else:
-        CatchPICFromVideo("截取人脸", 0, 200, 'C:\\Users\\Administrator\\Documents\\Python Project\\Face recognition\\data\\huangsongmao')
-
+        CatchPICFromVideo("截取人脸", 0, 200,
+                          'C:\\Users\\Administrator\\Documents\\Python Project\\Face recognition\\data\\huangsongmao')
 #+END_SRC
 
-在gain_face中调用了createfold脚本，用来检查写入的地址是否存在，不存在就建立。
-下面是createfold.py的代码：
+在 gain_face 中调用了 createfold 脚本，用来检查写入的地址是否存在，不存在就建立。
+下面是 createfold.py 的代码：
 #+BEGIN_SRC python
 import os
 
@@ -223,10 +247,8 @@ def CreateFolder(path):
         return True
     else:
         return False
-
-
 #+END_SRC
-OK，人脸数据获取就完成了，只要运行newuser_information_colletion.py就可以了。
+OK，人脸数据获取就完成了，只要运行 newuser_information_colletion.py 就可以了。
 
 如果没有电脑摄像头，也可以下载“人脸图像数据集”替换“摄像头保存的人脸图像”。
 
@@ -234,17 +256,21 @@ CASIA-WebFace.zip（4.4GB）下载地址：
 https://doc-0g-98-docs.googleusercontent.com/docs/securesc/p6vq0jv3r789camnt4ml8btk5mj3m4k2/1v4961qppnvgqf8lq179ho4nl86fsnee/1616554875000/01512658535062358685/03582181080251392395/1Of_EVz-yHV7QVWQGihYfvtny9Ne8qXVz?e=download&authuser=0&nonce=qqo6lq3fe5mpk&user=03582181080251392395&hash=btcm9phqmqmfaerfmo3sasrqrvudibnt
 
 ** 训练——分类吧
-想训练我们保存好的人脸图像，就得先把它们读取出来，然后写到一个数组array中，对吧。
+想训练我们保存好的人脸图像，就得先把它们读取出来，然后写到一个数组 array 中，对吧。
 load_dataset.py
 #+BEGIN_SRC python
 import sys
 import numpy as np
 import os
 import cv2
+
 ################################################
 #读取待训练的人脸图像，指定图像路径即可
 ################################################
+
 IMAGE_SIZE = 64
+
+
 #将输入的图像大小统一
 def resize_image(image,height = IMAGE_SIZE,width = IMAGE_SIZE):
     top,bottom,left,right = 0,0,0,0
@@ -267,12 +293,20 @@ def resize_image(image,height = IMAGE_SIZE,width = IMAGE_SIZE):
     BLACK = [0,0,0]
 
     #给图像增加边界，使图片长、宽等长，cv2.BORDER_CONSTANT指定边界颜色由value指定
-    constant_image = cv2.copyMakeBorder(image,top,bottom,left,right,cv2.BORDER_CONSTANT,value=BLACK)
+    constant_image = cv2.copyMakeBorder(image,
+                                        top,bottom,
+                                        left,right,
+                                        cv2.BORDER_CONSTANT,
+                                        value=BLACK)
 
     return cv2.resize(constant_image,(height,width))
+
+
 #读取数据
 images = []     #数据集
 labels = []     #标注集
+
+
 def read_path(path_name):
     for dir_item in os.listdir(path_name):
         full_path = path_name + '\\' + dir_item
@@ -311,12 +345,12 @@ if __name__ == '__main__':
     if len(sys.argv) != 1:
         print("Usage:%s path_name\r\n" % (sys.argv[0]))
     else:
-        images,labels = load_dataset('C:\\Users\\Administrator\\Documents\\Python Project\\Face recognition\\data')
+        images,labels = load_dataset(
+            'C:\\Users\\Administrator\\Documents\\Python Project\\Face recognition\\data')
         #print(labels)
-
 #+END_SRC
 
-数据和对应的标注都以array形式对出来了，是不是该分类训练了啊。
+数据和对应的标注都以 array 形式对出来了，是不是该分类训练了啊。
 
 face_train.py
 #+BEGIN_SRC python
@@ -370,51 +404,56 @@ class Dataset:
         #加载数据集到内存
         images, labels = load_dataset(self.path_name)
 
-        train_images, valid_images, train_labels, valid_labels = train_test_split(images, labels, test_size=0.3,
-                                                                                  random_state=random.randint(0, 100))
+        train_images, valid_images, train_labels, valid_labels =
+            train_test_split(images,
+                             labels,
+                             test_size=0.3,
+                             random_state=random.randint(0, 100))
         # _, test_images, _, test_labels = train_test_split(images, labels, test_size=0.5,
         #                                                   random_state=random.randint(0, 100))
 
-        # 当前的维度顺序如果为'th'，则输入图片数据时的顺序为：channels,rows,cols，否则:rows,cols,channels
+        # 当前的维度顺序如果为'th'，则输入图片数据时的顺序为：channels,rows,cols，
+        # 否则:rows,cols,channels
         # 这部分代码就是根据keras库要求的维度顺序重组训练数据集
         if K.image_dim_ordering() == 'th':
             train_images = train_images.reshape(train_images.shape[0], img_channels, img_rows, img_cols)
             valid_images = valid_images.reshape(valid_images.shape[0], img_channels, img_rows, img_cols)
-            #test_images = test_images.reshape(test_images.shape[0], img_channels, img_rows, img_cols)
+            # test_images = test_images.reshape(test_images.shape[0], img_channels, img_rows, img_cols)
             self.input_shape = (img_channels, img_rows, img_cols)
         else:
             train_images = train_images.reshape(train_images.shape[0], img_rows, img_cols, img_channels)
             valid_images = valid_images.reshape(valid_images.shape[0], img_rows, img_cols, img_channels)
-            #test_images = test_images.reshape(test_images.shape[0], img_rows, img_cols, img_channels)
+            # test_images = test_images.reshape(test_images.shape[0], img_rows, img_cols, img_channels)
             self.input_shape = (img_rows, img_cols, img_channels)
 
             # 输出训练集、验证集、测试集的数量
             print(train_images.shape[0], 'train samples')
             print(valid_images.shape[0], 'valid samples')
-            #print(test_images.shape[0], 'test samples')
+            # print(test_images.shape[0], 'test samples')
 
-            # 我们的模型使用categorical_crossentropy作为损失函数，因此需要根据类别数量nb_classes将
-            # 类别标签进行one-hot编码使其向量化，在这里我们的类别只有两种，经过转化后标签数据变为二维
+            # 我们的模型使用 categorical_crossentropy 作为损失函数，因此需要根据类别数量
+            # nb_classes 将类别标签进行one-hot编码使其向量化，在这里我们的类别只有两种，
+            # 经过转化后标签数据变为二维
             train_labels = np_utils.to_categorical(train_labels, nb_classes)
             valid_labels = np_utils.to_categorical(valid_labels, nb_classes)
-            #test_labels = np_utils.to_categorical(test_labels, nb_classes)
+            # test_labels = np_utils.to_categorical(test_labels, nb_classes)
 
             # 像素数据浮点化以便归一化
             train_images = train_images.astype('float32')
             valid_images = valid_images.astype('float32')
-            #test_images = test_images.astype('float32')
+            # test_images = test_images.astype('float32')
 
             # 将其归一化,图像的各像素值归一化到0~1区间
             train_images /= 255
             valid_images /= 255
-            #test_images /= 255
+            # test_images /= 255
 
             self.train_images = train_images
             self.valid_images = valid_images
-            #self.test_images = test_images
+            # self.test_images = test_images
             self.train_labels = train_labels
             self.valid_labels = valid_labels
-            #self.test_labels = test_labels
+            # self.test_labels = test_labels
 
 
 # CNN网络模型类
@@ -425,10 +464,11 @@ class Model:
         # 建立模型
     def build_model(self, dataset,nb_classes=4):
 
-        # 构建一个空的网络模型，它是一个线性堆叠模型，各神经网络层会被顺序添加，专业名称为序贯模型或线性堆叠模型
+        # 构建一个空的网络模型，它是一个线性堆叠模型，各神经网络层会被顺序添加，专业名称为
+        # 序贯模型或线性堆叠模型
         self.model = Sequential()
 
-        #以下代码将顺序添加CNN网络需要的各层，一个add就是一个网络层
+        # 以下代码将顺序添加CNN网络需要的各层，一个add就是一个网络层
         self.model.add(Convolution2D(32, 3, 3, border_mode='same',
                                      input_shape=dataset.input_shape))  # 1 2维卷积层
         self.model.add(Activation('relu'))  # 2 激活函数层
@@ -460,8 +500,10 @@ class Model:
 
     # 训练模型
     def train(self, dataset, batch_size=20, nb_epoch=10, data_augmentation=True):
-        sgd = SGD(lr=0.01, decay=1e-6,
-                  momentum=0.9, nesterov=True)  # 采用SGD+momentum的优化器进行训练，首先生成一个优化器对象
+        sgd = SGD(lr=0.01,
+                  decay=1e-6,
+                  momentum=0.9,
+                  nesterov=True)  # 采用SGD+momentum的优化器进行训练，首先生成一个优化器对象
         self.model.compile(loss='categorical_crossentropy',
                            optimizer=sgd,
                            metrics=['accuracy'])  # 完成实际的模型配置工作
@@ -495,11 +537,13 @@ class Model:
             datagen.fit(dataset.train_images)
 
             # 利用生成器开始训练模型
-            self.model.fit_generator(datagen.flow(dataset.train_images, dataset.train_labels,
-                                                  batch_size=batch_size),
-                                     samples_per_epoch=dataset.train_images.shape[0],
-                                     nb_epoch=nb_epoch,
-                                     validation_data=(dataset.valid_images, dataset.valid_labels))
+            self.model.fit_generator(
+                datagen.flow(dataset.train_images,
+                             dataset.train_labels,
+                             batch_size=batch_size),
+                samples_per_epoch=dataset.train_images.shape[0],
+                nb_epoch=nb_epoch,
+                validation_data=(dataset.valid_images, dataset.valid_labels))
 
     MODEL_PATH = './aggregate.face.model.h5'
 
@@ -516,10 +560,12 @@ class Model:
     # 识别人脸
     def face_predict(self, image):
         # 依然是根据后端系统确定维度顺序
-        if K.image_dim_ordering() == 'th' and image.shape != (1, 3, IMAGE_SIZE, IMAGE_SIZE):
+        if K.image_dim_ordering() == 'th'
+        and image.shape != (1, 3, IMAGE_SIZE, IMAGE_SIZE):
             image = resize_image(image)  # 尺寸必须与训练集一致都应该是IMAGE_SIZE x IMAGE_SIZE
             image = image.reshape((1, 3, IMAGE_SIZE, IMAGE_SIZE))  # 与模型训练不同，这次只是针对1张图片进行预测
-        elif K.image_dim_ordering() == 'tf' and image.shape != (1, IMAGE_SIZE, IMAGE_SIZE, 3):
+        elif K.image_dim_ordering() == 'tf'
+        and image.shape != (1, IMAGE_SIZE, IMAGE_SIZE, 3):
             image = resize_image(image)
             image = image.reshape((1, IMAGE_SIZE, IMAGE_SIZE, 3))
 
@@ -554,9 +600,8 @@ if __name__ == '__main__':
     model.build_model(dataset,nb_classes=user_num)
     # 测试训练函数的代码
     model.train(dataset)
-    
-    model.save_model(file_path='./model/aggregate.face.model.h5')  
 
+    model.save_model(file_path='./model/aggregate.face.model.h5')
 #+END_SRC
 
 注意：上面的代码，我没有进行训练结果的测试，想要测试的小伙伴们，把我屏蔽的代码解开就好了。
@@ -567,7 +612,7 @@ if __name__ == '__main__':
 # 图像种类
 self.user_num = len(os.listdir(path_name))
 #+END_SRC
-这是获取path_name下有多少个文件夹，因为我们统一在data文件夹下只放各个图像文件夹，所以在训练的时候，分多少种类别就由self.user_num说了算
+这是获取 path_name 下有多少个文件夹，因为我们统一在 data 文件夹下只放各个图像文件夹，所以在训练的时候，分多少种类别就由 self.user_num 说了算
 #+BEGIN_SRC python
 #数据种类
 nb_classes = self.user_num
@@ -584,12 +629,12 @@ else:
     return -1
 #+END_SRC
 这样子就能让返回结果比较让人可信了。
-运行face_train.py脚本吧，等待…（反正我电脑很慢，这怎么能用到工程上呢？）我在这里就不上图了，以上所有代码都是我实际使用过的。
-当在model文件夹下生成了.h5文件，OK训练完成！
+运行 face_train.py 脚本吧，等待…（反正我电脑很慢，这怎么能用到工程上呢？）我在这里就不上图了，以上所有代码都是我实际使用过的。
+当在 model 文件夹下生成了.h5 文件，OK 训练完成！
 下面应该就是激动人心的时刻了
 
 ** 识别大脸
-上代码face_recognition.py
+上代码 face_recognition.py
 #+BEGIN_SRC python
 import cv2
 import sys
@@ -628,7 +673,10 @@ if __name__ == '__main__':
         cascade = cv2.CascadeClassifier(cascade_path)
 
         # 利用分类器识别出哪个区域为人脸
-        faceRects = cascade.detectMultiScale(frame_gray, scaleFactor=1.2, minNeighbors=2, minSize=(32, 32))
+        faceRects = cascade.detectMultiScale(frame_gray,
+                                             scaleFactor=1.2,
+                                             minNeighbors=2,
+                                             minSize=(32, 32))
         if len(faceRects) > 0:
             for faceRect in faceRects:
                 x, y, w, h = faceRect
@@ -637,7 +685,11 @@ if __name__ == '__main__':
                 image = frame[y: y + h, x: x + w]       #(改)
                 faceID = model.face_predict(image)
 
-                cv2.rectangle(frame, (x - 10, y - 10), (x + w + 10, y + h + 10), color, thickness=2)
+                cv2.rectangle(frame,
+                              (x - 10, y - 10),
+                              (x + w + 10, y + h + 10),
+                              color,
+                              thickness=2)
                 #face_id判断（改）
                 for i in range(len(os.listdir('./data/'))):
                     if i == faceID:
@@ -660,7 +712,6 @@ if __name__ == '__main__':
     # 释放摄像头并销毁所有窗口
     cap.release()
     cv2.destroyAllWindows()
-
 #+END_SRC
 好了，运行该代码就能识别几位小伙伴的大脸了。代码中我修改了一点儿，主要是判断谁的脸的部分。
 
@@ -675,8 +726,7 @@ for i in range(len(os.listdir('./data/'))):
                     1,  # 字号
                     (255, 0, 255),  # 颜色
                     2)  # 字的线宽
-
 #+END_SRC
-因为我们在标注图像id的时候就是按照os.listdir(’./data/’)列表中显示的顺序，所以识别出的id和os.listdir(’./data/’)列表的索引号匹配，匹配到谁就在图像上标出谁os.listdir(’./data/’)[i]。
+因为我们在标注图像 id 的时候就是按照 os.listdir(’./data/’)列表中显示的顺序，所以识别出的 id 和 os.listdir(’./data/’)列表的索引号匹配，匹配到谁就在图像上标出谁 os.listdir(’./data/’)[i]。
 
 完
