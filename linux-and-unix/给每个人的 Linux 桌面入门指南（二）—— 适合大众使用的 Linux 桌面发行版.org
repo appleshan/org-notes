@@ -1,0 +1,200 @@
+#+TITLE: 给每个人的 Linux 桌面入门指南（二）—— 适合大众使用的 Linux 桌面发行版
+
+@See https://sspai.com/post/64545
+
+编者按：欢迎阅读「给每个人的 Linux 桌面入门指南」系列，这个系列将持续更新，希望可以帮你改变「用 Linux 很复杂」的印象，给你多一种操作系统的可选项。本篇是这个系列第二篇，重点阐述 Linux 发行版的分类、如何选择桌面发行版以及有哪些桌面发行版适合大众用户。
+
+第一篇：[[https://sspai.com/post/64499][给每个人的 Linux 桌面入门指南（一）—— 为何选择 Linux 桌面操作系统？]]
+
+* 什么是 Linux 桌面发行版？
+上一篇在 Linux 介绍中曾提到，我们通常所指的 Linux 系统指的是 Linux 内核及其捆绑了 [[https://www.gnu.org/home.zh-cn.html][GNU 系统]] 组件的工具、应用和服务的操作系统。虽然 Linux 系统多用于服务器、嵌入式设备和其他大型平台；但是在桌面端，Linux 也可以根据一般使用者的需求预先整合好 Linux 内核和包含了硬件驱动、软件包管理系统、桌面环境、媒体播放器、办公套件等各种应用软件，把它们打包成供个人计算机使用的桌面发行版 ；它的优点是只需要小幅度更改设定就可以使用，一般使用者不需要重新编译，有些整合得非常好的桌面发行版甚至可以达到「 *开箱即用* 」的效果。
+
+* Linux 桌面发行版如何分类？
+由于 Linux 是一款基于 [[https://www.gnu.org/licenses/licenses.zh-cn.html#GPL][GNU 通用公共许可证（GPL）]] 发布的操作系统。很多发行版可以基于同一个许可证的情况下修改其他发行版的代码进行重新分发，这便造成了 Linux 发行版的百花齐放和百家争鸣。根据 [[https://distrowatch.com/?language=CN][DistroWatch]] 的统计，现存的 Linux 发行版本有 600 多种。那么这么多的发行版应该怎么分类呢？
+
+[[file:./images/Unexplained_releases_on_DistroWatch.png]]
+DistroWatch 上不甚枚举的发行版
+
+从技术角度来看，Linux 发行版的最大的不同之处在于软件包的管理机制。
+
+同时根据维护主体的不同，又可分为两类，一类是商业公司维护的发行版本，一类是社区组织维护的发行版本，前者以著名的 [[https://www.redhat.com/zh][Red Hat]] 、 [[https://canonical.com/][Canonical]] 公司为首，后者以 [[https://www.debian.org/index.zh-cn.html][Debian]] 、[[https://archlinux.org/][Arch Linux]] 为代表。
+
+** 按照软件包管理划分
+在 Linux 桌面发行版中，有三种软件包管理器最为主流，它们被分别用在不同的系统分支上：
+
+- [[https://www.dpkg.org/][Dpkg]]：全称为 Debian Package Manager， 它是由 Debian 开发的软件包管理器，被用于安装、卸载和供给和.deb软件包相关的信息，可用于 Debian 及其衍生操作系统。（Ubuntu，Deepin 等）
+- [[https://rpm.org/][RPM]]：全称为 Redhat Package Manager，最早由 Red Hat 研制，作为运维工程师的利器适用于安装用 RPM 来打包软件的系统。（Fedora，openSUSE 等）
+- [[https://archlinux.org/pacman/][Pacman]]：作为 Arch Linux 发行版的一部分，最早由 Judd Vinet 开发。因为 Arch Linux 的激进特性，Pacman 可以自动下载并且安装所有需要的软件包解決安装过程中的依赖问题。它同样适用于 Arch Linux 的衍生版本。（Manjaro Linux，Atrix Linux 等）
+
+** 按照维护主体划分
+不同于 Windows 和 macOS，除了类似 [[https://ubuntu.com/][Ubuntu]] 和 [[https://www.redhat.com/zh/technologies/linux-platforms/enterprise-linux][Red Hat Enterprise Linux]] 这样完全由公司作为主体来维护的商业发行版；也有像 Debian 和 Arch Linux 这样完全由社区作为主体来开发、维护、支持的发行版。
+
+当然也有像 CentOS 和 Fedora 这种以社区作为主体进行维护，公司提供支持的发行版。笔者在此不向个人新手用户进行推荐：因为此类的发行版在新版本中会加入众多未验证的新功能，一旦验证成功便会有选择性地加入其商业发行版的下一个版本。简单来说，它们是把个人用户当作小白鼠来进行测试和修复新功能的沙盒。
+
+在 [[https://futurist.se/gldt/][GNU/Linux Distribution Timeline]] 上有一张图整理了整个 Linux 发行版进化编年史。
+
+* 为什么不推荐个人新手用户选择 Debian 或者 Arch Linux？
+可能读完上文的新手朋友不禁有个疑问：既然社区提供支持的发行版即自由又能定制化，那么作为普通个人用户为何不推荐直接使用 Debian 或 Arch Linux 这两个在编年图上的「根级」桌面发行版？
+
+Debian 这个伟大的项目遵循 GNU 规范，100% 免费，几乎兼容所有计算平台，拥有优秀的社区资源和强大的软件包管理，的确做到了「一个完全自由的通用操作系统」。但是由于其恪守的「纯净」准则，*在默认情况下只安装自由软件*，安装程序甚至没有提供专有固件的内核；如果你需要非自由软件，就需要为每个软件库添加 Nonfree 和 Contrib 这两个部分。虽然其稳定版的安全性可以说固若金汤，然而其以三年为更新周期，故对新上市硬件支持较差，而且安装完成后配置也会略微麻烦，故不推荐新用户直接上手。
+
+[[file:./images/The_ancestors_of_many_systems.png]]
+众多系统的「老祖宗」
+
+Arch Linux 以「KISS 原则」（保持简单和愚蠢）为总体指导，因其采用了滚动发行（即没有所谓的大版本更新，每次常规更新都会将系统和软件保持在最新状态）的激进策略，使得 Arch Linux 在个人计算机上总能部署最新的软件包。但是，滚动升级会带来一些「滚坏系统」的潜在风险。而且 Arch Linux 因为期待用户愿意去理解系统的运作，所以 *只提供命令行安装的模式* 。虽然其维基文档极尽详实，而且非常友好的用户社区素来有「邪教」的美誉；但对新手来说实在太难以入门。
+
+[[file:./images/Pure_command_line_installation_mode.png]]
+纯命令行安装模式
+
+* 为什么不推荐使用 Ubuntu？
+除了社区发行版，由 Canonical 公司基于 Debian 开发并主导的 Ubuntu 虽然默认提供开源软件和商业软件，而且提供专有驱动程序，新手可以很方便快速地安装，然而其程序包脱胎于 Debian 的 *测试版或不稳定版* 。[[https://arstechnica.com/information-technology/2012/09/ubuntu-bakes-amazon-search-results-into-os-to-raise-cash/][Ubuntu 从12.10 版本开始，为桌面搜索框加入了在线搜索功能：在户键入检索词汇时，搜索词会提交到的 Canonical 服务器并交给 Amazon 分析，向用户提供和关键词相关的商品推荐]] 。其创始人 Mark Shuttleworth 在管理委员会中占有永久性席位，还拥有决定权。Mark 及其 Canonical 代表对于社区通常拥有否决权，这在过去好几次引起了用户反抗。
+
+面对单一公司维护，而且垄断社区参与的发行版；尽管开源，它的开发方向最终还是要服从公司利益，我们还是小心为上。
+
+* 对于中国大陆个人用户应该如何选择 Linux 桌面发行版？
+
+** 根据个人需求确定发行版
+如果你确定非常清楚自己的需求，可以访问这个帮助你轻松找到适合自己的 Linux 桌面发行版的网站：[[https://distrochooser.de/zh-cn/][Distrochooser]]
+
+它会根据你的需求向你询问一系列问题并建议出几个合适你的 Linux 桌面发行版。
+
+[[file:./images/Distrochooser's_16_questions.png]]
+Distrochooser 的 16 道问题
+
+** 查看国内开源镜像站
+确认了你想使用的桌面发行版之后，为了节省下载安装镜像和日后更新的时间，建议可以先到类似 [[https://mirrors.tuna.tsinghua.edu.cn/][清华大学开源软件镜像站]] 的 [[https://gitee.com/gsls200808/chinese-opensource-mirror-site][国内开源镜像站]] 查看一下有没有该 Linux 桌面发行版。
+
+它不仅可以减少你从国外官网下载资源的时间，除了开源的操作系统和应用软件，其实还有很多比如字体之类的资源也会提供下载。
+
+[[file:./images/Operating_system_mirroring_in_Huawei_open_source_mirroring_site.png]]
+华为开源镜像站内的操作系统镜像
+
+** 选择默认桌面环境
+在很多开源镜像站的系统镜像包里会有 kde、xfce 的后缀，新手一定会纳闷这些后缀的含义。其实它们指的是这个发行版的默认桌面环境：Linux 中的桌面环境也是一个程序，它和内核不是绑定的，两者的开发也不同步；通常桌面发行版会给不带界面的 Linux 系统打包上一个默认的桌面环境来方便用户进行图形界面的操控。当然，如果你喜欢折腾，也可以将其更换成其它桌面环境。
+
+[[file:./images/Manjaro_Linux_versions_of_all_different_default_desktop_environments_in_the_Tsinghua_University_open_source_mirror_station.png]]
+在清华大学开源镜像站中所有不同默认桌面环境的 Manjaro Linux 版本
+
+在 Linux 桌面发行版中，最主流三大的桌面环境为 [[https://www.gnome.org/][GNOME]]、[[https://kde.org/][KDE]] 和 [[https://xfce.org/?lang=zh_CN][Xfce]]，笔者在此推荐 KDE 和 Xfce 这两个适合不同硬件配置的桌面环境：
+
+KDE 有类 Windows 的「开始菜单」，界面华丽，被称为最接近 Windows 界面的 Linux 桌面系统，包括界面布局、开始菜单、主题风格都与 Windows 相似，因此对熟悉 Windows 的用户很有亲切感。
+
+从传统角度讲，KDE 与 GNOME 都属于 Linux 阵营中最具影响力的桌面环境选项。然而 GNOME 桌面阵营目前已经分裂成了 GNOME、Unity、Cinnamon 以及 MATE，但 KDE 项目却仍然保持着旺盛的生命力，[[https://kde.org/plasma-desktop/][Plasma]] 界面也拥有了前所未见的精致表现。KDE 在可配置性方面一直优于 GNOME 以及由 GNOME 衍生而成的各类桌面环境。使用 KDE 的感受实际上与其他桌面环境可谓完全不同。GNOME 系的桌面环境都使用内置的 GTK 工具包，然而 KDE 却独树一帜，始终坚持 [[https://www.qt.io/][Qt]] 一百年不动摇，而且拥有着自己一套与之配合的应用套件。虽然应用程序在任何桌面环境下都能够正常运行，但量身打造出来的效果绝对是不一样的—— KDE 上的应用几乎与主屏幕及桌面融为一体。唯一美中不足的便是它稍重的资源占用：需要 1GHz 的 CPU 频率和 615 MB 的 RAM。
+
+[[file:./images/The_default_KDE_desktop_cyberpunk_theme_for_Garuda_Linux.png]]
+Garuda Linux 默认的 KDE 桌面赛博朋克主题
+
+Xfce 是一个轻量级的桌面环境，建立在 [[https://www.gtk.org/][GTK]] 的基础之上，Xfce 是仅次于 GNOME 与 KDE 的第三大人气选项。Xfce 非常小巧、轻便、高效，运行程序很快，它在轻量化水平上优于 KDE 与 GNOME，对于一些比较老旧的机器、或是很少内存的机器是理想选择，所以用 Xfce 作为预设桌面的发行版有很多。
+
+在 GNOME 3 正式发布之后，Xfce 已经成为顶尖的轻量化 Linux 桌面环境。连 Linus Torvalds 也在 Google+ 上表示，自己无法忍受 GNOME 3 「无可容忍的凌乱」 而改投到了 Xfce 桌面环境。它仅需 300 MHz 的 CPU 频率和 192 MB 的 RAM 便能运行。
+
+[[file:./images/The_lightweight_Xfce_can_also_be_customized_very_cool.jpeg]]
+轻巧的 Xfce 也可以定制得很炫酷
+
+当然，除了这两种桌面环境，新手也可以尝试其他不同的桌面环境。对于桌面环境来说没有好坏，适合的才是最棒的。用户体验最佳，就是成熟且成功的。
+
+如果你没法通过图片和视频来确定你究竟更喜欢哪种桌面环境，无需在本地安装，你也可以通过 [[https://distrotest.net/index.php][DistroTest]] 这个网站直接从安装到使用来体验测试你选择的 Linux 发行版和桌面环境。该网站由两个美国人 Klemann Andy 和 Forster Tobias 使用 [[https://www.qemu.org/][Qemu]] 在 Debian 上搭建；目前托管了 700 多个版本，200 多个操作系统。你可以像在本地系统中一样使用系统的所有功能，甚至删除或格式化硬盘或系统文件。 DistoTest 允许用户任意选择：用哪个发行版，用什么图形界面和需要何种配置。
+
+[[file:./images/Test_it_before_you_hate_it.png]]
+Test it before you hate it
+
+* 四款适合大众使用的 Linux 桌面发行版
+基于上文的阐述，笔者在此推荐四款针对五年以内制造的硬件非常适合中国大陆个人新手用户的 Linux 桌面发行版：
+
+** [[https://www.deepin.org/zh/][深度操作系统]]
+
+[[file:./images/Deepin_desktop.jpeg]]
+深度操作系统桌面
+
+亦称为 Deepin，是 [[https://www.deepin.com/][武汉深之度科技有限公司]] 开发的开源操作系统。它是基于 Debian 的稳定版本的一个 Linux 发行版；可以运行在个人计算机和服务器上，并免费提供给个人用户使用。据 DistroWatch 的数据截至 2020 年，深度操作系统是最受欢迎的源自中国的 Linux 发行版。深度操作系统预置自行开发的桌面环境，即 [[https://www.deepin.org/zh/dde/][深度桌面环境]] 。该桌面环境早先使用 HTML5 编写，后因性能不佳，使用 Qt 重写。因其美观和易用性被称作最好的中文 Linux 发行版。易用的软件商店使软件安装轻松简单，微信和 QQ 也能一键获取。使用它，你不用担心中文输入法的安装，不用担心字体渲染，不用担心不记得怎么用命令安装软件。
+
+[[file:./images/Deepin_operating_system_graphical_installation_interface.jpeg]]
+深度操作系统图形化安装界面
+
+[[file:./images/Deepin_Store.png]]
+深度商店
+
+优点：非常适合中国大陆地区的新手入门。
+
+缺点：商业公司提供支持的发行版；因为具体「国情」，[[https://www.bilibili.com/video/av668285454/][隐私保护依然是个问题]] 。
+
+** [[https://www.linuxmint.com/][Linux Mint]]
+
+[[file:./images/Linux_Mint_operating_system_desktop.png]]
+Linux Mint 操作系统桌面
+
+Linux Mint 是一款基于 Ubuntu 发行版上的一种优化发行版，致力于提供一种更为开箱即用的用户体验，免去用户在安装系统后还要自己安装一系列满足基本使用需求的软件。它包括提供浏览器、多媒体编解码器、显卡支持、Java 和其它组件。它也增加了一套定制桌面及各种菜单，一些独特的配置工具，以及一份基于 Web 的软件包安装界面。不同于 Ubuntu，Linux Mint 使用 [[https://cinnamon.linuxmint.com/][Cinnamon]] 作为预设桌面环境，对于使用习惯 Windows 的人来说，使用它并不会太陌生，甚至连系统中的预设热键也和 Windows 相差无几。
+
+[[file:./images/Linux_Mint_multilingual_graphical_installation_interface.png]]
+Linux Mint 多语言图形安装界面
+
+[[file:./images/Linux_Mint_friendly_welcome_interface.png]]
+Linux Mint 友好的欢迎界面
+
+[[file:./images/Linux_Mint_support_for_NVIDIA_graphics_cards.png]]
+Linux Mint 对 NVIDIA 显卡的支持
+
+[[file:./images/Linux_Mint_Software_Management_Center.png]]
+Linux Mint 软件管理中心
+
+优点：非常适合习惯 Windows 界面的用户。
+
+缺点：基于 Ubuntu 开发，这意味着如果上游版本 Ubuntu 出了问题也会波及 Linux Mint。尽管后期开发了 [[https://www.linuxmint.com/rel_debian.php][Linux Mint Debian Edition]] 来亡羊补牢，然而国内并没有 LMDE 的镜像源支持。而且没有汉化主页则会让中文用户迷路。
+
+** [[https://mxlinux.org/][MX Linux]]
+
+[[file:./images/MX_Linux_operating_system_desktop.png]]
+MX Linux 操作系统桌面
+
+MX Linux 是 [[https://antixlinux.com/][antiX]] 和早前的 [[https://mepis.org/][MEPIS]] 社区基于 Debian 稳定版本合作开发，倡导「将优雅而高效的桌面与简单的配置、高度的稳定性、可靠的性能相结合」的 Linux 发行版。虽然因为在 2019 略有争议地蹿上 DistroWatch 排行榜第一且未经配置的开箱界面略为「简陋」而持有一定负面的诽评，但其内置一套类似 [[https://en.opensuse.org/YaST][Yast]] 名为 MX Tools 的用户工具集强大到让你无以言表。
+
+MX Tools 中包括了启动界面管理、多媒体解码安装、NVIDIA 显卡驱动管理、iOS 设备连接、以及撒手锏 Snapshot——它可将当前系统快照保存为 ISO 映像，这意味着你可以把自己的整个系统烧录到 U 盘，并通过其它电脑启动甚至直接「克隆」到另一台电脑上。如果对这个发行版有兴趣，可以听 [[https://destinationlinux.org/episode-47/][第 47 期的 Destination Linux]] 进一步了解。
+
+[[file:./images/MX_Linux_graphical_installation_interface.png]]
+MX Linux 图形化安装界面
+
+[[file:./images/Powerful_MX_Tools.png]]
+强大的 MX Tools
+
+[[file:./images/Snapshot_of_the_entire_system_can_be_copyed.png]]
+可以「复制」整个系统的 Snapshot
+
+[[file:./images/MX_Linux_Package_Installer.png]]
+MX Linux 仅有文字的软件管理中心虽略显朴素，但是其中包含了其他不同版本的软件选项
+
+优点：非常适合老旧电脑以及有随身携带系统备份要求的用户。
+
+缺点：没有完全汉化的主页，系统汉化不完全，时常会出现乱码和英文。
+
+** [[https://manjaro.org/][Manjaro Linux]]
+
+[[file:./images/Manjaro_Linux_system_operation_interface.png]]
+Manjaro Linux 系统操作界面
+
+基于 Arch Linux 的 Linux 发行版，针对 Arch Linux 容易「滚挂」的「硬伤」和对新手不友好的「弱点」，Manjaro Linux 采用了图形化安装程序，使安装过程非常人性化，同时也把安装 Arch Linux 后的大量繁琐工作——安装配置显卡驱动、X 服务、桌面环境、中文输入法、Flash 插件、音频解码器、显示管理器等——全都做到位了，为新手解决了大麻烦，为高级用户节省了大量时间。虽然也采用滚动更新但是拥有自己独立的软件仓库，包含了由开发团队确认稳定的软件。Manjaro Linux 的目标是让强大的 Arch Linux 更方便用户使用，所以 Manjaro Linux 可以使用著名的 Pacman 调用强大的 AUR 上的资源，素有「人生苦短，我用 Manjaro」的美誉。如果对这个发行版有兴趣，可以听 [[https://destinationlinux.org/episode-167/][第 167 期的 Destination Linux]] 进一步了解。
+
+[[file:./images/Manjaro_Linux_provides_closed_source_driver_installation.jpeg]]
+Manjaro Linux 提供闭源驱动安装
+
+[[file:./images/Manjaro_Linux_multilingual_graphical_installation_interface.png]]
+Manjaro Linux 多语言图形安装界面
+
+[[file:./images/Manjaro_Linux_Software_Management_Center.png]]
+Manjaro Linux 软件管理中心
+
+优点：适配海量最新的硬件和软件，真正的开箱即用，非常适合爱玩游戏的用户。
+
+缺点：没有汉化的主页，虽然比 Arch Linux 要稳定，但是滚动发行的激进策略依然有几率会使系统崩溃，建议使用预置的 [[https://teejeetech.in/timeshift/][TimeShift]] 定期增量备份。
+
+* 总结
+
+[[file:./images/How_to_choose_an_OS.jpeg]]
+How to choose an OS
+
+下篇预告：给每个人的 Linux 桌面入门指南（三）—— 如何在 PC 和 mac 上安装 Linux?
+
+参考资料：
+- [[https://zh.wikipedia.org/zh/Linux%E5%8F%91%E8%A1%8C%E7%89%88%E5%88%97%E8%A1%A8][Linux发行版列表]]
+- [[https://zh.wikipedia.org/wiki/Linux%E5%8F%91%E8%A1%8C%E7%89%88%E6%AF%94%E8%BE%83][Linux发行版比较]]
+- [[https://zh.wikipedia.org/wiki/%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F][软件包管理系统]]
+- [[https://zh.wikipedia.org/wiki/%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83][桌面环境]]

@@ -1,0 +1,178 @@
+#+TITLE: 给每个人的 Linux 桌面入门指南（一）—— 为何选择 Linux 桌面操作系统？
+
+@See https://sspai.com/post/64499
+
+编者按：欢迎阅读给「每个人的 Linux 桌面入门指南」系列，这个系列将持续更新，希望可以帮你改变「用 Linux 很复杂」的印象，给你多一种操作系统的可选项。本篇是本系列第一篇，重点阐述 Linux 系统的优势和适合的应用场景。
+
+在刚刚过去的 2020 年，微软第二季度财报表明 Windows OEM 的收入增长 18%，苹果则因为发布了基于 ARM 架构的桌面级 M1 芯片和最新的桌面操作系统 macOS Big Sur 而风光无限。但是 [[https://tech.sina.com.cn/d/2020-03-24/doc-iimxxsth1508291.shtml][Windows 频频爆出高危漏洞]] ，第三方系统隐私控件 [[https://wpd.app/][WPD]] 达到了一百万次的月下载量；Big Sur 因 [[https://new.qq.com/rain/a/20201216a0db6a00][bug 多]] 而被网友调侃为 Bug Sur，甚至因为 [[https://sspai.com/post/63649][OCSP 软件故障而导致 Mac 应用无法启动]] 。更令人意想不到的是发起棱镜计划的美国政府竟然因为担心科技垄断在 7 月 29 日 [[https://sspai.com/post/61872#!][对苹果和其它科技巨头进行了听证会]] 。Jeffrey Paul 也撰文《[[https://sneak.berlin/i18n/2020-11-12-your-computer-isnt-yours.zh/][你的电脑不属于你]]》来表达对苹果在 Mac 上对用户行为进行监视的担忧。
+
+那作为大众消费者，我们能干些什么呢？当我们离开学校或办公室回到家想使用桌面端来进行正常学习、创作和娱乐的时候，就只能被既不安全又由商业利益驱动所监控着的系统控制么？究竟还有没有 Plan B ?
+
+我想我们遗忘了一些东西，一些很重要很基本的东西。
+
+独立游戏神作「时空环境」和「见证者」的开发者 Jonathan Blow 曾在访谈里聊到他的几条游戏哲学：
+
+每当你构建了一个系统之后，这个系统中会存在一些它独有的联接和特性。这些联接和特性就是它的核心，而使用它的过程就是发现隐藏在系统间的联接和特性。
+而好的系统，就是用尽可能少的机制，实现尽可能多的特性。
+好的系统是慷慨的，它向你展示一切，并不需要来自 *外部的奖励* 。
+
+我想，基于 [[https://sspai.com/post/58805][Unix 哲学]] 却又没有被商业利益完全把控的 Linux 系统可以轻易满足以上的条件。
+
+在大部分人的眼里，Linux 只是极客手中在黑乎乎的窗口用来敲命令行来调试机房和网络基建的工具。然而他们却不知道在 2021 年的当下，随着支持 Linux 众多图形界面软件的成熟，作为普通用户的 *每个人不需要学习那些纯符号化的命令也能像 Windows 和 macOS 那样正常使用* 它的桌面发行版；让它成为我们生活的好帮手。
+
+不信？跟着我一起来看看吧！
+
+* Linux 是什么？
+Linux 是一个开源操作系统和 IT 基础架构平台。它由 Linus Torvalds 于 1991 年构思设计而成，最初这只是他的一项兴趣爱好。如今，它不仅是公共互联网服务器上最常用的操作系统，还是速度排名前 500 的超级电脑上使用的唯一一款操作系统；同时，它也广泛地运用在智能移动设备和嵌入式终端上。Linux 最大的优势当属它的开源属性：它是一款基于 [[https://www.gnu.org/licenses/licenses.zh-cn.html#GPL][GNU 通用公共许可证（GPL）]] 发布的操作系统。这意味着，所有人都能运行、研究、分享和修改这个软件。经过修改后的代码还能重新分发，甚至出售，但必须基于同一个许可证。这一点与传统操作系统（如 Windows 和 macOS）截然不同，因为传统操作系统都是锁定供应商、以原样交付且无法修改的专有系统。特此声明，我们这里所谈的，是 Linux 内核及其捆绑的工具、应用和服务。这些要素共同构成了这个功能强大的操作系统，大多数人称之为「Linux」。 [[https://www.fsf.org/][自由软件基金会]] 则将其称为「GNU / Linux」，因为其中的部分工具、应用和服务是 [[https://www.gnu.org/home.zh-cn.html][GNU 系统]] 的组件。这些组件已与 Linux 内核捆绑，所以我们所熟知的 Linux 所指的不仅仅是 Linux 内核本身。
+
+* Linux 的优点
+** 跨平台的硬件支持
+由于 Linux 的内核大部分是用 C 语言编写的，并采用了可移植的 Unix 标准应用程序接口，所以它支持如 i386、Alpha、AMD 和 Sparc 等系统平台，以及从个人电脑到大型主机，甚至包括智能移动设备和嵌入式设备在内的各种硬件。
+
+[[file:./images/Supported-platforms.jpeg]]
+支持的平台
+
+[[file:./images/Supported-hardware.jpeg]]
+支持的硬件
+
+** 低资源占用下良好的稳定性
+Linux 内核的源代码是以标准规范位数的计算机来做的最佳化设计，既可确保其系统的稳定性，也能使在系统上运行的要求比 Windows 或 macOS 低。有些发行版适用于可追溯到 Pentium 系列的 CPU，另一些发行版则仅需要 1 GB 以下的 RAM。正因为 Linux 的低资源占用和稳定，才使得一些安装 Linux 的主机像 Unix 机一样常年不关而不曾宕机。
+
+此外，在 Windows 或 macOS 上，往往需要重新启动来安装最新的更新包；而 Linux 系统因为其运作基理的不同，除非内核更新，安装更新无须重启。
+
+** 高效的文件系统
+Linux 秉持了「一切皆文件」的 Unix 哲学，几乎兼容了所有市面上主流的文件系统；它们不但可以对文件设置权限，实施完全的保护，而且可以达到「越用越整齐」，「越用碎片越少」；使用 Linux 完全不需要什么「管家」或者「大师」。
+
+[[file:./images/Multiple-file-system-support.jpeg]]
+多文件系统支持
+
+** 可靠的安全性
+Linux 系统的核心代码是开源的，对用户完全透明，这意味着你的 Linux 系统漏洞更少。同时，由于 Linux 有着各种各样的不同版本，这也提高了被攻击的难度。你可以在选择更新时通过签名检查进行严格的细粒度控制，大多数的发行版在系统更新时都默认强制安全检查。
+
+此外，它采取了很多包括读写权限控制、带保护的子系统、审计跟踪、核心授权的安全措施，这为网络环境中的用户提供了安全保障。当一个病毒在 Linux 下被恶意发布，几个小时后所有的发行版都已经接种了疫苗。你可能很难找到那些每天都提供更新的单一主流操作系统，但是这样的 Linux 发行版却有很多。
+
+** 完善纯净的软件包管理机制
+大部分 Linux 发行版都具有特定的软件包管理工具（类似于无需注册帐号的 App Store），具有易于安装，更新和卸载的特性；并起到了保护配置文件的作用，不需要处理依赖关系也不容易对系统造成污染。同时由于其开源的特点，相较 Windows 和 macOS 里你那些平时用不到却会在每次大版本升级后「卷土重来」的预置应用，在 Linux 里你可以 *卸载一切不想安装在系统里的预置应用*。
+
+[[file:./images/Windows-pre-installed-apps-that-cannot-be-uninstalled-without-third-party-tools.png]]
+Windows 不借助第三方工具无法卸载的预置应用
+
+[[file:./images/Pre-installed-software-that-macOS-officially-does-not-allow-to-uninstall.png]]
+macOS 官方不允许卸载的预置软件
+
+** 随心所欲定制 UI
+在 Linux 系统中，你可以对系统功能进行任意更改。 Linux 生态系统中的核心项目之一就是桌面环境——它是一些由基础的用户程序和可视化元素组成的一个集合，比如状态栏和启动器，这些元素构成了用户与计算机的一个交互界面。在 Linux 系统中，用户都可以随意更换他们喜欢的桌面环境。
+
+[[file:./images/Main-graphical-desktop-interface.png]]
+主要的图形桌面界面
+
+在桌面环境这个万花筒里，你可以找到界面华丽的系统桌面，比如 [[https://kde.org/plasma-desktop/][KDE Plasma]] 或者 [[https://www.gnome.org/][Gnome]] ，以及轻量级的系统桌面，比如 [[https://xfce.org/?lang=zh_CN][Xfce]] 和 [[https://mate-desktop.org/zh_cn/][MATE]] 。使用任一款系统桌面，你都可以通过更改主题、系统托盘和菜单，以及仿照其它用户的桌面环境来进一步定制自己的桌面环境。Linux 系统的可定制特性完全超出你的想象力。喜欢 macOS UI 的朋友甚至可以将你的 Linux 桌面环境「复刻」成 macOS。
+
+[[file:./images/High-Imitation-macOS.png]]
+「高仿」 macOS
+
+你可以使用自己喜欢的任何方式去折腾属于自己的 Linux 系统。
+
+** 社区的支持
+Linux 系统拥有一个团结且友好型的社区。由于 Linux 在桌面系统是一个相对小众的桌面操作系统，仅占有 3% 左右的市场份额，因此，Linux 社区更希望有更多的潜在用户加入进来。Linux 系统有很多的用户论坛，尤其是对新手比较友好的论坛，它包括非常丰富且全面的知识来帮助用户解决一些基本的系统问题。很多高级用户更倾向于定制 Linux 系统，因此那些 Linux 发行版都拥有非常非常详尽维基文档，以指导用户完成高级的系统应用项目。
+
+** 开源
+因为开源的特性，多数 Linux 发行版都会去中心化在全球部署镜像，平时在 Windows 和 macOS 的更新下载不稳定？在 Linux 设置中更换为本地的镜像源便无须担心。开源不等于免费，不过的确众多桌面发行版是免费的；如果你真的喜欢这个版本，就去他们的主页给他们捐赠吧！
+
+* 哪些大众用户比较适合 Linux 桌面版？
+抛开程序员这个对 Linux 天生有好感的群体，作为一个不想用命令行只想通过图形用户界面来操控电脑的普通人：选择 Linux 桌面版之前 *请先确认自己是否有桌面电脑的使用需求* 。倘若你是白天对着公司配的电脑工作了一天，晚上回家只想刷刷剧的白领一族来说，iPad 应该更加适合你。以下几类是笔者想到比较适合 Linux 桌面版的人群特性，欢迎朋友们来补充：
+
+** 学习和探索
+对于有个人学习需求的， [[http://cidian.youdao.com/index-linux.html][有道词典]] 、 [[https://www.wps.cn/product/wpslinux][WPS]] 都有 Linux 版本， [[https://code-industry.net/masterpdfeditor/][Master PDF Editor]] 在 Linux 平台的众多功能甚至是免费的。如果你是学生一族，那么 [[https://www.zotero.org/][Zotero]] 、[[https://ww2.mathworks.cn/products/matlab.html][MATLAB]] 、 [[https://www.gnu.org/software/octave/][GUN Octave]] 都是特别强大的工具。
+
+** 业余个人内容创作
+除了本职工作外你是不是还干着斜杠的内容创作呢？如果你是博客主，播客主或 Up 主，你一定需要各类的图片、音频和视频编辑软件；在 Linux 平台这类的开源免费软件一应俱全而且非常易上手。Ubuntu 甚至还有一个专门针对内容创作者的发行版 [[https://ubuntustudio.org/][Ubuntu Studio]] ，它是一个预置了专业音频、视频和图形处理软件的工作站版本。
+
+[[file:./images/All-in-one_Ubuntu_Studio.png]]
+一应俱全的 Ubuntu Studio
+
+** 极度重视安全和隐私
+本身纯净的 Linux 天生就不会暴露你的个人信息，在安装过程中还能开启整盘加密的功能。如果你想实现完全的「隐身」：Linux 平台也有 [[https://tails.boum.org/][Tails]] 这种发行版，可以直接U盘内置启用方便随身携带，它以安全为理念对引用进行了预配置，并对网络流量进行了匿名性处理。为达到此目标，Tails 使用了 Tor 网络，以使得网络流量很难被追踪。
+
+[[file:./images/Snowden_is_also_using_Tails.png]]
+斯诺登也在使用的 Tails
+
+** 机器已经跑不动 Windows / macOS
+怎样处理你的旧电脑？ 当时有良好的硬件配置，但到现在开机都会等好久，更别提打开应用时的卡顿了。为什么不用 Linux 来立即重启你手边的旧电脑呢？相较 Windows 和 macOS 最新的版本，很多轻量级 Linux 发行版仅需很低的 CPU 频率，内存和磁盘空间便能让你的旧电脑用上最新的 Linux 内核。
+
+[[file:./images/Puppy_Linux_with_only_333-mHz_CPU_64-MB_RAM_and_300-MB_storage_space.png]]
+仅需 333 mHz CPU，64 MB RAM 和 300 MB 存储空间的 Puppy Linux
+
+* 在 Linux 上能玩游戏么？
+这可能是打算投奔 Linux 阵营的人最顾虑的问题之一。毕竟，在 Linux 上玩游戏在过去经常被认为有点难以实现。但是随着 [[https://store.steampowered.com/][Steam]] 平台 2013 年在 Linux 平台上线和其在 2018 上线的 [[https://www.protondb.com/][ProtonDB]] 服务，这种「在 Linux 上无法玩游戏」的看法就显得很荒谬了。
+
+[[file:./images/ProtonDB_service_that_can_run_a_large_number_of_Windows_games_on_the_Steam_platform.png]]
+可在 Steam 平台运行海量 Windows 游戏的 ProtonDB 服务
+
+国外网友 [[https://flightlessmango.com/][FlightlessMango]] 发布了一系列 Linux 系统与 Win 10 系统的游戏性能对比：NVIDIA 显卡在 Linux 下的性能比 Win 10 下还是要差一点点，差距大概 7% 左右，不过对游戏体验影响不大；而 AMD 显卡在 Linux 下的表现出乎意料，首先 Vlkan 的性能比 DX 强 7%，而 Linux 下 Vukan 性能还要再强 6% 左右，其他两种驱动也要比 Win10 DX 要强，可以说在使用 AMD 显卡的机器上 Linux 的游戏性能比 Win 10 下还要好一些。
+
+当然，除了直接在你的 Linux 上安装 Steam 平台和 ProtonDB 服务；如果你是个游戏发烧友，你也可以尝试那些专门面向游戏者开发的类似 [[https://garudalinux.org/][Garuda Linux]] 的桌面游戏发行版，其中预置了相当优秀的游戏管理工具：
+
+[[file:./images/Complete_software_and_hardware_game_support.png]]
+完善的软硬件游戏支持
+
+* Linux 上软件有多少？
+根据始祖级 Linux 发行版 [[https://www.debian.org/index.zh-cn.html][Debian]] 的维基页面统计，兼容 APT 包管理的软件包多达 59,000 多个，可以说足足占了开源软件的半壁江山。针对中国用户开发的 [[https://www.deepin.org/zh/][深度操作系统]] 其应用商店列举出了中国用户最常用的软件：
+
+[[file:./images/Deepin_Software_Store.png]]
+深度软件商店
+
+虽然 Linux 下丰富的软件仓库能满足大部分人的需求，而且很多优秀的开源个人软件会第一时间支持 Linux；但是的确很多商业个人软件考虑到投资回报率而未开发 Linux 版本。在这种情况下我们有七种解决方案：
+
+** 网页版应用
+随着互联网前端的迅捷发展，越来越多产品网页端的使用体验愈加完善。用 Web 技术搭建的网页应用不仅有着现代化的 UI，有些甚至体验比原生桌面客户端都要好上不少。如果某项应用并没有 Linux 版本，不妨试试使用 [[https://sspai.com/post/50250][基于 Chromium 的应用打包我们常用应用的网页端服务]] ，将其当作我们的「桌面应用」；这样不仅除了解决字体渲染的问题，我们能省去了下载巨大安装包的繁琐步骤，开发者也省去了适配全平台的繁重任务；而且我们不用担心其服务下架任何一个系统平台，毕竟 [[https://blog.yitianshijie.net/2016/06/20/web-is-the-best-platform/][万维网才是最好的平台]] 。
+
+** 支持同类网络传输协议的客户端
+对于原先就是针对某种特定类别的 网络传输协议 而设计的应用（例如浏览器和邮件客户端），我们可以直接通过它们来进行前端的操作而不用安装官方特定开发的应用。列如： [[https://www.pidgin.im/][Pidgin]] ，其支持 Jabber / XMPP、Bonjour、Gadu-Gadu、IRC、Novell GroupWise Messenger、Lotus Sametime、 SILC、SIMPLE 和 Zephyr 及其他各类即时通信协议。在不同协议和 [[https://www.pidgin.im/plugins/][第三方插件]] 的支持下，Pidgin 甚至可以实现微信、QQ、Skype、Whatsapp、Telegram 等多种即时通讯软件之间的互联互通。
+
+[[file:./images/Powerful_Pidgin.png]]
+强大的 Pidgin
+
+** 任务自动化服务
+如果你是 iOS 的资深用户，那你一定知道 [[https://support.apple.com/zh-cn/guide/shortcuts/welcome/ios][快捷指令]] 能让跨应用间复杂的任务简单化，重复的任务自动化。其实除了快捷指令，我们可以运用类似 [[https://ifttt.com/][IFTTT]] 或 [[https://zapier.com/][Zapier]] 这种跨平台的互联网任务自动化服务来达到不安装官方服务客户端的情况下，调用各自开放的 API 接口互相进行串联使用，自动完成任务的执行。
+
+[[file:./images/Zapier_covering_all_major_internet_services.png]]
+涵盖所有主流互联网服务的 Zapier
+
+** 即时通讯软件内置的聊天机器人
+2016 年就在国内微信、支付宝等应用通过对话窗口式的服务号提供服务的时候，国外 Telegram、Skype、Messenger、Kik、Slack 等几乎所有知名的互联网科技公司都利用技术领先优势机智地重新玩起了聊天机器人这项看似过时的技术。某种意义上来说，聊天机器人是一种全新的人机交互模式，一种集成程度更高的服务模式。当你通过聊天机器人获取第三方服务时，你是否安装了原生的应用软件便变得不再重要了。
+
+[[file:./images/Use_Telegram_Bot_to_send_and_receive_messages_from_other_platforms.png]]
+使用 Telegram Bot 收发其他平台的消息
+
+** Wine 兼容运行 Windows 应用
+[[https://www.winehq.org/][Wine]] 是一个能够在多种 POSIX-compliant 操作系统（诸如 Linux、macOS 及 BSD 等）上运行 Windows 应用的兼容层。Wine 不是像虚拟机或者模拟器一样模仿内部的 Windows 逻辑，而是將 Windows API 调用翻译成为动态的 POSIX 调用，免除了性能和其他一些行为的内存占用，让用户能够干净无缝地使用 Windows 平台的应用程序。现已支持 27,000 多款 Windows 应用。
+
+[[file:./images/Run_Microsoft_Family_Bucket_on_Ubuntu.jpeg]]
+在 Ubuntu 上运行微软全家桶
+
+** 模拟器兼容运行 Android 应用
+眼馋新 Mac 能运行来自 iOS 平台的原生 ARM 应用？在 Linux 平台上，利用类似 [[https://anbox.io/][Anbox]] 或 [[https://www.linzhuotech.com/product/xDroid][xDroid]] 等模拟器，能直接运行 Android 程序。使移动端应用能够以多窗口、自由缩放的桌面应用形态无缝运行于 Linux 平台，让用户以桌面应用的使用体验方式直接运行各种 Android 应用。
+
+[[file:./images/The_magical_xDroid.png]]
+神奇的 xDroid
+
+** 虚拟机软件模拟运行 macOS 或 Windows 系统
+虽然针对 Windows 系统的专有应用，我们有 Wine 可以作为兼容层。然而 macOS 的 Linux 兼容层 [[https://darlinghq.org/][Darling]] 还处于开发测试阶段；为了能够使用 macOS 上独有的应用，我们可以通过 [[https://www.virtualbox.org/][VirtualBox]] 或 [[https://www.vmware.com/cn/products/workstation-player.html][VMware]] 等虚拟机软件模拟具有完整硬件系统功能的、运行在一个完全隔离环境中的 macOS 系统。（同样适用于 Windows 系统）
+
+[[file:./images/Run_macOS_on_Ubuntu.jpeg]]
+在 Ubuntu 上运行 macOS
+
+注意：后三种解决方案虽然可以使你在 Linux 下正常使用不同平台的应用，然而兼容层、虚拟机的运行始终会消耗部分系统资源从而降低该应用的实际运行效果。
+
+* 总结
+Linux 因为其完全模块化的基理，干净得像水一样。水本身无固定的形态，它可以随环境而作出适应，让自己变成外物的形态。如今当大部分人只能选择到两家巨型连锁咖啡店喝那些我们也不知道加了什么成分的中杯大杯特大杯的情况下，水便显得更加尤为宝贵。
+
+所以，朋友，像水一样吧！
+
+下篇预告：给每个人的 Linux 桌面入门指南（二）—— 适合大众使用的 Linux 桌面发行版
+
+** 参考资料：
+ - [[http://techrights.org/wiki/Apple's_Dark_Side][Apple's Dark Side]]
+ - [[https://zh.wikipedia.org/wiki/%E5%BC%80%E6%BA%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%AF%94%E8%BE%83][开源操作系统比较]]
+
