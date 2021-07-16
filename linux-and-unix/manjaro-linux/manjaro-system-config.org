@@ -250,7 +250,7 @@ $ sudo pacman -S kcm-fcitx5-git # 增加内嵌的输入设置，只限KDE
 
 # ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-** 设置时间标准 为 UTC，并调整 时间漂移:
+** 将系统时间写入硬件时钟，设置时间标准为 UTC，并调整 时间漂移:
 # hwclock --systohc
 [Fail]
 
@@ -323,10 +323,11 @@ pacman -S arc-gtk-theme
 
 * 安装驱动程序
 
-** Intel CPU 安装 Intel-ucode
+** 安装或者更新 Intel/AMD CPU 的微码固件
 @See https://wiki.archlinux.org/index.php/Microcode
 
-非 IntelCPU 可以跳过此步骤。
+使用 AMD 或 Intel CPU 的用户都应该安装这些微代码更新，以确保系统稳定性。
+根据硬件平台选择 我是intel。
 直接 pacman 安装：
 
 pacman -S intel-ucode
