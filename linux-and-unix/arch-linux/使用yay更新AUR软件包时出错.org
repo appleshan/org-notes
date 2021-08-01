@@ -1,0 +1,20 @@
+#+TITLE: 使用yay更新AUR软件包时出错
+
+@See https://github.com/tuna/issues/issues/886
+
+* 发生了什么（What happened）
+yay提示Rate Limit Reached错误
+
+* 期望的现象（What you expected to happen）
+yay完成数据的更新
+
+* 如何重现（How to reproduce it）
+在将镜像地址设置为 https://aur.tuna.tsinghua.edu.cn 后使用yay更新AUR中的软件包
+
+* 其他事项（Anything else we need to know）
+将地址改回 https://aur.archlinux.org 后可以解决
+
+* 您的环境（Environment）
+操作系统（OS Version）： Manjaro Linux x86_64
+浏览器（如果适用）（Browser version, if applicable）：
+其他（Others）：
