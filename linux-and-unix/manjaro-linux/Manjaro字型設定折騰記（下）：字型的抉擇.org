@@ -1,0 +1,48 @@
+#+TITLE: Manjaro字型設定折騰記（下）：字型的抉擇
+
+@See https://archerindigo.medium.com/manjaro%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A%E6%8A%98%E9%A8%B0%E8%A8%98-%E4%B8%8B-%E5%AD%97%E5%9E%8B%E7%9A%84%E6%8A%89%E6%93%87-71a47813875b
+
+[[file:../../images/manjaro-font_14.png]]
+
+在設定字型時一個最令人頭痛的問題是選擇字型。既要看得舒服，又要美感充足，更要與其他風格的字型互相配襯，講究起來或許可以編出一篇論文。青鳥不是字型美學的專家，難以很學術地評價各種字體，只是憑感覺選出滿意的字型配搭，不過也可以分享一下我的配字過程。
+（知道封面的句字有什麼來頭嗎？文末開估！）
+
+* 關於Manjaro GNOME的預設設定
+在講我的配字之前先鞭撻一下系統原先的字型設定。Manjaro GNOME所用的fontconfig乃承襲自Arch Linux的版本，而Arch的fontconfig大致上忠於原生的preset，似乎不甚講究，甚至乎給人一種雜亂而過時的感覺。在拉丁字型上，Arch的fontconfig在所有方面都首選十多年前流行的Bitstream Vera，卻又偷偷在fontconfig中將Bitstream Vera替換成增潤版的DejaVu，有種掛羊頭賣狗肉的感覺。在中文字型上，它只設定了一堆Microsoft、文泉驛早期字型及文鼎的字型，但Linux用家現在已甚少使用。況且，Manjaro根本沒有預載相關的字型，只有比較過時的Droid Sans Fallback可以顯示中日韓文字，卻又沒有設定到fontconfig中，當用家安裝其他字體，就有機會引起混亂。
+
+在GNOME Shell上，Manjaro又有自己的奇特設定。它在介面用Noto Sans而非GNOME預設的Cantarell，標題列卻又用回Cantarell Bold，不知用意何在。Monospace則是用略具名氣的Hack，也沒有什麼好批評。不過以上對於GNOME的獨立設定再加上fontconfig的過時設定就令一些視窗同時出現多種字體，感覺十分奇怪。以Firefox為例，它的標題列被套上了Cantarell Bold、介面文字被套上Noto Sans、網頁的拉丁文字被套上DejaVu、所有中文字則用上Droid Sans Fallback，真是亂七八糟。
+
+#+CAPTION: 一個Firefox視窗就被套用了4種字型
+[[file:../../images/manjaro-font_15.png]]
+
+相反，Ubuntu在字型方面的確下了些功夫，除了自行設計了Ubuntu字型外，也專門為中日韓文字設定好字型，使用家不用費心就能享受相當不錯字型體驗。不過既然用Arch系的Linux，凡事要自己動手也是意料之內，既事苦差，也是學習和研究的好機會。
+
+#+CAPTION: 幾種主流支援中文的字型、標點及異字寫法比較
+[[file:../../images/manjaro-font_16.png]]
+
+Linux的中文印刷字型現時主流都是用文泉驛和Noto CJK（Source Han/思源）兩大家族。
+
+文泉驛家族中的文泉驛微米黑一直廣受歡迎。它實際上是承襲自Google早年為Android開發的Droid Sans Fallback字型，故兩者的字型基本上是如出一轍，比較明顯不同的地方在於標點符號，Droid Sans Fallback採用圓潤的點線，帶點簡約；微米黑則是傾向方直，帶點卡通感。其實文泉驛微米黑/Droid Sans Fallback在不同裝置上都有很高的可讀性，從前在Ubuntu 14.04的PC以及舊的Android手機上使用一直感覺不到問題，只是碰巧這次在我的laptop上不太討好，才引發今次的配字問題。不過在可讀性以外它們也有一些缺點，例如字重略粗、中文字只有大陸標準、缺乏相應的明體字型等。其中字重方面雖然後來有人修改出較幼的版本，可又是太幼，反而更難閱讀。
+
+個人認為Noto CJK相對於文泉驛微米黑是利多於弊。Noto CJK的字型比較修長，行距又稍多，與文泉驛微米黑相比看起來會稍為不自然，但除此以外Noto CJK的優點卻有一大堆。從上圖可見，它字重適中，筆劃清晰，容易閱讀。其次是它區分中、日、韓、台四地的漢字寫法，更合乎不同地區人士的習慣（美中不足是未有香港寫法的版本）。當中TC版的正體中文忠於台灣國字標準字體，筆劃細膩端正，標點置中，看起相當工整。另外Noto CJK現已齊備黑體及明體兩大風格，無需另襯明體字型或以黑體取代明體，因此Noto CJK比起文泉驛微米黑會是更佳的選擇。事實上Noto CJK已是Android和Ubuntu 16.04以後版本所採用的中日韓字型，大家看慣Android手機的話應該對它不會陌生。
+
+拉丁字型
+#+CAPTION: 各種主流的拉丁字型比較
+[[file:../../images/manjaro-font_17.png]]
+
+雖然Noto CJK都有拉丁字型，但設計上與非CJK的Noto不同，而且比較修長，看起來不太舒服，轉用其他的拉丁字型會更好。優秀的開源拉丁印刷字型有很多，早期流行的有Bitstream Vera及其增潤版DejaVu，也是現時Manjaro的fontconfig所指向的字型。另外還有Ubuntu開發的Ubuntu字型、GNOME特選的Cantarell、Adobe的Source Pro、早期Android系統所用的Droid、Google為支援所有文字而開發的Noto，以及現時Android系統主要採用的Roboto等等，全部都有很高的可讀性，字體設計上除了Ubuntu線條比較簡約外其他都大同小異，主要分別只在於文字大小、間距和個別字符的寫法。
+在Manjaro上我現時會採用Noto字族。因為一來它已內置於Manjaro，無需另外下載。二來它具有襯線和無襯線兩類風格字型，無須煩惱配襯的問題。三來它在同一字型大小設定下的實際大小與Noto CJK會比較接近，文字闊度和字重也很適中，當頁面中英夾雜時不會出現大小不一的現象。
+順道推薦font-manager這個軟件和 [[http://www.identifont.com/tools.html][Identifont]] 這個比較字型的網站，方便大家比較各種拉丁字型及了解他們之間的設計分別。
+
+等寬字型
+#+CAPTION: Hack和Source Code Pro的比較
+[[file:../../images/manjaro-font_18.png]]
+
+等寬字型多用於寫code的時候，因此講求閱讀舒適和便於識別文字。Manjaro預設的Hack字型其實已經十分優秀，但個人更加喜歡Source Code Pro。兩種字型的設計都比很多等寬字型圓潤，有充足的字距，而且都符合coding字型的其中一個重要需求：清晰地將0、o、l、1、i等字的寫法區分，連續的=和_也不會黏在一起，減少了讀錯字的機會。不過相比之下Source Code Pro看起來比較柔和，空間感較多卻又不致於鬆散，很容易就能識別文字，長時間閱讀亦會比較舒服，因此一直為我所採用。
+
+不知道各位Linux用家是如何設定自己的字型呢？歡迎留言討論。
+
+「我能吞下玻璃而不傷身體」是GNOME字型檢視器上的中文範例字型。取用此句相信是因為它是 [[http://kermitproject.org/utf8.html][UTF-8]] 萬國碼的示範字句，而這句話則出自Ethan Mollick一個收集不同語言中”I can eat glass”的翻譯的語言學項目，大家都不明覺厲！
+
+“The quick brown fox jumps over a lazy dog”則是一句著名的英語全字母句，以非常簡單的字組成包含26個英文字有意思句子。這句子被廣泛用於拉丁字型測試中。
+

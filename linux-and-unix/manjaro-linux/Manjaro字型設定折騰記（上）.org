@@ -1,0 +1,328 @@
+#+TITLE: Manjaro字型設定折騰記（上）
+
+@See https://archerindigo.medium.com/manjaro%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A%E6%8A%98%E9%A8%B0%E8%A8%98-%E4%B8%8A-b0483784b03e
+
+用了Manjaro GNOME數月，有一個地方一直讓人十分在意，就是它的文字顯示。雖然系統能夠正確顯示中英日韓所有文字，但感覺文字字距過寬過大，中文顯示又比較模糊。為此青鳥花了不少時間研究字型顯示的設定，終於對Linux上複雜的字型設定有多點了解，並得出一套相對滿意的配置方案。
+
+* 一句到尾的解決方法：轉字型、調渲染
+花了那麼多時間研究，最後得出的結論其實非常簡單：單是轉字型已能大大改善問題，再進一步就是調整字型渲染設定。說來容易，改起來卻有不少步驟，解䆁起來更是說來話長。先看看調整前後的字型效果，可以見到有所改善：
+
+#+CAPTION: 修改前的Firefox頁面
+[[file:../../images/manjaro-font_01.png]]
+
+#+CAPTION: 修改後的Firefox頁面
+[[file:../../images/manjaro-font_02.png]]
+
+#+CAPTION: 修改前的Terminal
+[[file:../../images/manjaro-font_03.png]]
+
+#+CAPTION: 修改後的Terminal
+[[file:../../images/manjaro-font_04.png]]
+
+以下就一邊講述我的字型配置步驟，一邊講解背後的事（沒興趣可直接無視引用欄內的內容）。有關字型的選擇則容後再解䆁。
+簡單來說我的設置是這樣：
+
+#+BEGIN_EXAMPLE
+襯線字型：Noto Serif（拉丁）；Noto Serif CJK TC（中日韓）
+
+無襯線字型：Noto Sans（拉丁）；Noto Sans CJK TC（中日韓）
+
+等寛字型：Source Code Pro（拉丁）；Noto Sans Mono CJK TC（中日韓）
+
+渲染：anti-aliasing — on; hinting — slight; sub-pixel rending — rgb, default LCD filter;
+#+END_EXAMPLE
+
+* Step 1：下載字型
+Noto CJK和Source Code Pro都不是Manjaro內置的字型，所以先用pacman/ Pamac下載字型：
+#+BEGIN_SRC bash
+sudo pacman -Su noto-fonts-cjk adobe-source-code-pro-font
+#+END_SRC
+
+#+CAPTION: 可用pacmac搜尋和下載
+[[file:../../images/manjaro-font_05.png]]
+
+Google和Adobe於2014年共同開發了針對中、日、韓文字的黑體字型。雖然是一種字型，但兩家就各自以其自身的字型品牌來命名和發佈。Google將其名為Noto Sans CJK，Adobe則將其名為Source Han Sans，中文就共同叫作思源黑體。至2017年他們又開發了相應的明體版本。
+
+整套CJK字型包含4個語系（日文JP、韓文KR、簡體中文SC、正體中文TC），每個語系各有3種風格（黑體Sans-Serif、明體Serif、等寬Monospace），前兩者各有7種字重（粗幼度），等寬字型亦分正常及粗體，前後總共64個字型。
+
+在Arch Linux的軟件庫中用家可以下載到noto-fonts-cjk以及一大堆以adobe-source-han開首的packages，其實它們基本上是沒有分別。前者一個package已包含全套56款以Noto CJK名義發佈的字型，後者則是以Source Han名義發佈的字型，按語系和字型風格（黑體和明體）來分柝。方便起見就下載noto-fonts-cjk。
+
+* Step 2：針對語言設定Noto CJK字型
+啟用noto-fonts-cjk附帶的字型設定：
+#+BEGIN_SRC bash
+sudo ln -s /etc/fonts/conf.avail/70-noto-cjk.conf /etc/fonts/conf.d/
+#+END_SRC
+
+打開70-noto-cjk.conf，修改以下針對zh-hk的字型偏好：
+#+BEGIN_SRC xml
+<match target="pattern">
+    <test name="lang">
+        <string>zh-hk</string>
+    </test>
+    <test name="family">
+        <string>serif</string>
+    </test>
+    <edit name="family" mode="prepend">
+        <string>Noto Serif CJK HK</string>
+    </edit>
+</match>
+
+<match target="pattern">
+    <test name="lang">
+        <string>zh-hk</string>
+    </test>
+    <test name="family">
+        <string>sans-serif</string>
+    </test>
+    <edit name="family" mode="prepend">
+        <string>Noto Sans CJK HK</string>
+    </edit>
+</match>
+
+<match target="pattern">
+    <test name="lang">
+        <string>zh-hk</string>
+    </test>
+    <test name="family">
+        <string>sans-serif</string>
+    </test>
+    <edit name="family" mode="prepend">
+        <string>Noto Sans CJK HK</string>
+    </edit>
+</match>
+#+END_SRC
+
+fontconfig是Linux上統合字型設定的library。/etc/fonts/conf.d/就是它存放正在生效的設定的地方，一般用soft link連結到存放可用設定的/etc/fonts/conf.avail/。
+
+noto-fonts-cjk附帶了Debian為Noto CJK所造的fontconfig設定檔，但它沒有為zh-hk指定字型，所以要自行補上。其實中文語系還有zh-mo和zh-sg等，只是使用場合較少，因此可以後再按需要為其加入設定。
+
+* Step 3：針對無指定語言的情況加入Noto CJK字型候選
+打開/etc/fonts/conf.d/65-nonlatin.conf，在serif、sans-serif、monospace三大family的perfer內的首個CJK字體前分別加入Noto Serif CJK TC、Noto Serif CJK HK以及Noto Sans Mono CJK HK：
+
+#+BEGIN_SRC xml
+<description>Set preferable fonts for non-Latin</description>
+<alias>
+ <family>serif</family>
+ <prefer>
+  <family>Artsounk</family> <!-- armenian -->
+  ...
+  <family>Noto Serif CJK TC</family> <!-- cjk -->
+  <family>MS Mincho</family> <!-- han (ja) -->
+  <family>SimSun</family> <!-- han (zh-cn,zh-tw) -->
+  ...
+ </prefer>
+</alias>
+<alias>
+ <family>sans-serif</family>
+ <prefer>
+  ...
+  <family>Hapax Berbère</family> <!-- tifinagh -->
+  <family>Noto Sans CJK HK</family> <!-- cjk -->
+  <family>MS Gothic</family> <!-- han (ja) -->
+  <family>UmePlus P Gothic</family> <!-- han (ja) -->
+  ...
+ </prefer>
+</alias>
+<alias>
+ <family>monospace</family>
+ <prefer>
+  ...
+  <family>UmePlus Gothic</family> <!-- han (ja) -->
+  <family>Noto Sans Mono CJK HK</family> <!-- cjk-->
+  <family>NSimSun</family> <!-- han (zh-cn,zh-tw) -->
+  <family>MingLiu</family> <!-- han (zh-tw) -->
+  ...
+ </prefer>
+</alias>
+#+END_SRC
+
+當軟件沒有指明自己使用的語言時，fontconfig會提供第一個它能找到，而又支援相關編碼的字型。在沒有將Noto CJK加入到設定檔的情況下，第一個會被找到而支援中日韓文字的字型會是Noto Sans CJK JP，這會和預期有所落差，故必須將想使用的中日韓字型加到設定檔中。
+
+由於不論JP、KR、SC或TC都支援所有4個語系的文字，所以在沒有指明語言的情況下只能選擇其一作為此四類文字的顯示字型。
+
+Noto CJK四種語系對於相同的中文字都有不同的寫法，例如SC是根據大陸《通用规范汉字表》造字，TC則根據台灣《教育部國字標準字體》造字。後者相對接近香港的中文字寫法，故作為香港用家用Noto CJK TC的字型會比較合適。
+
+此外，因為60-latin.conf會率先載入拉丁文字的字型偏好，將Noto CJK字型偏好放在65-nonlatin.conf可以避免字型在顯示拉丁文字時被選中，讓拉丁文字可用其他更適合的字型顯示。
+
+26/1/2019補充：Noto Sans CJK已推出HK版以支援香港寫法字形，故以上設定已作相應更新。
+
+* Step 4：針對拉丁文字設定字型候選
+打開/etc/fonts/conf.d/60-latin.conf，在serif、sans-serif以及monospace三大<family>的<perfer>的開首中分別加入Noto Serif、Noto Sans以及Source Code Pro：
+#+BEGIN_SRC xml
+<alias>
+ <family>serif</family>
+ <prefer>
+  <family>Noto Serif</family>
+  <family>Bitstream Vera Serif</family>
+  <family>DejaVu Serif</family>
+  ...
+ </prefer>
+</alias>
+<alias>
+ <family>sans-serif</family>
+ <prefer>
+  <family>Noto Sans</family>
+  <family>Bitstream Vera Sans</family>
+  <family>DejaVu Sans</family>
+  ...
+ </prefer>
+</alias>
+<alias>
+ <family>monospace</family>
+ <prefer>
+  <family>Source Code Pro</family>
+  <family>Bitstream Vera Sans Mono</family>
+  <family>DejaVu Sans Mono</family>
+  ...
+ </prefer>
+</alias>
+#+END_SRC
+
+由於Noto Sans CJK的拉丁字型比較醜，所以這裡會改用其他字型為拉丁語言而設的字體。有關字型的選擇後面再講。
+
+* Step 5：針對各個軟件指定字型
+有不少軟件都有獨立的字型設定凌駕於fontconfig之上，這時便需要逐個軟件進行設定：
+
+** GNOME
+GNOME有自己的字型設定，會影響到很多程式介面上的字型顯示。開啟GNOME Tweaks，在Fonts頁面內便可設定各個位置的字型和大小。本人現時採用的設定如下：
+
+#+CAPTION: GNOME的設定
+[[file:../../images/manjaro-font_06.png]]
+
+由於是英文介面，所以字型都是採用個人對拉丁字型的偏好。
+
+** Firefox
+Firefox的字型設定會影響網頁內容所用的字型。打開 Preference > Language and Appearance > Advance便可針對不同語言選用字型。在這裡將Noto CJK JP、KR、SC和TC的相關字型分別設定到Japanese、Korean、Simplified Chinese及Traditional Chinese (Taiwan, Hong Kong)。Latin的字型則選用Noto非CJK系列。
+
+#+CAPTION: 對於Traditional Chinese (Hong Kong)的設定沿用Noto CJK TC系字型
+[[file:../../images/manjaro-font_07.png]]
+
+如果想限定網頁必須使用你指定的字型及大小，你可以取消勾選「Allow pages to choose their own font, instead of your selection above」，不過我選擇保留讓網頁自定字型的權利，更忠實反映網頁設計者想澄現的排版。
+
+** Terminal
+打開Terminal的Preference，在Text一頁內設定一款等寬字型。我會將它設為Source Code Pro Regular 10。
+
+#+CAPTION: 勾選Custom font可以自定Terminal的字型，否則它將按GNOME的設定而決定字型
+[[file:../../images/manjaro-font_08.png]]
+
+** LibreOffice
+LibreOffice要選好正確的語言，否則當你輸入中日韓文字時它或會用上錯誤的字型。
+
+#+CAPTION: LibreWriter的字型設定包含語言一項
+[[file:../../images/manjaro-font_09.png]]
+
+* Step 6：調整fontconfig字型渲染設定
+fontconfig可以調整的字型渲染設定主要分為anti-aliasing（反鋸齒） 、hinting（字型微調）、sub-pixel rendering（子像素渲染） ，以及scale factor（字型比例）幾方面。
+
+這些設定效果因應不同裝置和個人喜好而異，故需要自行調節。
+
+除了fontconfig，GNOME Tweak的Font頁面亦有相關的設定（參考step 5的截圖），建議兩邊使用一致的設定。
+
+** Anti-aliasing 反鋸齒
+現時系統預設已啟用anti-aliasing，故無須額外設定。如要強制設定開關，可以加入10-antialias.conf：
+
+#+BEGIN_EXAMPLE
+sudo vim /etc/fonts/conf.avail/10-antialias.conf
+# Add the following text:
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+    <!-- Use the antialiasing -->
+    <match target="pattern">
+        <edit name="antialias" mode="append"><bool>true</bool></edit>
+    </match>
+</fontconfig>
+# Save and exit. Then link the file to conf.d
+sudo ln -s /etc/fonts/conf.avail/10-antialias.conf /etc/fonts/conf.d/
+#+END_EXAMPLE
+
+反鋸齒能填充文字邊緣在渲染時流失的像素，令文字看起來更完整平滑，在顯示細小的文字時效果尤為明顯。
+
+#+CAPTION: 沒有開反鋸齒的效果
+[[file:../../images/manjaro-font_10.png]]
+
+#+CAPTION: 開了反鋸齒的效果
+[[file:../../images/manjaro-font_11.png]]
+
+** Hinting 字型微調
+/etc/fonts/conf.avail/內有10-hinting*.conf的設定檔來設定hinting。這裡我選擇使用slight：
+#+BEGIN_SRC bash
+sudo ln -s /etc/fonts/conf.avail/10-hinting-slight.conf /etc/fonts/conf.d/
+#+END_SRC
+
+Hinting會嘗試將outline font的字形外貌作微調來令字型更貼近格線，同時或能提升字型的銳利度，但亦可能會令字型失真。在我的電腦上用slight hinting感覺銳利度有輕微提升，而medium和full則看不出與slight有分別，所以沿用GNOME預設的slight。
+
+** Sub-pixel Rendering 子像素渲染
+Sub-pixel rendering預設應該已生效，無須額外的設定。不過也有一些fontconfig相關的設定。
+/etc/fonts/conf.avail/內有10-sub-pixel-*.conf和11-lcdfilter-*.conf。一般電腦螢幕都應該用10-sub-pixel-rgb.conf和11-lcdfilter-default.conf。
+
+#+BEGIN_SRC bash
+sudo ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/
+sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d/
+#+END_SRC
+
+Sub-pixel rendering會讓文字邊緣像素的顏色設定成它覆蓋在螢幕次像素上的顏色，令文字看起來更清晰。這同時需要配合營幕次像素的排列方式來調校。一般LCD螢幕都是以RGB順序來排列像素顏色，你也可以到這個網站檢查自己的螢幕。
+
+另外也有grey-scale rendering，以不同深淺的灰階像素來調整邊沿，效果未必如sub-pixel rendering好。只要將10-no-sub-pixel.conf啟用就應該能改用grey-scale rendering。
+
+Arch Linux Wiki稱預設的freetype2沒有支援sub-pixel rendering，但我放大文字確實看到彩色邊緣，所以我也不確定以上的設定對sub-pixel rendering有沒有實際影響，也許Arch Wiki的說法已過時，亦也許GNOME和其他軟件的設定凌駕了fontconfig的設定。
+
+#+CAPTION: 放大後的文字見到彩邊，證明sub-pixel rendering正在作用
+[[file:../../images/manjaro-font_12.png]]
+
+** 字型比例 scale factor
+Scale factor只有在覺得字型太大或太小時，又或者想字型顯示大小更符合實際列印大小時才需要設定。現時我對我的電腦上的字型大小都已經十分滿意，也不追求準確的列印大小，故不再作設定。
+如需要設定，可以自行計算螢幕的DPI（每英吋像素）相對於96dpi的倍數，然後在GNOME Tweak中的font頁面設定。
+又或者可以加入一個fontconfig設定檔（如10-dpi.conf）來指定DPI數值：
+
+#+BEGIN_SRC xml
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+ <match target="pattern">
+  <edit name="dpi" mode="assign"><double>120</double></edit>
+ </match>
+</fontconfig>
+#+END_SRC
+
+fontconfig DPI的數值會影響使用某個大小的字型時所用的像素數量，從而影響實際顯示大小。當DPI/ scale factor的設定與螢幕的DPI相同時，字型的顯示大小將符合它列印出來時的大小。現時fontconfig預設為96，與Windows預設相同。
+
+DPI計算方法是直向/橫向的解析度除以螢幕高度/闊度的實際英吋。以我的螢幕為例，它是11.41" x 6.30"，解析度為1366x768，取其中一邊相除可得出約120dpi。不過如在fontconfig改用120dpi會令文字看起來太大（UI設計師應該都是基於96dpi來判斷文字在螢幕上應有的大小），所以維持在96dpi比較好。
+
+* 字型查詢指令
+fontconif提供了一些工具供用家查詢各樣字型的配置情況，以下提供幾個比較實用的指令以供參考：
+列出已安裝的字型：
+
+#+BEGIN_EXAMPLE
+fc-list <pattern> <attributes>
+e.g.
+fc-list family
+fc-list :lang=zh-hk
+#+END_EXAMPLE
+
+查詢某字型要求下fontconfig所提供的字型及其渲染設定：
+
+#+BEGIN_EXAMPLE
+fc-match <pattern> <attributes>
+e.g.
+fc-match sans-12 family autohint hinting hintstyle dpi pixelsize antialias rgba lcdfilter
+fc-match :lang=zh-hk
+#+END_EXAMPLE
+
+檢查fontconfig的版本：
+
+#+BEGIN_SRC bash
+fc-query -V
+#+END_SRC
+
+#+CAPTION: 幾個fc指令的執行效果
+[[file:../../images/manjaro-font_13.png]]
+
+有關我的字型設定大致上就是這樣。電腦字型本身就是一門藝術，要將它舞弄自如更是一門高深的技術。以上的教學希望能給想改善字型顯示的Linux新手一個有用的參考，要更仔細地修改的話還需要更豐富的知識。下篇文章再講講我對於字型的選擇。
+
+* 延伸參考：
+ - [[https://wiki.archlinux.org/index.php/Font_configuration][Arch Linux Wiki: Font configuration]]
+ - [[http://pre.tir.tw/008/blog/output/linux-zi-ti-3-zhong-wen-zi-xing.html][Linux 字體 [3] — 中文字型]]
+ - [[https://blog.idrsolutions.com/2013/12/what-is-font-hinting/][What is font hinting]]
+ - [[http://www.jinbuguo.com/gui/linux_fontconfig.html][Linux字体美化实战(Fontconfig配置)]]
+ - [[https://www.cnblogs.com/youxia/p/LinuxDesktop004.html][Linux 桌面玩家指南：04. Linux 桌面系统字体配置要略]]
