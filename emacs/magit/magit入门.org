@@ -21,11 +21,11 @@ c-x c-f 打开你的本地 Git 仓库
 1. 先打开本地的一个文件，README.md，在第一行输入 Add a line
 2. 输入 Spc g s 你会发发现了 README.md 这文件是 Unstaged 的状态
 
-在 Unstage 这一行按 Tab 键，可以看到改了那些地方。然后还是在这一行按 s 状态变成了
-Staged 的状态。
+在 Unstage 这一行按 Tab 键，可以看到改了那些地方。然后还是在这一行按 s 状态变成
+了 Staged 的状态。
 1. 输入 c,跳出一些选项，再输入 c。
 这里是你输入 Commit 的理由的地方，我们输入 Frist commit
-2. 输入完后，c-c c-c 运行
+2. 输入完后，C-c C-c 运行
 3. 在 Unpushed 这行输入 P（大写）,这里选择 p 的选项，意思是 push master to 你的仓库
 
 * git clone
@@ -33,5 +33,6 @@ Staged 的状态。
 clone 我们的 github 项目到本地。
 1. 打开我的 emacs 配置项目，获取 clone 地址。
 2. 在 emacs 里使用 M-x dired 打开想 clone 的目录
-3. 使用 magit 指令 clone 远程项目，M-x magit-clone，输入 clone 的远程仓库地址并填写 clone 文件夹名称
+3. 使用 magit 指令 clone 远程项目，M-x magit-clone，输入 clone 的远程仓库地址并填写
+   clone 文件夹名称
 4. 按 g 刷新目录，现在 magit 文件夹下的.spacemacs.d 便是我们远程 clone 下来的 github 项目了
