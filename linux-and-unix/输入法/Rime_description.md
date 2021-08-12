@@ -37,17 +37,16 @@
 </code></pre></ul>
 
 <h2>開關</h2>
-<p>通常包含以下五個：</p>
+<p>通常包含以下數個：</p>
 
 <ol><li><code>ascii_mode</code> 是中英文轉換開關。預設<code>0</code>爲中文，<code>1</code>爲英文</li>
 <li><code>full_shape</code> 是全角符號／半角符號開關。注意，開啓全角時英文字母亦爲全角。<code>0</code>爲半角，<code>1</code>爲全角</li>
 <li><code>extended_charset</code> 是字符集開關。<code>0</code>爲CJK基本字符集，<code>1</code>爲CJK全字符集</li>
 <ul><li>僅<code>table_translator</code>可用</li></ul>
-<li><code>simplification</code> 是轉化字開關。一般情況下與上同，<code>0</code>爲不開啓轉化，<code>1</code>爲轉化。</li>
 <li><code>ascii_punct</code> 是中西文標點轉換開關，<code>0</code>爲中文句讀，<code>1</code>爲西文標點。</li>
-</ol>
+<li><code>simplification</code> 是轉化字開關。一般情況下與上同，<code>0</code>爲不開啓轉化，<code>1</code>爲轉化。</li>
 
-<ul><ul><li>此選項名偁可自定義，亦可添加多套替換用字方案：</li></ul>
+<ul><li><code>simplification</code>選項名偁可自定義，亦可添加多套替換用字方案：</li></ul>
 <ul><pre><code>- name: zh_cn
   states: ["漢字", "汉字"]
   reset: 0
@@ -59,10 +58,35 @@
     - 字型 → 汉字
     - 字型 → 䕼茡
   reset: 0
-</code></pre></ul>
-<li><code>states:</code> 可不寫，如不寫則此開關存在但不可見，可由快捷鍵操作</li>
-<li><code>reset:</code> 設定默認狀態〔<code>reset</code>可不寫，此時切換窗口時不會重置到默認狀態〕</li>
+</code></pre>
+<ul>
+<li><code>name</code>/<code>options</code>名：須與<code>simplifier</code>中<code>option_name</code>相同</li>
+<li><code>states</code>：可不寫，如不寫則此開關存在但不可見，可由快捷鍵操作</li>
+<li><code>reset</code>：設定默認狀態〔<code>reset</code>可不寫，此時切換窗口時不會重置到默認狀態〕</li>
+</ul>
+</ul>
+<li>字符集過濾。此選項沒有默認名偁，須配合<code>charset_filter</code>使用。可單用，亦可添加多套字符集：</li>
+<pre><code>- name: gbk
+  states: [ 增廣, 常用 ]
+  reset: 0
+</code></pre>
+或
+<pre><code>- options: [ utf-8, big5hkscs, big5, gbk, gb2312 ]
+  states:
+    - 字集 → 全
+    - 字集 → 港臺
+    - 字集 → 臺
+    - 字集 → 大陸
+    - 字集 → 简体
+  reset: 0
+</code></pre>
+<ul>
+<li><code>name</code>/<code>options</code>名：須與<code>charset_filter</code><code>@</code>後的tag相同</li>
+<li>避免同時使用字符集過濾和<code>extended_charset</code></li>
+</ul>
+</ol>
 
+<ul>
 <h4><strong>示例</strong></h4>
 <pre><code>switches:
   - name: ascii_mode
@@ -96,6 +120,8 @@
 <li><code>express_editor</code> 編輯器，處理空格、回車上屏、回退鍵</li>
 <li><i><code>fluid_editor</code></i> 句式編輯器，用於以空格斷詞、回車上屏的【注音】、【語句流】等輸入方案，替換<code>express_editor</code></li>
 <li><i><code>chord_composer</code></i> 和絃作曲家或曰並擊處理器，用於【宮保拼音】等多鍵並擊的輸入方案</li>
+<li><code>lua_processor</code> 使用<code>lua</code>自定義按鍵，後接<code>@</code>+<code>lua</code>函數名</li>
+<ul><li><code>lua</code>函數名即用戶文件夾內<code>rime.lua</code>中函數名，參數爲<code>(key, env)</code></li></ul>
 </ol>
 
 <h3>二、<code>segmentors</code></h3>
@@ -107,10 +133,9 @@
 <li><code>punct_segmentor</code> 標識句讀段落〔鍵入標點符號用〕加上<code>punct</code>這個<code>tag</code></li>
 <li><code>fallback_segmentor</code> 標識其他未標識段落</li>
 <li><b><code>affix_segmentor</code></b> 用戶自定義<code>tag</code></li>
+<ul><li>此項可加載多個實例，後接<code>@</code>+<code>tag</code>名</li></ul>
+<li><i><code>lua_segmentor</code></i> 使用<code>lua</code>自定義切分，後接<code>@</code>+<code>lua</code>函數名</li>
 </ol>
-
-<ul><ul><li>此項可加載多個實例，後接<code>@</code>+<code>tag</code>名</li>
-</ul></ul>
 
 <h3>三、<code>translators</code></h3>
 <ul><li>這批組件翻譯特定類型的編碼段爲一組候選文字</li></ul>
@@ -122,18 +147,25 @@
 <li><b><code>script_translator</code></b> 腳本翻譯器，用於拼音、粵拼等基於音節表的輸入方案</li>
   - 此項可加載多個實例，後接<code>@</code>+翻譯器名〔如：<code>pinyin</code>、<code>jyutping</code>等〕</li>
 <li><i><code>reverse_lookup_translator</code></i> 反查翻譯器，用另一種編碼方案查碼</li>
+<li><b><code>lua_translator</code></b> 使用<code>lua</code>自定義輸入，例如動態輸入當前日期、時間，後接<code>@</code>+<code>lua</code>函數名</li>
+<ul><li><code>lua</code>函數名即用戶文件夾內<code>rime.lua</code>中函數名，參數爲<code>(input, seg, env)</code></li>
+<li>可以<code>env.engine.context:get_option("option_name")</code>方式綁定到<code>switch</code>開關／<code>key_binder</code>快捷鍵</li></ul>
 </ol>
 
 <h3>四、<code>filters</code></h3>
 <ul><li>這批組件過濾翻譯的結果</li></ul>
-
-<ol><li><b><code>simplifier</code></b> 用字轉換</li>
+<ol>
 <li><code>uniquifier</code> 過濾重複的候選字，有可能來自<b><code>simplifier</code></b></li>
-<li><code>cjk_minifier</code> 字符集過濾〔用於<code>script_translator</code>，使之支援<code>extended_charset</code>開關〕</li>
-<li><b><code>reverse_lookup_filter</code></b> 反查濾鏡，以更靈活的方式反查，Rime1.0後替代<i><code>reverse_lookup_translator</code></i></li>
-<ul><li>此項可加載多個實例，後接<code>@</code>+濾鏡名〔如：<code>pinyin_lookup</code>、<code>jyutping_lookup</code>等〕</li>
-</ul>
+<li><code>cjk_minifier</code> 字符集過濾〔僅用於<code>script_translator</code>，使之支援<code>extended_charset</code>開關〕</li>
 <li><b><code>single_char_filter</code></b> 單字過濾器，如加載此組件，則屛敝詞典中的詞組〔僅<code>table_translator</code>有效〕</li>
+<li><b><code>simplifier</code></b> 用字轉換</li>
+<li><b><code>reverse_lookup_filter</code></b> 反查濾鏡，以更靈活的方式反查，Rime1.0後替代<i><code>reverse_lookup_translator</code></i></li>
+<ul><li>此項可加載多個實例，後接<code>@</code>+濾鏡名〔如：<code>pinyin_lookup</code>、<code>jyutping_lookup</code>等〕</li></ul>
+<li><b><code>charset_filter</code></b> 字符集過濾</li>
+<ul><li>後接<code>@</code>+字符集名〔如：<code>utf-8</code>(無過濾)、<code>big5</code>、<code>big5hkscs</code>、<code>gbk</code>、<code>gb2312</code>〕</li></ul>
+<li><b><code>lua_filter</code></b> 使用<code>lua</code>自定義過濾，例如過濾字符集、調整排序，後接<code>@</code>+<code>lua</code>函數名</li>
+<ul><li><code>lua</code>函數名即用戶文件夾內<code>rime.lua</code>中函數名，參數爲<code>(input, env)</code></li>
+<li>可以<code>env.engine.context:get_option("option_name")</code>方式綁定到<code>switch</code>開關／<code>key_binder</code>快捷鍵</li></ul>
 </ol>
 
 <ul><h4><strong>示例</strong></h4>
@@ -166,13 +198,16 @@
     - script_translator@jyutping
     - script_translator@pinyin_lookup
     - script_translator@jyutping_lookup
+    - lua_translator@get_date
   filters:
     - simplifier@zh_simp
     - uniquifier
     - cjk_minifier
+    - charset_filter@gbk
     - reverse_lookup_filter@middle_chinese
     - reverse_lookup_filter@pinyin_reverse_lookup
     - reverse_lookup_filter@jyutping_reverse_lookup
+    - lua_filter@single_char_first
 </code></pre></ul>
 
 <h2>細項配置</h2>
@@ -289,6 +324,9 @@ erase --刪除
 <li><code>suffix:</code> 設定此翻譯器的尾綴標識，可不塡，不塡則無尾綴</li>
 <li><code>tips:</code> 設定此翻譯器的輸入前提示符，可不塡，不塡則無提示符</li>
 <li><code>closing_tips:</code> 設定此翻譯器的結束輸入提示符，可不塡，不塡則無提示符</li>
+<li><code>contextual_suggestions:</code> 是否使用語言模型優化輸出結果〔需配合<code>grammar</code>使用〕</li>
+<li><code>max_homophones:</code> 最大同音簇長度〔需配合<code>grammar</code>使用〕</li>
+<li><code>max_homographs:</code> 最大同形簇長度〔需配合<code>grammar</code>使用〕</li>
 </ol>
 
 <ul><h4><strong>示例</strong></h4>
@@ -434,17 +472,58 @@ erase --刪除
     - "xform/^(.*)$/[$1]/"
 </code></pre></ul>
 
-<h3>七、其它</h3>
+<h3>七、<code>lua</code></h3>
+<ul><li>請參攷<a href="https://github.com/hchunhui/librime-lua">hchunhui/librime-lua</a> 以尋求更多靈感。</li></ul>
+<ol>
+<li><code>lua_translator</code></li>
+<li><code>lua_filter</code></li>
+<li><code>lua_processor</code></li>
+<li><code>lua_segmentor</code></li>
+</ol>
+<ul><h4><strong>示例</strong></h4>
+<p><small>rime.lua</small></p>
+<pre><code>function get_date(input, seg, env)
+  --- 以 show_date 爲開關名或 key_binder 中 toggle 的對象
+  on = env.engine.context:get_option("show_date")
+  if (on and input == "date") then
+    --- Candidate(type, start, end, text, comment)
+    yield(Candidate("date", seg.start, seg._end, os.date("%Y年%m月%d日"), " 日期"))
+  end
+end
+
+function single_char_first(input, env)
+  --- 以 single_char 爲開關名或 key_binder 中 toggle 的對象
+  on = env.engine.context:get_option("single_char")
+  local cache = {}
+  for cand in input:iter() do
+    if (not on or utf8.len(cand.text) == 1) then
+      yield(cand)
+    else
+      table.insert(cache, cand)
+    end
+  end
+  for i, cand in ipairs(cache) do
+    yield(cand)
+  end
+end
+</code></pre></ul>
+
+<h3>八、其它</h3>
 <ul><li>包括<code>recognizer</code>、<code>key_binder</code>、<code>punctuator</code>。<b>標點</b>、<b>快捷鍵</b>、<b>二三選重</b>、<b>特殊字符</b>等均於此設置</li>
 </ul>
 
 <ol><li><b><code>import_preset:</code></b> 由外部統一文件導入
+<li><code>grammar:</code> 下設：
+<ul><li><code>language:</code> 取值<code>zh-han[ts]-t-essay-bg[wc]</code></li>
+<li><code>collocation_max_length:</code> 最大搭配長度（整句輸入可忽畧此項）</li>
+<li><code>collocation_min_length:</code> 最小搭配長度（整句輸入可忽畧此項）</li>
+</ul></li>
 <li><code>recognizer:</code> 下設<code>patterns:</code> 配合<code>segmentor</code>的<code>prefix</code>和<code>suffix</code>完成段落劃分、<code>tag</code>分配
-<ul><li><code>:</code>前字段可以爲以<code>affix_segmentor@someTag</code>定義的<code>Tag</code>名，或者<code>punct</code>、<code>reverse_lookup</code>兩個內設的字段。其它字段不調用輸入法引擎，輸入即輸出〔如<code>url</code>等字段〕</li></ul>
+<ul><li>前字段可以爲以<code>affix_segmentor@someTag</code>定義的<code>Tag</code>名，或者<code>punct</code>、<code>reverse_lookup</code>兩個內設的字段。其它字段不調用輸入法引擎，輸入即輸出〔如<code>url</code>等字段〕</li></ul></li>
 <li><code>key_binder:</code> 下設<code>bindings:</code> 設置功能性快捷鍵
 <ul><li>每一條<code>binding</code>可能包含：<code>accept</code>實際所按之鍵、<code>send</code>輸出效果、<code>toggle</code>切換開關和<code>when</code>作用範圍〔<code>send</code>和<code>toggle</code>二選一〕</li>
 <ul>
-<li><code>toggle</code>可用字段包含五個開關名</li>
+<li><code>toggle</code>可用字段包含各開關名</li>
 <li><code>when</code>可用字段包含：</li>
 <ul><pre><code>paging	翻䈎用
 has_menu	操作候選項用
