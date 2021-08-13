@@ -1,0 +1,54 @@
+#+TITLE: 使用ssh方式登录Github网站
+
+使用 ssh 方式登录到 github 中，使用 ssh 方式，可以在提交代码时，不用经常输入用户
+名和密码，提高效率。
+
+* 设置 Git 的用户名和邮箱
+#+begin_src sh
+git config --global user.name "Appleshan"
+git config --global user.email "apple.shan@gmail.com"
+#+end_src
+
+* 生成密钥
+#+begin_src sh
+ssh-keygen -t rsa -C "apple.shan@gmail.com"
+#+end_src
+如果不需要密码的话，连续回车，直到最后得到了两个文件： id_rsa 和 id_rsa.pub 。
+
+* 添加密钥到 ssh-agent
+查看 ssh-agent 是否可用。
+#+begin_src sh
+ssh-agent
+#+end_src
+注： ssh-agent 是密钥管理程序，使用 ssh-add 将私钥添加到 ssh-agent 中，其他
+程序在需要身份验证的时候，将验证申请交给 ssh-agent 来完成认证过程。
+
+添加生成的 SSH key 到 ssh-agent：
+#+begin_src sh
+ssh-add ~/.ssh/id_rsa
+#+end_src
+
+* 登录 Github 网站，添加 ssh
+在 github 网站的个人信息（路径为：“setting -> SSH and GPG keys -> new ssh key”），
+把 id_rsa.pub 的内容拷贝进去即可。
+
+* 测试
+#+begin_src sh
+ssh -T git@github.com
+#+end_src
+选择“yes”后，看到“Hi xxx”表示成功了。
+
+* 修改 .git 目录下的 config 文件
+默认的配置：
+#+begin_example
+[remote "origin"]
+url = appleshan/dotfiles
+fetch = +refs/heads/*:refs/remotes/origin/*
+#+end_example
+
+修改后的配置：
+#+begin_example
+[remote "origin"]
+url = git@github.com:appleshan/dotfiles.git
+fetch = +refs/heads/*:refs/remotes/origin/*
+#+end_example
