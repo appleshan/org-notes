@@ -5,7 +5,7 @@
 
 * 设置 Git 的用户名和邮箱
 #+begin_src sh
-git config --global user.name "Appleshan"
+git config --global user.name "appleshan"
 git config --global user.email "apple.shan@gmail.com"
 #+end_src
 
