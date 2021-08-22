@@ -7,4 +7,4 @@ Emacs has its own terminology for these concepts:
 | Cut         | C-x        | Kill-region    | C-w       |
 | Copy        | C-c        | Kill-ring-save | M-w       |
 | Paste       | C-v        | Yank           | C-y       |
-| —           | —          | Yank next      | M-y       |
+| --          | --         | Yank next      | M-y       |
