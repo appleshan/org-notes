@@ -1,0 +1,31 @@
+#+TITLE: 如何在linux上查看ram信息
+
+一般常用的查看 RAM 的方法是运行 =free -h= 或者直接查看 =/proc/meminfo= 文件。
+#+begin_src sh
+free -h
+#+end_src
+
+#+begin_src sh
+cat /proc/meminfo
+#+end_src
+但是通过这种方式，你只能看到内存的总量和使用量。而无法知道内存的类型（DDR1、
+DDR2、DDR3、DDR4、SDRAM、DRAM）、频率等信息。
+
+要获取这些信息，你需要借助 =dmidecode= 命令，像下面这样：
+#+begin_src sh
+sudo dmidecode --type memory
+#+end_src
+可以看到，结果一共分成 4 段，其中
+
+第一段是 dmidecode 的说明
+第二段中 Number Of Devices: 2 表示主板上有两个内存条
+第三、四段中 Size: 2048 MB 表示每个内存条 2G 大小
+第三、四段中 Type: DDR3 表示每个内存条都是 DDR3 的
+第三、四段中 Speed: 1333 MT/s 表示每个内存条的频率都是 1333MHz 的
+
+还有一种方法是，利用 lshw 来获取内存信息
+#+begin_src sh
+sudo lshw -class memory
+#+end_src
+从它的 description, size, 和 clock 中也可以看出内存为 DDR3,每条内存 2G，频率为
+1333MHz。
