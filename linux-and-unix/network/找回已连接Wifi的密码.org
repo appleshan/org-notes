@@ -1,0 +1,20 @@
+#+TITLE: 找回已连接wifi的密码
+
+@See http://blog.lujun9972.win/blog/2020/05/14/%E6%89%BE%E5%9B%9E%E5%B7%B2%E8%BF%9E%E6%8E%A5wifi%E7%9A%84%E5%AF%86%E7%A0%81/index.html
+
+根据 Wifi 管理组件的不同，存储 Wifi 密码的配置文件路径也不同。
+
+* NetworkManager
+在 Ubuntu 中默认是使用 =NetworkManger= 来进行管理 Wifi。 其配置文件存储在
+=/etc/NetworkManager/system-connections/= 目录中，且密码对应字段为 =psk= ,因此我们
+可以通过下面命令找回密码:
+#+begin_src sh :dir /sudo::
+sudo grep -r '^psk=' /etc/NetworkManager/system-connections/
+#+end_src
+
+* netctl
+我在 archlinux 下使用 =netctl= 来管理 Wifi。 其配置文件存储在 =/etc/netctl= 目录下，
+且密码对应字段为 =Key= (注意第一个字符大写),因此我们可以通过下面命令找回密码:
+#+begin_src sh :dir /sudo::
+sudo grep -r '^Key=' /etc/netctl/
+#+end_src
