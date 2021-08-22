@@ -1,0 +1,27 @@
+#+TITLE: Free Unicode Fonts
+
+* Fonts
+ - DejaVu: https://en.wikipedia.org/wiki/DejaVu_fonts
+ - Bitstream Vera: https://en.wikipedia.org/wiki/Bitstream_Vera
+ - Noto fonts: https://en.wikipedia.org/wiki/Noto_fonts
+ - Source Han: https://github.com/adobe-fonts
+ - AR PL UMing, AR PL UKai: https://www.freedesktop.org/wiki/Software/CJKUnifonts/
+ - GNU Unifont: https://en.wikipedia.org/wiki/GNU_Unifont
+ - Hanazono Mincho(花园明朝)，涵盖最全的 CJK 字符： http://fonts.jp/hanazono/
+ - 天珩全字库，非免费，涵盖最全的 CJK 字符： http://yedict.com/download/
+ - 中华书局宋体字库，非免费，涵盖最全的 CJK 字符： http://www.ancientbooks.cn/helpcore?font
+ - 开心宋体，非免费，涵盖最全的 CJK 字符： http://pan.baidu.com/s/1qWoQZzY
+ - ZCool: https://www.zcool.com.cn/special/zcoolfonts/
+ - 王汉宗自由字体： https://code.google.com/p/wangfonts/
+ - WenQuanYi: http://wenq.org
+
+* References
+ - https://github.com/googlefonts , https://github.com/google/fonts
+ - https://fontlibrary.org/
+ - https://github.com/jagracey/Awesome-Unicode#unicode-fonts
+ - http://www.unifont.org/fontguide/
+ - https://en.wikipedia.org/wiki/Unicode_font#List_of_Unicode_fonts
+ - https://en.wikipedia.org/wiki/List_of_CJK_fonts
+ - http://zenozeng.github.io/Free-Chinese-Fonts/
+ - 汉字检索： http://www.chise.org/ids-find
+ - 字海： http://zisea.com/ ， http://yedict.com/
