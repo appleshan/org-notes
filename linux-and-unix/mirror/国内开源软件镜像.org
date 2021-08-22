@@ -1,0 +1,22 @@
+#+TITLE: 国内开源软件镜像
+
+国内镜像汇总 https://mirrorz.org/list
+
+清华 https://opentuna.cn/
+清华 https://mirrors.tuna.tsinghua.edu.cn/
+中科大 https://mirrors.ustc.edu.cn/
+北外 https://mirrors.bfsu.edu.cn/
+阿里 https://mirrors.aliyun.com/
+网易 https://mirrors.163.com/
+搜狐 https://mirrors.sohu.com/
+北交 https://mirror.bjtu.edu.cn/
+重大 https://mirrors.cqu.edu.cn/
+北理 http://mirror.bit.edu.cn/web/
+兰大 http://mirror.lzu.edu.cn/
+浙大 http://mirrors.zju.edu.cn/
+哈工大 http://mirrors.hit.edu.cn/
+南大 http://mirrors.nju.edu.cn/
+南邮 http://mirrors.njupt.edu.cn/
+上交 http://ftp.sjtu.edu.cn/
+北大 https://mirrors.pku.edu.cn/
+东软 http://mirrors.neusoft.edu.cn/
