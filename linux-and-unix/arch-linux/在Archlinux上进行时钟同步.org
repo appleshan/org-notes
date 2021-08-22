@@ -1,0 +1,34 @@
+#+TITLE: 在archlinux上进行时钟同步
+
+最近笔记本上的时钟不知为何快了 5 分钟，导致与 AnkiWeb 同步时总是提示同步失败。
+
+想要进行时钟同步却发现不知道怎么操作。在查询了 ArchWiki 后发现挺简单的，这里
+简单记录一下，以防忘记。
+
+systemd 本身提供了一个简单的 SNTP 客户端 =/usr/lib/systemd/systemd-timesyncd= ，
+可以用来从远程 NTP 服务器查询时间。
+
+因此，同步时间只需要手工运行
+#+begin_src sh
+sudo /usr/lib/systemd/systemd-timesyncd
+#+end_src
+
+=systemd-timesyncd= 会从下面列表中读取 ntp 服务器的地址：
+#+begin_example
+/etc/systemd/timesyncd.conf
+/etc/systemd/timesyncd.conf.d/*.conf
+/run/systemd/timesyncd.conf.d/*.conf
+/usr/lib/systemd/timesyncd.conf.d/*.conf
+#+end_example
+事实上，你也没有必要老是手工起 =systemd-timesyncd= ，它本身就是 systemd 中预定义
+好的一个 =service= 。
+
+你可以通过
+#+begin_src sh
+sudo systemctl enable systemd-timesyncd
+#+end_src
+或者
+#+begin_src sh
+timedatectl set-ntp true
+#+end_src
+来开启这个服务。
