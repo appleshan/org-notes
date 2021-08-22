@@ -1,0 +1,24 @@
+#+TITLE: 查看端口占用进程的几种方法
+
+* netstat
+#+begin_src sh
+sudo netstat -pnltu
+#+end_src
+其中:
+ - p : 显示监听服务的进程号或程序名
+ - n : 用数字的形式表示主机,端口和用户名
+ - l : 只显示监听的 socket
+ - t : 显示 TCP 连接
+ - u :显示 UDP 连接
+
+* ss
+#+begin_src sh
+sudo ss -l -p -t -u -n
+# or
+sudo ss -pnltu
+#+end_src
+
+* lsof
+#+begin_src sh
+sudo lsof -i |grep LISTEN
+#+end_src
