@@ -1,11 +1,8 @@
 Linux 查看 glibc 版本信息
 
-1、ubuntu（以 ubuntu 14.04 为例）
-1.1 查看 libc.so.6
-$ ls -l /lib/i386-linux-gnu/libc.so.6
-
-1.2
-apt-cache show libc6|grep Version
+1、以 archlinux 为例
+查看 libc.so.6
+$ ls -l /lib/libc.so.6
 
 2、发行版无关方法
-$ ldd –-version
+$ ldd --version
