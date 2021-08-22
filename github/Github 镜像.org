@@ -1,0 +1,25 @@
+#+TITLE: Github 镜像
+
+1. https://github.com.cnpmjs.org/
+   将 github.com 替换成 github.com.cnpmjs.org
+
+2. https://gitclone.com/
+   #+begin_src sh
+   # Method 1 (replace url)
+   git clone https://gitclone.com/github.com/tendermint/tendermint.git
+
+   # Method 2 (set git parameters)
+   git config --global url."https://gitclone.com/".insteadOf https://
+   git clone https://github.com/tendermint/tendermint.git
+
+   # Method 3 (use cgit client)
+   cgit clone https://github.com/tendermint/tendermint.git
+   #+end_src
+
+3. https://hub.fastgit.org/
+
+4. http://toolwa.com/github/ 加速下载 release 文件
+
+5. 使用 https://www.ipaddress.com/ 查询 IP 后修改 /etc/hosts
+ - https://github.com.ipaddress.com/
+ - https://github.global.ssl.fastly.net.ipaddress.com
