@@ -26,25 +26,25 @@ open the file in your favorite text editor, and copy it to your clipboard.
 
 2. In the top right corner of any page, click your profile photo, then click =Settings=.
 #+ATTR_HTML: :width 190
-[[file:./userbar-account-settings.png]]
+[[file:../../../images/userbar-account-settings.png]]
 
 3.In the user settings sidebar, click =SSH and GPG keys=.
 #+ATTR_HTML: :width 190
-[[file:./settings-sidebar-ssh-keys.png]]
+[[file:../../../images/settings-sidebar-ssh-keys.png]]
 
 4. Click =New SSH key=.
 #+ATTR_HTML: :width 400
-[[file:./ssh-add-ssh-key.png]]
+[[file:../../../images/ssh-add-ssh-key.png]]
 
 5. In the "Title" field, add a descriptive label for the new key. For example,
 if you're using a personal Mac, you might call this key "Personal MacBook Air".
 
 6. Paste your key into the "Key" field.
 #+ATTR_HTML: :width 400
-[[file:./ssh-key-paste.png]]
+[[file:../../../images/ssh-key-paste.png]]
 
 7. Click =Add SSH key=.
 #+ATTR_HTML: :width 160
-[[file:./ssh-add-key.png]]
+[[file:../../../images/ssh-add-key.png]]
 
 8. Confirm the action by entering your GitHub password.
