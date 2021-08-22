@@ -1,47 +1,58 @@
-Emacs 新手求生指南
+#+TITLE: Emacs 新手求生指南
 
-https://twitter.com/emacstw
+@See https://twitter.com/emacstw
 
-[入門] 想嘗試 Emacs 完全拋棄滑鼠的編輯快感，卻不得其門而入？初學者專用小抄，
-十分鐘內理解純鍵盤基本操作。
+[入門] 想嘗試 Emacs 完全拋棄滑鼠的編輯快感，卻不得其門而入？初學者專用小抄，十分
+鐘內理解純鍵盤基本操作。
 （C：Ctrl；M：Alt 或 Esc）
-[[file:emacs-visual-cheat-sheet.png]]
+#+attr_org: :width 640px
+[[file:./images/emacs-visual-cheat-sheet.png]]
 
-[ELisp] 寫 Emacs Lisp 遇到 minibuffer 跳錯誤訊息卻沒跳出 backtraces buffer 時，
-M-x toggle-debug-on-error。
+[ELisp] 寫 Emacs Lisp 遇到 minibuffer 跳錯誤訊息卻沒跳出 backtraces buffer
+時，M-x toggle-debug-on-error。
 
-[ELisp] 游標移動到一個 (defun ...) 時，可以利用 M-x edebug-defun 來給一個函數除錯，
-會在下一次執行該函數時，一個一個 sexp 執行，按 SPC 來執行下一個 sexp，按 q 離開
-除錯，再次 C-x C-e 該 (defun ...) ，即會恢復回正常狀態。
+[ELisp] 游標移動到一個 (defun ...) 時，可以利用 M-x edebug-defun 來給一個函數
+除錯，會在下一次執行該函數時，一個一個 sexp 執行，按 SPC 來執行下一個 sexp，按 q
+離開除錯，再次 C-x C-e 該 (defun ...) ，即會恢復回正常狀態。
 
-[設定] (setq search-whitespace-regexp ".*?") 「这行代码让 Emacs 的搜索时的空白字符
-为任意字符，也就是说 C-s 搜索时任意字符都可以用空格代替」
+[設定] (setq search-whitespace-regexp ".*?") 「这行代码让 Emacs 的搜索时的
+空白字符为任意字符，也就是说 C-s 搜索时任意字符都可以用空格代替」
 
 [技巧] M-/ : 快速補全一個在緩衝區(buffer)裏面已經有的單字。
 
-[技巧] C-x z : 重複上一個指令，再按一次 'z ' 會繼續重複這個指令。例: C-k C-x z z
-z 總共刪除 4 行
+[技巧] C-x z : 重複上一個指令，再按一次 'z ' 會繼續重複這個指令。
+例: C-k C-x z z z 總共刪除 4 行
 
-[技巧] C-q : 對按鍵不做任何解釋，直接輸入。例：C-q TAB 可以再無法使用 TAB 情況下輸
-入 tab。
+[技巧] C-q : 對按鍵不做任何解釋，直接輸入。例：C-q TAB 可以再無法使用 TAB 情況下
+輸入 tab。
 
 [技巧] C-x SPC 可以進入矩形選取模式。
 
-[Org] 用(setq org-hide-emphasis-markers t)這個設定可以把 org-mode 文件中的標記符
-號給隱藏起來（就是*=/~_+這幾個），用 M-x org-toggle-link-display 則可以暫時顯示出
-來（包含 link）
+[Org] 用 (setq org-hide-emphasis-markers t) 這個設定可以把 org-mode 文件中
+的標記符號給隱藏起來（就是*=/~_+這幾個），用 M-x org-toggle-link-display 則可以
+暫時顯示出來（包含 link）
 
 [技巧] 儲存目前 buffer 一般是按 C-x C-s，但其實你也可以按 C-x s 來一個個儲存所有
-修改過的 buffers（會一個個詢問），而且可以在詢問時按 d 來 diff 看看這個檔案修改
-了哪些地方，你再決定要不要儲存。
+修改過的 buffers（會一個個詢問），而且可以在詢問時按 d 來 diff 看看這個檔案修改了
+哪些地方，你再決定要不要儲存。
 
-[技巧] 任何程式語言的 mode 下，M-; 可以插入註釋。我們常常輸入太長的註釋以致
-超出螢幕，這時可以按 M-q 讓 Emacs 自動幫該註釋排版（超出螢幕的部份會自動換行）。
+[套件] wgrep-ag https://github.com/mhayashi1120/Emacs-wgrep
+直接修改 M-x ag 的搜尋結果的 buffer，並會自動把所有修改存回原檔案，refactoring
+rename 的一種選擇。
+註：除了 ag 外，也有提供 ack, pt 的版本。
+
+[技巧] 任何程式語的 mode 下，M-; 可以插入註釋。我們常常輸入太長的註釋以致超出螢幕，
+這時可以按 M-q 讓 Emacs 自動幫該註釋排版（超出螢幕的部份會自動換行）。
+
+[套件] ESUP: 給 Emacs 設定檔測速、找出拖慢速度的瓶頸
+https://github.com/jschaf/esup
+
+[套件] Aggressive-indent 讓 Emacs 在編輯時，即時自動幫你 indent code。
+https://github.com/Bruce-Connor/aggressive-indent-mode/
 
 [技巧] 在 Code 中寫很長的 comment/doc 時，常為了一行不要超過 72 字元得手動換行，
-而且換行後還得自己按 M-;實在很不方便。其實在 Emacs 中比較方便的方法應該是「一直
-打下去不要換行、一口氣打完」後，再直接 M-q，Emacs 會自動幫你整理成一行不超過 72
-個字。
+而且換行後還得自己按 M-;實在很不方便。其實在 Emacs 中比較方便的方法應該是「一直打下
+去不要換行、一口氣打完」後，再直接 M-q，Emacs 會自動幫你整理成一行不超過 72 個字。
 
 [技巧] C-M-b 和 C-M-f 可以在一堆 S-expression (Lisp 用的表達式) 之中遊走。
 
@@ -52,13 +63,13 @@ z 總共刪除 4 行
 
 [Dired] 在 Dired 中按 % m 可以根據 regexp 選取多個檔案。
 
-[技巧] M-^可以將目前行的 indentation 刪掉、並直接 concat 到前一行的尾端。
+[技巧] M-^ 可以將目前行的 indentation 刪掉、並直接 concat 到前一行的尾端。
 
-[技巧] 游標在一堆連續的空白之中時，M-\ 可以把這些空白一次消掉, M-SPC 則是只留
-一個空白。
+[技巧] 游標在一堆連續的空白之中時，M-\ 可以把這些空白一次消掉, M-SPC 則是只留一個
+空白。
 
 [24.4] 以往 Emacs 中，code 中的 CamelCase 都會被視為單一個字，所以當按
- M-backspace 時會將整個字刪掉，很不方便。24.4 內建了 M-x subword-mode，啟用後，
+M-backspace 時會將整個字刪掉，很不方便。24.4 內建了 M-x subword-mode，啟用後，
 會將 camelCase 自動根據大小寫斷開為多個單字，如此一來修改方便多了。
 
 [設定] Emacs 24.4 多了個好像沒什麼用的（喂）美化功能：
@@ -67,14 +78,32 @@ M-x prettify-symbols-mode
 也可以設定成全域：
 (global-prettify-symbols-mode 1)
 
+[套件] helm-dash：developer 必備，透過 helm 離線查詢數百種 API 文件
+https://github.com/dash-docs-el/helm-dash
+
 [技巧] 在 Emacs 裡將一大排 code 給 comment 起來的最快方法是什麼？
-其實並不是 rectangle 或 multiple-cursor，而是直接 C-@把要註釋的區塊選起來後，
+其實並不是 rectangle 或 multiple-cursor，而是直接 C-@ 把要註釋的區塊選起來後，
 直接 M-;
 
 [技巧] M-g M-g（或者 M-g g）可以跳到指定行數；
 另外一個比較少用的是 M-g c 可以跳到 buffer 中的第 N 個字元。
 
-[技巧] 如何讓等號一類的符號對齊？C-@選取範圍後，M-x align，完成。
+[技巧] 用 `fit-window-to-buffer' 可以把目前的 window 縮到跟 buffer 內文一樣小
+可以搭配設定 (setq fit-window-to-buffer-horizontally t) 讓水平縮放有效。
+
+[技巧] 如何讓等號一類的符號對齊？ C-@ 選取範圍後，M-x align，完成。
+
+[套件] 需要找 Emacs 套件又不知從何下手？
+#EmacsTW 的 Awesome-Emacs  https://github.com/emacs-tw/awesome-emacs 為
+最熱門的一些 Emacs 套件分門別類，可快速找到需要的、最合您胃口的工具。
+
+[設定] Emacs 用熟悉後，你會發現其實畫面上方的選單列與工具列根本不需要。
+可以用設定把它們關掉，換來一個清爽的螢幕空間：
+;; 隱藏工具列
+(tool-bar-mode -1)
+;; 隱藏選單
+(menu-bar-mode -1)
+偶爾臨時需要可以用 M-x 即時把它們叫回來。
 
 [設定] 括弧突顯設定之二：只突顯括弧本身有時不太清楚，試試：
 ;;(setq show-paren-style 'parentheses) ;這是預設的括弧突顯方式
@@ -90,6 +119,16 @@ M-x prettify-symbols-mode
 
 [技巧] 當在 Emacs 內開啟多個 window 時，可以使用 M-PageUp/PageDown 來捲動另一個
 window 的內容，而不用先切換到另一個 window。
+
+[技巧] 在 Python-mode 下按 C-c C-z 可以自動開啟並跳到一個 Python REPL buffer。
+
+[技巧] 隨時善用 Isearch （C-s & C-r）。不只是能拿來搜尋字串，在按下 C-@ 後，C-s
+也可以直接讓 mark 隨著 isearch 搜尋到的字串跑，會比用 Ace-jump 來標記 region 方
+便。
+
+[設定] 當使用 Isearch 搜尋時，你可能不希望在結束搜尋時自動幫你把高亮的部份清除，
+可以使用這個設定：
+(setq lazy-highlight-cleanup nil)
 
 [內建套件] ERC - 用 Emacs 上 IRC，直接 M-x erc 即可使用。
 Emacs 還有內建另外一套比較不那麼流行的 M-x rcirc。
@@ -107,8 +146,8 @@ emacs -Q
 (windmove-default-keybindings 'shift)
 這樣只要按 shitf+方向鍵 就能夠切換 window
 
-[技巧] Emacs 除了可以直接編輯遠端檔案，也可以透過 su/sudo 來以 root 權限直接
-編輯特定檔案，而不用開新的 Emacs。
+[技巧] Emacs 除了可以直接編輯遠端檔案，也可以透過 su/sudo 來以 root 權限直接編輯特定
+檔案，而不用開新的 Emacs。
 假設我要編輯/etc/hosts，C-x C-f 後，輸入：
 /su::/etc/hosts
 或
@@ -149,6 +188,57 @@ RET 會被解讀成「送出」時。
 [ibuffer] ibuffer 可以根據各種特徵來為 buffer 分類，這樣使用 buffer 切換器時
 應該不會像以前那樣痛苦。參考設定如下：http://paste.ubuntu.com/7855489/
 
+;; 使用 ibuffer 的分類功能
+(setq ibuffer-saved-filter-groups
+      (quote (("default"
+               ("Dired" (mode . dired-mode))
+               ("JS" (or
+                      (mode . javascript-mode)
+                      (mode . js2-mode)
+                      (mode . json-mode)
+                      (mode . nodejs-repl-mode)))
+               ("Web Development" (or
+                                   (mode . css-mode)
+                                   (mode . html-mode)
+                                   (mode . stylus-mode)
+                                   (mode . web-mode)
+                                   (name . "\\.yml$")))
+               ("Python" (or (mode . python-mode)
+                             (mode . ipython-mode)
+                             (mode . inferior-python-mode)))
+               ("IRC" (or
+                       (mode . erc-mode)
+                       (mode . rcirc-mode)))
+               ("Lisp" (or
+                        (mode . emacs-lisp-mode)
+                        (mode . slime-mode)
+                        (name . "^\\*scratch\\*$")
+                        (mode . lisp-mode)))
+               ("Shell Script" (or (mode . shell-script-mode)
+                                   (mode . shell-mode)
+                                   (mode . sh-mode)))
+               ("Magit" (or (name . "*magit*")
+                            (mode . magit-mode)))
+               ("Emacs" (or
+                         (name . "^\\*Messages\\*$")
+                         (name . "^\\*Compile-Log\\*$")))
+               ("Help" (or (mode . woman-mode)
+                           (mode . man-mode)
+                           (mode . info-mode)
+                           (mode . help-mode)
+                           (name . "\\*Help\\*$")
+                           (name . "\\*info\\*$")))
+               ("Terminal" (or (mode . eshell-mode)
+                               (mode . term-mode)
+                               (mode . eshell-mode)
+                               (mode . comint-mode)
+                               (name . "\\*scheme\\*$")))
+               ("Agenda Files" (filename . "agenda/.+.org$"))
+               ("Org" (or
+                       (mode . org-mode)
+                       (name . "^\\*Calendar\\*$")))
+               ))))
+
 [套件] 按 C-x C-b 可以叫出 buffer 切換器，但預設的非常簡陋而難用，建議可以改成
 使用 ibuffer：
 (require 'ibuffer)
@@ -162,7 +252,7 @@ RET 會被解讀成「送出」時。
 [套件] popup-kill-ring，使用彈出式選單選取 kill-ring(剪貼簿)中的東西，比預設的
 奇怪操作方式好用非常多。如果你沒有裝過類似的 kill-ring 加強功能，此物必裝。
 （建議可以綁到 M-y）
-[[file:./popup-kill-ring.png]]
+[[file:./images/popup-kill-ring.png]]
 
 [技巧] C-x C-v 為 find-alternate-file，效果基本上等同 C-x C-f 開檔，但會先將
 關閉目前 buffer，再以新的 buffer 開檔。
@@ -174,7 +264,7 @@ RET 會被解讀成「送出」時。
 [入門]需要在啟動某個 mode 後，自動啟動你想要的 minor-mode？使用 add-hook。
 (add-hook 'mode 名-hook '想要的 function)
 範例：
- (add-hook 'python-mode-hook 'highlight-symbol-mode)
+(add-hook 'python-mode-hook 'highlight-symbol-mode)
 
 [入門] 想要為某個 mode 自訂特別的 key-binding 而不是 global，可以使用
  define-key。如下：
@@ -184,20 +274,20 @@ RET 會被解讀成「送出」時。
 方便。啟用 highlight-symbol-mode 後，則可以自動高亮游標下的詞。
 [[https://github.com/nschum/highlight-symbol.el][highlight-symbol.el]]
 
-[[file:highlight-symbol-mode.png]]
+[[file:./images/highlight-symbol-mode.png]]
 
 [套件] discovery.el : Emacs 有一些藏在深處的按鍵沒人講你可能永遠也不會發現
 （例如 C-x r 開頭的組合鍵），即使知道了也很難記住。discovery.el 解決了一些問題。
 （附圖為按下 C-x r 後跳出的「小抄」視窗）
-[[file:discovery.el.png]]
+[[file:./images/discovery.el.png]]
 
 [技巧] M-x imenu 能夠快速跳轉到目前檔案中的函數定義（可用 tab 鍵 completion）。
 
 [入門] 初次使用某個 mode，卻不知該 mode 有什麼 key-binding 和功能能使用時，
 請按 C-h m，可以顯示目前 buffer 中啟用的所有 mode 的說明資訊。
 
-[技巧] C-t 可以把當前字元與前一個字元交換；M-t 則是可以交換一個單字。別小看這個
-功能，熟悉以後非常的實用，尤其是 M-t。
+[技巧] C-t 可以把當前字元與前一個字元交換；M-t 則是可以交換一個單字。
+別小看這個功能，熟悉以後非常的實用，尤其是 M-t。
 
 [技巧] M-x sort-lines 可以將目前選取區域中的行按照字母順序排列。
 M-x delete-duplicate-lines 則是可以將目前選取區域中，重複的行刪除。這兩個命令在
@@ -214,6 +304,9 @@ C-c C-c 重新整理
 C-c Enter 新增一條水平分隔線
 M-方向鍵：移動行/列
 
+[Org] C-c C-x C-l 可以預覽「目前 outline（文章標題） 範圍」中，所有用 $$ 包起來的 LaTeX 算式。
+如果先加兩個 C-u 前綴，則是預覽整個 buffer。
+
 [Org] C-c C-x C-v 可以預覽目前 buffer 中的所有圖片連結。如果系統上有 ImageMagick，
 可以設定：
 (setq org-image-actual-width '(300))
@@ -221,7 +314,7 @@ M-方向鍵：移動行/列
 
 [Org] Org 文件中插入連結後，你應該會很好奇該怎麼打開該連結：答案是 C-c C-o。
 如果你覺得這種設計太反人類，可以使用 (setq org-return-follows-link t)
- 這個設定可以讓你直接按 Enter 就開啟連結。
+這個設定可以讓你直接按 Enter 就開啟連結。
 
 [Org] 文內連結
 - Org-mode 中按 C-c C-l 可以插入連結（再按 tab 可以看到所有支援的連結格式）
@@ -242,24 +335,24 @@ $LaTeX 數學式$
 (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
 來解決。
 
-[Org-mode] 如果想要自訂 Org 輸出 HTML 的 CSS 樣式，可以自行修改 org-html-style
+[Org] 如果想要自訂 Org 輸出 HTML 的 CSS 樣式，可以自行修改 org-html-style
 的值，範例如下：
 (setq org-html-style "<style type=\"text/css\">
 body {color: #555;}
 </style>")
 
-[Org-mode] C-c C-x f 可以在目前游標處加上腳註
-（同時，在文件底部會出現同號碼的腳註，腳註內容就是寫在這裡）。
+[Org] C-c C-x f 可以在目前游標處加上腳註（同時，在文件底部會出現同號碼的
+腳註，腳註內容就是寫在這裡）。
 命令前先加一個 C-u 前綴可以刪除/排序腳註。
 在腳註上面按 C-c C-c 可以互相跳轉到同號碼的腳註。
 
-[套件] multiple-cursors：瘋狂且非常實用方便的功能，能夠
-「複製目前游標、並同時編輯多處」推薦給所有 Emacsers，用途很廣泛。
-操作很難用文字解釋，請看 demo 影片操作示範。http://youtu.be/jNa3axo40qM
+[套件] multiple-cursors：瘋狂且非常實用方便的功能，能夠「複製目前游標、並同時
+編輯多處」。推薦給所有 Emacsers，用途很廣泛。操作很難用文字解釋，請看 demo 影片
+操作示範。http://youtu.be/jNa3axo40qM
 
-[套件] Rainbow-mode：寫 CSS 必備，直接在 Emacs 中顯示文內 hex 色碼的顏色！
+[套件] rainbow-mode：寫 CSS 必備，直接在 Emacs 中顯示文內 hex 色碼的顏色！
 （注：最新版 Emacs 已經內建，直接 M-x rainbow-mode 啟動即可）
-[[file:rainbow-mode.png]]
+[[file:./images/rainbow-mode.png]]
 
 [套件] helm-swoop：輸入任何字串，會即時顯示出當前檔案/多個檔案中，符合該字串的
 地方，並即時跳轉編輯，必裝！（注：需要先安裝 helm，都可以在 MELPA 中找到）
@@ -268,7 +361,7 @@ body {color: #555;}
 [套件] Ace-jump：必裝套件，在 buffer window 中，只用鍵盤、三個按鍵就能讓游標
 直接跳到指定的字母處。請看附圖 demo：
 [[https://github.com/winterTTr/ace-jump-mode][ace-jump-mode]]
-[[file:ace-jump-mode-demo.mp4][ace-jump-mode demo]]
+[[file:./images/ace-jump-mode-demo.mp4][ace-jump-mode demo]]
 
 [技巧]
 C-l 可以以目前游標位置為基準，將畫面向上/中/下 輪流切換（游標位置不變）。
@@ -276,27 +369,30 @@ M-r 則是讓目前游標在目前 window 的上/中/下 輪流切換（游標�
 （註：M-r 的功能直接用 Ace-jump 這個套件取代可能會比較有用 ）
 
 [技巧] M-q (fill-paragraph) 能夠把目前行在寬度 N 字元處（預設為 70）自動換行
-（尤其寫註解時很方便。） 可以用 (setq fill-column 72) 來設定多少字元換行。
+（尤其寫註解時很方便。）可以用 (setq fill-column 72) 來設定多少字元換行。
 
 [套件] git-gutter，對於 git repository 內的檔案，哪幾行修改過了都能夠一目了然。
 [[https://github.com/syohex/emacs-git-gutter]]
-[[file:emacs-git-gutter.png]]
+[[file:./images/emacs-git-gutter.png]]
 
 [套件] smeargle，可根據 git/mercurial 的紀錄，將檔案內容中較新與較早修改的部份
 以不同背景顏色顯示。
 [[https://github.com/syohex/emacs-smeargle]]
-[[file:emacs-smeargle.png]]
+[[file:./images/emacs-smeargle.png]]
 
 [入門] Org-mode 是 Emacs 內建的殺手級功能，讓人輕鬆地用純文字檔寫筆記日記、備忘
 錄、建立自己的知識資料庫、GTD、最後還可以把文件輸出成 HTML、PDF 等多種格式；
 Emacs 使用者真應該試試看，這段簡易教學影片是個好開始  http://vimeo.com/15269391
 
-[Org] Org-mode 有 code block，作筆記非常方便。使用方法是開新行後輸入<s 再按 Tab，
+[Org] Org-mode 有 code block，作筆記非常方便。使用方法是開新行後輸入 =<s= 再按 Tab，
 會自動展開如下：
-#+BEGIN_SRC
+
+#+begin_src
+#+end_src
+
 可使用 C-c '開新視窗編輯 code；再按一次以完成。
 標題記得指定語言；如圖：
-[[file:Org-mode_code-block.png]]
+[[file:./images/org-mode_code-block.png]]
 
 [Dired][入門] 嘗試了下 Dired，卻發現好像沒有傳說中的那樣好用？
 「必備 Dired 設定與簡易教學」就是你要的：
@@ -317,17 +413,17 @@ Emacs 使用者真應該試試看，這段簡易教學影片是個好開始  htt
 (setq dired-dwim-target t)
 設定好後，用 C-x 3 在螢幕上開兩個 dired 視窗（如附圖），再來只要按 R 或 C
 （移動/複製檔案）時，會自動以另一個視窗為預設目標路徑
-[[file:dired-dwim.png]]
+[[file:./images/dired-dwim.png]]
 
 [入門] 我們推薦的套件，除非有另外註明，否則只要加入 MELPA 的設定，使用
 M-x list-packages 都可以很容易地安裝。
 [[http://ithelp.ithome.com.tw/question/10131101]]
-[[file:list-packages.png]]
+[[file:./images/list-packages.png]]
 
 [套件] Dired+ ：必裝的 Dired 加強版（是直接在 dired-mode 上加強，不是新的 mode，
 故使用方法不變）
 [[http://www.emacswiki.org/emacs/DiredPlus]]
-[[file:DiredPlus.png]]
+[[file:./images/DiredPlus.png]]
 
 [Dired] 搞不懂 Dired 怎麼用？最常用的幾個命令：
 g: 重新整理
@@ -362,12 +458,12 @@ X: 解壓縮
 [套件] 括號老是少打一個，尤其覺得 Lisp 的括號都對不齊、一直寫錯？
 使用 Rainbow-delimiters，自動將成對的括弧上同樣的顏色。
 [[https://github.com/Fanael/rainbow-delimiters]]
-[[file:Rainbow-delimeter.png]]
+[[file:./images/Rainbow-delimeter.png]]
 
 [套件] Visual-Regexp - Emacs 必裝 RegExp replace 神器！
 在輸入 RegExp 時即時顯示匹配結果，replace 時再也不會打錯 RegExp：
 [[https://github.com/benma/visual-regexp.el]]
-[[file:visual-regexp.el.png]]
+[[file:./images/visual-regexp.el.png]]
 
 [技巧] ffap - Emacs 內建、卻沒有預設啟用的超方便功能。設定如下：
 (require 'ffap)
@@ -397,10 +493,6 @@ Emacs 使用者請務必學會用 package.el 來安裝、升級、管理你的 E
 [技巧] 在任何語言的 mode 下，使用 M-; 可在該行自動插入該語言的註解。
 （程式語言或標記語言，如 Org, Markdown-mode 也可）
 按 C-u M-; ，則可以把該行註解刪掉、並加入剪貼簿(kill-ring)。
-
-[外觀] 不滿意 Emacs 的預設外觀，想快點找到一個自己喜歡的 theme？
-這個網站整理了很多受歡迎的 theme，而且全部都有附上截圖，非常方便：
-http://emacsthemes.caisah.info/installed-emacs-themes/
 
 [CJK][Org] "解決 org-mode 表格內中英文對齊的問題"
 [[http://coldnew.github.io/blog/2013/11-16_d2f3a/]]
