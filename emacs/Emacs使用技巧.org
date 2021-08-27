@@ -12,8 +12,8 @@
 時，M-x toggle-debug-on-error。
 
 [ELisp] 游標移動到一個 (defun ...) 時，可以利用 M-x edebug-defun 來給一個函數
-除錯，會在下一次執行該函數時，一個一個 sexp 執行，按 SPC 來執行下一個 sexp，按 q
-離開除錯，再次 C-x C-e 該 (defun ...) ，即會恢復回正常狀態。
+除錯，會在下一次執行該函數時，一個一個 sexp 執行，按 SPC 來執行下一個 sexp，按
+q 離開除錯，再次 C-x C-e 該 (defun ...) ，即會恢復回正常狀態。
 
 [設定] (setq search-whitespace-regexp ".*?") 「这行代码让 Emacs 的搜索时的
 空白字符为任意字符，也就是说 C-s 搜索时任意字符都可以用空格代替」
@@ -23,8 +23,8 @@
 [技巧] C-x z : 重複上一個指令，再按一次 'z ' 會繼續重複這個指令。
 例: C-k C-x z z z 總共刪除 4 行
 
-[技巧] C-q : 對按鍵不做任何解釋，直接輸入。例：C-q TAB 可以再無法使用 TAB 情況下
-輸入 tab。
+[技巧] C-q : 對按鍵不做任何解釋，直接輸入。例：C-q TAB 可以再無法使用 TAB 情況
+下輸入 tab。
 
 [技巧] C-x SPC 可以進入矩形選取模式。
 
@@ -33,16 +33,16 @@
 暫時顯示出來（包含 link）
 
 [技巧] 儲存目前 buffer 一般是按 C-x C-s，但其實你也可以按 C-x s 來一個個儲存所有
-修改過的 buffers（會一個個詢問），而且可以在詢問時按 d 來 diff 看看這個檔案修改了
-哪些地方，你再決定要不要儲存。
+修改過的 buffers（會一個個詢問），而且可以在詢問時按 d 來 diff 看看這個檔案修改
+了哪些地方，你再決定要不要儲存。
 
 [套件] wgrep-ag https://github.com/mhayashi1120/Emacs-wgrep
 直接修改 M-x ag 的搜尋結果的 buffer，並會自動把所有修改存回原檔案，refactoring
 rename 的一種選擇。
 註：除了 ag 外，也有提供 ack, pt 的版本。
 
-[技巧] 任何程式語的 mode 下，M-; 可以插入註釋。我們常常輸入太長的註釋以致超出螢幕，
-這時可以按 M-q 讓 Emacs 自動幫該註釋排版（超出螢幕的部份會自動換行）。
+[技巧] 任何程式語的 mode 下，M-; 可以插入註釋。我們常常輸入太長的註釋以致超出螢
+幕，這時可以按 M-q 讓 Emacs 自動幫該註釋排版（超出螢幕的部份會自動換行）。
 
 [套件] ESUP: 給 Emacs 設定檔測速、找出拖慢速度的瓶頸
 https://github.com/jschaf/esup
@@ -51,8 +51,9 @@ https://github.com/jschaf/esup
 https://github.com/Bruce-Connor/aggressive-indent-mode/
 
 [技巧] 在 Code 中寫很長的 comment/doc 時，常為了一行不要超過 72 字元得手動換行，
-而且換行後還得自己按 M-;實在很不方便。其實在 Emacs 中比較方便的方法應該是「一直打下
-去不要換行、一口氣打完」後，再直接 M-q，Emacs 會自動幫你整理成一行不超過 72 個字。
+而且換行後還得自己按 M-;實在很不方便。其實在 Emacs 中比較方便的方法應該是「一直
+打下去不要換行、一口氣打完」後，再直接 M-q，Emacs 會自動幫你整理成一行不超過 72
+個字。
 
 [技巧] C-M-b 和 C-M-f 可以在一堆 S-expression (Lisp 用的表達式) 之中遊走。
 
@@ -65,8 +66,8 @@ https://github.com/Bruce-Connor/aggressive-indent-mode/
 
 [技巧] M-^ 可以將目前行的 indentation 刪掉、並直接 concat 到前一行的尾端。
 
-[技巧] 游標在一堆連續的空白之中時，M-\ 可以把這些空白一次消掉, M-SPC 則是只留一個
-空白。
+[技巧] 游標在一堆連續的空白之中時，M-\ 可以把這些空白一次消掉, M-SPC 則是只留一
+個空白。
 
 [24.4] 以往 Emacs 中，code 中的 CamelCase 都會被視為單一個字，所以當按
 M-backspace 時會將整個字刪掉，很不方便。24.4 內建了 M-x subword-mode，啟用後，
@@ -146,8 +147,8 @@ emacs -Q
 (windmove-default-keybindings 'shift)
 這樣只要按 shitf+方向鍵 就能夠切換 window
 
-[技巧] Emacs 除了可以直接編輯遠端檔案，也可以透過 su/sudo 來以 root 權限直接編輯特定
-檔案，而不用開新的 Emacs。
+[技巧] Emacs 除了可以直接編輯遠端檔案，也可以透過 su/sudo 來以 root 權限直接編輯
+特定檔案，而不用開新的 Emacs。
 假設我要編輯/etc/hosts，C-x C-f 後，輸入：
 /su::/etc/hosts
 或
@@ -176,8 +177,8 @@ emacs -Q
 B，這時依舊隨時能夠回到狀態 A，不會因為輸入了文字、A 就被洗掉、而只能回到 A'。
 玩玩看 undo-tree 會更了解
 
-[設定] 覺得 kill-ring（剪貼簿）預設只有 60 個項目太少的話，可以做如下設定改成
-自己想要的數量： (setq kill-ring-max 200)
+[設定] 覺得 kill-ring（剪貼簿）預設只有 60 個項目太少的話，可以做如下設定改成自
+己想要的數量： (setq kill-ring-max 200)
 
 [技巧] C-q 前綴可以插入控制字元，例如 C-q RET 將會插入^M 換行、C-q ESC 會插入
 ^[。這個功能有時可以用在一些 minibuffer 輸入中，例如當你想插入換行字元，但按
@@ -185,8 +186,8 @@ RET 會被解讀成「送出」時。
 
 [技巧] 按一下 ESC 後輸入數字 n，再下任何指令/操作，將會將該動作重複 n 遍。
 
-[ibuffer] ibuffer 可以根據各種特徵來為 buffer 分類，這樣使用 buffer 切換器時
-應該不會像以前那樣痛苦。參考設定如下：http://paste.ubuntu.com/7855489/
+[ibuffer] ibuffer 可以根據各種特徵來為 buffer 分類，這樣使用 buffer 切換器時應
+該不會像以前那樣痛苦。參考設定如下：http://paste.ubuntu.com/7855489/
 
 ;; 使用 ibuffer 的分類功能
 (setq ibuffer-saved-filter-groups
@@ -245,7 +246,8 @@ RET 會被解讀成「送出」時。
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
 [技巧] 很多剛接觸 Emacs 的人都會對於這點感到奇怪：
-為何預設按 Enter 換行時都不會自動縮排？其實可以像這樣設定，這樣換行時就會自動縮排：
+為何預設按 Enter 換行時都不會自動縮排？其實可以像這樣設定，這樣換行時就會自動
+縮排：
 (define-key prog-mode-map (kbd "<RET>") 'newline-and-indent)
 （注：prog-mode-map 指的是程式編輯相關的 mode map。）
 
@@ -254,12 +256,12 @@ RET 會被解讀成「送出」時。
 （建議可以綁到 M-y）
 [[file:./images/popup-kill-ring.png]]
 
-[技巧] C-x C-v 為 find-alternate-file，效果基本上等同 C-x C-f 開檔，但會先將
-關閉目前 buffer，再以新的 buffer 開檔。
+[技巧] C-x C-v 為 find-alternate-file，效果基本上等同 C-x C-f 開檔，但會先將關
+閉目前 buffer，再以新的 buffer 開檔。
 
-[入門] prog-mode 是 programming 相關的所有 major-mode 的 parent mode，所以你
-可以使用(add-hook 'prog-mode-hook ...)之類的方式來自訂你想要的東西，而不用分別
-自訂各種程式語言的 mode，各種 mode 會自己繼承設定。
+[入門] prog-mode 是 programming 相關的所有 major-mode 的 parent mode，所以你可
+以使用(add-hook 'prog-mode-hook ...)之類的方式來自訂你想要的東西，而不用分別自
+訂各種程式語言的 mode，各種 mode 會自己繼承設定。
 
 [入門]需要在啟動某個 mode 後，自動啟動你想要的 minor-mode？使用 add-hook。
 (add-hook 'mode 名-hook '想要的 function)
@@ -276,9 +278,9 @@ RET 會被解讀成「送出」時。
 
 [[file:./images/highlight-symbol-mode.png]]
 
-[套件] discovery.el : Emacs 有一些藏在深處的按鍵沒人講你可能永遠也不會發現
-（例如 C-x r 開頭的組合鍵），即使知道了也很難記住。discovery.el 解決了一些問題。
-（附圖為按下 C-x r 後跳出的「小抄」視窗）
+[套件] discovery.el : Emacs 有一些藏在深處的按鍵沒人講你可能永遠也不會發現（例如
+C-x r 開頭的組合鍵），即使知道了也很難記住。discovery.el 解決了一些問題。
+附圖為按下 C-x r 後跳出的「小抄」視窗：
 [[file:./images/discovery.el.png]]
 
 [技巧] M-x imenu 能夠快速跳轉到目前檔案中的函數定義（可用 tab 鍵 completion）。
@@ -290,8 +292,8 @@ RET 會被解讀成「送出」時。
 別小看這個功能，熟悉以後非常的實用，尤其是 M-t。
 
 [技巧] M-x sort-lines 可以將目前選取區域中的行按照字母順序排列。
-M-x delete-duplicate-lines 則是可以將目前選取區域中，重複的行刪除。這兩個命令在
-編輯一大串清單時非常實用。（註：可使用 C-x h 以全選整個 buffer）
+M-x delete-duplicate-lines 則是可以將目前選取區域中，重複的行刪除。這兩個命令
+在編輯一大串清單時非常實用。（註：可使用 C-x h 以全選整個 buffer）
 
 [ELisp] 需要 concat 一串 list 成字串時，記得可以用 mapconcat
 （ELisp 的 format 沒辦法像 CLisp 那樣 iterate）。
@@ -304,17 +306,17 @@ C-c C-c 重新整理
 C-c Enter 新增一條水平分隔線
 M-方向鍵：移動行/列
 
-[Org] C-c C-x C-l 可以預覽「目前 outline（文章標題） 範圍」中，所有用 $$ 包起來的 LaTeX 算式。
-如果先加兩個 C-u 前綴，則是預覽整個 buffer。
+[Org] C-c C-x C-l 可以預覽「目前 outline（文章標題） 範圍」中，所有用 $$ 包起來
+的 LaTeX 算式。如果先加兩個 C-u 前綴，則是預覽整個 buffer。
 
-[Org] C-c C-x C-v 可以預覽目前 buffer 中的所有圖片連結。如果系統上有 ImageMagick，
-可以設定：
+[Org] C-c C-x C-v 可以預覽目前 buffer 中的所有圖片連結。
+如果系統上有 ImageMagick，可以設定：
 (setq org-image-actual-width '(300))
 在預覽時將會先把圖片縮成 300px 寬才顯示。
 
-[Org] Org 文件中插入連結後，你應該會很好奇該怎麼打開該連結：答案是 C-c C-o。
-如果你覺得這種設計太反人類，可以使用 (setq org-return-follows-link t)
-這個設定可以讓你直接按 Enter 就開啟連結。
+[Org] Org 文件中插入連結後，你應該會很好奇該怎麼打開該連結：答案是 C-c C-o。如
+果你覺得這種設計太反人類，可以使用 (setq org-return-follows-link t) 這個設定可
+以讓你直接按 Enter 就開啟連結。
 
 [Org] 文內連結
 - Org-mode 中按 C-c C-l 可以插入連結（再按 tab 可以看到所有支援的連結格式）
@@ -330,13 +332,13 @@ $LaTeX 數學式$
 =文內程式碼=  (不經 Org syntax 處理、直接輸出)
 ~不處理~  (也是不經 Org syntax 處理直接輸出)
 
-[Org] 預設狀況下，Org-mode 內的中文內容可能會有文字超出頁面而不換行的問題，
-可以使用：
+[Org] 預設狀況下，Org-mode 內的中文內容可能會有文字超出頁面而不換行的問題，可
+以使用：
 (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
 來解決。
 
-[Org] 如果想要自訂 Org 輸出 HTML 的 CSS 樣式，可以自行修改 org-html-style
-的值，範例如下：
+[Org] 如果想要自訂 Org 輸出 HTML 的 CSS 樣式，可以自行修改 org-html-style 的
+值，範例如下：
 (setq org-html-style "<style type=\"text/css\">
 body {color: #555;}
 </style>")
@@ -358,8 +360,8 @@ body {color: #555;}
 地方，並即時跳轉編輯，必裝！（注：需要先安裝 helm，都可以在 MELPA 中找到）
 [[https://github.com/ShingoFukuyama/helm-swoop][helm-swoop]]
 
-[套件] Ace-jump：必裝套件，在 buffer window 中，只用鍵盤、三個按鍵就能讓游標
-直接跳到指定的字母處。請看附圖 demo：
+[套件] Ace-jump：必裝套件，在 buffer window 中，只用鍵盤、三個按鍵就能讓游標直
+接跳到指定的字母處。請看附圖 demo：
 [[https://github.com/winterTTr/ace-jump-mode][ace-jump-mode]]
 [[file:./images/ace-jump-mode-demo.mp4][ace-jump-mode demo]]
 
@@ -384,8 +386,8 @@ M-r 則是讓目前游標在目前 window 的上/中/下 輪流切換（游標�
 錄、建立自己的知識資料庫、GTD、最後還可以把文件輸出成 HTML、PDF 等多種格式；
 Emacs 使用者真應該試試看，這段簡易教學影片是個好開始  http://vimeo.com/15269391
 
-[Org] Org-mode 有 code block，作筆記非常方便。使用方法是開新行後輸入 =<s= 再按 Tab，
-會自動展開如下：
+[Org] Org-mode 有 code block，作筆記非常方便。使用方法是開新行後輸入 =<s= 再按
+Tab，會自動展開如下：
 
 #+begin_src
 #+end_src
@@ -442,18 +444,18 @@ d: 標記多個檔案為刪除
 x: 套用刪除
 X: 解壓縮
 
-[技巧] M-z (zap-to-char) 後輸入字元，可以從目前游標位置、一路刪到離游標最近的該
-字元。
+[技巧] M-z (zap-to-char) 後輸入字元，可以從目前游標位置、一路刪到離游標最近的
+該字元。
 
-[技巧] 在 minibuffer 中，M-p 與 M-n 可以回溯 minibuffer 的歷史紀錄
-（比按方向鍵好按）；在 minibuffer 裡按 C-r 甚至可以直接往回搜尋歷史紀錄。
+[技巧] 在 minibuffer 中，M-p 與 M-n 可以回溯 minibuffer 的歷史紀錄（比按方向鍵
+好按）；在 minibuffer 裡按 C-r 甚至可以直接往回搜尋歷史紀錄。
 
 [技巧] 在任何時候，你都可以使用 M-! 在當前工作目錄下執行 shell 指令。用途包括
 測試寫到一半的 script、或者在當前目錄下 git clone 等，非常方便。如果先加一個
 數字前綴（如 M-1 M-! ），shell 的執行結果會直接插入當前的 buffer 中。
 
-[技巧] M-x pwd 可以得知目前所在的工作目錄
-（在 Emacs 中是叫做 default-directory），概念與平常使用的 shell 指令`pwd`相同。
+[技巧] M-x pwd 可以得知目前所在的工作目錄（在 Emacs 中是叫做 default-directory
+），概念與平常使用的 shell 指令`pwd`相同。
 
 [套件] 括號老是少打一個，尤其覺得 Lisp 的括號都對不齊、一直寫錯？
 使用 Rainbow-delimiters，自動將成對的括弧上同樣的顏色。
@@ -468,8 +470,8 @@ X: 解壓縮
 [技巧] ffap - Emacs 內建、卻沒有預設啟用的超方便功能。設定如下：
 (require 'ffap)
 (ffap-bindings)
-設定後，按下 C-x C-f 與預設的開檔行為沒有什麼不同之處，但如果目前游標下的文字剛
-好是個目錄或檔案路徑，就會以該路徑為預設值。
+設定後，按下 C-x C-f 與預設的開檔行為沒有什麼不同之處，但如果目前游標下的文字
+剛好是個目錄或檔案路徑，就會以該路徑為預設值。
 
 [入門] 「我裝好 Emacs 了，但我沒看到使用者設定檔啊？」
 「很多系統不會為使用者事先建立設定檔，要自己手動建立。
@@ -507,6 +509,6 @@ M-c 首字大寫
 M-l 全小寫
 M-u 全大寫
 
-[技巧] 在任何地方按 C-x C-q 可以打開/解除目前 buffer 的唯獨狀態。
-而在 Dired 下解除唯獨的話，甚至可以非常直覺的直接改目前目錄下的檔名、或者刪檔
-（整行刪掉就是了）；改完後記得按 C-c C-c 儲存修改。
+[技巧] 在任何地方按 C-x C-q 可以打開/解除目前 buffer 的唯獨狀態。而在 Dired 下
+解除唯獨的話，甚至可以非常直覺的直接改目前目錄下的檔名、或者刪檔（整行刪掉就是
+了）；改完後記得按 C-c C-c 儲存修改。
