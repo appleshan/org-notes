@@ -1,6 +1,6 @@
 #+TITLE: Hideshow与evil-mode按键对比表格
 
-@See https://emacs-china.org/t/emacs-builtin-mode/11937/36
+@See https://github.com/condy0919/emacs-newbie/blob/master/introduction-to-builtin-modes.md#hideshow
 
 | 功能             | 原生        | evil-mode |
 |------------------+-------------+-----------|
