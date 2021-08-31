@@ -1,0 +1,12 @@
+#+TITLE: Hideshow与evil-mode按键对比表格
+
+@See https://emacs-china.org/t/emacs-builtin-mode/11937/36
+
+| 功能             | 原生        | evil-mode |
+|------------------+-------------+-----------|
+| hs-hide-block    | C-c @ C-h   | zc        |
+| hs-show-block    | C-c @ C-s   | zo        |
+| hs-hide-all      | C-c @ C-M-h | zm        |
+| hs-show-all      | C-c @ C-M-s | zr        |
+| hs-toggle-hiding | C-c @ C-c   | za        |
+| hs-hide-level    | C-c @ C-l   | 无        |
