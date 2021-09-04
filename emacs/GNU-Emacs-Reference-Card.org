@@ -140,7 +140,8 @@ kill a buffer                                       C-x k
 
 * Multiple Windows
 
-When two commands are shown, the second is a similar command for a frame instead of a window.
+When two commands are shown, the second is a similar command for a frame
+instead of a window.
 delete all other windows                    C-x 1      C-x 5 1
 split window, above and below               C-x 2      C-x 5 2
 delete this window                          C-x 0      C-x 5 0
