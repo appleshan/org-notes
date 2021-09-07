@@ -1,0 +1,25 @@
+#+TITLE: Magit Resolve Conflict
+
+@See https://vritser.github.io/posts/emacs-resolve-conflict/
+
+* 一般流程
+1. 在 git 项目打开 magit: M-x magit-status
+2. 拉取/合并上游代码
+3. 与上游代码产生了冲突, 找到有冲突的文件, 回车打开该文件
+4. 保留自己的改动: C-c ^ u
+5. 保留别人的改动: C-c ^ l
+6. 全部保留: C-c ^ a
+7. 如果一个文件有多处冲突, 使用 C-c ^ n 跳到下一处冲突, C-c ^ p 跳到上一处冲突
+
+* 修改按键绑定
+#+begin_src emacs-lisp
+(define-key smerge-mode-map (kbd "C-p") 'smerge-prev)
+(define-key smerge-mode-map (kbd "C-n") 'smerge-next)
+(define-key smerge-mode-map (kbd "C-c u") 'smerge-keep-upper)
+(define-key smerge-mode-map (kbd "C-c o") 'smerge-keep-lower)
+(define-key smerge-mode-map (kbd "C-c a") 'smerge-keep-all)
+#+end_src
+
+* 资源
+ - Magit: https://magit.vc
+ - Video: https://emacsgifs.github.io/public/videos/758861381898637313.mp4

@@ -1,0 +1,18 @@
+#+TITLE: 经常使用的magit工作流
+
+| 快捷键                  | 功能                                                                                         |
+|-------------------------+----------------------------------------------------------------------------------------------|
+| C-c C-p v               | 让 Projectile 呼出本项目的 magit。当然你也可以用 M-x magit 呼出                              |
+| s                       | 当光标停在一个 untracked file 上时， stage 这个文件；当停在一个 diff 区块时， stage 这个区块 |
+| c c                     | git commit                                                                                   |
+| c a                     | git commit --amend （超高频，救命用）                                                        |
+| f p                     | git fetch origin                                                                             |
+| F p                     | git pull                                                                                     |
+| P p                     | git push                                                                                     |
+| l b                     | git log 所有分支                                                                             |
+| A                       | 当光标停在一个 commit 上时， Cherry Pick 它                                                  |
+| t t                     | git tag                                                                                      |
+| Z z                     | git stash                                                                                    |
+| Z p                     | 光标停在一个 stash 上时，git stash pop 它                                                    |
+| M-x magit-file-dispatch | 当前文件「时光机」                                                                           |
+| M-x magit-blame         | 顾名思义， git blame 当前文件                                                                |
