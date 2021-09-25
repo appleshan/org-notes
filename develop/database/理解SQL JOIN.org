@@ -1,0 +1,12 @@
+#+TITLE: 理解sql Join
+
+首先, 可视化的介绍下连接的各种情况, 以表 1 和表 2 为例, 下面分别列出了各种可能的连接的情况
+
+ - 笛卡尔集: cross join
+ - 内连接: inner join
+ - 左外连接: left outer join
+ - 右外连接: right outer join
+ - 全外连接: full outer join
+
+#+attr_html: :width 700px
+[[file:../../images/sql-join.png]]
