@@ -1,0 +1,91 @@
+#+title: 配置多个git帐号
+
+为同一个电脑，配置多个 git 帐号，其整体流程如下：
+
+ - 清空默认的全局 user.name 和 user.email
+ - 为不同的 git 帐户生成不同的 ssh-key
+ - 将以上的 ssh-key 分别添加到 ssh-agent 信任列表
+ - 添加以上的公钥到自己的 git 帐户中
+ - 在 config 文件配置多个 ssh-key
+ - 测试
+
+
+* 1. 清空默认的全局 user.name 和 user.email
+
+#+begin_src bash
+git config --global --unset user.name
+git config --global --unset user.email
+#+end_src
+
+* 2. 为不同的 git 帐户生成不同的 ssh-key
+
+id_rsa 是默认的文件名称，我们现在需要生成不同的 ssh-key，所以要设置不同的文件存储对应的公钥，
+比如：自己的 GitHub 帐户，使用 id_rsa_github 命名；公司的帐户，使用 id_rsa_lovense 来命名
+
+#+begin_src bash
+ssh-keygen -t rsa -f id_rsa_github -C "apple.shan@gmail.com"
+
+ssh-keygen -t rsa -f id_rsa_lovense -C "alecshan@hytto.com"
+#+end_src
+
+* 3. 将 ssh-key 分别添加到 ssh-agent 信任列表
+#+begin_src bash
+ssh-add ~/.ssh/id_rsa_github
+
+ssh-add ~/.ssh/id_rsa_lovense
+#+end_src
+
+如果看到 Identitiy added: ~/.ssh/id_rsa_github ，就表示添加成功了。
+
+* 4. 添加公钥到自己的 git 帐户中
+使用命令， copy 公钥，到 git 帐户中粘贴即可。
+#+begin_src bash
+pbcopy < ~/.ssh/id_rsa_github.pub
+
+pbcopy < ~/.ssh/id_rsa_lovense.pub
+#+end_src
+
+* 5. 在 config 文件配置多个 ssh-key
+
+在 .ssh/ 目录下， config 文件（没有的话新建一个）
+
+#+begin_example
+# https://gitlab.lovense.cn:16666/
+Host gitlab.lovense.cn
+  HostName gitlab.lovense.cn
+  User alecshan
+  IdentityFile ~/.ssh/id_rsa_lovense
+
+#Default Git
+# https://github.com/appleshan/
+Host github.com
+  HostName github.com
+  User appleshan
+  IdentityFile ~/.ssh/id_rsa_github
+#+end_example
+
+* 6. 测试
+
+测试：ssh -T git@{config里面的user}.xxx主机名
+
+- 个人
+#+begin_src bash
+ssh -T git@github.com
+#+end_src
+
+出现以下，则说明成功！
+
+#+begin_example
+Hi appleshan! You've successfully authenticated, but GitHub does not provide shell access.
+#+end_example
+
+- 公司
+#+begin_src bash
+ssh -T git@gitlab.lovense.cn
+#+end_src
+
+出现以下，则说明成功！
+
+#+begin_example
+Welcome to GitLab, @alecshan!
+#+end_example
