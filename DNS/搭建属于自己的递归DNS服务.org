@@ -1,0 +1,61 @@
+#+TITLE: 搭建属于自己的递归DNS服务
+
+GitHub repo：
+https://github.com/kkkgo/PaoPaoDNS
+
+* 搭建DNS服务
+#拉取最新的docker镜像
+podman pull sliamb/paopaodns:latest
+
+#构建容器
+#假设你的数据要放在 /home/alecshan/.cache/paopaodns
+podman run -d \
+--name paopaodns \
+-v /home/alecshan/.cache/paopaodns:/data \
+-e CNAUTO=yes \
+-p 1053:53/tcp -p 1053:53/udp \
+sliamb/paopaodns
+
+# 在容器内置执行 test.sh
+docker exec paopaodns test.sh
+# 如果执行后输出 ALL TEST PASS，则所有组件都工作正常。
+# 如果显示 FAIL，可以执行 debug.sh 进一步分析原因。
+
+# @See https://serverfault.com/questions/1042205/how-to-set-custom-port-for-dns-in-systemd-resolved
+# 转发 53 端口到 1053，这样就可以把 PaoPaoDNS 当作本地 递归DNS 使用.
+iptables -t nat -A OUTPUT -p tcp -d 127.0.0.1 --dport 53 -j DNAT --to-destination 127.0.0.1:1053
+iptables -t nat -A OUTPUT -p udp -d 127.0.0.1 --dport 53 -j DNAT --to-destination 127.0.0.1:1053
+
+#测试：
+dig www.taobao.com @127.0.0.1 -p53 A +short
+dig www.google.com @127.0.0.1 -p53 A +short
+
+* podman 容器在开机自启动
+
+用 rootless 模式启动容器
+
+# 查看该容器
+podman ps
+
+# 第一步：创建目录来存储unit文件（可选）
+mkdir -p ~/.config/systemd/user/
+
+# 第二步：为已有容器生成 systemd 服务文件
+podman generate systemd --name paopaodns --files
+
+# 第三步：安装 systemd 服务
+# 将service文件保存在~/.config/systemd/user/
+cp container-paopaodns.service ~/.config/systemd/user/
+
+# 刷新配置文件，让其生效
+systemctl --user daemon-reload
+
+# 设置容器开机自启，并且现在启动
+systemctl --user enable --now ~/.config/systemd/user/container-paopaodns.service
+
+# 测试启动容器
+systemctl --user restart container-web.service
+
+# 最后，查看容器是否在运行，并查看是否开机自启和运行
+systemctl --user status container-paopaodns.service
+podman ps
