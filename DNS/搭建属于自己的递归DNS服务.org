@@ -1,61 +1,133 @@
 #+TITLE: 搭建属于自己的递归DNS服务
 
+系统环境：Arch Linux
+
+* 搭建DNS服务
+
 GitHub repo：
 https://github.com/kkkgo/PaoPaoDNS
 
-* 搭建DNS服务
-#拉取最新的docker镜像
-podman pull sliamb/paopaodns:latest
+** 拉取最新的镜像
 
-#构建容器
-#假设你的数据要放在 /home/alecshan/.cache/paopaodns
+#+BEGIN_SRC
+podman pull sliamb/paopaodns:latest
+#+END_SRC
+
+** 构建容器
+
+假设你的数据要放在 /home/alecshan/.cache/paopaodns
+#+BEGIN_SRC
 podman run -d \
 --name paopaodns \
 -v /home/alecshan/.cache/paopaodns:/data \
 -e CNAUTO=yes \
 -p 1053:53/tcp -p 1053:53/udp \
 sliamb/paopaodns
+#+END_SRC
 
-# 在容器内置执行 test.sh
+** 测试容器内部所有组件
+
+在容器内置执行 test.sh
+#+BEGIN_SRC
 docker exec paopaodns test.sh
-# 如果执行后输出 ALL TEST PASS，则所有组件都工作正常。
-# 如果显示 FAIL，可以执行 debug.sh 进一步分析原因。
+#+END_SRC
 
-# @See https://serverfault.com/questions/1042205/how-to-set-custom-port-for-dns-in-systemd-resolved
-# 转发 53 端口到 1053，这样就可以把 PaoPaoDNS 当作本地 递归DNS 使用.
-iptables -t nat -A OUTPUT -p tcp -d 127.0.0.1 --dport 53 -j DNAT --to-destination 127.0.0.1:1053
-iptables -t nat -A OUTPUT -p udp -d 127.0.0.1 --dport 53 -j DNAT --to-destination 127.0.0.1:1053
+如果执行后输出 ALL TEST PASS，则所有组件都工作正常。
+如果显示 FAIL，可以执行 debug.sh 进一步分析原因。
 
-#测试：
-dig www.taobao.com @127.0.0.1 -p53 A +short
-dig www.google.com @127.0.0.1 -p53 A +short
+** 测试 1053 的 DNS 服务
+#+BEGIN_SRC
+dig www.taobao.com @127.0.0.1 -p1053 A +short
+dig www.google.com @127.0.0.1 -p1053 A +short
+#+END_SRC
 
 * podman 容器在开机自启动
 
 用 rootless 模式启动容器
 
-# 查看该容器
+查看该容器
+#+BEGIN_SRC
 podman ps
+#+END_SRC
 
-# 第一步：创建目录来存储unit文件（可选）
+** 第一步：创建目录来存储unit文件（可选）
+#+BEGIN_SRC
 mkdir -p ~/.config/systemd/user/
+#+END_SRC
 
-# 第二步：为已有容器生成 systemd 服务文件
+** 第二步：为已有容器生成 systemd 服务文件
+#+BEGIN_SRC
 podman generate systemd --name paopaodns --files
+#+END_SRC
 
-# 第三步：安装 systemd 服务
-# 将service文件保存在~/.config/systemd/user/
+** 第三步：安装 systemd 服务
+将service文件保存在~/.config/systemd/user/
+#+BEGIN_SRC
 cp container-paopaodns.service ~/.config/systemd/user/
+#+END_SRC
 
-# 刷新配置文件，让其生效
+刷新配置文件，让其生效
+#+BEGIN_SRC
 systemctl --user daemon-reload
+#+END_SRC
 
-# 设置容器开机自启，并且现在启动
+设置容器开机自启，并且现在启动
+#+BEGIN_SRC
 systemctl --user enable --now ~/.config/systemd/user/container-paopaodns.service
+#+END_SRC
 
-# 测试启动容器
+测试启动容器
+#+BEGIN_SRC
 systemctl --user restart container-web.service
+#+END_SRC
 
-# 最后，查看容器是否在运行，并查看是否开机自启和运行
+最后，查看容器是否在运行，并查看是否开机自启和运行
+#+BEGIN_SRC
 systemctl --user status container-paopaodns.service
 podman ps
+#+END_SRC
+
+* iptables 转发端口 53 到 1053
+
+转发 53 端口到 1053，这样就可以把 PaoPaoDNS 当作本地 递归DNS 使用.
+# @See https://serverfault.com/questions/1042205/how-to-set-custom-port-for-dns-in-systemd-resolved
+
+#+BEGIN_SRC
+iptables -t nat -A OUTPUT -p tcp -d 127.0.0.1 --dport 53 -j DNAT --to-destination 127.0.0.1:1053
+iptables -t nat -A OUTPUT -p udp -d 127.0.0.1 --dport 53 -j DNAT --to-destination 127.0.0.1:1053
+#+END_SRC
+
+查看刚才添加的规则：
+#+BEGIN_SRC
+iptables -t nat -L
+#+END_SRC
+
+备份与恢复：
+#+BEGIN_SRC
+# 此处必须用root执行，sudo权限不够.
+iptables-save > /etc/iptables/iptables.rules
+#+END_SRC
+
+#+BEGIN_SRC
+systemctl enable iptables.service
+systemctl start iptables.service
+#+END_SRC
+
+** 遇到问题
+
+在 Arch Linux 中 iptables.service 不能自动启动，发现 firewalld.service 描述说与 iptables.service 冲突。
+然后，对 firewalld.service disabled，重启 Arch Linux，发现 iptables.service 已经启动。
+
+* 编辑 /etc/resolv.conf
+
+将原有的内容全部注释，然后在第一行写上
+#+BEGIN_SRC
+nameserver 127.0.0.1
+#+END_SRC
+
+* 测试整个服务
+
+#+BEGIN_SRC
+dig www.taobao.com @127.0.0.1 -p53 A +short
+dig www.google.com @127.0.0.1 -p53 A +short
+#+END_SRC
