@@ -1,191 +1,123 @@
 #+TITLE: 我的工具链（Geek 的常用软件清单）
 
+我的工具链（程序员效率指南）
+
 工欲善其事，必先利其器。
 这个器可以可以自己锻造，也可以用现成的。就是不断优化自己的工作环境。
-这些东西不必自己从头来，在 github 上找个 star 最高的 clone 或者 fork 之即可，这便是
-所谓的站在巨人的肩膀上。
 
 * Linux
 ** Arch Linux
+我的主力开发平台。
 是我尝试过的第三种 Linux 发行版，也最终让我留了下来。主要原因就是 pacman + AUR
 很好用，社区活跃，文档丰富，软件更新快，我觉得有人说的所谓折腾其实也是选择自己
 需要的一个过程，是有回报的。
-** Ubuntu - 可以让人少折腾的开发平台。
-** Emacs
-从来没有那个编辑器能像 Emacs 一样吸引到我。
-Coding, Version-Control, Document, GTD, Email 都在 Emacs 里完成。
-如果 Linux 上只能留一个程序，我肯定是选 Emacs。
-*** [[https://github.com/syl20bnr/spacemacs][Spacemacs]]
-最好的编辑器既不是 Emacs，也不是 Vim，而是两者的合体！
-这是一份 emacs 的配置工程。vim 有 vimrc. Emacs 有.emacs.d. 这就是 Emacs 的.emacs.d
-配置工程。利用了 Emacs 的 evil 插件还有别的一些插件, 实现了 Emacs 中使用 VIM 的
-快捷键。已经将原生的 Emacs 改造成了另一个模样。
-- 1. 它是我见过最好看的 Emacs 配置.
-- 2. 工程结构完美，容易扩展.
-- 3. 它是我见过文档最全,最丰富,最易懂的 Emacs 配置.比`oh-my-emacs`好好几个量级.
-- 4. 开发人员更多.在开源世界里, 这个工程拥有上千的 fork 量,开发非常活跃.
-- 5. 对 evil 的支持更加好,它的主打就是 evil.
-- 6. 它非常精致.简直给粗糙的 Emacs 上了一层美丽的妆.
-- 7. 操作更人性化,细节考虑太周到了
-*** [[https://github.com/appleshan/my-spacemacs-config][my-spacemacs-config]] - Apple Shan 的 Spacemacs 配置工程
-*** magit - git 客户端
-magit，独一无二的体验，最好用的 git 软件。
-基本可以在 emacs 中完成所有常用 git 命令的操作
-*** org-mode - 用 org 格式写所有文字类的东西。也是强大的 GTD 工具。
-*** 另外，java 的话，还是别用 emacs 了，java，groovy，Scala 都不太适合 emacs。
-** Terminator
-** git
-*** tig : https://github.com/jonas/tig
-字符模式下交互查看 git 项目，可以替代 git 命令。
-[[./images/tig.png]]
-** unity-tweak-tool - Unity 配置工具
+
+** termite / ghostty
+
 ** fcitx - 拼音输入法
-*** fcitx-rime
-** VirtualBox - 免费的虚拟机，主要用于隔离国产软件
-** Email Client
-*** mutt
-**** [[http://www.offlineimap.org/][OfflineIMAP]]
-**** msmtp
-*** exchange server
-**** davmail
-download: http://davmail.sourceforge.net/
-doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without-outlook.html
-*** popfile - 邮件分类
-** 网络下载工具
-*** uget
-*** aria2
-*** youtube-dl
-*** axel : https://axel.alioth.debian.org/
-多线程下载工具，下载文件时可以替代 curl、wget。
-运行以下命令：
-axel -n 20 http://centos.ustc.edu.cn/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso
-[[./images/axel.png]]
-** PAC Manager - 远程管理工具
-** F.lux
-一款根据当前时间调节屏幕颜色的软件。程序员晚睡强迫症的福音。
-** [[https://github.com/GGleb/indicator-netspeed-unity][indicator-netspeed-unity]] - 网速显示小插件
-** psensor - 温度监控小工具
-** shutter - 截图工具
-** 英文词典
-*** goldendict
-项目主页：http://goldendict.org/
-源代码仓库：https://github.com/goldendict/goldendict
+
+** dotfiles
+一个程序员一天可能 80% 的时间都在跟 shell 打交道，有个好的 shell(bash or zsh)，加上
+合理的 shell 配置绝对让效率提升一大截。dotfiles 这样的东西不必自己从头来，在 github
+上找个 star 最高的 clone 或者 fork 之即可，这便是所谓的站在巨人的肩膀上。
+
+** org-mode
+用 org 格式写所有文字类的东西。也是强大的 GTD 工具。
+
+** [[http://www.videolan.org/vlc/][VLC]]
+影音播放
+
+** VirtualBox
+免费的虚拟机，主要用于隔离国产软件
+
 ** CLI
-*** zsh
- shell 里面的战斗机
-**** oh-my-zsh : http://ohmyz.sh/ | https://github.com/robbyrussell/oh-my-zsh
- zsh 工具，你的终端你做主
+
+*** git 客户端
+dotfiles repo 大概 600 行的 git alias，定义了一个名为 Topic 的 git workflow。
+https://github.com/appleshan/dotfiles/blob/stow/git/.config/git/conf/aliases.gitconfig
+
+*** git-delta - like diff but with colors
+
+*** tree - for presenting the content of a folder
+
+*** ripgrep - like grep but better
+
+*** htop and glances - system monitoring tools
+
+*** zsh & oh-my-zsh
+
+- [oh-my-zsh](http://ohmyz.sh/) zsh 工具，你的终端你做主
+- starship - a great prompt that requires no setup
+
 *** tmux : https://github.com/tmux/tmux
 终端多路复用，替代 screen、nohup
-[[./images/tmux.png]]
-*** [[https://github.com/peco/peco][peco]] - Simplistic interactive filtering tool
-*** percol -  交互过滤文本
- python 开发的命令行工具,天才的作品
-*** [[https://ngrok.com/][ngrok]]
- ssh tunneling 讓其他人直接連到本機開發中網站
-*** rclone - 同步文件到云端硬盘的客户端
- 支持：
- Google Drive
- Amazon S3
- Dropbox
- Google Cloud Storage
- Amazon Cloud Drive
- Microsoft One Drive
- The local filesystem
-*** tlp 笔记本电源管理工具
-*** dotfiles
- 一个程序员一天可能 80% 的时间都在跟 shell 打交道，有个好的 shell(bash or zsh)，加上
- 合理的 shell 配置绝对让效率提升一大截。
-*** htop : https://hisham.hm/htop/
-提供更美观、更方便的进程监控工具，替代 top 命令。
-[[./images/htop.png]]
-*** proxychains-ng(proxychains4)
- 命令行 sock5 代理工具，配合科学上网，让没有代理设置的软件也可以正常联网。
- 透明代理首选工具。
-*** shell 的所有命令行工具
- linux 命令行里面的所有工具都是精华，真的，用的熟悉的话可以很大程度上加快你的工作
- 进度，linux 就像是一个数也数不清的优秀工具的大集合。
-*** full text search - 搜索代码超级快
-**** sift
-https://github.com/svent/sift
-**** ag
-比 grep、ack 跟快的递归搜索文件内容
-https://github.com/ggreer/the_silver_searcher
-[[./images/the_silver_searcher.png]]
-**** pt : https://github.com/monochromegane/the_platinum_searcher
-*** GnuPG -  加密，保护你的备份数据
-*** [[https://forwardhq.com/help/ssh-tunneling-how-to/][forward]]
- ssh tunneling 讓其他人直接連到本機開發中網站
-*** [[http://www.videolan.org/vlc/][VLC]]
- 影音播放
-*** cowsay lolcat
- 好玩的，不解释
-*** bleachbit
- 清理常用软件产生的临时文件
-*** sdcv 词典
-*** ncdu - Best disk usage analyzer under Linux
-*** [[https://github.com/dvorka/hstr][hh]] - search and manage your command history
-*** [[https://github.com/tstack/lnav][lnav]] - The Logfile Navigator
-*** [[https://github.com/holys/redis-cli][redis-cli]]
-*** [[https://github.com/asciimoo/wuzz][wuzz]]
-Interactive cli tool for HTTP inspection
-** mysql
-*** mycli
-https://github.com/dbcli/mycli
-mysql 客户端，支持语法高亮和命令补全，效果类似 ipython，可以替代 mysql 命令。
-[[./images/mycli.png]]
-** jq : https://stedolan.github.io/jq/
-json 文件处理以及格式化显示，支持高亮，可以替换 python -m json.tool。
-[[./images/jq.png]]
-** mosh : https://mosh.org/#getting
-基于 UDP 的终端连接，可以替代 ssh，连接更稳定，即使 IP 变了，也能自动重连。
-** fzf : https://github.com/junegunn/fzf
+[[../images/tmux.png]]
+
+*** 交互过滤文本
+
+- fzf - general-purpose fuzzy search
+https://github.com/junegunn/fzf
 命令行下模糊搜索工具，能够交互式智能搜索并选取文件或者内容，配合终端 ctrl-r 历史命令搜索简直完美。
-[[./images/fzf.png]]
-** PathPicker(fpp) : https://github.com/facebook/PathPicker
+[[../images/fzf.png]]
+- percol
+
+*** PathPicker(fpp) : https://github.com/facebook/PathPicker
 在命令行输出中自动识别目录和文件，支持交互式，配合 git 非常有用。
 运行以下命令：
 git diff HEAD~8 --stat | fpp
-[[./images/fpp.png]]
-** sz/rz : https://github.com/mmastrac/iterm2-zmodem
+
+*** sz/rz : https://github.com/mmastrac/iterm2-zmodem
 交互式文件传输，在多重跳板机下传输文件非常好用，不用一级一级传输。
-** cloc : http://cloc.sourceforge.net/
+
+*** cloc : http://cloc.sourceforge.net/
 代码行数统计工具，统计结果比较分类比较详细，支持大部分编程语言。
-[[./images/cloc-1.png]]
-[[./images/cloc-2.png]]
-** you-get : https://github.com/soimort/you-get
+[[../images/cloc-1.png]]
+[[../images/cloc-2.png]]
+
+*** you-get : https://github.com/soimort/you-get
 非常强大的媒体下载工具，支持 youtube、google+、优酷、芒果 TV、腾讯视频、秒拍等视频下载。
-** PM2 : http://pm2.keymetrics.io/
+
+*** PM2 : http://pm2.keymetrics.io/
 用以在后台运行和管理进程
 先放张刚截的图：
-[[./images/pm2-1.png]]
+[[../images/pm2-1.png]]
 可以看到我的 pm2 list 中有 aria2c，npm，gulp 和 hexo。
 后台运行担心看不到 log？pm2 也已经帮你考虑了：pm2 monit
-[[./images/pm2-monit.png]]
+[[../images/pm2-monit.png]]
 这样就能看到全局的 log 啦。
-** enca
-detect and convert encoding of text files
-** tldr : https://github.com/tldr-pages/tldr
-如果你经常不想详读 man 文档，那么你应该试试这个小工具。
-** mackup : https://github.com/lra/mackup
-应用偏好设置备份和同步工具。支持多种云盘，支持大部分应用程序的配置文件（也可以自定义）。
-** moby : https://github.com/moby/moby
-** ansible : https://github.com/ansible/ansible
-** musicbox : https://github.com/darknessomi/musicbox
-** trash-cli
-一套命令集，用作 shell 下的回收站，包括以下几个命令
-- trash-put：删除文件
-- trash-empty：清空回收站
-- trash-restore：还原指定文件
-- trash-list：查看
-可以通过 alias 把 rm 指向 trash-put，但建议直接禁止 rm 命令，使用 trash-put 的原生命令
-** screenfetch
-** pandoc
+
+*** pandoc
 文档转换工具
-** except
-可以实现自动化操作。
-** 磁盘分区
+
+*** tlp 笔记本电源管理工具
+
+*** htop : https://hisham.hm/htop/
+提供更美观、更方便的进程监控工具，替代 top 命令。
+
+*** ncdu - Best disk usage analyzer under Linux
+
+*** 磁盘分区
 Linux下 最好用的分区工具 gparted
+
+*** mosh : https://mosh.org/#getting
+基于 UDP 的终端连接，可以替代 ssh，连接更稳定，即使 IP 变了，也能自动重连。
+
+*** shell 的所有命令行工具
+linux 命令行里面的所有工具都是精华，真的，用的熟悉的话可以很大程度上加快你的工作
+进度，linux 就像是一个数也数不清的优秀工具的大集合。
+
+*** GnuPG
+保护你的备份数据
+
+*** rclone
+同步文件到云端硬盘的客户端，支持：
+Google Drive
+Amazon S3
+Dropbox
+Google Cloud Storage
+Amazon Cloud Drive
+Microsoft One Drive
+The local filesystem
 
 * Windows
 尽量不要用 windows 进行开发，除非你只用 dotnet 开发软件，不然 osx/ubuntu 会是更好的
@@ -249,84 +181,70 @@ Google 公司的图片浏览、编辑工具。
 ** 1Checker
 免费的英语写作辅助软件：1Checker（易改）。用来检查、修改文章中的单词和语法错误。
 ** EagleGet
+
 * Android
 ** google 服务
 包括邮件,日历,联系人,play 应用市场等功能。
 ** Chrome
 最常用的浏览器。配合 google 账号，可以同步书签。
-** 影梭
-shadowsocks 翻墙服务。
 ** 高德地图
 解决路痴问题，开车的情况下使用较好。
 ** 支付宝钱包
 方便网购，转账。
-** 知乎，知乎日报
-知乎日报每日必读。
 ** 微信
-足以替代短信，何况还有朋友圈和订阅号。
 ** Hacker's Keyboard
-** Termux
-** 1Checker
-免费的英语写作辅助软件：1Checker（易改）。用来检查、修改文章中的单词和语法错误。
 
 * 开发
-** Source Code Pro
+
+** Hack / Source Code Pro
 没有一个合适的等宽字体，都不想看电脑。
+
+** uv
+python 开发的管理工具
+
+** rg
+搜索代码超级快
+
+** Intellij IDEA
+最最最最最好用的 Java IDE
+
 ** [[https://kapeli.com/dash/][Dash]]
 Mac 专有开发者字典
+
 ** [[https://zealdocs.org/][Zeal]]
 Linux & Windows，开发者字典，節省一直開瀏覽器 tab 的機會，查詢速度極快
+
 ** [[http://devdocs.io/][Devdocs]]
 API 文件會整
-** [[https://www.sourcetreeapp.com/][SourceTree]]
-git GUI
+
 ** [[https://www.docker.com/products/docker-toolbox][Docker]]
 现代开发流程中的航空母舰，一次运行，到处运行。Docker 的各种镜像，大幅度减少了
 我们安装、配置软件的 CD 等待时间。
+现在已用 podman 替换。
+
 ** DevOps
 用 Docker 做高可用，弹性伸缩，分布式，而我看中的则是环境隔离、快速安装。剩下的
 事情都交给运维了，我只关心计算。
-** Kitematic
-Docker GUI
-** Spark
-是新一代的科学计算软件，提供了 Python 的接口，轻松实现基于内存的分布式计算，结合
- Docker 使得 Spark 更加易用，威力巨大。现代开发流程中的宇宙飞船，实现分布式开发
-傻瓜化。
-** Plsql Developer
+
 ** Toad
 Toad for MySQL
 Toad for Oracle
 Toad for SQL Server
-** Intellij IDEA
-最最最最最好用的 Java IDE
-** eclipse
-[[https://github.com/ajermakovics/eclipse-instasearch][InstaSearch]] 任何有对话框的搜索都是耍流氓
+
 ** [[https://github.com/jkbrzt/httpie][httpie]]
 人类用的 http 测试工具
+
 ** [[http://codepen.io/][codepen]]
 線上 HTML, CSS, JS
+
 ** [[http://jsbin.com/][jsbin]]
 線上 HTML, CSS, JS
+
 ** [[https://developers.google.com/speed/pagespeed/insights/][PageSpeed]]
 網頁測試分析工具
-** shellcheck : https://github.com/koalaman/shellcheck
-shell 脚本静态检查工具，能够识别语法错误以及不规范的写法。
-[[./images/shellcheck.png]]
-** pip - Python 程序安装程序
-python-pip
-python3-pip
-** yapf
-https://github.com/google/yapf
-Google 开发的 python 代码格式规范化工具，支持 pep8 以及 Google 代码风格。
-** ccache : https://ccache.samba.org/
-高速 C/C++编译缓存工具，反复编译内核非常有用。使用起来也非常方便：
-gcc foo.c
-改成:
-ccache gcc foo.c
 
 * 编程语言
-** Common Lisp
-** Emacs Lisp
+
 ** Python
 独特的代码缩进要求和 Everything in Python，各种 DevOps 和快速开发框架。
 Web 开发四件套：Django、Flask、Tornado、Gevent
@@ -336,7 +254,9 @@ Web 开发四件套：Django、Flask、Tornado、Gevent
 网络爬虫：Scrapy、Urllib、Requests
 高端组件：OpenCV、NLTK、Tensorflow
 调试：ipython
-** Golang
+
+** shell
+
 ** Java
 ** Javascript
 
@@ -344,24 +264,9 @@ Web 开发四件套：Django、Flask、Tornado、Gevent
 翻越长城，放眼世界
 众所周知的原因，我们被关在了墙内。
 作为一名互联网工作者，失去了与外部世界的联系基本就算失去了学习国外先进技术的途径。
-** [[https://github.com/cyfdecyf/cow][COW]] - 一个简化穿墙的 HTTP 代理服务器
-它能自动检测被墙网站，仅对这些网站使用二级代理。
-** Shadowsocks
-科学上网目前首选的工具是 shadowsocks，它可以创建一个本地的 socks5 的代理。
-*** shadowsocks-go : https://github.com/shadowsocks/shadowsocks-go
-shadowsocks-go is a lightweight tunnel proxy which can help you get through firewalls. It is a port of shadowsocks.
-The protocol is compatible with the origin shadowsocks (if both have been upgraded to the latest version).
-*** shadowsocks-libev
-** [[https://github.com/v2ray/v2ray-core][v2ray]] - 网络代理平台
-** [[https://getlantern.org/][Lantern]]
-作为一个 P2P 的匿名科学上网工具，蓝灯免费带你飞跃长城！支持 Mac、Linux、Windows、
-Android 等多种操作系统，帮助我们照亮前进的道路，蓝灯绝对是科学上网必备的第一件神装！
-** Tor
-*** ARM
-tor 的外壳
-*** Tor Browser
-Tor Project 官方打包製作的傻瓜式匿名瀏覽器。
-上暗网的必备工具。你所看到的网络世界只是冰山一角。
+
+不细说，懂的都懂……
+
 ** DNS
 *** DnsMasq
 DNS 缓存
@@ -370,35 +275,74 @@ DNS 加密查询 Open DNS
 *** [[https://github.com/shadowsocks/ChinaDNS][ChinaDNS]]
 此项目解决的是 DNS 污染问题
 
-* Hack
-** [[http://www.norse-corp.com/][norse]]
-DDOS 地圖
+*** PaoPaoDNS
+最新的方案，自取：[[https://github.com/appleshan/org-notes/blob/master/DNS/%E6%90%AD%E5%BB%BA%E5%B1%9E%E4%BA%8E%E8%87%AA%E5%B7%B1%E7%9A%84%E9%80%92%E5%BD%92DNS%E6%9C%8D%E5%8A%A1.org][搭建属于自己的递归DNS服务]]
+
+* Cloud
+- [[http://aws.amazon.com/][AWS]]
+- [[https://dash.cloudflare.com/][Cloudflare]]
+直连海外 CDN 加速，非常适合用来做各种前沿试验，速度和体验一流。
 
 * 网络服务
+
 ** 源代码仓库
+
 *** [[https://github.com/][GitHub]]
 号称全球最大的程序员同性交友网站。其实是现代化的文档管理中心。适合存储非私密资料。
 只要是自己产生的文档，一律使用 git 管理。
 程序世界里的大师们都在 github 上，只是需要你的发掘。
 [[https://github.com/appleshan][personal repo]]
+
 *** [[https://bitbucket.org/][Bitbucket]]
-用于团队的 Git 和 Mercurial 代码管理工具。
 适合存储私密资料。
+
 ** Google 帐号
-** Email
+
+** Email Client
+
 *** Gmail
 邮件必备
+
+*** mutt
+*** [[http://www.offlineimap.org/][OfflineIMAP]]
+*** msmtp
+*** popfile - 邮件分类
+
+*** exchange server
+**** davmail
+download: http://davmail.sourceforge.net/
+doc: http://blog.binchen.org/posts/how-to-get-email-from-exchange-server-without-outlook.html
+
+** 网络下载工具
+*** uget
+*** aria2
+*** youtube-dl
+*** axel : https://axel.alioth.debian.org/
+多线程下载工具，下载文件时可以替代 curl、wget。
+运行以下命令：
+axel -n 20 http://centos.ustc.edu.cn/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso
+[[../images/axel.png]]
+
+** 网速显示 - polybar 自定义插件
+** 温度监控 - polybar 自定义插件
+** 截图工具 - Flameshot
+
 ** Inoreader
 RSS 服务提供商
+
 ** 雲端硬碟
 顺便说一下，国内的服务不要用，安全原因，不言自明。
-*** Dropbox
+
+*** Onedrive
+
 ** 分享
 *** [[http://imgur.com/][imgur]]
 圖片分享
 *** [[https://droplr.com/][droplr]]
 快速上傳圖片分享
+
 ** [[https://www.google.com/chrome/][Chrome]]
+*** ZeroOmega : 搭配`科学上网`足够走遍天下
 *** [[https://github.com/philc/vimium][vimium]]
 The hacker's browser.
 vim 键位控制浏览器，彻底解放鼠标。
@@ -412,45 +356,6 @@ greasyfork.org 的 dark side：https://sleazyfork.org/en，集合了各种黑暗
 而 cpu 和内存占用小到忽略不计，完爆知名的 Adblocker。
 *** [[https://chrome.google.com/webstore/detail/adblock-plus/cfhdojbkjhnklbpkdaibdccddilifddb][Adblock Plus]]
 过滤烦人的广告
-*** [[https://github.com/FelisCatus/SwitchyOmega][Proxy SwitchyOmega]]
-轻松快捷地管理和切换多个代理设置，据悉常与 shadowsocks 互相配合，来完成科学上网
-的美好愿景。
-*** [[https://chrome.google.com/webstore/detail/https-everywhere/gcbommkclmclpchllfjekcdonpmejbdp][HTTPS Everywhere]]
-加密整個網路！自動在網站上使用 HTTPS 安全連線。
-*** Imagus
-不用点开图片就能放大
-*** [[https://chrome.google.com/webstore/detail/stylish-custom-themes-for/fjnbnpbmkenffdnngjfgmeleoegfcffe?hl=zh-CN][Stylish]]
-Restyle the web with Stylish（为任意网站自定义主题）!
-其官方描述为：利用用户样式管理器 Stylish 来重新编辑网站的样式。您可利用 Stylish
-为许多网站安装主题和皮肤，也可创建自己的主题和皮肤。
-去 userstyles.org 就可以找到很多别人弄好的网页样式，点击就可安装到 Stylish
-*** [[https://github.com/buunguyen/octotree][Octotree]]
-Code tree for GitHub and GitLab；
-当我们在浏览别人的开源代码时，还要 clone 下来一个文件查看，而有了这个插件，你可以
-直接在 Chrome 侧边栏向打开文件夹一样的查看别人的项目。
-*** [[https://chrome.google.com/webstore/detail/isometric-contributions/mjoedlfflcchnleknnceiplgaeoegien][Isometric Contributions]]
-可以让你在 GitHub 上的 commit 像盖楼一样的展示
-*** [[https://github.com/anasnakawa/chrome-github-avatars][Avatars for Github]]
-默认我们在 GitHub 主页动态只能看到 id 的，而安装了这个插件就可以看到 GitHub 头像了，让
-你一眼就能知道是谁。
-*** Session Manager
-chrome 启动时自动打开上次未关闭的标签页
-*** [[https://chrome.google.com/webstore/detail/save-to-pocket/niloccemoadcdkdjlinkgdfekeahmflj][Save to Pocket]]
-*** [[https://chrome.google.com/webstore/detail/%E6%89%87%E8%B4%9D/aanmfalgnenapmgaeaknhahbclkbealk][扇贝]]
-扇贝网功能改造 chrome 插件,直接加载所有柯林斯例句
-*** [[https://chrome.google.com/webstore/detail/extension-automation/ghopjgdkodchjclkkfdekhjfomdbakkb][Extension Automation]]
-
-*** [[https://chrome.google.com/webstore/detail/print-friendly-pdf/ohlencieiipommannpdfcmfdpjjmeolj/related?hl=zh-CN][Print Friendly & PDF]]
-一款可以帮助用户自定义打印内容，以及打印格式的谷歌浏览器插件，同时支持 PDF 的格
-式打印。Chrome 自带打印功能(command p 或者右键)，但不能满足复杂点的需求；而这款
-插件的存在，就解决了很多人的刚需：
-1. 可以滤掉一些不想打印的内容(去除打印页面中的所有图片、删除网页中的广告、删除
-   多余的文字等方便的自定义打印的功能)；
-2. 对打印的格式重新进行调整(比如调节打印的字体大小)；
-还支持查看打印历史等等，如此贴心，值得拥有。
-*** [[https://chrome.google.com/webstore/detail/reader-view/iibolhpkjjmoepndefdmdlmbpfhlgjpl/related?utm_source=chrome-app-launcher-info-dialog][阅读模式]]
-她提供与 Safari 阅读模式功能一致的插件，浏览文章页时候可进入友好的阅读模式，并
-自定义阅读功能。
 *** [[https://chrome.google.com/webstore/detail/json-handle/iahnhfdhidomcpggpaimmmahffihkfnj?hl=zh-CN][Json-Handle]]
 她可以帮助你在浏览器中查看 JSON 数据，并以优美的树视图姿势，展示出对应数据；如果
 你愿意，还可以配置快捷键，所需之时，一键呼出。
@@ -461,40 +366,37 @@ Wappalyzer 是一个浏览器扩展，义译为 Web 应用指纹识别，它能�
 https://wappalyzer.com/applications。
 据悉为渗透工程师必备，同比之下还有 HackBar、Tamper Data 等等；倘若，你想知道一个
 网站，使用什么技术，用此插件就对了。
-** 看片
-[[http://www.acfun.com/][A 站]] / [[http://www.bilibili.com/][B 站]] / 被窝 / 海盗湾 : 总有能看到的片
+
 ** 其他
-[[http://www.mailgun.com/][mailgun]] : 寄信服務
 [[http://www.urbandictionary.com/][urban]] : 新世代英文單字查詢
 [[http://www.keybr.com/#!practice][keybr]] : 英打練習
 [[https://quizlet.com/][quizlet]] : 語言學習, 背單字
-[[http://defonic.com/sunset.html][defonic]] : 白噪音
-** VPS
-*** [[http://aws.amazon.com/][AWS]]
-直连海外 CDN 加速，非常适合用来做各种前沿试验，速度和体验一流。
-*** [[https://www.qingcloud.com/][青云]]
-国内，可以用青云做替代品使用。青云的 Web Design 和工单服务当数一流，真正在为开发者
-解决各种实际问题。
 
 * 社群
-** [[https://slack.com/][Slack]]
-各国小组讨论代替 Gmail Group
-** [[https://gitter.im/][gitter]]
-Github 交流
+** [[https://www.reddit.com/][Reddit]]
+
 ** [[http://v2ex.com/][V2EX]]
-码农社区
 
 * 日常外设
+
 ** gunnar
 眼镜
+
 ** 指甲钳
 指甲长了敲代码速度明显变慢
+
 ** 87 键机械键盘
 如果编码垒字较多的话，最好备着
+
 ** 显示器
 最为重要，直接和效率挂钩，推荐 24 寸以上。
 使用大屏幕可以让一个屏幕同时显示好几个窗口而无需来回切换，用上了就回不去了，
 一天呆在公司 12 小时都不嫌多。
+
 ** ThinkPad
-主力办公电脑 ThinkPad X220i。推荐配置：
-Intel 四核 CPU + Intel 核心显卡 + Intel 有线/无线网卡 + 16GB 以上内存 + SSD
+办公电脑 ThinkPad X1，感觉不香了……
+
+** Intel NUC
+写代码的电脑。
+推荐配置：
+Intel CPU + Intel 核心显卡 + Intel 有线/无线网卡 + 32GB 以上内存 + SSD
