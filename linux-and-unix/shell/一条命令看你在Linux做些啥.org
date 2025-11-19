@@ -1,6 +1,7 @@
 一条命令看你在 Linux 做些啥
 
 #一条命令看你在 Linux 做些啥
+
 history | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n10
 
 大家不妨把运行的结果贴上来
@@ -19,4 +20,4 @@ history | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/c
 
 6.nl，加上行号，即 1，2，3，4
 
-7.只输出前十行﻿
+7.只输出前十行
